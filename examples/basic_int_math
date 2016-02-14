@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/z3"
+
+def check_multiplication_laws_1
+  a = Z3::Ast.int("a")
+  b = Z3::Ast.int("b")
+  solver = Z3::Solver.new
+  solver.assert(~(
+    (a+b)*(a-b) == (a*a - b*b)
+  ))
+  puts "Checking if (a+b)(a-b)==a*a-b*b"
+  p solver.check
+end
+
+def check_inequalities
+  a = Z3::Ast.int("a")
+  b = Z3::Ast.int("b")
+  solver = Z3::Solver.new
+  solver.assert(a+b < a)
+  puts "Checking if a+b >= 0"
+  p solver.check
+
+  solver = Z3::Solver.new
+  solver.assert(a >= a-a)
+  solver.assert(b >= b-b)
+  solver.assert(a+b < a)
+  puts "Checking if a+b >= a if a,b >= 0"
+  p solver.check
+end
+
+check_multiplication_laws_1
+check_inequalities

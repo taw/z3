@@ -25,15 +25,8 @@ def check_de_morgan_law_1
   a = Z3::Ast::bool("a")
   b = Z3::Ast::bool("b")
   solver = Z3::Solver.new
-  solver.assert(
-    Z3::Ast.not(
-      Z3::Ast.eq(
-        Z3::Ast.not(Z3::Ast.and(a, b)),
-        Z3::Ast.or(Z3::Ast.not(a), Z3::Ast.not(b))
-      )
-    )
-  )
-  puts "Is negation of !(a && b) == (!a || !b) satisfiable?"
+  solver.assert(~(~(a & b) == (~a | ~b)))
+  puts "Is negation of ~(a & b) == (~a | ~b) satisfiable?"
   p solver.check
 end
 
@@ -41,15 +34,8 @@ def check_de_morgan_law_2
   a = Z3::Ast::bool("a")
   b = Z3::Ast::bool("b")
   solver = Z3::Solver.new
-  solver.assert(
-    Z3::Ast.not(
-      Z3::Ast.eq(
-        Z3::Ast.not(Z3::Ast.or(a, b)),
-        Z3::Ast.and(Z3::Ast.not(a), Z3::Ast.not(b))
-      )
-    )
-  )
-  puts "Is negation of !(a && b) == (!a || !b) satisfiable?"
+  solver.assert(~(~(a | b) == ~a & ~b))
+  puts "Is negation of ~(a | b) == (~a & ~b) satisfiable?"
   p solver.check
 end
 
