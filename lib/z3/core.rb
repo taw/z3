@@ -18,6 +18,7 @@ module Z3::Core
   attach_function :Z3_mk_bool_sort, [ctx_pointer], sort_pointer
   attach_function :Z3_mk_int_sort, [ctx_pointer], sort_pointer
   attach_function :Z3_mk_real_sort, [ctx_pointer], sort_pointer
+  attach_function :Z3_sort_to_string, [ctx_pointer, sort_pointer], :string
   # Solver API
   attach_function :Z3_mk_solver, [ctx_pointer], solver_pointer
   attach_function :Z3_solver_push, [ctx_pointer, solver_pointer], :void

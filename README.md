@@ -10,6 +10,8 @@ The rest of `Z3` is high level API, but the interface is extremely unstable at t
 
 You can use most Ruby operators to construct ASTs, but use `~ | &` instead of `! || &&` for boolean operators.
 
+As for API internals, attributes starting with `_` are FFI internals you shouldn't touch, other attributes are generally legitimate Ruby objects.
+
 ### Requirements
 
 To use it, you'll need to install `z3`. On OSX that would be:
