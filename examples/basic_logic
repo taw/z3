@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/z3"
+
+a = Z3::Ast.true
+b = Z3::Ast.true
+c = Z3::Ast.false
+
+solver = Z3::Solver.new
+solver.assert(Z3::Ast.eq(a, b))
+p solver.check
+
+solver = Z3::Solver.new
+solver.assert(Z3::Ast.eq(a, c))
+p solver.check
