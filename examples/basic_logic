@@ -2,14 +2,58 @@
 
 require_relative "../lib/z3"
 
-a = Z3::Ast.true
-b = Z3::Ast.true
-c = Z3::Ast.false
+def check_if_true_is_true
+  a = Z3::Ast.true
+  b = Z3::Ast.true
+  solver = Z3::Solver.new
+  solver.assert(Z3::Ast.eq(a, b))
+  puts "Checking if true == true"
+  p solver.check
+end
 
-solver = Z3::Solver.new
-solver.assert(Z3::Ast.eq(a, b))
-p solver.check
+def check_if_true_is_false
+  a = Z3::Ast.true
+  b = Z3::Ast.false
+  solver = Z3::Solver.new
+  solver.assert(Z3::Ast.eq(a, b))
+  puts "Checking if true == false"
+  p solver.check
+end
 
-solver = Z3::Solver.new
-solver.assert(Z3::Ast.eq(a, c))
-p solver.check
+# We prove it by checking that negation is unsatisfiable
+def check_de_morgan_law_1
+  a = Z3::Ast::bool("a")
+  b = Z3::Ast::bool("b")
+  solver = Z3::Solver.new
+  solver.assert(
+    Z3::Ast.not(
+      Z3::Ast.eq(
+        Z3::Ast.not(Z3::Ast.and(a, b)),
+        Z3::Ast.or(Z3::Ast.not(a), Z3::Ast.not(b))
+      )
+    )
+  )
+  puts "Is negation of !(a && b) == (!a || !b) satisfiable?"
+  p solver.check
+end
+
+def check_de_morgan_law_2
+  a = Z3::Ast::bool("a")
+  b = Z3::Ast::bool("b")
+  solver = Z3::Solver.new
+  solver.assert(
+    Z3::Ast.not(
+      Z3::Ast.eq(
+        Z3::Ast.not(Z3::Ast.or(a, b)),
+        Z3::Ast.and(Z3::Ast.not(a), Z3::Ast.not(b))
+      )
+    )
+  )
+  puts "Is negation of !(a && b) == (!a || !b) satisfiable?"
+  p solver.check
+end
+
+check_if_true_is_true
+check_if_true_is_false
+check_de_morgan_law_1
+check_de_morgan_law_2
