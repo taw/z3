@@ -1,17 +1,17 @@
-This is Ruby interface for Z3.
+This is Ruby interface for Z3 [ https://github.com/Z3Prover/z3 ].
 
 It's in extremely early stages of development. Pull requests always welcome.
 
-== Interface ==
+### Interface
 
-Z3::Core is low level FFI interface, and it shouldn't be used directly.
+`Z3::Core` is low level FFI interface, and it shouldn't be used directly.
 
-Z3 is high level API, but it's extremely unstable at this point.
+The rest of `Z3` is high level API, but the interface is extremely unstable at this point, and it's pretty much guaranteed to  change many times.
 
-== Requirements ==
+### Requirements
 
-To use it, you'll need to install z3. On OSX that would be:
+To use it, you'll need to install `z3`. On OSX that would be:
 
-   brew install z3
+    brew install z3
 
 On other systems use appropriate package manager.
