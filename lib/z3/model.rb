@@ -1,6 +1,5 @@
 class Z3::Model
-  def initialize(_model, ctx: Z3::Context.main)
-    @ctx = ctx
+  def initialize(_model)
     @_model = _model
   end
 end

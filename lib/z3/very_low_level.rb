@@ -1,8 +1,8 @@
-require 'ffi'
-
 # Seriously do not use this directly in your code
 
-module Z3::Core
+require 'ffi'
+
+module Z3::VeryLowLevel
   extend FFI::Library
   ffi_lib "z3"
   # Aliases defined just to make APIs below look nicer

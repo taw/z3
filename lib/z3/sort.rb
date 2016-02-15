@@ -10,7 +10,7 @@ class Z3::Sort
   end
 
   def to_s
-    Z3::Core.Z3_sort_to_string(Z3::Context._context, @_sort)
+    Z3::LowLevel.sort_to_string(self)
   end
 
   def inspect
@@ -19,15 +19,15 @@ class Z3::Sort
 
   class << self
     def bool
-      Z3::Sort.new(Z3::Core.Z3_mk_bool_sort(Z3::Context._context))
+      Z3::Sort.new(Z3::LowLevel.mk_bool_sort)
     end
 
     def int
-      Z3::Sort.new(Z3::Core.Z3_mk_int_sort(Z3::Context._context))
+      Z3::Sort.new(Z3::LowLevel.mk_int_sort)
     end
 
     def real
-      Z3::Sort.new(Z3::Core.Z3_mk_real_sort(Z3::Context._context))
+      Z3::Sort.new(Z3::LowLevel.mk_real_sort)
     end
   end
 end

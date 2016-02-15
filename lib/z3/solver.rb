@@ -1,31 +1,31 @@
 class Z3::Solver
   def initialize
-    @_solver = Z3::Core.Z3_mk_solver(Z3::Context._context)
+    @_solver = Z3::LowLevel.mk_solver
   end
 
   def push
-    Z3::Core.Z3_solver_push(Z3::Context._context, @_solver)
+    Z3::LowLevel.solver_push(self)
   end
 
   def pop(n=1)
-    Z3::Core.Z3_solver_pop(Z3::Context._context, @_solver, n)
+    Z3::LowLevel.solver_pop(self, n)
   end
 
   def reset
-    Z3::Core.Z3_solver_reset(Z3::Context._context, @_solver)
+    Z3::LowLevel.solver_reset(self)
   end
 
   def assert(ast)
-    Z3::Core.Z3_solver_assert(Z3::Context._context, @_solver, ast._ast)
+    Z3::LowLevel.solver_assert(self, ast)
   end
 
   def check
-    check_sat_results(Z3::Core.Z3_solver_check(Z3::Context._context, @_solver))
+    check_sat_results(Z3::LowLevel.solver_check(self))
   end
 
   def model
     Z3::Model.new(
-      Z3::Core.Z3_solver_get_model(Z3::Context._context, @_solver)
+      Z3::LowLevel.solver_get_model(self)
     )
   end
 
@@ -35,6 +35,7 @@ class Z3::Solver
     case check
     when :sat
       puts "Counterexample exists"
+      # puts model
     when :unknown
       puts "Unknown"
     when :unsat

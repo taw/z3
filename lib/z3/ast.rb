@@ -6,13 +6,11 @@ class Z3::Ast
   end
 
   def sort
-    Z3::Sort.new(
-      Z3::Core.Z3_get_sort(Z3::Context._context, @_ast)
-    )
+    Z3::Sort.new(Z3::LowLevel.get_sort(self))
   end
 
   def to_s
-    Z3::Core.Z3_ast_to_string(Z3::Context._context, @_ast)
+    Z3::LowLevel.ast_to_string(self)
   end
 
   def inspect
@@ -112,10 +110,8 @@ class Z3::Ast
   end
 
   def int_to_real
-    raise Z3::Exception, "Type mismatch" unless sort == Z3::Sort.int
-    Z3::Ast.new(
-      Z3::Core.Z3_mk_int2real(Z3::Context._context, @_ast)
-    )
+    raise Z3::Exception, "Type mismatch" unless int?
+    Z3::Ast.new(Z3::LowLevel.mk_int2real(self))
   end
 
   class <<self
@@ -133,13 +129,13 @@ class Z3::Ast
         # ((int_to_real int_var) == (mknumeral 2.4))
         raise Z3::Exception, "Can't convert #{value.class} to Real" unless value.is_a?(Numeric)
         if value.is_a?(Float)
-          Z3::Ast.new(Z3::Core.Z3_mk_numeral(Z3::Context._context, value.to_s, Z3::Sort.real._sort))
+          Z3::Ast.new(Z3::LowLevel.mk_numeral(value.to_s, Z3::Sort.real))
         else
-          Z3::Ast.new(Z3::Core.Z3_mk_numeral(Z3::Context._context, value.to_s, sort._sort))
+          Z3::Ast.new(Z3::LowLevel.mk_numeral(value.to_s, sort))
         end
       when Z3::Sort.real
         raise Z3::Exception, "Can't convert #{value.class} to Real" unless value.is_a?(Numeric)
-        Z3::Ast.new(Z3::Core.Z3_mk_numeral(Z3::Context._context, value.to_s, sort._sort))
+        Z3::Ast.new(Z3::LowLevel.mk_numeral(value.to_s, sort))
       end
     end
 
@@ -154,59 +150,59 @@ class Z3::Ast
     end
 
     def true
-      Z3::Ast.new(Z3::Core.Z3_mk_true(Z3::Context._context))
+      Z3::Ast.new(Z3::LowLevel.mk_true)
     end
 
     def false
-      Z3::Ast.new(Z3::Core.Z3_mk_false(Z3::Context._context))
+      Z3::Ast.new(Z3::LowLevel.mk_false)
     end
 
     def eq(a, b)
-      Z3::Ast.new(Z3::Core.Z3_mk_eq(Z3::Context._context, a._ast, b._ast))
+      Z3::Ast.new(Z3::LowLevel.mk_eq(a, b))
     end
 
     def ge(a, b)
-      Z3::Ast.new(Z3::Core.Z3_mk_ge(Z3::Context._context, a._ast, b._ast))
+      Z3::Ast.new(Z3::LowLevel.mk_ge(a, b))
     end
 
     def gt(a, b)
-      Z3::Ast.new(Z3::Core.Z3_mk_gt(Z3::Context._context, a._ast, b._ast))
+      Z3::Ast.new(Z3::LowLevel.mk_gt(a, b))
     end
 
     def le(a, b)
-      Z3::Ast.new(Z3::Core.Z3_mk_le(Z3::Context._context, a._ast, b._ast))
+      Z3::Ast.new(Z3::LowLevel.mk_le(a, b))
     end
 
     def lt(a, b)
-      Z3::Ast.new(Z3::Core.Z3_mk_lt(Z3::Context._context, a._ast, b._ast))
+      Z3::Ast.new(Z3::LowLevel.mk_lt(a, b))
     end
 
     def not(a)
-      Z3::Ast.new(Z3::Core.Z3_mk_not(Z3::Context._context, a._ast))
+      Z3::Ast.new(Z3::LowLevel.mk_not(a))
     end
 
     def distinct(*args)
-      ast_vararg_operator(:Z3_mk_distinct, args)
+      Z3::Ast.new(Z3::LowLevel.mk_distinct(args))
     end
 
     def and(*args)
-      ast_vararg_operator(:Z3_mk_and, args)
+      Z3::Ast.new(Z3::LowLevel.mk_and(args))
     end
 
     def or(*args)
-      ast_vararg_operator(:Z3_mk_or, args)
+      Z3::Ast.new(Z3::LowLevel.mk_or(args))
     end
 
     def add(*args)
-      ast_vararg_operator(:Z3_mk_add, args)
+      Z3::Ast.new(Z3::LowLevel.mk_add(args))
     end
 
     def sub(*args)
-      ast_vararg_operator(:Z3_mk_sub, args)
+      Z3::Ast.new(Z3::LowLevel.mk_sub(args))
     end
 
     def mul(*args)
-      ast_vararg_operator(:Z3_mk_mul, args)
+      Z3::Ast.new(Z3::LowLevel.mk_mul(args))
     end
 
     def bool(name)
@@ -223,19 +219,11 @@ class Z3::Ast
 
     private
 
-    def ast_vararg_operator(sym, args)
-      raise if args.empty?
-      c_args = FFI::MemoryPointer.new(:pointer, args.size)
-      c_args.write_array_of_pointer args.map(&:_ast)
-      Z3::Ast.new(Z3::Core.send(sym, Z3::Context._context, args.size, c_args))
-    end
-
     def var(name, sort)
       Z3::Ast.new(
-        Z3::Core.Z3_mk_const(
-          Z3::Context._context,
-          Z3::Core.Z3_mk_string_symbol(Z3::Context._context, name),
-          sort._sort,
+        Z3::LowLevel.mk_const(
+          Z3::LowLevel.mk_string_symbol(name),
+          sort,
         )
       )
     end
