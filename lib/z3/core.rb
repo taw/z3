@@ -48,4 +48,6 @@ module Z3::Core
   attach_function :Z3_mk_distinct, [ctx_pointer, :int, :pointer], ast_pointer
   attach_function :Z3_ast_to_string, [ctx_pointer, ast_pointer], :string
   attach_function :Z3_get_sort, [ctx_pointer, ast_pointer], sort_pointer
+  attach_function :Z3_mk_int2real, [ctx_pointer, ast_pointer], ast_pointer
+  attach_function :Z3_mk_numeral, [ctx_pointer, :string, sort_pointer], ast_pointer
 end

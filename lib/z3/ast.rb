@@ -56,8 +56,15 @@ class Z3::Ast
   end
 
   def ==(b)
+    unless b.is_a?(Z3::Ast)
+      b = Z3::Ast.from_const(b, sort, ctx: @ctx)
+    end
+    if sort != b.sort
+      a, b = Z3::Ast.coerce_to_same_sort(self, b)
+    else
+      a = self
+    end
     raise Z3::Exception, "Not same context" unless @ctx == b.ctx
-    raise Z3::Exception, "Type mismatch" unless sort == b.sort
     Z3::Ast.eq(self, b, ctx: @ctx)
   end
 
@@ -91,7 +98,53 @@ class Z3::Ast
     Z3::Ast.gt(self, b, ctx: @ctx)
   end
 
+  def coerce(other)
+    require 'pry'; binding.pry
+  end
+
+  def int_to_real
+    raise Z3::Exception, "Type mismatch" unless sort == Z3::Sort.int
+    Z3::Ast.new(
+      Z3::Core.Z3_mk_int2real(@ctx._context, @_ast),
+      @ctx
+    )
+  end
+
   class <<self
+    def from_const(value, sort, ctx: Z3::Context.main)
+      case sort
+      when Z3::Sort.bool
+        raise Z3::Exception, "Can't convert #{value.class} to Real" unless value == true or value == false
+        if value
+          Z3::Ast.true(ctx: ctx)
+        else
+          Z3::Ast.false(ctx: ctx)
+        end
+      when Z3::Sort.int
+        # (int_var == 2.4) gets changed to
+        # ((int_to_real int_var) == (mknumeral 2.4))
+        raise Z3::Exception, "Can't convert #{value.class} to Real" unless value.is_a?(Numeric)
+        if value.is_a?(Float)
+          Z3::Ast.new(Z3::Core.Z3_mk_numeral(ctx._context, value.to_s, Z3::Sort.real(ctx: ctx)._sort), ctx)
+        else
+          Z3::Ast.new(Z3::Core.Z3_mk_numeral(ctx._context, value.to_s, sort._sort), ctx)
+        end
+      when Z3::Sort.real
+        raise Z3::Exception, "Can't convert #{value.class} to Real" unless value.is_a?(Numeric)
+        Z3::Ast.new(Z3::Core.Z3_mk_numeral(ctx._context, value.to_s, sort._sort), ctx)
+      end
+    end
+
+    def coerce_to_same_sort(a, b)
+      if a.sort == Z3::Sort.int and b.sort == Z3::Sort.real
+        [a.int_to_real, b]
+      elsif b.sort == Z3::Sort.int and a.sort == Z3::Sort.real
+        [a, b.int_to_real]
+      else
+        raise Z3::Exception, "No rules how to coerce #{a.sort} and #{b.sort}"
+      end
+    end
+
     def true(ctx: Z3::Context.main)
       Z3::Ast.new(Z3::Core.Z3_mk_true(ctx._context), ctx)
     end

@@ -68,16 +68,18 @@ describe Z3::Ast do
     end
 
     it "casts to correct type if possible" do
-      expect((a == 42).to_s).to eq "(= a ???)"
-      expect((42 == a).to_s).to eq "(= a ???)"
-      expect((a == e).to_s).to eq "(= a ???)"
-      expect((e == a).to_s).to eq "(= a ???)"
-      expect((c == true).to_s).to eq "(= a ???)"
-      expect((true == c).to_s).to eq "(= a ???)"
-      expect((a == 42.5).to_s).to eq "(= a ???)"
-      expect((42.5 == a).to_s).to eq "(= a ???)"
-      expect((e == 42.5).to_s).to eq "(= a ???)"
-      expect((42.5 == e).to_s).to eq "(= a ???)"
+      expect((a == 42).to_s).to eq "(= a 42)"
+      expect((42 == a).to_s).to eq "(= a 42)"
+      expect((a == e).to_s).to eq "(= (to_real a) e)"
+      expect((e == a).to_s).to eq "(= e (to_real a))"
+      expect((c == true).to_s).to eq "(= c true)"
+      expect((c == false).to_s).to eq "(= c false)"
+      expect((a == 42.5).to_s).to eq "(= (to_real a) (/ 85.0 2.0))"
+      expect((42.5 == a).to_s).to eq "(= (to_real a) (/ 85.0 2.0))"
+      expect((e == 42.5).to_s).to eq "(= e (/ 85.0 2.0))"
+      expect((42.5 == e).to_s).to eq "(= e (/ 85.0 2.0))"
+      # expect((true == c).to_s).to eq "(= true c)"
+      # expect((false == c).to_s).to eq "(= false c)"
     end
 
     it "raises exception if type cast is not possible" do
@@ -85,8 +87,8 @@ describe Z3::Ast do
       expect{e == c}.to raise_error(Z3::Exception)
       expect{a == true}.to raise_error(Z3::Exception)
       expect{e == true}.to raise_error(Z3::Exception)
-      expect{true == a}.to raise_error(Z3::Exception)
-      expect{true == e}.to raise_error(Z3::Exception)
+      # expect{true == a}.to raise_error(Z3::Exception)
+      # expect{true == e}.to raise_error(Z3::Exception)
       expect{c == 42}.to raise_error(Z3::Exception)
       expect{c == 42.5}.to raise_error(Z3::Exception)
       expect{42 == c}.to raise_error(Z3::Exception)
