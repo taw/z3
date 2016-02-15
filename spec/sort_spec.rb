@@ -1,15 +1,15 @@
 describe Z3::Sort do
-  it "create Bool sort" do
+  it "#bool creates Bool sort" do
     expect(Z3::Sort.bool.to_s).to eq("Bool")
     expect(Z3::Sort.bool.inspect).to eq("Z3::Sort<Bool>")
   end
 
-  it "create Int sort" do
+  it "#int creates Int sort" do
     expect(Z3::Sort.int.to_s).to eq("Int")
     expect(Z3::Sort.int.inspect).to eq("Z3::Sort<Int>")
   end
 
-  it "create Real sort" do
+  it "#real creates Real sort" do
     expect(Z3::Sort.real.to_s).to eq("Real")
     expect(Z3::Sort.real.inspect).to eq("Z3::Sort<Real>")
   end

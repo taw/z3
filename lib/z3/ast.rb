@@ -1,68 +1,83 @@
 class Z3::Ast
-  attr_reader :_ast, :_ctx
+  attr_reader :_ast, :ctx
   # Do not use .new directly
   def initialize(_ast, ctx=Z3::Context.main)
-    @_ctx = ctx
+    @ctx = ctx
     @_ast = _ast
   end
 
+  def sort
+    Z3::Sort.new(
+      Z3::Core.Z3_get_sort(@ctx._context, @_ast),
+      ctx: @ctx
+    )
+  end
+
+  def to_s
+    Z3::Core.Z3_ast_to_string(@ctx._context, @_ast)
+  end
+
+  def inspect
+    "Z3::Ast<#{to_s} :: #{sort.to_s}>"
+  end
+
   def ~
-    Z3::Ast.not(self, ctx: @_ctx)
+    Z3::Ast.not(self, ctx: @ctx)
   end
 
   def |(b)
-    raise "Not same context" unless @_ctx == b._ctx
-    Z3::Ast.or(self, b, ctx: @_ctx)
+    raise "Not same context" unless @ctx == b.ctx
+    Z3::Ast.or(self, b, ctx: @ctx)
   end
 
   def &(b)
-    raise "Not same context" unless @_ctx == b._ctx
-    Z3::Ast.and(self, b, ctx: @_ctx)
+    raise "Not same context" unless @ctx == b.ctx
+    Z3::Ast.and(self, b, ctx: @ctx)
   end
 
   def +(b)
-    raise "Not same context" unless @_ctx == b._ctx
-    Z3::Ast.add(self, b, ctx: @_ctx)
+    raise "Not same context" unless @ctx == b.ctx
+    Z3::Ast.add(self, b, ctx: @ctx)
   end
 
   def *(b)
-    raise "Not same context" unless @_ctx == b._ctx
-    Z3::Ast.mul(self, b, ctx: @_ctx)
+    raise "Not same context" unless @ctx == b.ctx
+    Z3::Ast.mul(self, b, ctx: @ctx)
   end
 
   def -(b)
-    raise "Not same context" unless @_ctx == b._ctx
-    Z3::Ast.sub(self, b, ctx: @_ctx)
+    raise "Not same context" unless @ctx == b.ctx
+    Z3::Ast.sub(self, b, ctx: @ctx)
   end
 
   def ==(b)
-    raise "Not same context" unless @_ctx == b._ctx
-    Z3::Ast.eq(self, b, ctx: @_ctx)
+    raise "Not same context" unless @ctx == b.ctx
+    Z3::Ast.eq(self, b, ctx: @ctx)
   end
 
   def !=(b)
-    raise "Not same context" unless @_ctx == b._ctx
-    Z3::Ast.distinct(self, b, ctx: @_ctx)
+    raise "Not same context" unless @ctx == b.ctx
+    Z3::Ast.distinct(self, b, ctx: @ctx)
   end
 
   def <=(b)
-    raise "Not same context" unless @_ctx == b._ctx
-    Z3::Ast.le(self, b, ctx: @_ctx)
+    raise "Not same context" unless @ctx == b.ctx
+    Z3::Ast.le(self, b, ctx: @ctx)
   end
 
   def <(b)
-    raise "Not same context" unless @_ctx == b._ctx
-    Z3::Ast.lt(self, b, ctx: @_ctx)
+    raise "Not same context" unless @ctx == b.ctx
+    Z3::Ast.lt(self, b, ctx: @ctx)
   end
 
   def >=(b)
-    raise "Not same context" unless @_ctx == b._ctx
-    Z3::Ast.ge(self, b, ctx: @_ctx)
+    raise "Not same context" unless @ctx == b.ctx
+    Z3::Ast.ge(self, b, ctx: @ctx)
   end
 
   def >(b)
-    raise "Not same context" unless @_ctx == b._ctx
-    Z3::Ast.gt(self, b, ctx: @_ctx)
+    raise "Not same context" unless @ctx == b.ctx
+    Z3::Ast.gt(self, b, ctx: @ctx)
   end
 
   class <<self

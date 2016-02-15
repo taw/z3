@@ -9,6 +9,7 @@ module Z3::Core
   ast_pointer = :pointer
   sort_pointer = :pointer
   symbol = :pointer
+  model_pointer = :pointer
   z3_bool = :int
   # Context API
   attach_function :Z3_mk_context, [], ctx_pointer
@@ -26,6 +27,9 @@ module Z3::Core
   attach_function :Z3_solver_reset, [ctx_pointer, solver_pointer], :void
   attach_function :Z3_solver_assert, [ctx_pointer, solver_pointer, ast_pointer], :void
   attach_function :Z3_solver_check, [ctx_pointer, solver_pointer], z3_bool
+  # Model API
+  attach_function :Z3_solver_get_model, [ctx_pointer, solver_pointer], model_pointer
+
   # AST API
   attach_function :Z3_mk_true, [ctx_pointer], ast_pointer
   attach_function :Z3_mk_false, [ctx_pointer], ast_pointer
@@ -42,4 +46,6 @@ module Z3::Core
   attach_function :Z3_mk_sub, [ctx_pointer, :int, :pointer], ast_pointer
   attach_function :Z3_mk_mul, [ctx_pointer, :int, :pointer], ast_pointer
   attach_function :Z3_mk_distinct, [ctx_pointer, :int, :pointer], ast_pointer
+  attach_function :Z3_ast_to_string, [ctx_pointer, ast_pointer], :string
+  attach_function :Z3_get_sort, [ctx_pointer, ast_pointer], sort_pointer
 end
