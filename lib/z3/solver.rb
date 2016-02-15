@@ -24,6 +24,23 @@ class Z3::Solver
     check_sat_results(Z3::Core.Z3_solver_check(@ctx._context, @_solver))
   end
 
+  def prove!(ast)
+    push
+    assert(~ast)
+    case check
+    when :sat
+      puts "Counterexample exists"
+    when :unknown
+      puts "Unknown"
+    when :unsat
+      puts "Proven"
+    else
+      raise "Wrong SAT result #{r}"
+    end
+  ensure
+    pop
+  end
+
   private
 
   def check_sat_results(r)

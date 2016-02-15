@@ -6,27 +6,24 @@ def check_multiplication_laws_1
   a = Z3::Ast.int("a")
   b = Z3::Ast.int("b")
   solver = Z3::Solver.new
-  solver.assert(~(
-    (a+b)*(a-b) == (a*a - b*b)
-  ))
   puts "Checking if (a+b)(a-b)==a*a-b*b"
-  p solver.check
+  solver.prove!(
+    (a+b)*(a-b) == (a*a - b*b)
+  )
 end
 
 def check_inequalities
   a = Z3::Ast.int("a")
   b = Z3::Ast.int("b")
   solver = Z3::Solver.new
-  solver.assert(a+b < a)
-  puts "Checking if a+b >= 0"
-  p solver.check
+  puts "Checking if a+b >= a"
+  solver.prove!(a+b >= a)
 
   solver = Z3::Solver.new
-  solver.assert(a >= a-a)
-  solver.assert(b >= b-b)
-  solver.assert(a+b < a)
+  solver.assert(a >= 0)
+  solver.assert(b >= 0)
   puts "Checking if a+b >= a if a,b >= 0"
-  p solver.check
+  solver.prove!(a+b >= a)
 end
 
 check_multiplication_laws_1
