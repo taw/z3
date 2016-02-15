@@ -1,20 +1,18 @@
 class Z3::Ast
-  attr_reader :_ast, :ctx
+  attr_reader :_ast
   # Do not use .new directly
-  def initialize(_ast, ctx=Z3::Context.main)
-    @ctx = ctx
+  def initialize(_ast)
     @_ast = _ast
   end
 
   def sort
     Z3::Sort.new(
-      Z3::Core.Z3_get_sort(@ctx._context, @_ast),
-      ctx: @ctx
+      Z3::Core.Z3_get_sort(Z3::Context._context, @_ast)
     )
   end
 
   def to_s
-    Z3::Core.Z3_ast_to_string(@ctx._context, @_ast)
+    Z3::Core.Z3_ast_to_string(Z3::Context._context, @_ast)
   end
 
   def inspect
@@ -23,7 +21,7 @@ class Z3::Ast
 
   def ~
     raise Z3::Exception, "Can only be used on booleans" unless bool?
-    Z3::Ast.not(self, ctx: @ctx)
+    Z3::Ast.not(self)
   end
 
   def int?
@@ -39,27 +37,26 @@ class Z3::Ast
   end
 
   private def binary_arithmetic_operator(op, b)
-    b = Z3::Ast.from_const(b, sort, ctx: @ctx) unless b.is_a?(Z3::Ast)
+    b = Z3::Ast.from_const(b, sort) unless b.is_a?(Z3::Ast)
     raise Z3::Exception, "Can't be used on booleans" if bool? or b.bool?
-    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
     if sort == b.sort
       a = self
     else
       a, b = Z3::Ast.coerce_to_same_sort(self, b)
     end
-    Z3::Ast.send(op, a, b, ctx: @ctx)
+    Z3::Ast.send(op, a, b)
   end
 
   def |(b)
-    b = Z3::Ast.from_const(b, sort, ctx: @ctx) unless b.is_a?(Z3::Ast)
+    b = Z3::Ast.from_const(b, sort) unless b.is_a?(Z3::Ast)
     raise Z3::Exception, "Can only be used on booleans" unless bool? and b.bool?
-    Z3::Ast.or(self, b, ctx: @ctx)
+    Z3::Ast.or(self, b)
   end
 
   def &(b)
-    b = Z3::Ast.from_const(b, sort, ctx: @ctx) unless b.is_a?(Z3::Ast)
+    b = Z3::Ast.from_const(b, sort) unless b.is_a?(Z3::Ast)
     raise Z3::Exception, "Can only be used on booleans" unless bool? and b.bool?
-    Z3::Ast.and(self, b, ctx: @ctx)
+    Z3::Ast.and(self, b)
   end
 
   def +(b)
@@ -91,61 +88,58 @@ class Z3::Ast
   end
 
   def ==(b)
-    b = Z3::Ast.from_const(b, sort, ctx: @ctx) unless b.is_a?(Z3::Ast)
-    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
+    b = Z3::Ast.from_const(b, sort) unless b.is_a?(Z3::Ast)
     if sort != b.sort
       a, b = Z3::Ast.coerce_to_same_sort(self, b)
     else
       a = self
     end
-    Z3::Ast.eq(self, b, ctx: @ctx)
+    Z3::Ast.eq(self, b)
   end
 
   def !=(b)
-    b = Z3::Ast.from_const(b, sort, ctx: @ctx) unless b.is_a?(Z3::Ast)
-    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
+    b = Z3::Ast.from_const(b, sort) unless b.is_a?(Z3::Ast)
     if sort != b.sort
       a, b = Z3::Ast.coerce_to_same_sort(self, b)
     else
       a = self
     end
-    Z3::Ast.distinct(a, b, ctx: @ctx)
+    Z3::Ast.distinct(a, b)
   end
 
   def coerce(other)
-    [Z3::Ast.from_const(other, sort, ctx: @ctx), self]
+    [Z3::Ast.from_const(other, sort), self]
   end
 
   def int_to_real
     raise Z3::Exception, "Type mismatch" unless sort == Z3::Sort.int
     Z3::Ast.new(
-      Z3::Core.Z3_mk_int2real(@ctx._context, @_ast),
-      @ctx
+      Z3::Core.Z3_mk_int2real(Z3::Context._context, @_ast)
     )
   end
 
   class <<self
-    def from_const(value, sort, ctx: Z3::Context.main)
+    def from_const(value, sort)
       case sort
       when Z3::Sort.bool
         raise Z3::Exception, "Can't convert #{value.class} to Real" unless value == true or value == false
         if value
-          Z3::Ast.true(ctx: ctx)
+          Z3::Ast.true
         else
-          Z3::Ast.false(ctx: ctx)
+          Z3::Ast.false
         end
       when Z3::Sort.int
         # (int_var == 2.4) gets changed to
         # ((int_to_real int_var) == (mknumeral 2.4))
         raise Z3::Exception, "Can't convert #{value.class} to Real" unless value.is_a?(Numeric)
         if value.is_a?(Float)
-          Z3::Ast.new(Z3::Core.Z3_mk_numeral(ctx._context, value.to_s, Z3::Sort.real(ctx: ctx)._sort), ctx)
+          Z3::Ast.new(Z3::Core.Z3_mk_numeral(Z3::Context._context, value.to_s, Z3::Sort.real._sort))
         else
-          Z3::Ast.new(Z3::Core.Z3_mk_numeral(ctx._context, value.to_s, sort._sort), ctx)
+          Z3::Ast.new(Z3::Core.Z3_mk_numeral(Z3::Context._context, value.to_s, sort._sort))
         end
       when Z3::Sort.real
         raise Z3::Exception, "Can't convert #{value.class} to Real" unless value.is_a?(Numeric)
-        Z3::Ast.new(Z3::Core.Z3_mk_numeral(ctx._context, value.to_s, sort._sort), ctx)
+        Z3::Ast.new(Z3::Core.Z3_mk_numeral(Z3::Context._context, value.to_s, sort._sort))
       end
     end
 
@@ -159,91 +153,90 @@ class Z3::Ast
       end
     end
 
-    def true(ctx: Z3::Context.main)
-      Z3::Ast.new(Z3::Core.Z3_mk_true(ctx._context), ctx)
+    def true
+      Z3::Ast.new(Z3::Core.Z3_mk_true(Z3::Context._context))
     end
 
-    def false(ctx: Z3::Context.main)
-      Z3::Ast.new(Z3::Core.Z3_mk_false(ctx._context), ctx)
+    def false
+      Z3::Ast.new(Z3::Core.Z3_mk_false(Z3::Context._context))
     end
 
-    def eq(a, b, ctx: Z3::Context.main)
-      Z3::Ast.new(Z3::Core.Z3_mk_eq(ctx._context, a._ast, b._ast), ctx)
+    def eq(a, b)
+      Z3::Ast.new(Z3::Core.Z3_mk_eq(Z3::Context._context, a._ast, b._ast))
     end
 
-    def ge(a, b, ctx: Z3::Context.main)
-      Z3::Ast.new(Z3::Core.Z3_mk_ge(ctx._context, a._ast, b._ast), ctx)
+    def ge(a, b)
+      Z3::Ast.new(Z3::Core.Z3_mk_ge(Z3::Context._context, a._ast, b._ast))
     end
 
-    def gt(a, b, ctx: Z3::Context.main)
-      Z3::Ast.new(Z3::Core.Z3_mk_gt(ctx._context, a._ast, b._ast), ctx)
+    def gt(a, b)
+      Z3::Ast.new(Z3::Core.Z3_mk_gt(Z3::Context._context, a._ast, b._ast))
     end
 
-    def le(a, b, ctx: Z3::Context.main)
-      Z3::Ast.new(Z3::Core.Z3_mk_le(ctx._context, a._ast, b._ast), ctx)
+    def le(a, b)
+      Z3::Ast.new(Z3::Core.Z3_mk_le(Z3::Context._context, a._ast, b._ast))
     end
 
-    def lt(a, b, ctx: Z3::Context.main)
-      Z3::Ast.new(Z3::Core.Z3_mk_lt(ctx._context, a._ast, b._ast), ctx)
+    def lt(a, b)
+      Z3::Ast.new(Z3::Core.Z3_mk_lt(Z3::Context._context, a._ast, b._ast))
     end
 
-    def not(a, ctx: Z3::Context.main)
-      Z3::Ast.new(Z3::Core.Z3_mk_not(ctx._context, a._ast), ctx)
+    def not(a)
+      Z3::Ast.new(Z3::Core.Z3_mk_not(Z3::Context._context, a._ast))
     end
 
-    def distinct(*args, ctx: Z3::Context.main)
-      ast_vararg_operator(:Z3_mk_distinct, args, ctx)
+    def distinct(*args)
+      ast_vararg_operator(:Z3_mk_distinct, args)
     end
 
-    def and(*args, ctx: Z3::Context.main)
-      ast_vararg_operator(:Z3_mk_and, args, ctx)
+    def and(*args)
+      ast_vararg_operator(:Z3_mk_and, args)
     end
 
-    def or(*args, ctx: Z3::Context.main)
-      ast_vararg_operator(:Z3_mk_or, args, ctx)
+    def or(*args)
+      ast_vararg_operator(:Z3_mk_or, args)
     end
 
-    def add(*args, ctx: Z3::Context.main)
-      ast_vararg_operator(:Z3_mk_add, args, ctx)
+    def add(*args)
+      ast_vararg_operator(:Z3_mk_add, args)
     end
 
-    def sub(*args, ctx: Z3::Context.main)
-      ast_vararg_operator(:Z3_mk_sub, args, ctx)
+    def sub(*args)
+      ast_vararg_operator(:Z3_mk_sub, args)
     end
 
-    def mul(*args, ctx: Z3::Context.main)
-      ast_vararg_operator(:Z3_mk_mul, args, ctx)
+    def mul(*args)
+      ast_vararg_operator(:Z3_mk_mul, args)
     end
 
-    def bool(name, ctx: Z3::Context.main)
-      var(name, Z3::Sort.bool(ctx: ctx), ctx)
+    def bool(name)
+      var(name, Z3::Sort.bool)
     end
 
-    def int(name, ctx: Z3::Context.main)
-      var(name, Z3::Sort.int(ctx: ctx), ctx)
+    def int(name)
+      var(name, Z3::Sort.int)
     end
 
-    def real(name, ctx: Z3::Context.main)
-      var(name, Z3::Sort.real(ctx: ctx), ctx)
+    def real(name)
+      var(name, Z3::Sort.real)
     end
 
     private
 
-    def ast_vararg_operator(sym, args, ctx)
+    def ast_vararg_operator(sym, args)
       raise if args.empty?
       c_args = FFI::MemoryPointer.new(:pointer, args.size)
       c_args.write_array_of_pointer args.map(&:_ast)
-      Z3::Ast.new(Z3::Core.send(sym, ctx._context, args.size, c_args), ctx)
+      Z3::Ast.new(Z3::Core.send(sym, Z3::Context._context, args.size, c_args))
     end
 
-    def var(name, sort, ctx)
+    def var(name, sort)
       Z3::Ast.new(
         Z3::Core.Z3_mk_const(
-          ctx._context,
-          Z3::Core.Z3_mk_string_symbol(ctx._context, name),
+          Z3::Context._context,
+          Z3::Core.Z3_mk_string_symbol(Z3::Context._context, name),
           sort._sort,
-        ),
-        ctx
+        )
       )
     end
   end

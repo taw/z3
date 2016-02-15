@@ -1,5 +1,7 @@
 require 'ffi'
 
+# Seriously do not use this directly in your code
+
 module Z3::Core
   extend FFI::Library
   ffi_lib "z3"

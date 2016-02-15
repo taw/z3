@@ -1,8 +1,7 @@
 class Z3::Sort
-  attr_reader :_sort, :ctx
+  attr_reader :_sort
   # Do not use .new directly
-  def initialize(_sort, ctx: Z3::Context.main)
-    @ctx = ctx
+  def initialize(_sort)
     @_sort = _sort
   end
 
@@ -11,7 +10,7 @@ class Z3::Sort
   end
 
   def to_s
-    Z3::Core.Z3_sort_to_string(@ctx._context, @_sort)
+    Z3::Core.Z3_sort_to_string(Z3::Context._context, @_sort)
   end
 
   def inspect
@@ -19,16 +18,16 @@ class Z3::Sort
   end
 
   class << self
-    def bool(ctx: Z3::Context.main)
-      Z3::Sort.new(Z3::Core::Z3_mk_bool_sort(ctx._context), ctx: ctx)
+    def bool
+      Z3::Sort.new(Z3::Core.Z3_mk_bool_sort(Z3::Context._context))
     end
 
-    def int(ctx: Z3::Context.main)
-      Z3::Sort.new(Z3::Core::Z3_mk_int_sort(ctx._context), ctx: ctx)
+    def int
+      Z3::Sort.new(Z3::Core.Z3_mk_int_sort(Z3::Context._context))
     end
 
-    def real(ctx: Z3::Context.main)
-      Z3::Sort.new(Z3::Core::Z3_mk_real_sort(ctx._context), ctx: ctx)
+    def real
+      Z3::Sort.new(Z3::Core.Z3_mk_real_sort(Z3::Context._context))
     end
   end
 end

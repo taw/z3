@@ -1,33 +1,31 @@
 class Z3::Solver
-  def initialize(ctx: Z3::Context.main)
-    @ctx = ctx
-    @_solver = Z3::Core.Z3_mk_solver(@ctx._context)
+  def initialize
+    @_solver = Z3::Core.Z3_mk_solver(Z3::Context._context)
   end
 
   def push
-    Z3::Core.Z3_solver_push(@ctx._context, @_solver)
+    Z3::Core.Z3_solver_push(Z3::Context._context, @_solver)
   end
 
   def pop(n=1)
-    Z3::Core.Z3_solver_pop(@ctx._context, @_solver, n)
+    Z3::Core.Z3_solver_pop(Z3::Context._context, @_solver, n)
   end
 
   def reset
-    Z3::Core.Z3_solver_reset(@ctx._context, @_solver)
+    Z3::Core.Z3_solver_reset(Z3::Context._context, @_solver)
   end
 
   def assert(ast)
-    Z3::Core.Z3_solver_assert(@ctx._context, @_solver, ast._ast)
+    Z3::Core.Z3_solver_assert(Z3::Context._context, @_solver, ast._ast)
   end
 
   def check
-    check_sat_results(Z3::Core.Z3_solver_check(@ctx._context, @_solver))
+    check_sat_results(Z3::Core.Z3_solver_check(Z3::Context._context, @_solver))
   end
 
   def model
     Z3::Model.new(
-      Z3::Core.Z3_solver_get_model(@ctx._context, @_solver),
-      ctx: @ctx,
+      Z3::Core.Z3_solver_get_model(Z3::Context._context, @_solver)
     )
   end
 
