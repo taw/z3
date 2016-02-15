@@ -25,81 +25,102 @@ class Z3::Ast
     Z3::Ast.not(self, ctx: @ctx)
   end
 
-  def |(b)
+  def int?
+    sort == Z3::Sort.int
+  end
+
+  def bool?
+    sort == Z3::Sort.bool
+  end
+
+  def real?
+    sort == Z3::Sort.real
+  end
+
+  private def binary_arithmetic_operator(op, b)
+    b = Z3::Ast.from_const(b, sort, ctx: @ctx) unless b.is_a?(Z3::Ast)
+    raise Z3::Exception, "Can't be used on booleans" if bool? or b.bool?
     raise Z3::Exception, "Not same context" unless @ctx == b.ctx
-    raise Z3::Exception, "Type mismatch" unless sort == b.sort
+    if sort == b.sort
+      a = self
+    else
+      a, b = Z3::Ast.coerce_to_same_sort(self, b)
+    end
+    Z3::Ast.send(op, a, b, ctx: @ctx)
+  end
+
+  def |(b)
+    b = Z3::Ast.from_const(b, sort, ctx: @ctx) unless b.is_a?(Z3::Ast)
+    raise Z3::Exception, "Can only be used on booleans" unless bool? and b.bool?
     Z3::Ast.or(self, b, ctx: @ctx)
   end
 
   def &(b)
-    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
-    raise Z3::Exception, "Type mismatch" unless sort == b.sort
+    b = Z3::Ast.from_const(b, sort, ctx: @ctx) unless b.is_a?(Z3::Ast)
+    raise Z3::Exception, "Can only be used on booleans" unless bool? and b.bool?
     Z3::Ast.and(self, b, ctx: @ctx)
   end
 
   def +(b)
-    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
-    raise Z3::Exception, "Type mismatch" unless sort == b.sort
-    Z3::Ast.add(self, b, ctx: @ctx)
+    binary_arithmetic_operator(:add, b)
   end
 
   def *(b)
-    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
-    raise Z3::Exception, "Type mismatch" unless sort == b.sort
-    Z3::Ast.mul(self, b, ctx: @ctx)
+    binary_arithmetic_operator(:mul, b)
   end
 
   def -(b)
-    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
-    raise Z3::Exception, "Type mismatch" unless sort == b.sort
-    Z3::Ast.sub(self, b, ctx: @ctx)
+    binary_arithmetic_operator(:sub, b)
   end
 
   def ==(b)
-    unless b.is_a?(Z3::Ast)
-      b = Z3::Ast.from_const(b, sort, ctx: @ctx)
-    end
+    b = Z3::Ast.from_const(b, sort, ctx: @ctx) unless b.is_a?(Z3::Ast)
+    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
     if sort != b.sort
       a, b = Z3::Ast.coerce_to_same_sort(self, b)
     else
       a = self
     end
-    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
     Z3::Ast.eq(self, b, ctx: @ctx)
   end
 
   def !=(b)
+    b = Z3::Ast.from_const(b, sort, ctx: @ctx) unless b.is_a?(Z3::Ast)
     raise Z3::Exception, "Not same context" unless @ctx == b.ctx
     raise Z3::Exception, "Type mismatch" unless sort == b.sort
     Z3::Ast.distinct(self, b, ctx: @ctx)
   end
 
   def <=(b)
+    b = Z3::Ast.from_const(b, sort, ctx: @ctx) unless b.is_a?(Z3::Ast)
     raise Z3::Exception, "Not same context" unless @ctx == b.ctx
     raise Z3::Exception, "Type mismatch" unless sort == b.sort
     Z3::Ast.le(self, b, ctx: @ctx)
   end
 
   def <(b)
+    b = Z3::Ast.from_const(b, sort, ctx: @ctx) unless b.is_a?(Z3::Ast)
     raise Z3::Exception, "Not same context" unless @ctx == b.ctx
     raise Z3::Exception, "Type mismatch" unless sort == b.sort
     Z3::Ast.lt(self, b, ctx: @ctx)
   end
 
   def >=(b)
+    b = Z3::Ast.from_const(b, sort, ctx: @ctx) unless b.is_a?(Z3::Ast)
     raise Z3::Exception, "Not same context" unless @ctx == b.ctx
     raise Z3::Exception, "Type mismatch" unless sort == b.sort
     Z3::Ast.ge(self, b, ctx: @ctx)
   end
 
   def >(b)
+    b = Z3::Ast.from_const(b, sort, ctx: @ctx) unless b.is_a?(Z3::Ast)
     raise Z3::Exception, "Not same context" unless @ctx == b.ctx
     raise Z3::Exception, "Type mismatch" unless sort == b.sort
     Z3::Ast.gt(self, b, ctx: @ctx)
   end
 
   def coerce(other)
-    require 'pry'; binding.pry
+    [Z3::Ast.from_const(other, sort, ctx: @ctx), self]
   end
 
   def int_to_real

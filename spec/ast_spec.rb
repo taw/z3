@@ -44,6 +44,33 @@ describe Z3::Ast do
       expect((a+b).to_s).to eq "(+ a b)"
       expect((e+f).to_s).to eq "(+ e f)"
     end
+
+    it "casts to correct type if possible" do
+      expect((a+e).to_s).to eq "(+ (to_real a) e)"
+      expect((e+a).to_s).to eq "(+ e (to_real a))"
+      expect((a+42).to_s).to eq "(+ a 42)"
+      expect((42+a).to_s).to eq "(+ 42 a)"
+      expect((a+42.5).to_s).to eq "(+ (to_real a) (/ 85.0 2.0))"
+      expect((42.5+a).to_s).to eq "(+ (/ 85.0 2.0) (to_real a))"
+      expect((e+42).to_s).to eq "(+ e 42.0)"
+      expect((42+e).to_s).to eq "(+ 42.0 e)"
+      expect((e+42.5).to_s).to eq "(+ e (/ 85.0 2.0))"
+      expect((42.5+e).to_s).to eq "(+ (/ 85.0 2.0) e)"
+    end
+
+    it "raises exception if type cast is not possible" do
+      expect{a+c}.to raise_error(Z3::Exception)
+      expect{c+a}.to raise_error(Z3::Exception)
+      expect{e+c}.to raise_error(Z3::Exception)
+      expect{c+e}.to raise_error(Z3::Exception)
+      expect{c+d}.to raise_error(Z3::Exception)
+      expect{a+true}.to raise_error(Z3::Exception)
+      expect{c+true}.to raise_error(Z3::Exception)
+      expect{e+true}.to raise_error(Z3::Exception)
+      expect{a+false}.to raise_error(Z3::Exception)
+      expect{c+false}.to raise_error(Z3::Exception)
+      expect{e+false}.to raise_error(Z3::Exception)
+    end
   end
 
   describe "#-" do
@@ -51,12 +78,66 @@ describe Z3::Ast do
       expect((a-b).to_s).to eq "(- a b)"
       expect((e-f).to_s).to eq "(- e f)"
     end
+
+    it "casts to correct type if possible" do
+      expect((a-e).to_s).to eq "(- (to_real a) e)"
+      expect((e-a).to_s).to eq "(- e (to_real a))"
+      expect((a-42).to_s).to eq "(- a 42)"
+      expect((42-a).to_s).to eq "(- 42 a)"
+      expect((a-42.5).to_s).to eq "(- (to_real a) (/ 85.0 2.0))"
+      expect((42.5-a).to_s).to eq "(- (/ 85.0 2.0) (to_real a))"
+      expect((e-42).to_s).to eq "(- e 42.0)"
+      expect((42-e).to_s).to eq "(- 42.0 e)"
+      expect((e-42.5).to_s).to eq "(- e (/ 85.0 2.0))"
+      expect((42.5-e).to_s).to eq "(- (/ 85.0 2.0) e)"
+    end
+
+    it "raises exception if type cast is not possible" do
+      expect{a-c}.to raise_error(Z3::Exception)
+      expect{c-a}.to raise_error(Z3::Exception)
+      expect{e-c}.to raise_error(Z3::Exception)
+      expect{c-e}.to raise_error(Z3::Exception)
+      expect{c-d}.to raise_error(Z3::Exception)
+      expect{a-true}.to raise_error(Z3::Exception)
+      expect{c-true}.to raise_error(Z3::Exception)
+      expect{e-true}.to raise_error(Z3::Exception)
+      expect{a-false}.to raise_error(Z3::Exception)
+      expect{c-false}.to raise_error(Z3::Exception)
+      expect{e-false}.to raise_error(Z3::Exception)
+    end
   end
 
   describe "#*" do
     it "allows * of int or real variables" do
       expect((a*b).to_s).to eq "(* a b)"
       expect((e*f).to_s).to eq "(* e f)"
+    end
+
+    it "casts to correct type if possible" do
+      expect((a*e).to_s).to eq "(* (to_real a) e)"
+      expect((e*a).to_s).to eq "(* e (to_real a))"
+      expect((a*42).to_s).to eq "(* a 42)"
+      expect((42*a).to_s).to eq "(* 42 a)"
+      expect((a*42.5).to_s).to eq "(* (to_real a) (/ 85.0 2.0))"
+      expect((42.5*a).to_s).to eq "(* (/ 85.0 2.0) (to_real a))"
+      expect((e*42).to_s).to eq "(* e 42.0)"
+      expect((42*e).to_s).to eq "(* 42.0 e)"
+      expect((e*42.5).to_s).to eq "(* e (/ 85.0 2.0))"
+      expect((42.5*e).to_s).to eq "(* (/ 85.0 2.0) e)"
+    end
+
+    it "raises exception if type cast is not possible" do
+      expect{a*c}.to raise_error(Z3::Exception)
+      expect{c*a}.to raise_error(Z3::Exception)
+      expect{e*c}.to raise_error(Z3::Exception)
+      expect{c*e}.to raise_error(Z3::Exception)
+      expect{c*d}.to raise_error(Z3::Exception)
+      expect{a*true}.to raise_error(Z3::Exception)
+      expect{c*true}.to raise_error(Z3::Exception)
+      expect{e*true}.to raise_error(Z3::Exception)
+      expect{a*false}.to raise_error(Z3::Exception)
+      expect{c*false}.to raise_error(Z3::Exception)
+      expect{e*false}.to raise_error(Z3::Exception)
     end
   end
 
