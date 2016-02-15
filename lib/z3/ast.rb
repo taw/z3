@@ -22,6 +22,7 @@ class Z3::Ast
   end
 
   def ~
+    raise Z3::Exception, "Can only be used on booleans" unless bool?
     Z3::Ast.not(self, ctx: @ctx)
   end
 
@@ -73,6 +74,22 @@ class Z3::Ast
     binary_arithmetic_operator(:sub, b)
   end
 
+  def >=(b)
+    binary_arithmetic_operator(:ge, b)
+  end
+
+  def >(b)
+    binary_arithmetic_operator(:gt, b)
+  end
+
+  def <=(b)
+    binary_arithmetic_operator(:le, b)
+  end
+
+  def <(b)
+    binary_arithmetic_operator(:lt, b)
+  end
+
   def ==(b)
     b = Z3::Ast.from_const(b, sort, ctx: @ctx) unless b.is_a?(Z3::Ast)
     raise Z3::Exception, "Not same context" unless @ctx == b.ctx
@@ -87,36 +104,12 @@ class Z3::Ast
   def !=(b)
     b = Z3::Ast.from_const(b, sort, ctx: @ctx) unless b.is_a?(Z3::Ast)
     raise Z3::Exception, "Not same context" unless @ctx == b.ctx
-    raise Z3::Exception, "Type mismatch" unless sort == b.sort
-    Z3::Ast.distinct(self, b, ctx: @ctx)
-  end
-
-  def <=(b)
-    b = Z3::Ast.from_const(b, sort, ctx: @ctx) unless b.is_a?(Z3::Ast)
-    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
-    raise Z3::Exception, "Type mismatch" unless sort == b.sort
-    Z3::Ast.le(self, b, ctx: @ctx)
-  end
-
-  def <(b)
-    b = Z3::Ast.from_const(b, sort, ctx: @ctx) unless b.is_a?(Z3::Ast)
-    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
-    raise Z3::Exception, "Type mismatch" unless sort == b.sort
-    Z3::Ast.lt(self, b, ctx: @ctx)
-  end
-
-  def >=(b)
-    b = Z3::Ast.from_const(b, sort, ctx: @ctx) unless b.is_a?(Z3::Ast)
-    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
-    raise Z3::Exception, "Type mismatch" unless sort == b.sort
-    Z3::Ast.ge(self, b, ctx: @ctx)
-  end
-
-  def >(b)
-    b = Z3::Ast.from_const(b, sort, ctx: @ctx) unless b.is_a?(Z3::Ast)
-    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
-    raise Z3::Exception, "Type mismatch" unless sort == b.sort
-    Z3::Ast.gt(self, b, ctx: @ctx)
+    if sort != b.sort
+      a, b = Z3::Ast.coerce_to_same_sort(self, b)
+    else
+      a = self
+    end
+    Z3::Ast.distinct(a, b, ctx: @ctx)
   end
 
   def coerce(other)

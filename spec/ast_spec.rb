@@ -25,6 +25,11 @@ describe Z3::Ast do
     it "allows negating boolean variables" do
       expect((~c).to_s).to eq("(not c)")
     end
+
+    it "raises exception if type cast is not possible" do
+      expect{~a}.to raise_error(Z3::Exception)
+      expect{~e}.to raise_error(Z3::Exception)
+    end
   end
 
   describe "#&" do
@@ -57,105 +62,39 @@ describe Z3::Ast do
     end
   end
 
-  describe "#+" do
-    it "allows + of int or real variables" do
-      expect((a+b).to_s).to eq "(+ a b)"
-      expect((e+f).to_s).to eq "(+ e f)"
-    end
+  %W[+ - * <= < >= >].each do |op|
+    describe "#{op} arithmetic operator" do
+      it "allows + of int or real variables" do
+        expect((a.send op, b).to_s).to eq "(#{op} a b)"
+        expect((e.send op, f).to_s).to eq "(#{op} e f)"
+      end
 
-    it "casts to correct type if possible" do
-      expect((a+e).to_s).to eq "(+ (to_real a) e)"
-      expect((e+a).to_s).to eq "(+ e (to_real a))"
-      expect((a+42).to_s).to eq "(+ a 42)"
-      expect((42+a).to_s).to eq "(+ 42 a)"
-      expect((a+42.5).to_s).to eq "(+ (to_real a) (/ 85.0 2.0))"
-      expect((42.5+a).to_s).to eq "(+ (/ 85.0 2.0) (to_real a))"
-      expect((e+42).to_s).to eq "(+ e 42.0)"
-      expect((42+e).to_s).to eq "(+ 42.0 e)"
-      expect((e+42.5).to_s).to eq "(+ e (/ 85.0 2.0))"
-      expect((42.5+e).to_s).to eq "(+ (/ 85.0 2.0) e)"
-    end
+      it "casts to correct type if possible" do
+        expect((a.send op, e).to_s).to eq "(#{op} (to_real a) e)"
+        expect((e.send op, a).to_s).to eq "(#{op} e (to_real a))"
+        expect((a.send op, 42).to_s).to eq "(#{op} a 42)"
+        expect((42.send op, a).to_s).to eq "(#{op} 42 a)"
+        expect((a.send op, 42.5).to_s).to eq "(#{op} (to_real a) (/ 85.0 2.0))"
+        expect((42.5.send op, a).to_s).to eq "(#{op} (/ 85.0 2.0) (to_real a))"
+        expect((e.send op, 42).to_s).to eq "(#{op} e 42.0)"
+        expect((42.send op, e).to_s).to eq "(#{op} 42.0 e)"
+        expect((e.send op, 42.5).to_s).to eq "(#{op} e (/ 85.0 2.0))"
+        expect((42.5.send op, e).to_s).to eq "(#{op} (/ 85.0 2.0) e)"
+      end
 
-    it "raises exception if type cast is not possible" do
-      expect{a+c}.to raise_error(Z3::Exception)
-      expect{c+a}.to raise_error(Z3::Exception)
-      expect{e+c}.to raise_error(Z3::Exception)
-      expect{c+e}.to raise_error(Z3::Exception)
-      expect{c+d}.to raise_error(Z3::Exception)
-      expect{a+true}.to raise_error(Z3::Exception)
-      expect{c+true}.to raise_error(Z3::Exception)
-      expect{e+true}.to raise_error(Z3::Exception)
-      expect{a+false}.to raise_error(Z3::Exception)
-      expect{c+false}.to raise_error(Z3::Exception)
-      expect{e+false}.to raise_error(Z3::Exception)
-    end
-  end
-
-  describe "#-" do
-    it "allows + of int or real variables" do
-      expect((a-b).to_s).to eq "(- a b)"
-      expect((e-f).to_s).to eq "(- e f)"
-    end
-
-    it "casts to correct type if possible" do
-      expect((a-e).to_s).to eq "(- (to_real a) e)"
-      expect((e-a).to_s).to eq "(- e (to_real a))"
-      expect((a-42).to_s).to eq "(- a 42)"
-      expect((42-a).to_s).to eq "(- 42 a)"
-      expect((a-42.5).to_s).to eq "(- (to_real a) (/ 85.0 2.0))"
-      expect((42.5-a).to_s).to eq "(- (/ 85.0 2.0) (to_real a))"
-      expect((e-42).to_s).to eq "(- e 42.0)"
-      expect((42-e).to_s).to eq "(- 42.0 e)"
-      expect((e-42.5).to_s).to eq "(- e (/ 85.0 2.0))"
-      expect((42.5-e).to_s).to eq "(- (/ 85.0 2.0) e)"
-    end
-
-    it "raises exception if type cast is not possible" do
-      expect{a-c}.to raise_error(Z3::Exception)
-      expect{c-a}.to raise_error(Z3::Exception)
-      expect{e-c}.to raise_error(Z3::Exception)
-      expect{c-e}.to raise_error(Z3::Exception)
-      expect{c-d}.to raise_error(Z3::Exception)
-      expect{a-true}.to raise_error(Z3::Exception)
-      expect{c-true}.to raise_error(Z3::Exception)
-      expect{e-true}.to raise_error(Z3::Exception)
-      expect{a-false}.to raise_error(Z3::Exception)
-      expect{c-false}.to raise_error(Z3::Exception)
-      expect{e-false}.to raise_error(Z3::Exception)
-    end
-  end
-
-  describe "#*" do
-    it "allows * of int or real variables" do
-      expect((a*b).to_s).to eq "(* a b)"
-      expect((e*f).to_s).to eq "(* e f)"
-    end
-
-    it "casts to correct type if possible" do
-      expect((a*e).to_s).to eq "(* (to_real a) e)"
-      expect((e*a).to_s).to eq "(* e (to_real a))"
-      expect((a*42).to_s).to eq "(* a 42)"
-      expect((42*a).to_s).to eq "(* 42 a)"
-      expect((a*42.5).to_s).to eq "(* (to_real a) (/ 85.0 2.0))"
-      expect((42.5*a).to_s).to eq "(* (/ 85.0 2.0) (to_real a))"
-      expect((e*42).to_s).to eq "(* e 42.0)"
-      expect((42*e).to_s).to eq "(* 42.0 e)"
-      expect((e*42.5).to_s).to eq "(* e (/ 85.0 2.0))"
-      expect((42.5*e).to_s).to eq "(* (/ 85.0 2.0) e)"
-    end
-
-    it "raises exception if type cast is not possible" do
-      expect{a*c}.to raise_error(Z3::Exception)
-      expect{c*a}.to raise_error(Z3::Exception)
-      expect{e*c}.to raise_error(Z3::Exception)
-      expect{c*e}.to raise_error(Z3::Exception)
-      expect{c*d}.to raise_error(Z3::Exception)
-      expect{a*true}.to raise_error(Z3::Exception)
-      expect{c*true}.to raise_error(Z3::Exception)
-      expect{e*true}.to raise_error(Z3::Exception)
-      expect{a*false}.to raise_error(Z3::Exception)
-      expect{c*false}.to raise_error(Z3::Exception)
-      expect{e*false}.to raise_error(Z3::Exception)
+      it "raises exception if type cast is not possible" do
+        expect{a.send op, c}.to raise_error(Z3::Exception)
+        expect{c.send op, a}.to raise_error(Z3::Exception)
+        expect{e.send op, c}.to raise_error(Z3::Exception)
+        expect{c.send op, e}.to raise_error(Z3::Exception)
+        expect{c.send op, d}.to raise_error(Z3::Exception)
+        expect{a.send op, true}.to raise_error(Z3::Exception)
+        expect{c.send op, true}.to raise_error(Z3::Exception)
+        expect{e.send op, true}.to raise_error(Z3::Exception)
+        expect{a.send op, false}.to raise_error(Z3::Exception)
+        expect{c.send op, false}.to raise_error(Z3::Exception)
+        expect{e.send op, false}.to raise_error(Z3::Exception)
+      end
     end
   end
 
@@ -201,33 +140,33 @@ describe Z3::Ast do
       expect((c != d).to_s).to eq "(distinct c d)"
       expect((e != f).to_s).to eq "(distinct e f)"
     end
-  end
 
-  describe "comparisons" do
-    it "allows >= of numeric variables" do
-      expect((a >= b).to_s).to eq "(>= a b)"
-      expect((e >= f).to_s).to eq "(>= e f)"
+    it "casts to correct type if possible" do
+      expect((a != 42).to_s).to eq "(distinct a 42)"
+      # expect((42 != a).to_s).to eq "(distinct a 42)"
+      expect((a != e).to_s).to eq "(distinct (to_real a) e)"
+      expect((e != a).to_s).to eq "(distinct e (to_real a))"
+      expect((c != true).to_s).to eq "(distinct c true)"
+      expect((c != false).to_s).to eq "(distinct c false)"
+      expect((a != 42.5).to_s).to eq "(distinct (to_real a) (/ 85.0 2.0))"
+      # expect((42.5 != a).to_s).to eq "(distinct (to_real a) (/ 85.0 2.0))"
+      expect((e != 42.5).to_s).to eq "(distinct e (/ 85.0 2.0))"
+      # expect((42.5 != e).to_s).to eq "(distinct e (/ 85.0 2.0))"
+      # expect((true != c).to_s).to eq "(distinct true c)"
+      # expect((false != c).to_s).to eq "(distinct false c)"
     end
-  end
 
-  describe "comparisons" do
-    it "allows > of numeric variables" do
-      expect((a > b).to_s).to eq "(> a b)"
-      expect((e > f).to_s).to eq "(> e f)"
-    end
-  end
-
-  describe "comparisons" do
-    it "allows <= of numeric variables" do
-      expect((a <= b).to_s).to eq "(<= a b)"
-      expect((e <= f).to_s).to eq "(<= e f)"
-    end
-  end
-
-  describe "comparisons" do
-    it "allows < of numeric variables" do
-      expect((a < b).to_s).to eq "(< a b)"
-      expect((e < f).to_s).to eq "(< e f)"
+    it "raises exception if type cast is not possible" do
+      expect{a != c}.to raise_error(Z3::Exception)
+      expect{e != c}.to raise_error(Z3::Exception)
+      expect{a != true}.to raise_error(Z3::Exception)
+      expect{e != true}.to raise_error(Z3::Exception)
+      # expect{true != a}.to raise_error(Z3::Exception)
+      # expect{true != e}.to raise_error(Z3::Exception)
+      expect{c != 42}.to raise_error(Z3::Exception)
+      expect{c != 42.5}.to raise_error(Z3::Exception)
+      # expect{42 != c}.to raise_error(Z3::Exception)
+      # expect{42.5 != c}.to raise_error(Z3::Exception)
     end
   end
 end
