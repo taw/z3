@@ -26,57 +26,68 @@ class Z3::Ast
   end
 
   def |(b)
-    raise "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Type mismatch" unless sort == b.sort
     Z3::Ast.or(self, b, ctx: @ctx)
   end
 
   def &(b)
-    raise "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Type mismatch" unless sort == b.sort
     Z3::Ast.and(self, b, ctx: @ctx)
   end
 
   def +(b)
-    raise "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Type mismatch" unless sort == b.sort
     Z3::Ast.add(self, b, ctx: @ctx)
   end
 
   def *(b)
-    raise "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Type mismatch" unless sort == b.sort
     Z3::Ast.mul(self, b, ctx: @ctx)
   end
 
   def -(b)
-    raise "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Type mismatch" unless sort == b.sort
     Z3::Ast.sub(self, b, ctx: @ctx)
   end
 
   def ==(b)
-    raise "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Type mismatch" unless sort == b.sort
     Z3::Ast.eq(self, b, ctx: @ctx)
   end
 
   def !=(b)
-    raise "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Type mismatch" unless sort == b.sort
     Z3::Ast.distinct(self, b, ctx: @ctx)
   end
 
   def <=(b)
-    raise "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Type mismatch" unless sort == b.sort
     Z3::Ast.le(self, b, ctx: @ctx)
   end
 
   def <(b)
-    raise "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Type mismatch" unless sort == b.sort
     Z3::Ast.lt(self, b, ctx: @ctx)
   end
 
   def >=(b)
-    raise "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Type mismatch" unless sort == b.sort
     Z3::Ast.ge(self, b, ctx: @ctx)
   end
 
   def >(b)
-    raise "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Not same context" unless @ctx == b.ctx
+    raise Z3::Exception, "Type mismatch" unless sort == b.sort
     Z3::Ast.gt(self, b, ctx: @ctx)
   end
 

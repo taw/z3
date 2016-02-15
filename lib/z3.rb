@@ -1,6 +1,9 @@
 module Z3
 end
 
+class Z3::Exception < StandardError
+end
+
 require_relative "z3/core"
 require_relative "z3/context"
 require_relative "z3/solver"
