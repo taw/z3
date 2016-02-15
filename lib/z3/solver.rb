@@ -1,4 +1,5 @@
 class Z3::Solver
+  attr_reader :_solver
   def initialize
     @_solver = Z3::LowLevel.mk_solver
   end

@@ -47,12 +47,12 @@ module Z3::LowLevel
       Z3::VeryLowLevel.Z3_mk_solver_reset(_ctx_pointer, solver._solver)
     end
 
-    def solver_asssert(solver)
-      Z3::VeryLowLevel.Z3_mk_solver_assert(_ctx_pointer, solver._solver)
+    def solver_assert(solver, ast)
+      Z3::VeryLowLevel.Z3_solver_assert(_ctx_pointer, solver._solver, ast._ast)
     end
 
     def solver_check(solver)
-      Z3::VeryLowLevel.Z3_mk_solver_check(_ctx_pointer, solver._solver)
+      Z3::VeryLowLevel.Z3_solver_check(_ctx_pointer, solver._solver)
     end
 
     # Model API
@@ -87,6 +87,10 @@ module Z3::LowLevel
 
     def mk_lt(a,b)
       Z3::VeryLowLevel.Z3_mk_lt(_ctx_pointer, a._ast, b._ast)
+    end
+
+    def mk_power(a,b)
+      Z3::VeryLowLevel.Z3_mk_power(_ctx_pointer, a._ast, b._ast)
     end
 
     def mk_not(a)

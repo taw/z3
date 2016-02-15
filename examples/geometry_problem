@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/z3"
+
+solver = Z3::Solver.new
+
+ax = Z3::Ast.real("a.x")
+ay = Z3::Ast.real("a.y")
+bx = Z3::Ast.real("b.x")
+by = Z3::Ast.real("b.y")
+cx = Z3::Ast.real("c.x")
+cy = Z3::Ast.real("c.y")
+dx = Z3::Ast.real("d.x")
+dy = Z3::Ast.real("d.y")
+
+a_c = Z3::Ast.real("|a-c|")
+b_d = Z3::Ast.real("|b-d|")
+
+solver.assert(bx == 0)
+solver.assert(by == 0)
+solver.assert(cx == 10)
+solver.assert(cy == 0)
+solver.assert(dx == cx)
+solver.assert(ay == dy)
+solver.assert(ax == 0)
+
+# BD is on the circle
+solver.assert(b_d**2 == (bx-dx)**2 + (by-dy)**2)
+solver.assert(b_d == 20)
+
+solver.assert(a_c**2 == (ax-cx)**2 + (ay-cy)**2)
+
+if solver.check == :sat
+  puts solver.model
+else
+  puts "Can't solve the problem"
+end

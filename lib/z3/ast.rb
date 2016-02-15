@@ -85,6 +85,10 @@ class Z3::Ast
     binary_arithmetic_operator(:lt, b)
   end
 
+  def **(b)
+    binary_arithmetic_operator(:power, b)
+  end
+
   def ==(b)
     b = Z3::Ast.from_const(b, sort) unless b.is_a?(Z3::Ast)
     if sort != b.sort
@@ -175,6 +179,10 @@ class Z3::Ast
 
     def lt(a, b)
       Z3::Ast.new(Z3::LowLevel.mk_lt(a, b))
+    end
+
+    def power(a, b)
+      Z3::Ast.new(Z3::LowLevel.mk_power(a, b))
     end
 
     def not(a)
