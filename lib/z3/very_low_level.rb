@@ -36,6 +36,9 @@ module Z3::VeryLowLevel
 
   # Model API
   attach_function :Z3_solver_get_model, [ctx_pointer, solver_pointer], model_pointer
+  attach_function :Z3_model_get_num_consts, [ctx_pointer, model_pointer], :int
+  attach_function :Z3_model_get_num_funcs, [ctx_pointer, model_pointer], :int
+  attach_function :Z3_model_get_num_sorts, [ctx_pointer, model_pointer], :int
 
   # AST API
   attach_function :Z3_mk_true, [ctx_pointer], ast_pointer

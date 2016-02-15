@@ -60,6 +60,18 @@ module Z3::LowLevel
       Z3::VeryLowLevel.Z3_solver_get_model(_ctx_pointer, solver._solver)
     end
 
+    def model_get_num_consts(model)
+      Z3::VeryLowLevel.Z3_model_get_num_consts(_ctx_pointer, model._model)
+    end
+
+    def model_get_num_funcs(model)
+      Z3::VeryLowLevel.Z3_model_get_num_funcs(_ctx_pointer, model._model)
+    end
+
+    def model_get_num_sorts(model)
+      Z3::VeryLowLevel.Z3_model_get_num_sorts(_ctx_pointer, model._model)
+    end
+
     # AST API
     def mk_true
       Z3::VeryLowLevel.Z3_mk_true(_ctx_pointer)
