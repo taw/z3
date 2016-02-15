@@ -31,11 +31,29 @@ describe Z3::Ast do
     it "allows and of boolean variables" do
       expect((c & d).to_s).to eq("(and c d)")
     end
+
+    it "raises exception if type cast is not possible" do
+      expect{a&b}.to raise_error(Z3::Exception)
+      expect{e&f}.to raise_error(Z3::Exception)
+      expect{a&c}.to raise_error(Z3::Exception)
+      expect{e&c}.to raise_error(Z3::Exception)
+      expect{c&a}.to raise_error(Z3::Exception)
+      expect{c&e}.to raise_error(Z3::Exception)
+    end
   end
 
   describe "#|" do
     it "allows or of boolean variables" do
       expect((c | d).to_s).to eq("(or c d)")
+    end
+
+    it "raises exception if type cast is not possible" do
+      expect{a|b}.to raise_error(Z3::Exception)
+      expect{e|f}.to raise_error(Z3::Exception)
+      expect{a|c}.to raise_error(Z3::Exception)
+      expect{e|c}.to raise_error(Z3::Exception)
+      expect{c|a}.to raise_error(Z3::Exception)
+      expect{c|e}.to raise_error(Z3::Exception)
     end
   end
 
