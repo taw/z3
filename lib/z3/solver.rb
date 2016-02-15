@@ -24,6 +24,13 @@ class Z3::Solver
     check_sat_results(Z3::Core.Z3_solver_check(@ctx._context, @_solver))
   end
 
+  def model
+    Z3::Model.new(
+      Z3::Core.Z3_solver_get_model(@ctx._context, @_solver),
+      ctx: @ctx,
+    )
+  end
+
   def prove!(ast)
     push
     assert(~ast)
