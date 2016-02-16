@@ -1,0 +1,370 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/z3"
+
+class SelfRefPuzzleSolver
+  attr_reader :q, :a
+  attr_reader :a_answers, :b_answers, :c_answers, :d_answers, :e_answers, :cons_answers
+  def initialize
+    @solver = Z3::Solver.new
+    @q = {}
+    @a = {}
+    (1..20).each do |i|
+      @q[i] = Z3::Ast.int("q#{i}")
+      assert @q[i] >= 1
+      assert @q[i] <= 5
+      @a[i] = {}
+      (1..5).each do |j|
+        @a[i][j] = Z3::Ast.int("a#{i},#{' ABCDE'[j]}")
+        assert (@a[i][j] == 0) == (@q[i] != j)
+        assert (@a[i][j] == 1) == (@q[i] == j)
+      end
+    end
+  end
+
+  def assert(ast)
+    @solver.assert(ast)
+  end
+
+  def cons_in(*ary)
+    Z3::Ast.or(*ary.map{|i| cons_answers == i})
+  end
+
+  def solve!
+    @a_answers = Z3::Ast.add(*(1..20).map{|i| @a[i][1]})
+    @b_answers = Z3::Ast.add(*(1..20).map{|i| @a[i][2]})
+    @c_answers = Z3::Ast.add(*(1..20).map{|i| @a[i][3]})
+    @d_answers = Z3::Ast.add(*(1..20).map{|i| @a[i][4]})
+    @e_answers = Z3::Ast.add(*(1..20).map{|i| @a[i][5]})
+    @cons_answers = b_answers + c_answers + d_answers
+
+    # Question 1
+    assert (q[1] == 1) == (q[1] == 2)
+    assert (q[1] == 2) == Z3::Ast.and(q[1] != 2, q[2] == 2)
+    assert (q[1] == 3) == Z3::Ast.and(q[1] != 2, q[2] != 2, q[3] == 2)
+    assert (q[1] == 4) == Z3::Ast.and(q[1] != 2, q[2] != 2, q[3] != 2, q[4] == 2)
+    assert (q[1] == 5) == Z3::Ast.and(q[1] != 2, q[2] != 2, q[3] != 2, q[4] != 2, q[5] == 2)
+
+    # Question 2
+    assert q[ 1] != q[ 2]
+    assert q[ 2] != q[ 3]
+    assert q[ 3] != q[ 4]
+    assert q[ 4] != q[ 5]
+    assert q[ 5] != q[ 6]
+    assert (q[ 6] == q[ 7]) == (q[2] == 1)
+    assert (q[ 7] == q[ 8]) == (q[2] == 2)
+    assert (q[ 8] == q[ 9]) == (q[2] == 3)
+    assert (q[ 9] == q[10]) == (q[2] == 4)
+    assert (q[10] == q[11]) == (q[2] == 5)
+    assert q[11] != q[12]
+    assert q[12] != q[13]
+    assert q[13] != q[14]
+    assert q[14] != q[15]
+    assert q[15] != q[16]
+    assert q[16] != q[17]
+    assert q[17] != q[18]
+    assert q[18] != q[19]
+    assert q[19] != q[20]
+
+    # Question 3
+    assert (e_answers == 0) == (q[3] == 1)
+    assert (e_answers == 1) == (q[3] == 2)
+    assert (e_answers == 2) == (q[3] == 3)
+    assert (e_answers == 3) == (q[3] == 4)
+    assert (e_answers == 4) == (q[3] == 5)
+
+    # Question 4
+    assert (a_answers == 4) == (q[4] == 1)
+    assert (a_answers == 5) == (q[4] == 2)
+    assert (a_answers == 6) == (q[4] == 3)
+    assert (a_answers == 7) == (q[4] == 4)
+    assert (a_answers == 8) == (q[4] == 5)
+
+    # Question 5
+    assert Z3::Ast.implies(q[5] == 1, q[5] == q[1])
+    assert Z3::Ast.implies(q[5] == 2, q[5] == q[2])
+    assert Z3::Ast.implies(q[5] == 3, q[5] == q[3])
+    assert Z3::Ast.implies(q[5] == 4, q[5] == q[4])
+    assert Z3::Ast.implies(q[5] == 5, q[5] == q[5])
+
+    # Question 6
+    assert (q[17] == 3) == (q[6] == 1)
+    assert (q[17] == 4) == (q[6] == 2)
+    assert (q[17] == 5) == (q[6] == 3)
+    assert Z3::Ast.or(q[17] == 1, q[17] == 2) == (q[6] == 4)
+    assert q[6] != 5
+
+    # Question 7
+    assert Z3::Ast.or(q[7] - q[8] == 4, q[8] - q[7] == 4) == (q[7] == 1)
+    assert Z3::Ast.or(q[7] - q[8] == 3, q[8] - q[7] == 3) == (q[7] == 2)
+    assert Z3::Ast.or(q[7] - q[8] == 2, q[8] - q[7] == 2) == (q[7] == 3)
+    assert Z3::Ast.or(q[7] - q[8] == 1, q[8] - q[7] == 1) == (q[7] == 4)
+    assert Z3::Ast.or(q[7] - q[8] == 0, q[8] - q[7] == 0) == (q[7] == 5)
+
+    # Question 8
+    assert (a_answers + e_answers == 4) == (q[8] == 1)
+    assert (a_answers + e_answers == 5) == (q[8] == 2)
+    assert (a_answers + e_answers == 6) == (q[8] == 3)
+    assert (a_answers + e_answers == 7) == (q[8] == 4)
+    assert (a_answers + e_answers == 8) == (q[8] == 5)
+
+    # Question 9
+    assert (q[10] == q[9]) == (q[9] == 1)
+    assert Z3::Ast.and(q[10] != q[9], q[11] == q[9]) == (q[9] == 2)
+    assert Z3::Ast.and(q[10] != q[9], q[11] != q[9], q[12] == q[9]) == (q[9] == 3)
+    assert Z3::Ast.and(q[10] != q[9], q[11] != q[9], q[12] != q[9], q[13] == q[9]) == (q[9] == 4)
+    assert Z3::Ast.and(q[10] != q[9], q[11] != q[9], q[12] != q[9], q[13] != q[9], q[14] == q[9]) == (q[9] == 5)
+
+    # Question 10
+    assert (q[16] == 4) == (q[10] == 1)
+    assert (q[16] == 1) == (q[10] == 2)
+    assert (q[16] == 5) == (q[10] == 3)
+    assert (q[16] == 2) == (q[10] == 4)
+    assert (q[16] == 3) == (q[10] == 5)
+
+    # Question 11
+    prec_b_answers = Z3::Ast.add(*(1..10).map{|i| @a[i][2]})
+    assert (prec_b_answers == 0) == (q[11] == 1)
+    assert (prec_b_answers == 1) == (q[11] == 2)
+    assert (prec_b_answers == 2) == (q[11] == 3)
+    assert (prec_b_answers == 3) == (q[11] == 4)
+    assert (prec_b_answers == 4) == (q[11] == 5)
+
+    # Question 12
+    assert Z3::Ast.implies(q[12] == 1, cons_in(2,4,6,8,10,12,14,16,18,20))
+    assert Z3::Ast.implies(q[12] == 2, cons_in(1,3,5,7,9,11,13,15,17,19))
+    assert Z3::Ast.implies(q[12] == 3, cons_in(1,4,9,16))
+    assert Z3::Ast.implies(q[12] == 4, cons_in(2,3,5,7,11,13,17,19))
+    assert Z3::Ast.implies(q[12] == 5, cons_in(5,10,15,20))
+
+    # Question 13
+    assert q[1] != 1
+    assert q[3] != 1
+    assert q[5] != 1
+    assert q[7] != 1
+    assert (q[ 9] == 1) == (q[13] == 1)
+    assert (q[11] == 1) == (q[13] == 2)
+    assert (q[13] == 1) == (q[13] == 3)
+    assert (q[15] == 1) == (q[13] == 4)
+    assert (q[17] == 1) == (q[13] == 5)
+    assert q[19] != 1
+
+    # Question 14
+    assert (d_answers == 6) == (q[4] == 1)
+    assert (d_answers == 7) == (q[4] == 2)
+    assert (d_answers == 8) == (q[4] == 3)
+    assert (d_answers == 9) == (q[4] == 4)
+    assert (d_answers == 10) == (q[4] == 5)
+
+    # Question 15
+    assert q[15] == q[12]
+
+    # Question 16
+    assert (q[10] == 4) == (q[16] == 1)
+    assert (q[10] == 3) == (q[16] == 2)
+    assert (q[10] == 2) == (q[16] == 3)
+    assert (q[10] == 1) == (q[16] == 4)
+    assert (q[10] == 5) == (q[16] == 5)
+
+    # Question 17
+    assert (q[6] == 3) == (q[17] == 1)
+    assert (q[6] == 4) == (q[17] == 2)
+    assert (q[6] == 5) == (q[17] == 3)
+    assert Z3::Ast.and(q[6] != 3, q[6] != 4, q[6] != 5) == (q[17] == 4)
+    assert q[17] != 5
+
+    # Question 18
+    assert (a_answers == b_answers) == (q[18] == 1)
+    assert (a_answers == c_answers) == (q[18] == 2)
+    assert (a_answers == d_answers) == (q[18] == 3)
+    assert (a_answers == e_answers) == (q[18] == 4)
+    assert Z3::Ast.and(
+      a_answers != b_answers,
+      a_answers != c_answers,
+      a_answers != d_answers,
+      a_answers != e_answers
+    ) == (q[18] == 5)
+
+    # Question 19
+    assert q[19] == q[19]
+
+    # Question 20
+    assert q[20] == 5
+
+    # Print solutions
+    if @solver.check == :sat
+      model = @solver.model
+      (1..20).each do |i|
+        a = model[q[i]].to_s.to_i
+        puts "Q%2d: %s" % [i, " ABCDE"[a]]
+      end
+    else
+      puts "failed to solve"
+    end
+  end
+end
+
+
+SelfRefPuzzleSolver.new.solve!
+
+__END__
+http://faculty.uml.edu/jpropp/srat-Q.txt
+
+SELF-REFERENTIAL APTITUDE TEST, by Jim Propp (jimpropp at gmaildotcom)
+
+The solution to the following puzzle is unique; in some cases the
+knowledge that the solution is unique may actually give you a short-cut
+to finding the answer to a particular question.  (Thanks to Andy Latto
+for bringing this subtlety to my attention.)
+
+I should mention that if you don't agree with me about the answer to #20,
+you will get a different solution to the puzzle than the one I had in mind.
+But I should also mention that if you don't agree with me about the answer
+to #20, you are just plain wrong.  :-)
+
+You may now begin work.
+
+
+ 1. The first question whose answer is B is question
+    (A) 1
+    (B) 2
+    (C) 3
+    (D) 4
+    (E) 5
+
+ 2. The only two consecutive questions with identical answers are questions
+    (A) 6 and 7
+    (B) 7 and 8
+    (C) 8 and 9
+    (D) 9 and 10
+    (E) 10 and 11
+
+ 3. The number of questions with the answer E is
+    (A) 0
+    (B) 1
+    (C) 2
+    (D) 3
+    (E) 4
+
+ 4. The number of questions with the answer A is
+    (A) 4
+    (B) 5
+    (C) 6
+    (D) 7
+    (E) 8
+
+ 5. The answer to this question is the same as the answer to question
+    (A) 1
+    (B) 2
+    (C) 3
+    (D) 4
+    (E) 5
+
+ 6. The answer to question 17 is
+    (A) C
+    (B) D
+    (C) E
+    (D) none of the above
+    (E) all of the above
+
+ 7. Alphabetically, the answer to this question and the answer to the
+    following question are
+    (A) 4 apart
+    (B) 3 apart
+    (C) 2 apart
+    (D) 1 apart
+    (E) the same
+
+ 8. The number of questions whose answers are vowels is
+    (A) 4
+    (B) 5
+    (C) 6
+    (D) 7
+    (E) 8
+
+ 9. The next question with the same answer as this one is question
+    (A) 10
+    (B) 11
+    (C) 12
+    (D) 13
+    (E) 14
+
+10. The answer to question 16 is
+    (A) D
+    (B) A
+    (C) E
+    (D) B
+    (E) C
+
+11. The number of questions preceding this one with the answer B is
+    (A) 0
+    (B) 1
+    (C) 2
+    (D) 3
+    (E) 4
+
+12. The number of questions whose answer is a consonant is
+    (A) an even number
+    (B) an odd number
+    (C) a perfect square
+    (D) a prime
+    (E) divisible by 5
+
+13. The only odd-numbered problem with answer A is
+    (A) 9
+    (B) 11
+    (C) 13
+    (D) 15
+    (E) 17
+
+14. The number of questions with answer D is
+    (A) 6
+    (B) 7
+    (C) 8
+    (D) 9
+    (E) 10
+
+15. The answer to question 12 is
+    (A) A
+    (B) B
+    (C) C
+    (D) D
+    (E) E
+
+16. The answer to question 10 is
+    (A) D
+    (B) C
+    (C) B
+    (D) A
+    (E) E
+
+17. The answer to question 6 is
+    (A) C
+    (B) D
+    (C) E
+    (D) none of the above
+    (E) all of the above
+
+18. The number of questions with answer A equals the number of questions
+    with answer
+    (A) B
+    (B) C
+    (C) D
+    (D) E
+    (E) none of the above
+
+19. The answer to this question is:
+    (A) A
+    (B) B
+    (C) C
+    (D) D
+    (E) E
+
+20. Standardized test is to intelligence as barometer is to
+    (A) temperature (only)
+    (B) wind-velocity (only)
+    (C) latitude (only)
+    (D) longitude (only)
+    (E) temperature, wind-velocity, latitude, and longitude
+
+( to go to the main SRAT page, go to jamespropp.org/srat.html )
