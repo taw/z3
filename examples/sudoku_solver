@@ -1,0 +1,73 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/z3"
+
+class SudokuSolver
+  def initialize(data)
+    @data = data
+    @solver = Z3::Solver.new()
+  end
+
+  def solve!
+    @cells = (0..8).map{|j|
+      (0..8).map{|i|
+        cell_var(@data[j][i], i, j)
+      }
+    }
+
+    (0..8).each do |i|
+      @solver.assert Z3::Ast.distinct(*@cells[i])
+    end
+    (0..8).each do |j|
+      @solver.assert Z3::Ast.distinct(*@cells.map{|row| row[j]})
+    end
+
+    [0,3,6].each do |i|
+      [0,3,6].each do |j|
+        @solver.assert Z3::Ast.distinct(
+          *@cells[i,3].flat_map{|row| row[j,3]}
+        )
+      end
+    end
+
+    if @solver.check == :sat
+      @model = @solver.model
+      print_answer!
+    else
+      puts("failed to solve")
+    end
+  end
+
+  private
+
+  def cell_var(cell, i, j)
+    v = Z3::Ast.int("cell[#{i+1},#{j+1}]")
+    @solver.assert(v >= 1)
+    @solver.assert(v <= 9)
+    @solver.assert(v == cell) if cell != nil
+    v
+  end
+
+  def print_answer!
+    (0..8).each do |i|
+      (0..8).each do |j|
+        print(@model.model_eval(@cells[i][j]), " ")
+      end
+      print("\n")
+    end
+  end
+end
+
+_ = nil
+sudoku = SudokuSolver.new([
+  [_, 6, _, 5, _, 9, _, 4, _],
+  [9, 2, _, _, _, _, _, 7, 6],
+  [_, _, 1, _, _, _, 9, _, _],
+  [7, _, _, 6, _, 3, _, _, 9],
+  [_, _, _, _, _, _, _, _, _],
+  [3, _, _, 4, _, 1, _, _, 7],
+  [_, _, 6, _, _, _, 7, _, _],
+  [2, 4, _, _, _, _, _, 6, 5],
+  [_, 9, _, 1, _, 8, _, 3, _],
+])
+sudoku.solve!
