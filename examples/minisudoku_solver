@@ -2,15 +2,15 @@
 
 require_relative "../lib/z3"
 
-class SudokuSolver
+class MiniSudokuSolver
   def initialize(data)
     @data = data
     @solver = Z3::Solver.new
   end
 
   def solve!
-    @cells = (0..8).map do |j|
-      (0..8).map do |i|
+    @cells = (0..5).map do |j|
+      (0..5).map do |i|
         cell_var(@data[j][i], i, j)
       end
     end
@@ -21,7 +21,7 @@ class SudokuSolver
     @cells.transpose.each do |column|
       @solver.assert Z3::Ast.distinct(*column)
     end
-    @cells.each_slice(3) do |rows|
+    @cells.each_slice(2) do |rows|
       rows.transpose.each_slice(3) do |square|
         @solver.assert Z3::Ast.distinct(*square.flatten)
       end
@@ -40,7 +40,7 @@ class SudokuSolver
   def cell_var(cell, i, j)
     v = Z3::Ast.int("cell[#{i+1},#{j+1}]")
     @solver.assert v >= 1
-    @solver.assert v <= 9
+    @solver.assert v <= 6
     @solver.assert v == cell if cell != nil
     v
   end
@@ -53,15 +53,12 @@ class SudokuSolver
 end
 
 _ = nil
-sudoku = SudokuSolver.new([
-  [_, 6, _, 5, _, 9, _, 4, _],
-  [9, 2, _, _, _, _, _, 7, 6],
-  [_, _, 1, _, _, _, 9, _, _],
-  [7, _, _, 6, _, 3, _, _, 9],
-  [_, _, _, _, _, _, _, _, _],
-  [3, _, _, 4, _, 1, _, _, 7],
-  [_, _, 6, _, _, _, 7, _, _],
-  [2, 4, _, _, _, _, _, 6, 5],
-  [_, 9, _, 1, _, 8, _, 3, _],
+minisudoku = MiniSudokuSolver.new([
+  [_, _, _, 4, _, _],
+  [_, _, 4, 1, 2, _],
+  [_, _, 6, 5, 4, _],
+  [_, 5, 2, 3, _, _],
+  [_, 2, 3, 6, _, _],
+  [_, _, 1, _, _, _],
 ])
-sudoku.solve!
+minisudoku.solve!
