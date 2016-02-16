@@ -19,4 +19,8 @@ class Z3::Model
   def model_eval(ast, model_completion=false)
     Z3::Ast.new(Z3::LowLevel.model_eval(self, ast, model_completion))
   end
+
+  def [](ast)
+    model_eval(ast)
+  end
 end

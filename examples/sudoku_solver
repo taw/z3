@@ -5,28 +5,26 @@ require_relative "../lib/z3"
 class SudokuSolver
   def initialize(data)
     @data = data
-    @solver = Z3::Solver.new()
+    @solver = Z3::Solver.new
   end
 
   def solve!
-    @cells = (0..8).map{|j|
-      (0..8).map{|i|
+    @cells = (0..8).map do |j|
+      (0..8).map do |i|
         cell_var(@data[j][i], i, j)
-      }
-    }
-
-    (0..8).each do |i|
-      @solver.assert Z3::Ast.distinct(*@cells[i])
-    end
-    (0..8).each do |j|
-      @solver.assert Z3::Ast.distinct(*@cells.map{|row| row[j]})
+      end
     end
 
-    [0,3,6].each do |i|
-      [0,3,6].each do |j|
-        @solver.assert Z3::Ast.distinct(
-          *@cells[i,3].flat_map{|row| row[j,3]}
-        )
+    @cells.each do |row|
+      @solver.assert Z3::Ast.distinct(*row)
+    end
+    @cells.transpose.each do |column|
+      @solver.assert Z3::Ast.distinct(*column)
+    end
+
+    @cells.each_slice(3) do |rows|
+      rows.transpose.each_slice(3) do |square|
+        @solver.assert Z3::Ast.distinct(*square.flatten)
       end
     end
 
@@ -34,7 +32,7 @@ class SudokuSolver
       @model = @solver.model
       print_answer!
     else
-      puts("failed to solve")
+      puts "failed to solve"
     end
   end
 
@@ -42,18 +40,15 @@ class SudokuSolver
 
   def cell_var(cell, i, j)
     v = Z3::Ast.int("cell[#{i+1},#{j+1}]")
-    @solver.assert(v >= 1)
-    @solver.assert(v <= 9)
-    @solver.assert(v == cell) if cell != nil
+    @solver.assert v >= 1
+    @solver.assert v <= 9
+    @solver.assert v == cell if cell != nil
     v
   end
 
   def print_answer!
-    (0..8).each do |i|
-      (0..8).each do |j|
-        print(@model.model_eval(@cells[i][j]), " ")
-      end
-      print("\n")
+    @cells.each do |row|
+      puts row.map{|v| @model[v]}.join(" ")
     end
   end
 end
