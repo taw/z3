@@ -46,15 +46,15 @@ module Z3::LowLevel
     end
 
     def solver_push(solver)
-      Z3::VeryLowLevel.Z3_mk_solver_push(_ctx_pointer, solver._solver)
+      Z3::VeryLowLevel.Z3_solver_push(_ctx_pointer, solver._solver)
     end
 
     def solver_pop(solver, n)
-      Z3::VeryLowLevel.Z3_mk_solver_pop(_ctx_pointer, solver._solver, n)
+      Z3::VeryLowLevel.Z3_solver_pop(_ctx_pointer, solver._solver, n)
     end
 
     def solver_reset(solver)
-      Z3::VeryLowLevel.Z3_mk_solver_reset(_ctx_pointer, solver._solver)
+      Z3::VeryLowLevel.Z3_solver_reset(_ctx_pointer, solver._solver)
     end
 
     def solver_assert(solver, ast)
