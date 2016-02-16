@@ -15,4 +15,8 @@ class Z3::Model
   def num_funcs
     Z3::LowLevel.model_get_num_funcs(self)
   end
+
+  def model_eval(ast, model_completion=false)
+    Z3::Ast.new(Z3::LowLevel.model_eval(self, ast, model_completion))
+  end
 end

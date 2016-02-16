@@ -14,4 +14,16 @@ describe Z3::Model do
     expect(model.num_funcs).to eq(0)
     expect(model.num_sorts).to eq(0)
   end
+
+  it "can evaluate variables" do
+    solver.assert(a == 2)
+    solver.assert(b == a+2)
+    expect(solver.check).to eq(:sat)
+    expect(model.model_eval(a).inspect).to eq("Z3::Ast<2 :: Int>")
+    expect(model.model_eval(b).inspect).to eq("Z3::Ast<4 :: Int>")
+    expect(model.model_eval(c).inspect).to eq("Z3::Ast<c :: Int>")
+    expect(model.model_eval(a, true).inspect).to eq("Z3::Ast<2 :: Int>")
+    expect(model.model_eval(b, true).inspect).to eq("Z3::Ast<4 :: Int>")
+    expect(model.model_eval(c, true).inspect).to eq("Z3::Ast<0 :: Int>")
+  end
 end

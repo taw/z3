@@ -82,6 +82,16 @@ module Z3::LowLevel
       Z3::VeryLowLevel.Z3_model_get_num_sorts(_ctx_pointer, model._model)
     end
 
+    def model_eval(model, ast, model_completion)
+      rv_ptr = FFI::MemoryPointer.new(:pointer)
+      result = Z3::VeryLowLevel.Z3_model_eval(_ctx_pointer, model._model, ast._ast, !!model_completion, rv_ptr)
+      if result == 1
+        rv_ptr.get_pointer(0)
+      else
+        raise Z3::Exception, "Evaluation of `#{ast}' failed"
+      end
+    end
+
     # AST API
     def mk_true
       Z3::VeryLowLevel.Z3_mk_true(_ctx_pointer)
