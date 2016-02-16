@@ -31,7 +31,10 @@ solver.assert(b_d == 20)
 solver.assert(a_c**2 == (ax-cx)**2 + (ay-cy)**2)
 
 if solver.check == :sat
-  puts solver.model
+  model = solver.model
+  model.each do |n,v|
+    puts "* #{n} = #{v}"
+  end
 else
   puts "Can't solve the problem"
 end

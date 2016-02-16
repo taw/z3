@@ -41,6 +41,8 @@ module Z3::VeryLowLevel
   attach_function :Z3_solver_reset, [ctx_pointer, solver_pointer], :void
   attach_function :Z3_solver_assert, [ctx_pointer, solver_pointer, ast_pointer], :void
   attach_function :Z3_solver_check, [ctx_pointer, solver_pointer], z3_bool
+  attach_function :Z3_solver_inc_ref, [ctx_pointer, solver_pointer], :void
+
 
   # Model API
   attach_function :Z3_solver_get_model, [ctx_pointer, solver_pointer], model_pointer
@@ -49,10 +51,13 @@ module Z3::VeryLowLevel
   attach_function :Z3_model_get_num_sorts, [ctx_pointer, model_pointer], :int
   attach_function :Z3_model_eval, [ctx_pointer, model_pointer, ast_pointer, :bool, :pointer], :int
   attach_function :Z3_model_get_const_decl, [ctx_pointer, model_pointer, :int], func_decl_pointer
+  attach_function :Z3_model_get_const_interp, [ctx_pointer, model_pointer, func_decl_pointer], ast_pointer
 
   # FuncDecl API
   attach_function :Z3_func_decl_to_ast, [ctx_pointer, func_decl_pointer], ast_pointer
   attach_function :Z3_get_decl_name, [ctx_pointer, func_decl_pointer], symbol
+  attach_function :Z3_get_arity, [ctx_pointer, func_decl_pointer], :uint
+  attach_function :Z3_get_decl_ast_parameter, [ctx_pointer, func_decl_pointer, :uint], ast_pointer
 
   # AST API
   attach_function :Z3_mk_true, [ctx_pointer], ast_pointer

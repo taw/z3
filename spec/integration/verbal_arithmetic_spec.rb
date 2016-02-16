@@ -1,4 +1,4 @@
-describe "Bridges" do
+describe "Verbal Arithmetic" do
   let(:executable) { "#{__dir__}/../../examples/verbal_arithmetic" }
   it "can solve verbal arithmetic puzzles" do
     expect(IO.popen(executable).read).to eq <<EOF

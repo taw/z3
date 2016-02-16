@@ -69,6 +69,10 @@ module Z3::LowLevel
       Z3::VeryLowLevel.Z3_solver_check(_ctx_pointer, solver._solver)
     end
 
+    def solver_inc_ref(solver)
+      Z3::VeryLowLevel.Z3_solver_inc_ref(_ctx_pointer, solver._solver)
+    end
+
     # Model API
     def solver_get_model(solver)
       Z3::VeryLowLevel.Z3_solver_get_model(_ctx_pointer, solver._solver)
@@ -107,6 +111,18 @@ module Z3::LowLevel
 
     def get_decl_name(func_decl)
       Z3::VeryLowLevel.Z3_get_decl_name(_ctx_pointer, func_decl._func_decl)
+    end
+
+    def get_arity(func_decl)
+      Z3::VeryLowLevel.Z3_get_arity(_ctx_pointer, func_decl._func_decl)
+    end
+
+    def get_decl_ast_parameter(func_decl, i)
+      Z3::VeryLowLevel.Z3_get_decl_ast_parameter(_ctx_pointer, func_decl._func_decl, i)
+    end
+
+    def model_get_const_interp(model, func_decl)
+      Z3::VeryLowLevel.Z3_model_get_const_interp(_ctx_pointer, model._model, func_decl._func_decl)
     end
 
     # AST API

@@ -26,4 +26,12 @@ describe Z3::Model do
     expect(model.model_eval(b, true).inspect).to eq("Z3::Ast<4 :: Int>")
     expect(model.model_eval(c, true).inspect).to eq("Z3::Ast<0 :: Int>")
   end
+
+  it "#to_s" do
+    solver.assert(a == 2)
+    solver.assert(b == a+2)
+    expect(solver.check).to eq(:sat)
+    expect(model.to_s).to eq("Z3::Model<a=2, b=4>")
+    expect(model.inspect).to eq("Z3::Model<a=2, b=4>")
+  end
 end

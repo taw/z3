@@ -12,8 +12,6 @@ You can use most Ruby operators to construct ASTs, but use `~ | &` instead of `!
 
 As for API internals, attributes starting with `_` are FFI internals you shouldn't touch, other attributes are generally legitimate Ruby objects.
 
-Ruby API tries to catch the most common mistakes, but if you use API in a weird way you can get C crash instead of nice Ruby exception.
-
 ### Requirements
 
 To use it, you'll need to install `z3`. On OSX that would be:
@@ -21,3 +19,9 @@ To use it, you'll need to install `z3`. On OSX that would be:
     brew install z3
 
 On other systems use appropriate package manager.
+
+### Known Bugs
+
+Ruby API tries to catch the most common mistakes, but if you use API in a weird way you can get C crash instead of nice Ruby exception.
+
+Memory will leak a good deal. Generally avoid in long running processes.

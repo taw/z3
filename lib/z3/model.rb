@@ -1,4 +1,6 @@
 class Z3::Model
+  include Enumerable
+
   attr_reader :_model
   def initialize(_model)
     @_model = _model
@@ -6,6 +8,10 @@ class Z3::Model
 
   def num_consts
     Z3::LowLevel.model_get_num_consts(self)
+  end
+
+  def consts
+    (0...num_consts).map{|i| Z3::FuncDecl.new(Z3::LowLevel.model_get_const_decl(self, i)) }
   end
 
   def num_sorts
@@ -22,5 +28,22 @@ class Z3::Model
 
   def [](ast)
     model_eval(ast)
+  end
+
+  def to_s
+    "Z3::Model<#{ map{|n,v| "#{n}=#{v}"}.join(", ") }>"
+  end
+
+  def inspect
+    to_s
+  end
+
+  def each
+    consts.sort_by(&:name).each do |c|
+      yield(
+        c.name,
+        Z3::Ast::new(Z3::LowLevel.model_get_const_interp(self, c))
+      )
+    end
   end
 end

@@ -2,6 +2,7 @@ class Z3::Solver
   attr_reader :_solver
   def initialize
     @_solver = Z3::LowLevel.mk_solver
+    Z3::LowLevel.solver_inc_ref(self)
   end
 
   def push
@@ -36,7 +37,9 @@ class Z3::Solver
     case check
     when :sat
       puts "Counterexample exists"
-      # puts model
+      model.each do |n,v|
+        puts "* #{n} = #{v}"
+      end
     when :unknown
       puts "Unknown"
     when :unsat
