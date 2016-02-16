@@ -4,24 +4,23 @@ require_relative "../lib/z3"
 
 class VerbalArithmetic
   def initialize(a, b, c)
-    @a = a.chars
-    @b = b.chars
-    @c = c.chars
     @solver = Z3::Solver.new
+    @vars = Hash.new do |ht,name|
+      v = Z3::Ast.int(name)
+      @solver.assert v >= 0
+      @solver.assert v <= 9
+      ht[name] = v
+    end
+    @a = a.chars.map{|v| @vars[v]}
+    @b = b.chars.map{|v| @vars[v]}
+    @c = c.chars.map{|v| @vars[v]}
   end
 
   def solve!
-    @vars = {}
-    [@a,@b,@c].flatten.uniq.each do |v|
-      @vars[v] = digit_var(v)
-    end
-    val_a = word_value(@a)
-    val_b = word_value(@b)
-    val_c = word_value(@c)
-    @solver.assert @vars[@a[0]] != 0
-    @solver.assert @vars[@b[0]] != 0
-    @solver.assert @vars[@c[0]] != 0
-    @solver.assert val_a + val_b == val_c
+    @solver.assert @a[0] != 0
+    @solver.assert @b[0] != 0
+    @solver.assert @c[0] != 0
+    @solver.assert word_value(@a) + word_value(@b) == word_value(@c)
     @solver.assert Z3::Ast.distinct(*@vars.values)
 
     if @solver.check == :sat
@@ -35,19 +34,12 @@ class VerbalArithmetic
   private
 
   def word_value(word)
-    word.map{|v| @vars[v]}.inject(0){|x,y| 10*x+y}
-  end
-
-  def digit_var(name)
-    v = Z3::Ast.int(name)
-    @solver.assert v >= 0
-    @solver.assert v <= 9
-    v
+    word.inject(0){|x,y| 10*x+y}
   end
 
   def print_answer!
     [@a,@b,@c].each do |word|
-      p word.map{|v| [v, @model[@vars[v]].to_s.to_i]}
+      p word.map{|v| [v.to_s, @model[v].to_s.to_i]}
     end
   end
 end
