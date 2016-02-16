@@ -1,0 +1,55 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/z3"
+
+class VerbalArithmetic
+  def initialize(a, b, c)
+    @a = a.chars
+    @b = b.chars
+    @c = c.chars
+    @solver = Z3::Solver.new
+  end
+
+  def solve!
+    @vars = {}
+    [@a,@b,@c].flatten.uniq.each do |v|
+      @vars[v] = digit_var(v)
+    end
+    val_a = word_value(@a)
+    val_b = word_value(@b)
+    val_c = word_value(@c)
+    @solver.assert @vars[@a[0]] != 0
+    @solver.assert @vars[@b[0]] != 0
+    @solver.assert @vars[@c[0]] != 0
+    @solver.assert val_a + val_b == val_c
+    @solver.assert Z3::Ast.distinct(*@vars.values)
+
+    if @solver.check == :sat
+      @model = @solver.model
+      print_answer!
+    else
+      puts "failed to solve"
+    end
+  end
+
+  private
+
+  def word_value(word)
+    word.map{|v| @vars[v]}.inject(0){|x,y| 10*x+y}
+  end
+
+  def digit_var(name)
+    v = Z3::Ast.int(name)
+    @solver.assert v >= 0
+    @solver.assert v <= 9
+    v
+  end
+
+  def print_answer!
+    [@a,@b,@c].each do |word|
+      p word.map{|v| [v, @model[@vars[v]].to_s.to_i]}
+    end
+  end
+end
+
+VerbalArithmetic.new("SEND", "MORE", "MONEY").solve!
