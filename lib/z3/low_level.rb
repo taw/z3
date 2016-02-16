@@ -23,6 +23,10 @@ module Z3::LowLevel
       Z3::VeryLowLevel.Z3_mk_string_symbol(_ctx_pointer, name)
     end
 
+    def get_symbol_string(symbol)
+      Z3::VeryLowLevel.Z3_get_symbol_string(_ctx_pointer, symbol)
+    end
+
     # Sort API
     def mk_bool_sort
       Z3::VeryLowLevel.Z3_mk_bool_sort(_ctx_pointer)
@@ -90,6 +94,19 @@ module Z3::LowLevel
       else
         raise Z3::Exception, "Evaluation of `#{ast}' failed"
       end
+    end
+
+    def model_get_const_decl(model, i)
+      Z3::VeryLowLevel.Z3_model_get_const_decl(_ctx_pointer, model._model, i)
+    end
+
+    # FuncDecl API
+    def func_decl_to_ast(func_decl)
+      Z3::VeryLowLevel.Z3_func_decl_to_ast(_ctx_pointer, func_decl._func_decl)
+    end
+
+    def get_decl_name(func_decl)
+      Z3::VeryLowLevel.Z3_get_decl_name(_ctx_pointer, func_decl._func_decl)
     end
 
     # AST API

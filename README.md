@@ -4,13 +4,15 @@ It's in extremely early stages of development. Pull requests always welcome.
 
 ### Interface
 
-`Z3::Core` is low level FFI interface, and it shouldn't be used directly.
+`Z3::VeryLowLever` / `Z3::LowLevel` are low level FFI interface, and they shouldn't be used directly.
 
-The rest of `Z3` is high level API, but the interface is extremely unstable at this point, and it's pretty much guaranteed to  change many times.
+The rest of `Z3` is high level API, but the interface is extremely unstable at this point, and it's pretty much guaranteed to  change many times. Check specs or `examples/` directory for usage.
 
 You can use most Ruby operators to construct ASTs, but use `~ | &` instead of `! || &&` for boolean operators.
 
 As for API internals, attributes starting with `_` are FFI internals you shouldn't touch, other attributes are generally legitimate Ruby objects.
+
+Ruby API tries to catch the most common mistakes, but if you use API in a weird way you can get C crash instead of nice Ruby exception.
 
 ### Requirements
 

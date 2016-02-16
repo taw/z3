@@ -12,6 +12,7 @@ module Z3::VeryLowLevel
   sort_pointer = :pointer
   symbol = :pointer
   model_pointer = :pointer
+  func_decl_pointer = :pointer
   z3_bool = :int
 
   # Common API
@@ -22,6 +23,7 @@ module Z3::VeryLowLevel
 
   # Symbol API
   attach_function :Z3_mk_string_symbol, [ctx_pointer, :string], symbol
+  attach_function :Z3_get_symbol_string, [ctx_pointer, symbol], :string
 
   # Sort API
   attach_function :Z3_mk_bool_sort, [ctx_pointer], sort_pointer
@@ -43,6 +45,11 @@ module Z3::VeryLowLevel
   attach_function :Z3_model_get_num_funcs, [ctx_pointer, model_pointer], :int
   attach_function :Z3_model_get_num_sorts, [ctx_pointer, model_pointer], :int
   attach_function :Z3_model_eval, [ctx_pointer, model_pointer, ast_pointer, :bool, :pointer], :int
+  attach_function :Z3_model_get_const_decl, [ctx_pointer, model_pointer, :int], func_decl_pointer
+
+  # FuncDecl API
+  attach_function :Z3_func_decl_to_ast, [ctx_pointer, func_decl_pointer], ast_pointer
+  attach_function :Z3_get_decl_name, [ctx_pointer, func_decl_pointer], symbol
 
   # AST API
   attach_function :Z3_mk_true, [ctx_pointer], ast_pointer
