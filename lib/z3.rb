@@ -1,4 +1,7 @@
 module Z3
+  def self.version
+    Z3::LowLevel.get_version.join(".")
+  end
 end
 
 class Z3::Exception < StandardError

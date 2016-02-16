@@ -3,6 +3,16 @@
 
 module Z3::LowLevel
   class << self
+    # Common API
+    def get_version
+      a = FFI::MemoryPointer.new(:int)
+      b = FFI::MemoryPointer.new(:int)
+      c = FFI::MemoryPointer.new(:int)
+      d = FFI::MemoryPointer.new(:int)
+      Z3::VeryLowLevel.Z3_get_version(a,b,c,d)
+      [a.get_uint(0), b.get_uint(0), c.get_uint(0), d.get_uint(0)]
+    end
+
     # Context API
     def mk_context
       Z3::VeryLowLevel.Z3_mk_context

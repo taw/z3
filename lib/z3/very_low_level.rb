@@ -14,6 +14,9 @@ module Z3::VeryLowLevel
   model_pointer = :pointer
   z3_bool = :int
 
+  # Common API
+  attach_function :Z3_get_version, [:pointer, :pointer, :pointer, :pointer], :void
+
   # Context API
   attach_function :Z3_mk_context, [], ctx_pointer
 
