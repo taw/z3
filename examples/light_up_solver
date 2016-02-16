@@ -1,0 +1,105 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/z3"
+
+class LightUp
+  def initialize(data)
+    data = data.split.map{|line| line.strip.chars}
+    @xsize = data[0].size
+    @ysize = data.size
+    @data  = map_coordinates{|x,y| data[y][x]}
+    @solver = Z3::Solver.new
+  end
+
+  def solve!
+    @lamps = map_coordinates{|x,y| int01(x,y)}
+
+    # No lamps on walls
+    # Numbers count lamps next to node (diagonals don't count)
+    (0...@ysize).each do |y|
+      (0...@xsize).each do |x|
+        v = @data[[x,y]]
+        next if v == "."
+        @solver.assert @lamps[[x,y]] == 0
+        if ("0".."4").include?(v)
+          @solver.assert Z3::Ast.add(*lamps_next_to_cell(x,y)) == v.to_i
+        end
+      end
+    end
+
+    # Every cell is in raycast of a lamp
+    # No lamp is in raycast of another lamp
+    (0...@ysize).each do |y|
+      (0...@xsize).each do |x|
+        raycast = Z3::Ast.add(*raycast_cells(x,y))
+        @solver.assert Z3::Ast.implies(@lamps[[x,y]] == 0, raycast >= 1)
+        @solver.assert Z3::Ast.implies(@lamps[[x,y]] == 1, raycast == 0)
+      end
+    end
+
+    if @solver.check == :sat
+      @model = @solver.model
+      print_answer!
+    else
+      puts "failed to solve"
+    end
+  end
+
+  private
+
+  def lamps_next_to_cell(x0,y0)
+    [[x0-1,y0],[x0+1,y0],[x0,y0-1],[x0,y0+1]].map{|x,y| @lamps[[x,y]]}.compact
+  end
+
+  def raycast_cells(x0,y0)
+    result = []
+    [[1,0],[-1,0],[0,1],[0,-1]].each do |dx,dy|
+      x = x0+dx
+      y = y0+dy
+      while @data[[x,y]] == "."
+        result << @lamps[[x,y]]
+        x += dx
+        y += dy
+      end
+    end
+    result
+  end
+
+  def map_coordinates
+    Hash[(0...@xsize).to_a.product((0...@ysize).to_a).map{|x,y| [[x,y],yield(x,y)]}]
+  end
+
+  def print_answer!
+    (0...@ysize).each do |y|
+      (0...@xsize).each do |x|
+        if @data[[x,y]] != "."
+          print(@data[[x,y]])
+        elsif @model[@lamps[[x,y]]].to_s == "1"
+          print("*")
+        else
+          print(" ")
+        end
+      end
+      puts "\n"
+    end
+  end
+
+  def int01(x,y)
+    v = Z3::Ast.int("l#{x},#{y}")
+    @solver.assert v >= 0
+    @solver.assert v <= 1
+    v
+  end
+end
+
+LightUp.new(
+"""
+....0..
+.......
+x.2.x..
+...3...
+..x.x.3
+.......
+..1....
+"""
+).solve!

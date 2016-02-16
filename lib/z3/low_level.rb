@@ -158,6 +158,14 @@ module Z3::LowLevel
       Z3::VeryLowLevel.Z3_mk_or(_ctx_pointer, asts.size, asts_vector(asts))
     end
 
+    def mk_iff(asts)
+      Z3::VeryLowLevel.Z3_mk_iff(_ctx_pointer, a._ast, b._ast)
+    end
+
+    def mk_implies(a, b)
+      Z3::VeryLowLevel.Z3_mk_implies(_ctx_pointer, a._ast, b._ast)
+    end
+
     def mk_mul(asts)
       Z3::VeryLowLevel.Z3_mk_mul(_ctx_pointer, asts.size, asts_vector(asts))
     end

@@ -205,6 +205,14 @@ class Z3::Ast
       Z3::Ast.new(Z3::LowLevel.mk_add(args))
     end
 
+    def iff(*args)
+      Z3::Ast.new(Z3::LowLevel.mk_iff(a, b))
+    end
+
+    def implies(a, b)
+      Z3::Ast.new(Z3::LowLevel.mk_implies(a, b))
+    end
+
     def sub(*args)
       Z3::Ast.new(Z3::LowLevel.mk_sub(args))
     end

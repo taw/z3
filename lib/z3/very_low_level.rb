@@ -64,6 +64,8 @@ module Z3::VeryLowLevel
   attach_function :Z3_mk_const, [ctx_pointer, symbol, sort_pointer], ast_pointer
   attach_function :Z3_mk_and, [ctx_pointer, :int, :pointer], ast_pointer
   attach_function :Z3_mk_or, [ctx_pointer, :int, :pointer], ast_pointer
+  attach_function :Z3_mk_iff, [ctx_pointer, ast_pointer, ast_pointer], ast_pointer
+  attach_function :Z3_mk_implies, [ctx_pointer, ast_pointer, ast_pointer], ast_pointer
   attach_function :Z3_mk_add, [ctx_pointer, :int, :pointer], ast_pointer
   attach_function :Z3_mk_sub, [ctx_pointer, :int, :pointer], ast_pointer
   attach_function :Z3_mk_mul, [ctx_pointer, :int, :pointer], ast_pointer
