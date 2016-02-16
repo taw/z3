@@ -16,7 +16,10 @@ module Z3::VeryLowLevel
   z3_bool = :int
 
   # Common API
+  callback :error_handler, [ctx_pointer, :int], :void
+
   attach_function :Z3_get_version, [:pointer, :pointer, :pointer, :pointer], :void
+  attach_function :Z3_set_error_handler, [ctx_pointer, :error_handler], :void
 
   # Context API
   attach_function :Z3_mk_context, [], ctx_pointer

@@ -198,6 +198,10 @@ module Z3::LowLevel
       Z3::VeryLowLevel.Z3_mk_numeral(_ctx_pointer, str, sort._sort)
     end
 
+    def set_error_handler(&block)
+      Z3::VeryLowLevel.Z3_set_error_handler(_ctx_pointer, block)
+    end
+
     private
 
     def asts_vector(args)
