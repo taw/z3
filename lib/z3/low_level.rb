@@ -162,6 +162,18 @@ module Z3::LowLevel
       Z3::VeryLowLevel.Z3_mk_power(_ctx_pointer, a._ast, b._ast)
     end
 
+    def mk_rem(a,b)
+      Z3::VeryLowLevel.Z3_mk_rem(_ctx_pointer, a._ast, b._ast)
+    end
+
+    def mk_mod(a,b)
+      Z3::VeryLowLevel.Z3_mk_mod(_ctx_pointer, a._ast, b._ast)
+    end
+
+    def mk_div(a,b)
+      Z3::VeryLowLevel.Z3_mk_div(_ctx_pointer, a._ast, b._ast)
+    end
+
     def mk_not(a)
       Z3::VeryLowLevel.Z3_mk_not(_ctx_pointer, a._ast)
     end

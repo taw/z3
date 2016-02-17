@@ -67,6 +67,9 @@ module Z3::VeryLowLevel
   attach_function :Z3_mk_le, [ctx_pointer, ast_pointer, ast_pointer], ast_pointer
   attach_function :Z3_mk_lt, [ctx_pointer, ast_pointer, ast_pointer], ast_pointer
   attach_function :Z3_mk_power, [ctx_pointer, ast_pointer, ast_pointer], ast_pointer
+  attach_function :Z3_mk_rem, [ctx_pointer, ast_pointer, ast_pointer], ast_pointer
+  attach_function :Z3_mk_mod, [ctx_pointer, ast_pointer, ast_pointer], ast_pointer
+  attach_function :Z3_mk_div, [ctx_pointer, ast_pointer, ast_pointer], ast_pointer
   attach_function :Z3_mk_not, [ctx_pointer, ast_pointer], ast_pointer
   attach_function :Z3_mk_const, [ctx_pointer, symbol, sort_pointer], ast_pointer
   attach_function :Z3_mk_and, [ctx_pointer, :int, :pointer], ast_pointer

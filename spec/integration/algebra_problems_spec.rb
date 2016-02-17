@@ -1,6 +1,6 @@
 describe "Algebra Problems" do
   let(:executable) { "#{__dir__}/../../examples/algebra_problems" }
-  it "can solve verbal arithmetic puzzles" do
+  it "can solve algebra puzzles" do
     expect(IO.popen(executable).read).to eq <<EOF
 Solution to problem 01:
 Solution to problem 03:

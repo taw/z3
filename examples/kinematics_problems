@@ -1,0 +1,218 @@
+#!/usr/bin/env ruby
+
+# Problems from: http://www.physicsclassroom.com/class/1DKin/Lesson-6/Sample-Problems-and-Solutions
+
+require_relative "../lib/z3"
+
+class KinematicsProblem
+  attr_reader :solver
+  def initialize
+    @solver = Z3::Solver.new
+  end
+
+  def assert(ast)
+    @solver.assert(ast)
+  end
+
+  def print_solution!(number)
+    puts("Solution to problem %s:" % number)
+    if @solver.check() == :sat
+      @solver.model.each do |n,v|
+        puts "* #{n} = #{v}"
+      end
+    else
+      puts "* Can't solve the problem"
+    end
+  end
+end
+
+class KinematicsProblem01 < KinematicsProblem
+  """
+  An airplane accelerates down a runway at 3.20 m/s2 for 32.8 s until is finally lifts off the ground.
+  Determine the distance traveled before takeoff.
+  """
+  def solve!
+    a = Z3::Ast.real("a")
+    t = Z3::Ast.real("t")
+    d = Z3::Ast.real("d")
+    assert a == 3.20
+    assert t == 32.8
+    assert d == a*t*t/2
+    print_solution! "01"
+  end
+end
+
+class KinematicsProblem02 < KinematicsProblem
+  """
+  A car starts from rest and accelerates uniformly over a time of 5.21 seconds for a distance of 110 m. Determine the acceleration of the car.
+  """
+  def solve!
+    a = Z3::Ast.real("a")
+    t = Z3::Ast.real("t")
+    d = Z3::Ast.real("d")
+    assert d == a*t*t/2
+    assert t == 5.21
+    assert d == 110
+    print_solution! "02"
+  end
+end
+
+class KinematicsProblem03 < KinematicsProblem
+  """
+  Upton Chuck is riding the Giant Drop at Great America.
+  If Upton free falls for 2.60 seconds, what will be his final velocity and how far will he fall?
+  """
+  def solve!
+    a = Z3::Ast.real("a")
+    t = Z3::Ast.real("t")
+    v = Z3::Ast.real("v")
+    d = Z3::Ast.real("d")
+    assert a == 9.81
+    assert d == a*t*t/2
+    assert v == a*t
+    assert t == 2.60
+    print_solution! "03"
+  end
+end
+
+class KinematicsProblem04 < KinematicsProblem
+  """
+  A race car accelerates uniformly from 18.5 m/s to 46.1 m/s in 2.47 seconds. Determine the acceleration of the car and the distance traveled.
+  """
+  def solve!
+    a = Z3::Ast.real("a")
+    t = Z3::Ast.real("t")
+    vs= Z3::Ast.real("vs")
+    ve = Z3::Ast.real("ve")
+    d = Z3::Ast.real("d")
+    assert vs == 18.5
+    assert ve == 46.1
+    assert t == 2.47
+    assert a == (ve-vs)/t
+    assert d == (vs+ve)/2*t
+    print_solution! "04"
+  end
+end
+
+class KinematicsProblem05 < KinematicsProblem
+  """
+  A feather is dropped on the moon from a height of 1.40 meters.
+  The acceleration of gravity on the moon is 1.67 m/s2.
+  Determine the time for the feather to fall to the surface of the moon.
+  """
+  def solve!
+    a = Z3::Ast.real("a")
+    t = Z3::Ast.real("t")
+    d = Z3::Ast.real("d")
+    assert a == 1.67
+    assert d == 1.40
+    assert t >= 0
+    assert d == a*t*t/2
+    print_solution! "05"
+  end
+end
+
+class KinematicsProblem06 < KinematicsProblem
+  """
+  Rocket-powered sleds are used to test the human response to acceleration.
+  If a rocket-powered sled is accelerated to a speed of 444 m/s in 1.83 seconds,
+  then what is the acceleration and what is the distance that the sled travels?
+  """
+  def solve!
+    a = Z3::Ast.real("a")
+    t = Z3::Ast.real("t")
+    d = Z3::Ast.real("d")
+    v = Z3::Ast.real("v")
+    assert v == 444
+    assert t == 1.83
+    assert v == a*t
+    assert d == a*t*t/2
+    print_solution! "06"
+  end
+end
+
+class KinematicsProblem07 < KinematicsProblem
+  """
+  A bike accelerates uniformly from rest to a speed of 7.10 m/s over a distance of 35.4 m.
+  Determine the acceleration of the bike.
+  """
+  def solve!
+    a = Z3::Ast.real("a")
+    t = Z3::Ast.real("t")
+    d = Z3::Ast.real("d")
+    v = Z3::Ast.real("v")
+    assert v == 7.10
+    assert d == 35.4
+    assert a*t == v
+    assert t*v/2 == d
+    print_solution! "07"
+  end
+end
+
+class KinematicsProblem08 < KinematicsProblem
+  """
+  An engineer is designing the runway for an airport.
+  Of the planes that will use the airport, the lowest acceleration rate is likely to be 3 m/s2.
+  The takeoff speed for this plane will be 65 m/s.
+  Assuming this minimum acceleration, what is the minimum allowed length for the runway?
+  """
+  def solve!
+    a = Z3::Ast.real("a")
+    t = Z3::Ast.real("t")
+    d = Z3::Ast.real("d")
+    v = Z3::Ast.real("v")
+    assert a == 3
+    assert v == 65
+    assert a*t == v
+    assert t*v/2 == d
+    print_solution! "08"
+  end
+end
+
+class KinematicsProblem09 < KinematicsProblem
+  """
+  A car traveling at 22.4 m/s skids to a stop in 2.55 s.
+  Determine the skidding distance of the car (assume uniform acceleration).
+  """
+  def solve!
+    t = Z3::Ast.real("t")
+    d = Z3::Ast.real("d")
+    v = Z3::Ast.real("v")
+    assert v == 22.4
+    assert t == 2.55
+    assert d == t*v/2
+    print_solution! "09"
+  end
+end
+
+class KinematicsProblem10 < KinematicsProblem
+  """
+  A kangaroo is capable of jumping to a height of 2.62 m.
+  Determine the takeoff speed of the kangaroo.
+  """
+  def solve!
+    a = Z3::Ast.real("a")
+    t = Z3::Ast.real("t")
+    d = Z3::Ast.real("d")
+    v = Z3::Ast.real("v")
+    assert d == 2.62
+    assert a == -9.81
+    assert d == v*t/2
+    assert v + a*t == 0
+    assert t >= 0
+    print_solution! "10"
+  end
+end
+
+# Z3.set_option(rational_to_decimal: true)
+
+KinematicsProblem01.new.solve!
+KinematicsProblem02.new.solve!
+KinematicsProblem03.new.solve!
+KinematicsProblem04.new.solve!
+KinematicsProblem05.new.solve!
+KinematicsProblem06.new.solve!
+KinematicsProblem07.new.solve!
+KinematicsProblem08.new.solve!
+KinematicsProblem09.new.solve!
+KinematicsProblem10.new.solve!

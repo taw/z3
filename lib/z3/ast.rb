@@ -45,6 +45,12 @@ class Z3::Ast
     Z3::Ast.send(op, a, b)
   end
 
+  private def binary_int_operator(op, b)
+    b = Z3::Ast.from_const(b, sort) unless b.is_a?(Z3::Ast)
+    raise Z3::Exception, "Can only be used on integers" unless int? and b.int?
+    Z3::Ast.send(op, a, b)
+  end
+
   def |(b)
     b = Z3::Ast.from_const(b, sort) unless b.is_a?(Z3::Ast)
     raise Z3::Exception, "Can only be used on booleans" unless bool? and b.bool?
@@ -87,6 +93,18 @@ class Z3::Ast
 
   def **(b)
     binary_arithmetic_operator(:power, b)
+  end
+
+  def /(b)
+    binary_arithmetic_operator(:div, b)
+  end
+
+  def %(b)
+    binary_int_operator(:mod, b)
+  end
+
+  def rem(b)
+    binary_int_operator(:rem, b)
   end
 
   def -@
@@ -201,6 +219,18 @@ class Z3::Ast
 
     def power(a, b)
       Z3::Ast.new(Z3::LowLevel.mk_power(a, b))
+    end
+
+    def div(a, b)
+      Z3::Ast.new(Z3::LowLevel.mk_div(a, b))
+    end
+
+    def mod(a, b)
+      Z3::Ast.new(Z3::LowLevel.mk_mod(a, b))
+    end
+
+    def rem(a, b)
+      Z3::Ast.new(Z3::LowLevel.mk_rem(a, b))
     end
 
     def not(a)

@@ -1,6 +1,6 @@
 describe "Basic Int Math" do
   let(:executable) { "#{__dir__}/../../examples/basic_int_math" }
-  it "can solve verbal arithmetic puzzles" do
+  it "can solve basic integer math problems" do
     expect(IO.popen(executable).read).to eq <<EOF
 Checking if (a+b)(a-b)==a*a-b*b
 Proven
