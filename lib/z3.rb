@@ -1,6 +1,12 @@
 module Z3
-  def self.version
-    Z3::LowLevel.get_version.join(".")
+  class <<self
+    def version
+      Z3::LowLevel.get_version.join(".")
+    end
+
+    def set_param(k,v)
+      Z3::LowLevel.global_param_set(k,v)
+    end
   end
 end
 

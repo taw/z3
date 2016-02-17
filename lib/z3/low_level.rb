@@ -17,6 +17,10 @@ module Z3::LowLevel
       Z3::VeryLowLevel.Z3_set_error_handler(_ctx_pointer, block)
     end
 
+    def global_param_set(k,v)
+      Z3::VeryLowLevel.Z3_global_param_set(k.to_s, v.to_s)
+    end
+
     # Context API
     def mk_context
       Z3::VeryLowLevel.Z3_mk_context

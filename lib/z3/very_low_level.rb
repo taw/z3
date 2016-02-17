@@ -20,6 +20,7 @@ module Z3::VeryLowLevel
 
   attach_function :Z3_get_version, [:pointer, :pointer, :pointer, :pointer], :void
   attach_function :Z3_set_error_handler, [ctx_pointer, :error_handler], :void
+  attach_function :Z3_global_param_set, [:string, :string], :void
 
   # Context API
   attach_function :Z3_mk_context, [], ctx_pointer
