@@ -13,6 +13,10 @@ module Z3::LowLevel
       [a.get_uint(0), b.get_uint(0), c.get_uint(0), d.get_uint(0)]
     end
 
+    def set_error_handler(&block)
+      Z3::VeryLowLevel.Z3_set_error_handler(_ctx_pointer, block)
+    end
+
     # Context API
     def mk_context
       Z3::VeryLowLevel.Z3_mk_context
@@ -214,8 +218,8 @@ module Z3::LowLevel
       Z3::VeryLowLevel.Z3_mk_numeral(_ctx_pointer, str, sort._sort)
     end
 
-    def set_error_handler(&block)
-      Z3::VeryLowLevel.Z3_set_error_handler(_ctx_pointer, block)
+    def mk_unary_minus(ast)
+      Z3::VeryLowLevel.Z3_mk_unary_minus(_ctx_pointer, ast._ast)
     end
 
     private

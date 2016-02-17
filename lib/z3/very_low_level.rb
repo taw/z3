@@ -43,7 +43,6 @@ module Z3::VeryLowLevel
   attach_function :Z3_solver_check, [ctx_pointer, solver_pointer], z3_bool
   attach_function :Z3_solver_inc_ref, [ctx_pointer, solver_pointer], :void
 
-
   # Model API
   attach_function :Z3_solver_get_model, [ctx_pointer, solver_pointer], model_pointer
   attach_function :Z3_model_get_num_consts, [ctx_pointer, model_pointer], :int
@@ -82,4 +81,5 @@ module Z3::VeryLowLevel
   attach_function :Z3_get_sort, [ctx_pointer, ast_pointer], sort_pointer
   attach_function :Z3_mk_int2real, [ctx_pointer, ast_pointer], ast_pointer
   attach_function :Z3_mk_numeral, [ctx_pointer, :string, sort_pointer], ast_pointer
+  attach_function :Z3_mk_unary_minus, [ctx_pointer, ast_pointer], ast_pointer
 end

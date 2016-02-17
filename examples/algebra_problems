@@ -1,0 +1,148 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/z3"
+
+class AlgebraProblem
+  attr_reader :solver
+  def initialize
+    @solver = Z3::Solver.new
+  end
+
+  def print_solution!(number)
+    puts("Solution to problem %s:" % number)
+    if @solver.check() == :sat
+      @solver.model.each do |n,v|
+        puts "* #{n} = #{v}"
+      end
+    else
+      puts "* Can't solve the problem"
+    end
+  end
+end
+
+class AlgebraProblem01 < AlgebraProblem
+  def solve!
+    x = Z3::Ast.real("x")
+    solver.assert 5*(-3*x - 2) - (x - 3) == -4*(4*x + 5) + 13
+    print_solution! "01"
+    # No nice way to say x is unconstrained
+  end
+end
+
+class AlgebraProblem03 < AlgebraProblem
+  def declare_abs(var, expr)
+    solver.assert Z3::Ast.or(
+      Z3::Ast.and(var == expr,  expr >= 0),
+      Z3::Ast.and(var == -expr, expr <= 0)
+    )
+  end
+
+  def solve!
+    x = Z3::Ast.real("x")
+    xm2abs = Z3::Ast.real("|x-2|")
+    declare_abs(xm2abs, x-2)
+    m6abs = Z3::Ast.real("|-6|")
+    declare_abs(m6abs, -6)
+    solver.assert x < 2
+    solver.assert xm2abs == 4*m6abs
+    print_solution! "03"
+  end
+end
+
+class AlgebraProblem04 < AlgebraProblem
+  def declare_distance(a_b, ax, ay, bx, by)
+    solver.assert a_b >= 0
+    solver.assert a_b**2 == (ax-bx)**2 + (ay-by)**2
+  end
+
+  def solve!
+    ax = Z3::Ast.real("ax")
+    ay = Z3::Ast.real("ay")
+    bx = Z3::Ast.real("bx")
+    by = Z3::Ast.real("by")
+    a_b = Z3::Ast.real("|a-b|")
+    declare_distance(a_b, ax, ay, bx, by)
+    solver.assert ax == -4
+    solver.assert ay == -5
+    solver.assert bx == -1
+    solver.assert by == -1
+    print_solution! "04"
+  end
+end
+
+class AlgebraProblem05 < AlgebraProblem
+  def solve!
+    x = Z3::Ast.real("x")
+    y = Z3::Ast.real("y")
+    solver.assert 2*x - 4*y == 9
+    solver.assert y == 0
+    print_solution! "05"
+  end
+end
+
+class AlgebraProblem06 < AlgebraProblem
+  def declare_f(x,y)
+    solver.assert y == 6*x + 1
+  end
+
+  def solve!
+    x1 = Z3::Ast.real("x1")
+    y1 = Z3::Ast.real("y1")
+    x2 = Z3::Ast.real("x2")
+    y2 = Z3::Ast.real("y2")
+    answer = Z3::Ast.real("answer")
+    solver.assert x2 == 2
+    solver.assert x1 == 1
+    declare_f(x1, y1)
+    declare_f(x2, y2)
+    solver.assert answer == y2 - y1
+    print_solution! "06"
+  end
+end
+
+class AlgebraProblem10 < AlgebraProblem
+  def declare_abs(var, expr)
+    solver.assert Z3::Ast.or(
+      Z3::Ast.and(var == expr,  expr >= 0),
+      Z3::Ast.and(var == -expr, expr <= 0)
+    )
+  end
+
+  def solve!
+    x = Z3::Ast.real("x")
+    y = Z3::Ast.real("|-2x + 2|")
+    declare_abs(y, -2*x + 2)
+    solver.assert y - 3 == -3
+    print_solution! "10"
+  end
+end
+
+AlgebraProblem01.new.solve!
+AlgebraProblem03.new.solve!
+AlgebraProblem04.new.solve!
+AlgebraProblem05.new.solve!
+AlgebraProblem06.new.solve!
+AlgebraProblem10.new.solve!
+
+"""
+http://www.analyzemath.com/Algebra1/Algebra1.html
+
+
+Problem 1: Solve the equation
+  5(-3x - 2) - (x - 3) = -4(4x + 5) + 13
+
+Problem 3: If x <2, simplify
+  |x - 2| = 4|-6|
+(actually I misread original, whatever)
+
+Problem 4: Find the distance between the points (-4 , -5) and (-1 , -1).
+
+Problem 5: Find the x intercept of the graph of the equation
+  2x - 4y = 9
+
+Problem 6: Evaluate f(2) - f(1)
+  f(x) = 6x + 1
+
+Problem 10: Solve the equation
+  |-2x + 2| -3 = -3
+"""

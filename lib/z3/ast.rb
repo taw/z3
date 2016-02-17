@@ -89,6 +89,11 @@ class Z3::Ast
     binary_arithmetic_operator(:power, b)
   end
 
+  def -@
+    raise "Can only apply unary negation to Int or Real" unless int? or real?
+    Z3::Ast.new(Z3::LowLevel.mk_unary_minus(self))
+  end
+
   def ==(b)
     b = Z3::Ast.from_const(b, sort) unless b.is_a?(Z3::Ast)
     if sort != b.sort
@@ -122,7 +127,7 @@ class Z3::Ast
     def from_const(value, sort)
       case sort
       when Z3::Sort.bool
-        raise Z3::Exception, "Can't convert #{value.class} to Real" unless value == true or value == false
+        raise Z3::Exception, "Can't convert #{value.class} to Bool" unless value == true or value == false
         if value
           Z3::Ast.true
         else
@@ -141,6 +146,19 @@ class Z3::Ast
         raise Z3::Exception, "Can't convert #{value.class} to Real" unless value.is_a?(Numeric)
         Z3::Ast.new(Z3::LowLevel.mk_numeral(value.to_s, sort))
       end
+    end
+
+    def coerce_bool(value)
+      if value.is_a?(Z3::Ast)
+        return value if value.bool?
+        raise Z3::Exception, "Can't convert #{value.sort} to Bool"
+      end
+      raise Z3::Exception, "Can't convert #{value.class} to Bool" unless value == true or value == false
+        if value
+          Z3::Ast.true
+        else
+          Z3::Ast.false
+        end
     end
 
     def coerce_to_same_sort(a, b)
@@ -186,6 +204,7 @@ class Z3::Ast
     end
 
     def not(a)
+      a = coerce_bool(a)
       Z3::Ast.new(Z3::LowLevel.mk_not(a))
     end
 
@@ -194,10 +213,12 @@ class Z3::Ast
     end
 
     def and(*args)
+      args = args.map{|a| coerce_bool(a)}
       Z3::Ast.new(Z3::LowLevel.mk_and(args))
     end
 
     def or(*args)
+      args = args.map{|a| coerce_bool(a)}
       Z3::Ast.new(Z3::LowLevel.mk_or(args))
     end
 
@@ -205,11 +226,15 @@ class Z3::Ast
       Z3::Ast.new(Z3::LowLevel.mk_add(args))
     end
 
-    def iff(*args)
+    def iff(a, b)
+      a = coerce_bool(a)
+      b = coerce_bool(b)
       Z3::Ast.new(Z3::LowLevel.mk_iff(a, b))
     end
 
     def implies(a, b)
+      a = coerce_bool(a)
+      b = coerce_bool(b)
       Z3::Ast.new(Z3::LowLevel.mk_implies(a, b))
     end
 
