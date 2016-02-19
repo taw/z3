@@ -1,6 +1,6 @@
 describe "Self-Referential Aptitude Test" do
   let(:executable) { "#{__dir__}/../../examples/selfref_solver" }
-  it "can solve minisudokus" do
+  it "can solve Self-Referential Aptitude Test" do
     expect(IO.popen(executable).read).to eq <<EOF
 Q 1: D
 Q 2: A
