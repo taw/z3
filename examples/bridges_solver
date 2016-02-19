@@ -1,0 +1,132 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/z3"
+
+class Bridges
+  def initialize(data)
+    data = data.strip.split("\n").map do |line|
+      line.split.map{|c| c == "_" ? nil : c.to_i}
+    end
+    @xsize = data[0].size
+    @ysize = data.size
+    @data = map_coordinates{|x,y| data[y][x]}
+    @solver = Z3::Solver.new
+  end
+
+  def solve!
+    @vars = {}
+    (0...@xsize).each do |x|
+      (0...@ysize).each do |y|
+        u = int012(x,y,"u")
+        d = int012(x,y,"d")
+        r = int012(x,y,"r")
+        l = int012(x,y,"l")
+        @vars[[x,y,"u"]] = u
+        @vars[[x,y,"d"]] = d
+        @vars[[x,y,"r"]] = r
+        @vars[[x,y,"l"]] = l
+        if @data[[x,y]] == nil
+          @solver.assert u == d
+          @solver.assert l == r
+          @solver.assert (u==0) | (l==0)
+        else
+          @solver.assert u+d+r+l == @data[[x,y]]
+        end
+        # Nothing goes out of the map
+        if x == 0
+          @solver.assert l == 0
+        end
+        if x == @xsize - 1
+          @solver.assert r == 0
+        end
+        if y == 0
+          @solver.assert u == 0
+        end
+        if y == @ysize - 1
+          @solver.assert d == 0
+        end
+      end
+    end
+
+    (0...@xsize).each do |x|
+      (0...@ysize).each do |y|
+        if x != @xsize-1
+          @solver.assert @vars[[x,y,"r"]] == @vars[[x+1,y,"l"]]
+        end
+        if y != @ysize-1
+          @solver.assert @vars[[x,y,"d"]] == @vars[[x,y+1,"u"]]
+        end
+      end
+    end
+
+    if @solver.check == :sat
+      @model = @solver.model
+      print_answer!
+    else
+      puts "failed to solve"
+    end
+  end
+
+  private
+
+  def map_coordinates
+    Hash[(0...@xsize).to_a.product((0...@ysize).to_a).map{|x,y| [[x,y],yield(x,y)]}]
+  end
+
+  def print_answer!
+    picture = (0...@ysize*3).map do
+      [" "] * (3*@xsize)
+    end
+
+    @data.each do |(x,y),v|
+      if v == nil
+        u = @model[@vars[[x,y,"u"]]].to_s.to_i
+        l = @model[@vars[[x,y,"l"]]].to_s.to_i
+        if u > 0
+          picture[y*3+1][x*3+1] = " |\u2016"[u]
+        elsif l > 0
+          picture[y*3+1][x*3+1] = " -="[l]
+        else
+          picture[y*3+1][x*3+1] = " "
+        end
+      else
+        picture[y*3+1][x*3+1] = v.to_s
+      end
+    end
+
+    @data.each do |(x,y),_|
+      u = @model[@vars[[x,y,"u"]]].to_s.to_i
+      d = @model[@vars[[x,y,"d"]]].to_s.to_i
+      l = @model[@vars[[x,y,"l"]]].to_s.to_i
+      r = @model[@vars[[x,y,"r"]]].to_s.to_i
+
+      picture[y*3+1][x*3  ] = " -="[l]
+      picture[y*3+1][x*3+2] = " -="[r]
+      picture[y*3  ][x*3+1] = " |\u2016"[u]
+      picture[y*3+2][x*3+1] = " |\u2016"[d]
+    end
+
+    picture.each do |row|
+      puts row.join
+    end
+  end
+
+  def int012(x, y, d)
+    v = Z3::Ast.int("#{x},#{y},#{d}")
+    @solver.assert v >= 0
+    @solver.assert v <= 2
+    v
+  end
+end
+
+Bridges.new(
+"""
+3 _ _ 6 _ _ 4
+_ 1 _ _ _ _ _
+_ _ _ 4 _ 4 _
+_ _ _ _ _ _ _
+_ _ 1 _ 3 _ _
+1 _ _ _ _ 2 _
+_ 3 _ _ 5 _ 3
+"""
+).solve!
