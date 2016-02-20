@@ -48,7 +48,7 @@ class Z3::Ast
   private def binary_int_operator(op, b)
     b = Z3::Ast.from_const(b, sort) unless b.is_a?(Z3::Ast)
     raise Z3::Exception, "Can only be used on integers" unless int? and b.int?
-    Z3::Ast.send(op, a, b)
+    Z3::Ast.send(op, self, b)
   end
 
   def |(b)
