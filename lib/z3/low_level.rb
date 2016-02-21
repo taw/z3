@@ -3,7 +3,6 @@
 
 module Z3::LowLevel
   class << self
-    # Common API
     def get_version
       a = FFI::MemoryPointer.new(:int)
       b = FFI::MemoryPointer.new(:int)
@@ -17,85 +16,8 @@ module Z3::LowLevel
       Z3::VeryLowLevel.Z3_set_error_handler(_ctx_pointer, block)
     end
 
-    def global_param_set(k,v)
-      Z3::VeryLowLevel.Z3_global_param_set(k.to_s, v.to_s)
-    end
-
-    # Context API
     def mk_context
       Z3::VeryLowLevel.Z3_mk_context
-    end
-
-    # Symbol API
-    def mk_string_symbol(name)
-      Z3::VeryLowLevel.Z3_mk_string_symbol(_ctx_pointer, name)
-    end
-
-    def get_symbol_string(symbol)
-      Z3::VeryLowLevel.Z3_get_symbol_string(_ctx_pointer, symbol)
-    end
-
-    # Sort API
-    def mk_bool_sort
-      Z3::VeryLowLevel.Z3_mk_bool_sort(_ctx_pointer)
-    end
-
-    def mk_int_sort
-      Z3::VeryLowLevel.Z3_mk_int_sort(_ctx_pointer)
-    end
-
-    def mk_real_sort
-      Z3::VeryLowLevel.Z3_mk_real_sort(_ctx_pointer)
-    end
-
-    def sort_to_string(sort)
-      Z3::VeryLowLevel.Z3_sort_to_string(_ctx_pointer, sort._sort)
-    end
-
-    # Solver API
-    def mk_solver
-      Z3::VeryLowLevel.Z3_mk_solver(_ctx_pointer)
-    end
-
-    def solver_push(solver)
-      Z3::VeryLowLevel.Z3_solver_push(_ctx_pointer, solver._solver)
-    end
-
-    def solver_pop(solver, n)
-      Z3::VeryLowLevel.Z3_solver_pop(_ctx_pointer, solver._solver, n)
-    end
-
-    def solver_reset(solver)
-      Z3::VeryLowLevel.Z3_solver_reset(_ctx_pointer, solver._solver)
-    end
-
-    def solver_assert(solver, ast)
-      Z3::VeryLowLevel.Z3_solver_assert(_ctx_pointer, solver._solver, ast._ast)
-    end
-
-    def solver_check(solver)
-      Z3::VeryLowLevel.Z3_solver_check(_ctx_pointer, solver._solver)
-    end
-
-    def solver_inc_ref(solver)
-      Z3::VeryLowLevel.Z3_solver_inc_ref(_ctx_pointer, solver._solver)
-    end
-
-    # Model API
-    def solver_get_model(solver)
-      Z3::VeryLowLevel.Z3_solver_get_model(_ctx_pointer, solver._solver)
-    end
-
-    def model_get_num_consts(model)
-      Z3::VeryLowLevel.Z3_model_get_num_consts(_ctx_pointer, model._model)
-    end
-
-    def model_get_num_funcs(model)
-      Z3::VeryLowLevel.Z3_model_get_num_funcs(_ctx_pointer, model._model)
-    end
-
-    def model_get_num_sorts(model)
-      Z3::VeryLowLevel.Z3_model_get_num_sorts(_ctx_pointer, model._model)
     end
 
     def model_eval(model, ast, model_completion)
@@ -112,78 +34,12 @@ module Z3::LowLevel
       Z3::VeryLowLevel.Z3_model_get_const_decl(_ctx_pointer, model._model, i)
     end
 
-    # FuncDecl API
-    def func_decl_to_ast(func_decl)
-      Z3::VeryLowLevel.Z3_func_decl_to_ast(_ctx_pointer, func_decl._func_decl)
-    end
-
     def get_decl_name(func_decl)
       Z3::VeryLowLevel.Z3_get_decl_name(_ctx_pointer, func_decl._func_decl)
     end
 
-    def get_arity(func_decl)
-      Z3::VeryLowLevel.Z3_get_arity(_ctx_pointer, func_decl._func_decl)
-    end
-
-    def get_decl_ast_parameter(func_decl, i)
-      Z3::VeryLowLevel.Z3_get_decl_ast_parameter(_ctx_pointer, func_decl._func_decl, i)
-    end
-
     def model_get_const_interp(model, func_decl)
       Z3::VeryLowLevel.Z3_model_get_const_interp(_ctx_pointer, model._model, func_decl._func_decl)
-    end
-
-    # AST API
-    def mk_true
-      Z3::VeryLowLevel.Z3_mk_true(_ctx_pointer)
-    end
-
-    def mk_false
-      Z3::VeryLowLevel.Z3_mk_false(_ctx_pointer)
-    end
-
-    def mk_eq(a,b)
-      Z3::VeryLowLevel.Z3_mk_eq(_ctx_pointer, a._ast, b._ast)
-    end
-
-    def mk_ge(a,b)
-      Z3::VeryLowLevel.Z3_mk_ge(_ctx_pointer, a._ast, b._ast)
-    end
-
-    def mk_gt(a,b)
-      Z3::VeryLowLevel.Z3_mk_gt(_ctx_pointer, a._ast, b._ast)
-    end
-
-    def mk_le(a,b)
-      Z3::VeryLowLevel.Z3_mk_le(_ctx_pointer, a._ast, b._ast)
-    end
-
-    def mk_lt(a,b)
-      Z3::VeryLowLevel.Z3_mk_lt(_ctx_pointer, a._ast, b._ast)
-    end
-
-    def mk_power(a,b)
-      Z3::VeryLowLevel.Z3_mk_power(_ctx_pointer, a._ast, b._ast)
-    end
-
-    def mk_rem(a,b)
-      Z3::VeryLowLevel.Z3_mk_rem(_ctx_pointer, a._ast, b._ast)
-    end
-
-    def mk_mod(a,b)
-      Z3::VeryLowLevel.Z3_mk_mod(_ctx_pointer, a._ast, b._ast)
-    end
-
-    def mk_div(a,b)
-      Z3::VeryLowLevel.Z3_mk_div(_ctx_pointer, a._ast, b._ast)
-    end
-
-    def mk_not(a)
-      Z3::VeryLowLevel.Z3_mk_not(_ctx_pointer, a._ast)
-    end
-
-    def mk_const(_symbol, sort)
-      Z3::VeryLowLevel.Z3_mk_const(_ctx_pointer, _symbol, sort._sort)
     end
 
     def mk_and(asts)
@@ -192,14 +48,6 @@ module Z3::LowLevel
 
     def mk_or(asts)
       Z3::VeryLowLevel.Z3_mk_or(_ctx_pointer, asts.size, asts_vector(asts))
-    end
-
-    def mk_iff(asts)
-      Z3::VeryLowLevel.Z3_mk_iff(_ctx_pointer, a._ast, b._ast)
-    end
-
-    def mk_implies(a, b)
-      Z3::VeryLowLevel.Z3_mk_implies(_ctx_pointer, a._ast, b._ast)
     end
 
     def mk_mul(asts)
@@ -218,25 +66,8 @@ module Z3::LowLevel
       Z3::VeryLowLevel.Z3_mk_distinct(_ctx_pointer, asts.size, asts_vector(asts))
     end
 
-    def ast_to_string(ast)
-      Z3::VeryLowLevel.Z3_ast_to_string(_ctx_pointer, ast._ast)
-    end
-
-    def get_sort(ast)
-      Z3::VeryLowLevel.Z3_get_sort(_ctx_pointer, ast._ast)
-    end
-
-    def mk_int2real(ast)
-      Z3::VeryLowLevel.Z3_mk_int2real(_ctx_pointer, ast._ast)
-    end
-
-    def mk_numeral(str, sort)
-      Z3::VeryLowLevel.Z3_mk_numeral(_ctx_pointer, str, sort._sort)
-    end
-
-    def mk_unary_minus(ast)
-      Z3::VeryLowLevel.Z3_mk_unary_minus(_ctx_pointer, ast._ast)
-    end
+    ### Automatically generated, do not edit that file
+    eval open("#{__dir__}/low_level_auto.rb").read
 
     private
 

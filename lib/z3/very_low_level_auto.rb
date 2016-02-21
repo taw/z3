@@ -1,4 +1,3 @@
-
 attach_function :Z3_algebraic_add, [ctx_pointer, ast_pointer, ast_pointer], ast_pointer
 attach_function :Z3_algebraic_div, [ctx_pointer, ast_pointer, ast_pointer], ast_pointer
 attach_function :Z3_algebraic_eq, [ctx_pointer, ast_pointer, ast_pointer], :bool

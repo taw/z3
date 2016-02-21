@@ -125,6 +125,14 @@ class Definition
     "Z3::VeryLowLevel.Z3_#{@name}(#{ffi_call_args.join(", ")})"
   end
 
+  def api
+    [
+      "def #{api_def}\n",
+      "  #{api_body}\n",
+      "end\n",
+    ].join
+  end
+
   def ffi_type(type)
     case type
     when "VOID"

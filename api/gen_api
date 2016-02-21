@@ -14,8 +14,12 @@ class GenerateAPI
 
   def run!
     puts ""
-    supported_definitions.each do |d|
-      puts d.ffi
+    (Pathname(__dir__) + "../lib/z3/very_low_level_auto.rb").open("w") do |fh|
+      fh.puts supported_definitions.map(&:ffi)
+    end
+
+    (Pathname(__dir__) + "../lib/z3/low_level_auto.rb").open("w") do |fh|
+      fh.puts supported_definitions.map(&:api).join("\n")
     end
   end
 
