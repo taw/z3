@@ -2,8 +2,8 @@ require "rake"
 
 Gem::Specification.new do |s|
   s.name         = "z3"
-  s.version      = "0.0.0"
-  s.date         = "2016-02-17"
+  s.version      = "0.0.20160221"
+  s.date         = "2016-02-21"
   s.summary      = "Z3 Constraint Solver"
   s.description  = "Ruby bindings for Z3 Constraint Solver"
   s.authors      = ["Tomasz Wegrzanowski"]
