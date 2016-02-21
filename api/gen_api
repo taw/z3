@@ -1,0 +1,92 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+
+class Definition
+  attr_reader :name, :ret_type, :arguments
+  def initialize(str)
+    parse_definition!(str)
+  end
+
+  private
+
+  def parse_definition!(definition_str)
+    raise "Parse error: `#{definition_str}'" unless definition_str =~ /
+      \A
+      def_API
+      \(
+      '
+      (\w+)
+      '
+      \s*,\s*
+      (\w+)
+      \s*,\s*
+      \(
+      (.*)
+      \)
+      \s*
+      \)
+      \z
+    /x
+    name = $1
+    @ret_type = $2
+    argument_str = $3
+
+    @arguments = []
+    until argument_str.empty?
+      if argument_str.sub!(/\A_in\( (\w+) \)/x, "")
+        arguments << [:in, $1]
+      elsif argument_str.sub!(/\A_out\( (\w+) \)/x, "")
+        arguments << [:out, $1]
+      elsif argument_str.sub!(/\A_in_array\( (\d+) \s*,\s* (\w+) \)/x, "")
+        arguments << [:in_array, $1.to_i, $2]
+      elsif argument_str.sub!(/\A_out_array\( (\d+) \s*,\s* (\w+) \)/x, "")
+        arguments << [:out_array, $1.to_i, $2]
+      elsif argument_str.sub!(/\A_out_managed_array\( (\d+) \s*,\s* (\w+) \)/x, "")
+        arguments << [:out_managed_array, $1.to_i, $2]
+      elsif argument_str.sub!(/\A_inout_array\( (\d+) \s*,\s* (\w+) \)/x, "")
+        arguments << [:inout_array, $1.to_i, $2]
+      elsif argument_str.sub!(/\A[,\s]+/, "")
+        # OK
+      else
+        require 'pry'; binding.pry
+      end
+    end
+    if name =~ /\AZ3_/
+      @name = name.sub(/\AZ3_/, "")
+    else
+      raise "Bad name: `#{name}'"
+    end
+  end
+end
+
+class GenerateAPI
+  def initialize(*paths)
+    paths.each do |path|
+      add_file! Pathname(path)
+    end
+  end
+
+  def run!
+  end
+
+  private
+
+  def add_definition!(definition)
+    p Definition.new(definition)
+  end
+
+  def add_file!(path)
+    path.readlines.grep(/def_API/).map(&:strip).each do |definition|
+      add_definition! definition
+    end
+  end
+end
+
+if ARGV.empty?
+  STDERR.puts "Usage: #{$0} path1.h path2.h [...]"
+  exit 1
+end
+
+
+GenerateAPI.new(*ARGV).run!
