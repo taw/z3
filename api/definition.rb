@@ -11,8 +11,23 @@ class Definition
       api_body
       true
     rescue Exception => e
-      warn "Failed because: #{e}"
+      warn "Failed because: #{e} # #{@name}"
       false
+    end
+  end
+
+  def type_to_api_argument_name(t)
+    case t
+    when "INT", "UINT", "RCF_NUM", "INT64", "UINT64"
+      "num"
+    when "BOOL"
+      "bool"
+    when "SYMBOL"
+      "sym"
+    when "STRING"
+      "str"
+    else
+      "#{t.downcase}"
     end
   end
 
@@ -20,71 +35,19 @@ class Definition
     raise if @arguments.any?{|a,| a != :in}
     arg_types = @arguments.map(&:last)
     arg_types.shift if arg_types[0] == "CONTEXT"
-    case arg_types
-    when ["AST"]
-      ["ast"]
-    when ["AST", "AST"]
-      ["ast1", "ast2"]
-    when ["AST", "AST", "AST"]
-      ["ast1", "ast2", "ast3"]
-    when ["AST", "AST", "AST", "AST"]
-      ["ast1", "ast2", "ast3", "ast4"]
-    when ["AST", "AST", "SORT"]
-      ["ast1", "ast2", "sort"]
-    when ["STRING", "SORT"]
-      ["str", "sort"]
-    when ["STRING"]
-      ["str"]
-    when ["SOLVER"]
-      ["solver"]
-    when ["SOLVER", "AST"]
-      ["solver", "ast1"]
-    when ["SOLVER", "AST", "AST"]
-      ["solver", "ast1", "ast2"]
-    when ["SOLVER", "UINT"]
-      ["solver", "num"]
-    when ["RCF_NUM"]
-      ["num"]
-    when ["RCF_NUM", "RCF_NUM"]
-      ["num1", "num2"]
-    when ["PROBE"]
-      ["probe"]
-    when ["PROBE", "PROBE"]
-      ["probe1", "probe2"]
-    when ["UINT"]
-      ["num"]
-    when ["AST", "UINT"]
-      ["ast", "num"]
-    when []
-      []
-    when ["SORT"]
-      ["sort"]
-    when ["SORT", "SORT"]
-      ["sort1", "sort2"]
-    when ["SORT", "UINT"]
-      ["sort", "num"]
-    when ["STRING", "STRING"]
-      ["str1", "str2"]
-    when ["FUNC_DECL", "AST", "AST"]
-      ["func_decl", "ast1", "ast2"]
-    when ["SYMBOL", "SORT"]
-      ["symbol", "sort"]
-    when ["SYMBOL"]
-      ["symbol"]
-    when ["GOAL"]
-      ["goal"]
-    when ["MODEL"]
-      ["model"]
-    when ["PARAMS"]
-      ["params"]
-    when ["OPTIMIZE"]
-      ["optimize"]
-    when ["PATTERN"]
-      ["pattern"]
-    else
-      raise "Unknown API argument combinations #{arg_types.inspect}"
-      # p arg_types
-      # require 'pry'; binding.pry
+
+    cnts = Hash.new(0)
+    idx = Hash.new(0)
+    arg_names = arg_types.map{|t| type_to_api_argument_name(t)}
+    arg_names.each do |n|
+      cnts[n] += 1
+    end
+    arg_names.map do |n|
+      if cnts[n] == 1
+        n
+      else
+        i = "#{n}#{idx[n] += 1}"
+      end
     end
   end
 
@@ -107,12 +70,14 @@ class Definition
     result + arg_types.zip(api_arguments).map do |t,n|
       case t
       when "AST", "SORT", "SOLVER", "MODEL", "GOAL", "FIXEDPOINT", "FUNC_DECL",
-          "PATTERN", "PROBE", "RCF_NUM", "OPTIMIZE", "PARAMS"
+          "PATTERN", "PROBE", "RCF_NUM", "OPTIMIZE", "PARAMS", "PARAM_DESCRS", "TACTIC",
+          "CONTEXT", "AST_VECTOR", "AST_MAP", "APPLY_RESULT", "FUNC_INTERP", "CONFIG",
+          "CONSTRUCTOR", "CONSTRUCTOR_LIST", "STATS", "FUNC_ENTRY", "APP"
         "#{n}._#{t.downcase}"
       when "SYMBOL"
         # FFI but not wrapped
         n
-      when "INT", "UINT", "STRING", "BOOLEAN"
+      when "INT", "UINT", "STRING", "BOOL", "INT64", "UINT64", "DOUBLE", "FLOAT"
         n
       else
         raise "Unknown API/FFI argument #{t}"
@@ -173,8 +138,19 @@ class Definition
          "STATS",
          "RCF_NUM",
          "MODEL",
-         "PATTERN"
+         "PATTERN",
+         "AST_MAP",
+         "AST_VECTOR",
+         "CONFIG",
+         "FUNC_ENTRY",
+         "CONSTRUCTOR",
+         "CONSTRUCTOR_LIST",
+         "APPLY_RESULT",
+         "APP"
       "#{type.downcase}_pointer"
+    # These are enums
+         # "ERROR_CODE"
+         # "PRINT_MODE"
     else
       raise "Unsupported type `#{type.inspect}'"
     end
@@ -186,7 +162,7 @@ class Definition
 
   def ffi_args
     @arguments.map do |arg|
-      raise "Only in arguments supported" unless arg[0] == :in
+      raise "Only in arguments supported: #{@arguments.inspect}" unless arg[0] == :in
       ffi_type(arg[1])
     end
   end

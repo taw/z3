@@ -30,18 +30,6 @@ module Z3::LowLevel
       end
     end
 
-    def model_get_const_decl(model, i)
-      Z3::VeryLowLevel.Z3_model_get_const_decl(_ctx_pointer, model._model, i)
-    end
-
-    def get_decl_name(func_decl)
-      Z3::VeryLowLevel.Z3_get_decl_name(_ctx_pointer, func_decl._func_decl)
-    end
-
-    def model_get_const_interp(model, func_decl)
-      Z3::VeryLowLevel.Z3_model_get_const_interp(_ctx_pointer, model._model, func_decl._func_decl)
-    end
-
     def mk_and(asts)
       Z3::VeryLowLevel.Z3_mk_and(_ctx_pointer, asts.size, asts_vector(asts))
     end

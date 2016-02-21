@@ -66,8 +66,112 @@ def algebraic_sub(ast1, ast2)
   Z3::VeryLowLevel.Z3_algebraic_sub(_ctx_pointer, ast1._ast, ast2._ast)
 end
 
+def app_to_ast(app)
+  Z3::VeryLowLevel.Z3_app_to_ast(_ctx_pointer, app._app)
+end
+
+def apply_result_convert_model(apply_result, num, model)
+  Z3::VeryLowLevel.Z3_apply_result_convert_model(_ctx_pointer, apply_result._apply_result, num, model._model)
+end
+
+def apply_result_dec_ref(apply_result)
+  Z3::VeryLowLevel.Z3_apply_result_dec_ref(_ctx_pointer, apply_result._apply_result)
+end
+
+def apply_result_get_num_subgoals(apply_result)
+  Z3::VeryLowLevel.Z3_apply_result_get_num_subgoals(_ctx_pointer, apply_result._apply_result)
+end
+
+def apply_result_get_subgoal(apply_result, num)
+  Z3::VeryLowLevel.Z3_apply_result_get_subgoal(_ctx_pointer, apply_result._apply_result, num)
+end
+
+def apply_result_inc_ref(apply_result)
+  Z3::VeryLowLevel.Z3_apply_result_inc_ref(_ctx_pointer, apply_result._apply_result)
+end
+
+def apply_result_to_string(apply_result)
+  Z3::VeryLowLevel.Z3_apply_result_to_string(_ctx_pointer, apply_result._apply_result)
+end
+
+def ast_map_contains(ast_map, ast)
+  Z3::VeryLowLevel.Z3_ast_map_contains(_ctx_pointer, ast_map._ast_map, ast._ast)
+end
+
+def ast_map_dec_ref(ast_map)
+  Z3::VeryLowLevel.Z3_ast_map_dec_ref(_ctx_pointer, ast_map._ast_map)
+end
+
+def ast_map_erase(ast_map, ast)
+  Z3::VeryLowLevel.Z3_ast_map_erase(_ctx_pointer, ast_map._ast_map, ast._ast)
+end
+
+def ast_map_find(ast_map, ast)
+  Z3::VeryLowLevel.Z3_ast_map_find(_ctx_pointer, ast_map._ast_map, ast._ast)
+end
+
+def ast_map_inc_ref(ast_map)
+  Z3::VeryLowLevel.Z3_ast_map_inc_ref(_ctx_pointer, ast_map._ast_map)
+end
+
+def ast_map_insert(ast_map, ast1, ast2)
+  Z3::VeryLowLevel.Z3_ast_map_insert(_ctx_pointer, ast_map._ast_map, ast1._ast, ast2._ast)
+end
+
+def ast_map_keys(ast_map)
+  Z3::VeryLowLevel.Z3_ast_map_keys(_ctx_pointer, ast_map._ast_map)
+end
+
+def ast_map_reset(ast_map)
+  Z3::VeryLowLevel.Z3_ast_map_reset(_ctx_pointer, ast_map._ast_map)
+end
+
+def ast_map_size(ast_map)
+  Z3::VeryLowLevel.Z3_ast_map_size(_ctx_pointer, ast_map._ast_map)
+end
+
+def ast_map_to_string(ast_map)
+  Z3::VeryLowLevel.Z3_ast_map_to_string(_ctx_pointer, ast_map._ast_map)
+end
+
 def ast_to_string(ast)
   Z3::VeryLowLevel.Z3_ast_to_string(_ctx_pointer, ast._ast)
+end
+
+def ast_vector_dec_ref(ast_vector)
+  Z3::VeryLowLevel.Z3_ast_vector_dec_ref(_ctx_pointer, ast_vector._ast_vector)
+end
+
+def ast_vector_get(ast_vector, num)
+  Z3::VeryLowLevel.Z3_ast_vector_get(_ctx_pointer, ast_vector._ast_vector, num)
+end
+
+def ast_vector_inc_ref(ast_vector)
+  Z3::VeryLowLevel.Z3_ast_vector_inc_ref(_ctx_pointer, ast_vector._ast_vector)
+end
+
+def ast_vector_push(ast_vector, ast)
+  Z3::VeryLowLevel.Z3_ast_vector_push(_ctx_pointer, ast_vector._ast_vector, ast._ast)
+end
+
+def ast_vector_resize(ast_vector, num)
+  Z3::VeryLowLevel.Z3_ast_vector_resize(_ctx_pointer, ast_vector._ast_vector, num)
+end
+
+def ast_vector_set(ast_vector, num, ast)
+  Z3::VeryLowLevel.Z3_ast_vector_set(_ctx_pointer, ast_vector._ast_vector, num, ast._ast)
+end
+
+def ast_vector_size(ast_vector)
+  Z3::VeryLowLevel.Z3_ast_vector_size(_ctx_pointer, ast_vector._ast_vector)
+end
+
+def ast_vector_to_string(ast_vector)
+  Z3::VeryLowLevel.Z3_ast_vector_to_string(_ctx_pointer, ast_vector._ast_vector)
+end
+
+def ast_vector_translate(ast_vector, context)
+  Z3::VeryLowLevel.Z3_ast_vector_translate(_ctx_pointer, ast_vector._ast_vector, context._context)
 end
 
 def datatype_update_field(func_decl, ast1, ast2)
@@ -76,6 +180,18 @@ end
 
 def dec_ref(ast)
   Z3::VeryLowLevel.Z3_dec_ref(_ctx_pointer, ast._ast)
+end
+
+def del_config(config)
+  Z3::VeryLowLevel.Z3_del_config(config._config)
+end
+
+def del_constructor(constructor)
+  Z3::VeryLowLevel.Z3_del_constructor(_ctx_pointer, constructor._constructor)
+end
+
+def del_constructor_list(constructor_list)
+  Z3::VeryLowLevel.Z3_del_constructor_list(_ctx_pointer, constructor_list._constructor_list)
 end
 
 def del_context
@@ -94,6 +210,94 @@ def finalize_memory
   Z3::VeryLowLevel.Z3_finalize_memory()
 end
 
+def fixedpoint_add_cover(fixedpoint, num, func_decl, ast)
+  Z3::VeryLowLevel.Z3_fixedpoint_add_cover(_ctx_pointer, fixedpoint._fixedpoint, num, func_decl._func_decl, ast._ast)
+end
+
+def fixedpoint_add_rule(fixedpoint, ast, sym)
+  Z3::VeryLowLevel.Z3_fixedpoint_add_rule(_ctx_pointer, fixedpoint._fixedpoint, ast._ast, sym)
+end
+
+def fixedpoint_assert(fixedpoint, ast)
+  Z3::VeryLowLevel.Z3_fixedpoint_assert(_ctx_pointer, fixedpoint._fixedpoint, ast._ast)
+end
+
+def fixedpoint_dec_ref(fixedpoint)
+  Z3::VeryLowLevel.Z3_fixedpoint_dec_ref(_ctx_pointer, fixedpoint._fixedpoint)
+end
+
+def fixedpoint_from_file(fixedpoint, str)
+  Z3::VeryLowLevel.Z3_fixedpoint_from_file(_ctx_pointer, fixedpoint._fixedpoint, str)
+end
+
+def fixedpoint_from_string(fixedpoint, str)
+  Z3::VeryLowLevel.Z3_fixedpoint_from_string(_ctx_pointer, fixedpoint._fixedpoint, str)
+end
+
+def fixedpoint_get_answer(fixedpoint)
+  Z3::VeryLowLevel.Z3_fixedpoint_get_answer(_ctx_pointer, fixedpoint._fixedpoint)
+end
+
+def fixedpoint_get_assertions(fixedpoint)
+  Z3::VeryLowLevel.Z3_fixedpoint_get_assertions(_ctx_pointer, fixedpoint._fixedpoint)
+end
+
+def fixedpoint_get_cover_delta(fixedpoint, num, func_decl)
+  Z3::VeryLowLevel.Z3_fixedpoint_get_cover_delta(_ctx_pointer, fixedpoint._fixedpoint, num, func_decl._func_decl)
+end
+
+def fixedpoint_get_help(fixedpoint)
+  Z3::VeryLowLevel.Z3_fixedpoint_get_help(_ctx_pointer, fixedpoint._fixedpoint)
+end
+
+def fixedpoint_get_num_levels(fixedpoint, func_decl)
+  Z3::VeryLowLevel.Z3_fixedpoint_get_num_levels(_ctx_pointer, fixedpoint._fixedpoint, func_decl._func_decl)
+end
+
+def fixedpoint_get_param_descrs(fixedpoint)
+  Z3::VeryLowLevel.Z3_fixedpoint_get_param_descrs(_ctx_pointer, fixedpoint._fixedpoint)
+end
+
+def fixedpoint_get_reason_unknown(fixedpoint)
+  Z3::VeryLowLevel.Z3_fixedpoint_get_reason_unknown(_ctx_pointer, fixedpoint._fixedpoint)
+end
+
+def fixedpoint_get_rules(fixedpoint)
+  Z3::VeryLowLevel.Z3_fixedpoint_get_rules(_ctx_pointer, fixedpoint._fixedpoint)
+end
+
+def fixedpoint_get_statistics(fixedpoint)
+  Z3::VeryLowLevel.Z3_fixedpoint_get_statistics(_ctx_pointer, fixedpoint._fixedpoint)
+end
+
+def fixedpoint_inc_ref(fixedpoint)
+  Z3::VeryLowLevel.Z3_fixedpoint_inc_ref(_ctx_pointer, fixedpoint._fixedpoint)
+end
+
+def fixedpoint_pop(fixedpoint)
+  Z3::VeryLowLevel.Z3_fixedpoint_pop(_ctx_pointer, fixedpoint._fixedpoint)
+end
+
+def fixedpoint_push(fixedpoint)
+  Z3::VeryLowLevel.Z3_fixedpoint_push(_ctx_pointer, fixedpoint._fixedpoint)
+end
+
+def fixedpoint_query(fixedpoint, ast)
+  Z3::VeryLowLevel.Z3_fixedpoint_query(_ctx_pointer, fixedpoint._fixedpoint, ast._ast)
+end
+
+def fixedpoint_register_relation(fixedpoint, func_decl)
+  Z3::VeryLowLevel.Z3_fixedpoint_register_relation(_ctx_pointer, fixedpoint._fixedpoint, func_decl._func_decl)
+end
+
+def fixedpoint_set_params(fixedpoint, params)
+  Z3::VeryLowLevel.Z3_fixedpoint_set_params(_ctx_pointer, fixedpoint._fixedpoint, params._params)
+end
+
+def fixedpoint_update_rule(fixedpoint, ast, sym)
+  Z3::VeryLowLevel.Z3_fixedpoint_update_rule(_ctx_pointer, fixedpoint._fixedpoint, ast._ast, sym)
+end
+
 def fpa_get_ebits(sort)
   Z3::VeryLowLevel.Z3_fpa_get_ebits(_ctx_pointer, sort._sort)
 end
@@ -110,12 +314,80 @@ def fpa_get_sbits(sort)
   Z3::VeryLowLevel.Z3_fpa_get_sbits(_ctx_pointer, sort._sort)
 end
 
+def func_decl_to_ast(func_decl)
+  Z3::VeryLowLevel.Z3_func_decl_to_ast(_ctx_pointer, func_decl._func_decl)
+end
+
+def func_decl_to_string(func_decl)
+  Z3::VeryLowLevel.Z3_func_decl_to_string(_ctx_pointer, func_decl._func_decl)
+end
+
+def func_entry_dec_ref(func_entry)
+  Z3::VeryLowLevel.Z3_func_entry_dec_ref(_ctx_pointer, func_entry._func_entry)
+end
+
+def func_entry_get_arg(func_entry, num)
+  Z3::VeryLowLevel.Z3_func_entry_get_arg(_ctx_pointer, func_entry._func_entry, num)
+end
+
+def func_entry_get_num_args(func_entry)
+  Z3::VeryLowLevel.Z3_func_entry_get_num_args(_ctx_pointer, func_entry._func_entry)
+end
+
+def func_entry_get_value(func_entry)
+  Z3::VeryLowLevel.Z3_func_entry_get_value(_ctx_pointer, func_entry._func_entry)
+end
+
+def func_entry_inc_ref(func_entry)
+  Z3::VeryLowLevel.Z3_func_entry_inc_ref(_ctx_pointer, func_entry._func_entry)
+end
+
+def func_interp_dec_ref(func_interp)
+  Z3::VeryLowLevel.Z3_func_interp_dec_ref(_ctx_pointer, func_interp._func_interp)
+end
+
+def func_interp_get_arity(func_interp)
+  Z3::VeryLowLevel.Z3_func_interp_get_arity(_ctx_pointer, func_interp._func_interp)
+end
+
+def func_interp_get_else(func_interp)
+  Z3::VeryLowLevel.Z3_func_interp_get_else(_ctx_pointer, func_interp._func_interp)
+end
+
+def func_interp_get_entry(func_interp, num)
+  Z3::VeryLowLevel.Z3_func_interp_get_entry(_ctx_pointer, func_interp._func_interp, num)
+end
+
+def func_interp_get_num_entries(func_interp)
+  Z3::VeryLowLevel.Z3_func_interp_get_num_entries(_ctx_pointer, func_interp._func_interp)
+end
+
+def func_interp_inc_ref(func_interp)
+  Z3::VeryLowLevel.Z3_func_interp_inc_ref(_ctx_pointer, func_interp._func_interp)
+end
+
 def get_algebraic_number_lower(ast, num)
   Z3::VeryLowLevel.Z3_get_algebraic_number_lower(_ctx_pointer, ast._ast, num)
 end
 
 def get_algebraic_number_upper(ast, num)
   Z3::VeryLowLevel.Z3_get_algebraic_number_upper(_ctx_pointer, ast._ast, num)
+end
+
+def get_app_arg(app, num)
+  Z3::VeryLowLevel.Z3_get_app_arg(_ctx_pointer, app._app, num)
+end
+
+def get_app_decl(app)
+  Z3::VeryLowLevel.Z3_get_app_decl(_ctx_pointer, app._app)
+end
+
+def get_app_num_args(app)
+  Z3::VeryLowLevel.Z3_get_app_num_args(_ctx_pointer, app._app)
+end
+
+def get_arity(func_decl)
+  Z3::VeryLowLevel.Z3_get_arity(_ctx_pointer, func_decl._func_decl)
 end
 
 def get_array_sort_domain(sort)
@@ -154,6 +426,10 @@ def get_datatype_sort_constructor(sort, num)
   Z3::VeryLowLevel.Z3_get_datatype_sort_constructor(_ctx_pointer, sort._sort, num)
 end
 
+def get_datatype_sort_constructor_accessor(sort, num1, num2)
+  Z3::VeryLowLevel.Z3_get_datatype_sort_constructor_accessor(_ctx_pointer, sort._sort, num1, num2)
+end
+
 def get_datatype_sort_num_constructors(sort)
   Z3::VeryLowLevel.Z3_get_datatype_sort_num_constructors(_ctx_pointer, sort._sort)
 end
@@ -162,16 +438,76 @@ def get_datatype_sort_recognizer(sort, num)
   Z3::VeryLowLevel.Z3_get_datatype_sort_recognizer(_ctx_pointer, sort._sort, num)
 end
 
+def get_decl_ast_parameter(func_decl, num)
+  Z3::VeryLowLevel.Z3_get_decl_ast_parameter(_ctx_pointer, func_decl._func_decl, num)
+end
+
+def get_decl_double_parameter(func_decl, num)
+  Z3::VeryLowLevel.Z3_get_decl_double_parameter(_ctx_pointer, func_decl._func_decl, num)
+end
+
+def get_decl_func_decl_parameter(func_decl, num)
+  Z3::VeryLowLevel.Z3_get_decl_func_decl_parameter(_ctx_pointer, func_decl._func_decl, num)
+end
+
+def get_decl_int_parameter(func_decl, num)
+  Z3::VeryLowLevel.Z3_get_decl_int_parameter(_ctx_pointer, func_decl._func_decl, num)
+end
+
+def get_decl_kind(func_decl)
+  Z3::VeryLowLevel.Z3_get_decl_kind(_ctx_pointer, func_decl._func_decl)
+end
+
+def get_decl_name(func_decl)
+  Z3::VeryLowLevel.Z3_get_decl_name(_ctx_pointer, func_decl._func_decl)
+end
+
+def get_decl_num_parameters(func_decl)
+  Z3::VeryLowLevel.Z3_get_decl_num_parameters(_ctx_pointer, func_decl._func_decl)
+end
+
+def get_decl_parameter_kind(func_decl, num)
+  Z3::VeryLowLevel.Z3_get_decl_parameter_kind(_ctx_pointer, func_decl._func_decl, num)
+end
+
+def get_decl_rational_parameter(func_decl, num)
+  Z3::VeryLowLevel.Z3_get_decl_rational_parameter(_ctx_pointer, func_decl._func_decl, num)
+end
+
+def get_decl_sort_parameter(func_decl, num)
+  Z3::VeryLowLevel.Z3_get_decl_sort_parameter(_ctx_pointer, func_decl._func_decl, num)
+end
+
+def get_decl_symbol_parameter(func_decl, num)
+  Z3::VeryLowLevel.Z3_get_decl_symbol_parameter(_ctx_pointer, func_decl._func_decl, num)
+end
+
 def get_denominator(ast)
   Z3::VeryLowLevel.Z3_get_denominator(_ctx_pointer, ast._ast)
+end
+
+def get_domain(func_decl, num)
+  Z3::VeryLowLevel.Z3_get_domain(_ctx_pointer, func_decl._func_decl, num)
+end
+
+def get_domain_size(func_decl)
+  Z3::VeryLowLevel.Z3_get_domain_size(_ctx_pointer, func_decl._func_decl)
 end
 
 def get_error_code
   Z3::VeryLowLevel.Z3_get_error_code(_ctx_pointer)
 end
 
+def get_func_decl_id(func_decl)
+  Z3::VeryLowLevel.Z3_get_func_decl_id(_ctx_pointer, func_decl._func_decl)
+end
+
 def get_index_value(ast)
   Z3::VeryLowLevel.Z3_get_index_value(_ctx_pointer, ast._ast)
+end
+
+def get_interpolant(ast1, ast2, params)
+  Z3::VeryLowLevel.Z3_get_interpolant(_ctx_pointer, ast1._ast, ast2._ast, params._params)
 end
 
 def get_num_probes
@@ -192,6 +528,10 @@ end
 
 def get_numerator(ast)
   Z3::VeryLowLevel.Z3_get_numerator(_ctx_pointer, ast._ast)
+end
+
+def get_pattern(pattern, num)
+  Z3::VeryLowLevel.Z3_get_pattern(_ctx_pointer, pattern._pattern, num)
 end
 
 def get_pattern_num_terms(pattern)
@@ -236,6 +576,10 @@ end
 
 def get_quantifier_weight(ast)
   Z3::VeryLowLevel.Z3_get_quantifier_weight(_ctx_pointer, ast._ast)
+end
+
+def get_range(func_decl)
+  Z3::VeryLowLevel.Z3_get_range(_ctx_pointer, func_decl._func_decl)
 end
 
 def get_relation_arity(sort)
@@ -298,16 +642,16 @@ def get_sort_name(sort)
   Z3::VeryLowLevel.Z3_get_sort_name(_ctx_pointer, sort._sort)
 end
 
-def get_symbol_int(symbol)
-  Z3::VeryLowLevel.Z3_get_symbol_int(_ctx_pointer, symbol)
+def get_symbol_int(sym)
+  Z3::VeryLowLevel.Z3_get_symbol_int(_ctx_pointer, sym)
 end
 
-def get_symbol_kind(symbol)
-  Z3::VeryLowLevel.Z3_get_symbol_kind(_ctx_pointer, symbol)
+def get_symbol_kind(sym)
+  Z3::VeryLowLevel.Z3_get_symbol_kind(_ctx_pointer, sym)
 end
 
-def get_symbol_string(symbol)
-  Z3::VeryLowLevel.Z3_get_symbol_string(_ctx_pointer, symbol)
+def get_symbol_string(sym)
+  Z3::VeryLowLevel.Z3_get_symbol_string(_ctx_pointer, sym)
 end
 
 def get_tactic_name(num)
@@ -334,12 +678,20 @@ def global_param_set(str1, str2)
   Z3::VeryLowLevel.Z3_global_param_set(str1, str2)
 end
 
+def goal_assert(goal, ast)
+  Z3::VeryLowLevel.Z3_goal_assert(_ctx_pointer, goal._goal, ast._ast)
+end
+
 def goal_dec_ref(goal)
   Z3::VeryLowLevel.Z3_goal_dec_ref(_ctx_pointer, goal._goal)
 end
 
 def goal_depth(goal)
   Z3::VeryLowLevel.Z3_goal_depth(_ctx_pointer, goal._goal)
+end
+
+def goal_formula(goal, num)
+  Z3::VeryLowLevel.Z3_goal_formula(_ctx_pointer, goal._goal, num)
 end
 
 def goal_inc_ref(goal)
@@ -378,6 +730,10 @@ def goal_to_string(goal)
   Z3::VeryLowLevel.Z3_goal_to_string(_ctx_pointer, goal._goal)
 end
 
+def goal_translate(goal, context)
+  Z3::VeryLowLevel.Z3_goal_translate(_ctx_pointer, goal._goal, context._context)
+end
+
 def inc_ref(ast)
   Z3::VeryLowLevel.Z3_inc_ref(_ctx_pointer, ast._ast)
 end
@@ -406,6 +762,10 @@ def is_eq_ast(ast1, ast2)
   Z3::VeryLowLevel.Z3_is_eq_ast(_ctx_pointer, ast1._ast, ast2._ast)
 end
 
+def is_eq_func_decl(func_decl1, func_decl2)
+  Z3::VeryLowLevel.Z3_is_eq_func_decl(_ctx_pointer, func_decl1._func_decl, func_decl2._func_decl)
+end
+
 def is_eq_sort(sort1, sort2)
   Z3::VeryLowLevel.Z3_is_eq_sort(_ctx_pointer, sort1._sort, sort2._sort)
 end
@@ -430,8 +790,24 @@ def mk_array_sort(sort1, sort2)
   Z3::VeryLowLevel.Z3_mk_array_sort(_ctx_pointer, sort1._sort, sort2._sort)
 end
 
+def mk_ast_map
+  Z3::VeryLowLevel.Z3_mk_ast_map(_ctx_pointer)
+end
+
+def mk_ast_vector
+  Z3::VeryLowLevel.Z3_mk_ast_vector(_ctx_pointer)
+end
+
 def mk_bool_sort
   Z3::VeryLowLevel.Z3_mk_bool_sort(_ctx_pointer)
+end
+
+def mk_bound(num, sort)
+  Z3::VeryLowLevel.Z3_mk_bound(_ctx_pointer, num, sort._sort)
+end
+
+def mk_bv2int(ast, bool)
+  Z3::VeryLowLevel.Z3_mk_bv2int(_ctx_pointer, ast._ast, bool)
 end
 
 def mk_bv_sort(num)
@@ -440,6 +816,10 @@ end
 
 def mk_bvadd(ast1, ast2)
   Z3::VeryLowLevel.Z3_mk_bvadd(_ctx_pointer, ast1._ast, ast2._ast)
+end
+
+def mk_bvadd_no_overflow(ast1, ast2, bool)
+  Z3::VeryLowLevel.Z3_mk_bvadd_no_overflow(_ctx_pointer, ast1._ast, ast2._ast, bool)
 end
 
 def mk_bvadd_no_underflow(ast1, ast2)
@@ -460,6 +840,10 @@ end
 
 def mk_bvmul(ast1, ast2)
   Z3::VeryLowLevel.Z3_mk_bvmul(_ctx_pointer, ast1._ast, ast2._ast)
+end
+
+def mk_bvmul_no_overflow(ast1, ast2, bool)
+  Z3::VeryLowLevel.Z3_mk_bvmul_no_overflow(_ctx_pointer, ast1._ast, ast2._ast, bool)
 end
 
 def mk_bvmul_no_underflow(ast1, ast2)
@@ -542,6 +926,10 @@ def mk_bvsub_no_overflow(ast1, ast2)
   Z3::VeryLowLevel.Z3_mk_bvsub_no_overflow(_ctx_pointer, ast1._ast, ast2._ast)
 end
 
+def mk_bvsub_no_underflow(ast1, ast2, bool)
+  Z3::VeryLowLevel.Z3_mk_bvsub_no_underflow(_ctx_pointer, ast1._ast, ast2._ast, bool)
+end
+
 def mk_bvudiv(ast1, ast2)
   Z3::VeryLowLevel.Z3_mk_bvudiv(_ctx_pointer, ast1._ast, ast2._ast)
 end
@@ -578,8 +966,20 @@ def mk_concat(ast1, ast2)
   Z3::VeryLowLevel.Z3_mk_concat(_ctx_pointer, ast1._ast, ast2._ast)
 end
 
-def mk_const(symbol, sort)
-  Z3::VeryLowLevel.Z3_mk_const(_ctx_pointer, symbol, sort._sort)
+def mk_config
+  Z3::VeryLowLevel.Z3_mk_config()
+end
+
+def mk_const(sym, sort)
+  Z3::VeryLowLevel.Z3_mk_const(_ctx_pointer, sym, sort._sort)
+end
+
+def mk_const_array(sort, ast)
+  Z3::VeryLowLevel.Z3_mk_const_array(_ctx_pointer, sort._sort, ast._ast)
+end
+
+def mk_context_rc(config)
+  Z3::VeryLowLevel.Z3_mk_context_rc(config._config)
 end
 
 def mk_div(ast1, ast2)
@@ -602,8 +1002,16 @@ def mk_ext_rotate_right(ast1, ast2)
   Z3::VeryLowLevel.Z3_mk_ext_rotate_right(_ctx_pointer, ast1._ast, ast2._ast)
 end
 
+def mk_extract(num1, num2, ast)
+  Z3::VeryLowLevel.Z3_mk_extract(_ctx_pointer, num1, num2, ast._ast)
+end
+
 def mk_false
   Z3::VeryLowLevel.Z3_mk_false(_ctx_pointer)
+end
+
+def mk_finite_domain_sort(sym, num)
+  Z3::VeryLowLevel.Z3_mk_finite_domain_sort(_ctx_pointer, sym, num)
 end
 
 def mk_fixedpoint
@@ -640,6 +1048,10 @@ end
 
 def mk_fpa_gt(ast1, ast2)
   Z3::VeryLowLevel.Z3_mk_fpa_gt(_ctx_pointer, ast1._ast, ast2._ast)
+end
+
+def mk_fpa_inf(sort, bool)
+  Z3::VeryLowLevel.Z3_mk_fpa_inf(_ctx_pointer, sort._sort, bool)
 end
 
 def mk_fpa_is_infinite(ast)
@@ -698,6 +1110,26 @@ def mk_fpa_neg(ast)
   Z3::VeryLowLevel.Z3_mk_fpa_neg(_ctx_pointer, ast._ast)
 end
 
+def mk_fpa_numeral_double(double, sort)
+  Z3::VeryLowLevel.Z3_mk_fpa_numeral_double(_ctx_pointer, double, sort._sort)
+end
+
+def mk_fpa_numeral_float(float, sort)
+  Z3::VeryLowLevel.Z3_mk_fpa_numeral_float(_ctx_pointer, float, sort._sort)
+end
+
+def mk_fpa_numeral_int(num, sort)
+  Z3::VeryLowLevel.Z3_mk_fpa_numeral_int(_ctx_pointer, num, sort._sort)
+end
+
+def mk_fpa_numeral_int64_uint64(bool, num1, num2, sort)
+  Z3::VeryLowLevel.Z3_mk_fpa_numeral_int64_uint64(_ctx_pointer, bool, num1, num2, sort._sort)
+end
+
+def mk_fpa_numeral_int_uint(bool, num1, num2, sort)
+  Z3::VeryLowLevel.Z3_mk_fpa_numeral_int_uint(_ctx_pointer, bool, num1, num2, sort._sort)
+end
+
 def mk_fpa_rem(ast1, ast2)
   Z3::VeryLowLevel.Z3_mk_fpa_rem(_ctx_pointer, ast1._ast, ast2._ast)
 end
@@ -750,6 +1182,10 @@ def mk_fpa_rtz
   Z3::VeryLowLevel.Z3_mk_fpa_rtz(_ctx_pointer)
 end
 
+def mk_fpa_sort(num1, num2)
+  Z3::VeryLowLevel.Z3_mk_fpa_sort(_ctx_pointer, num1, num2)
+end
+
 def mk_fpa_sort_128
   Z3::VeryLowLevel.Z3_mk_fpa_sort_128(_ctx_pointer)
 end
@@ -790,8 +1226,16 @@ def mk_fpa_sub(ast1, ast2, ast3)
   Z3::VeryLowLevel.Z3_mk_fpa_sub(_ctx_pointer, ast1._ast, ast2._ast, ast3._ast)
 end
 
+def mk_fpa_to_fp_bv(ast, sort)
+  Z3::VeryLowLevel.Z3_mk_fpa_to_fp_bv(_ctx_pointer, ast._ast, sort._sort)
+end
+
 def mk_fpa_to_fp_float(ast1, ast2, sort)
   Z3::VeryLowLevel.Z3_mk_fpa_to_fp_float(_ctx_pointer, ast1._ast, ast2._ast, sort._sort)
+end
+
+def mk_fpa_to_fp_int_real(ast1, ast2, ast3, sort)
+  Z3::VeryLowLevel.Z3_mk_fpa_to_fp_int_real(_ctx_pointer, ast1._ast, ast2._ast, ast3._ast, sort._sort)
 end
 
 def mk_fpa_to_fp_real(ast1, ast2, sort)
@@ -814,6 +1258,18 @@ def mk_fpa_to_real(ast)
   Z3::VeryLowLevel.Z3_mk_fpa_to_real(_ctx_pointer, ast._ast)
 end
 
+def mk_fpa_to_sbv(ast1, ast2, num)
+  Z3::VeryLowLevel.Z3_mk_fpa_to_sbv(_ctx_pointer, ast1._ast, ast2._ast, num)
+end
+
+def mk_fpa_to_ubv(ast1, ast2, num)
+  Z3::VeryLowLevel.Z3_mk_fpa_to_ubv(_ctx_pointer, ast1._ast, ast2._ast, num)
+end
+
+def mk_fpa_zero(sort, bool)
+  Z3::VeryLowLevel.Z3_mk_fpa_zero(_ctx_pointer, sort._sort, bool)
+end
+
 def mk_fresh_const(str, sort)
   Z3::VeryLowLevel.Z3_mk_fresh_const(_ctx_pointer, str, sort._sort)
 end
@@ -824,6 +1280,10 @@ end
 
 def mk_ge(ast1, ast2)
   Z3::VeryLowLevel.Z3_mk_ge(_ctx_pointer, ast1._ast, ast2._ast)
+end
+
+def mk_goal(bool1, bool2, bool3)
+  Z3::VeryLowLevel.Z3_mk_goal(_ctx_pointer, bool1, bool2, bool3)
 end
 
 def mk_gt(ast1, ast2)
@@ -838,16 +1298,36 @@ def mk_implies(ast1, ast2)
   Z3::VeryLowLevel.Z3_mk_implies(_ctx_pointer, ast1._ast, ast2._ast)
 end
 
+def mk_int(num, sort)
+  Z3::VeryLowLevel.Z3_mk_int(_ctx_pointer, num, sort._sort)
+end
+
+def mk_int2bv(num, ast)
+  Z3::VeryLowLevel.Z3_mk_int2bv(_ctx_pointer, num, ast._ast)
+end
+
 def mk_int2real(ast)
   Z3::VeryLowLevel.Z3_mk_int2real(_ctx_pointer, ast._ast)
+end
+
+def mk_int64(num, sort)
+  Z3::VeryLowLevel.Z3_mk_int64(_ctx_pointer, num, sort._sort)
 end
 
 def mk_int_sort
   Z3::VeryLowLevel.Z3_mk_int_sort(_ctx_pointer)
 end
 
+def mk_int_symbol(num)
+  Z3::VeryLowLevel.Z3_mk_int_symbol(_ctx_pointer, num)
+end
+
 def mk_interpolant(ast)
   Z3::VeryLowLevel.Z3_mk_interpolant(_ctx_pointer, ast._ast)
+end
+
+def mk_interpolation_context(config)
+  Z3::VeryLowLevel.Z3_mk_interpolation_context(config._config)
 end
 
 def mk_is_int(ast)
@@ -894,6 +1374,10 @@ def mk_probe(str)
   Z3::VeryLowLevel.Z3_mk_probe(_ctx_pointer, str)
 end
 
+def mk_real(num1, num2)
+  Z3::VeryLowLevel.Z3_mk_real(_ctx_pointer, num1, num2)
+end
+
 def mk_real2int(ast)
   Z3::VeryLowLevel.Z3_mk_real2int(_ctx_pointer, ast._ast)
 end
@@ -904,6 +1388,18 @@ end
 
 def mk_rem(ast1, ast2)
   Z3::VeryLowLevel.Z3_mk_rem(_ctx_pointer, ast1._ast, ast2._ast)
+end
+
+def mk_repeat(num, ast)
+  Z3::VeryLowLevel.Z3_mk_repeat(_ctx_pointer, num, ast._ast)
+end
+
+def mk_rotate_left(num, ast)
+  Z3::VeryLowLevel.Z3_mk_rotate_left(_ctx_pointer, num, ast._ast)
+end
+
+def mk_rotate_right(num, ast)
+  Z3::VeryLowLevel.Z3_mk_rotate_right(_ctx_pointer, num, ast._ast)
 end
 
 def mk_select(ast1, ast2)
@@ -938,6 +1434,10 @@ def mk_set_subset(ast1, ast2)
   Z3::VeryLowLevel.Z3_mk_set_subset(_ctx_pointer, ast1._ast, ast2._ast)
 end
 
+def mk_sign_ext(num, ast)
+  Z3::VeryLowLevel.Z3_mk_sign_ext(_ctx_pointer, num, ast._ast)
+end
+
 def mk_simple_solver
   Z3::VeryLowLevel.Z3_mk_simple_solver(_ctx_pointer)
 end
@@ -946,8 +1446,12 @@ def mk_solver
   Z3::VeryLowLevel.Z3_mk_solver(_ctx_pointer)
 end
 
-def mk_solver_for_logic(symbol)
-  Z3::VeryLowLevel.Z3_mk_solver_for_logic(_ctx_pointer, symbol)
+def mk_solver_for_logic(sym)
+  Z3::VeryLowLevel.Z3_mk_solver_for_logic(_ctx_pointer, sym)
+end
+
+def mk_solver_from_tactic(tactic)
+  Z3::VeryLowLevel.Z3_mk_solver_from_tactic(_ctx_pointer, tactic._tactic)
 end
 
 def mk_store(ast1, ast2, ast3)
@@ -970,16 +1474,44 @@ def mk_unary_minus(ast)
   Z3::VeryLowLevel.Z3_mk_unary_minus(_ctx_pointer, ast._ast)
 end
 
-def mk_uninterpreted_sort(symbol)
-  Z3::VeryLowLevel.Z3_mk_uninterpreted_sort(_ctx_pointer, symbol)
+def mk_uninterpreted_sort(sym)
+  Z3::VeryLowLevel.Z3_mk_uninterpreted_sort(_ctx_pointer, sym)
+end
+
+def mk_unsigned_int(num, sort)
+  Z3::VeryLowLevel.Z3_mk_unsigned_int(_ctx_pointer, num, sort._sort)
+end
+
+def mk_unsigned_int64(num, sort)
+  Z3::VeryLowLevel.Z3_mk_unsigned_int64(_ctx_pointer, num, sort._sort)
 end
 
 def mk_xor(ast1, ast2)
   Z3::VeryLowLevel.Z3_mk_xor(_ctx_pointer, ast1._ast, ast2._ast)
 end
 
+def mk_zero_ext(num, ast)
+  Z3::VeryLowLevel.Z3_mk_zero_ext(_ctx_pointer, num, ast._ast)
+end
+
 def model_dec_ref(model)
   Z3::VeryLowLevel.Z3_model_dec_ref(_ctx_pointer, model._model)
+end
+
+def model_get_const_decl(model, num)
+  Z3::VeryLowLevel.Z3_model_get_const_decl(_ctx_pointer, model._model, num)
+end
+
+def model_get_const_interp(model, func_decl)
+  Z3::VeryLowLevel.Z3_model_get_const_interp(_ctx_pointer, model._model, func_decl._func_decl)
+end
+
+def model_get_func_decl(model, num)
+  Z3::VeryLowLevel.Z3_model_get_func_decl(_ctx_pointer, model._model, num)
+end
+
+def model_get_func_interp(model, func_decl)
+  Z3::VeryLowLevel.Z3_model_get_func_interp(_ctx_pointer, model._model, func_decl._func_decl)
 end
 
 def model_get_num_consts(model)
@@ -994,12 +1526,32 @@ def model_get_num_sorts(model)
   Z3::VeryLowLevel.Z3_model_get_num_sorts(_ctx_pointer, model._model)
 end
 
+def model_get_sort(model, num)
+  Z3::VeryLowLevel.Z3_model_get_sort(_ctx_pointer, model._model, num)
+end
+
+def model_get_sort_universe(model, sort)
+  Z3::VeryLowLevel.Z3_model_get_sort_universe(_ctx_pointer, model._model, sort._sort)
+end
+
+def model_has_interp(model, func_decl)
+  Z3::VeryLowLevel.Z3_model_has_interp(_ctx_pointer, model._model, func_decl._func_decl)
+end
+
 def model_inc_ref(model)
   Z3::VeryLowLevel.Z3_model_inc_ref(_ctx_pointer, model._model)
 end
 
 def model_to_string(model)
   Z3::VeryLowLevel.Z3_model_to_string(_ctx_pointer, model._model)
+end
+
+def optimize_assert(optimize, ast)
+  Z3::VeryLowLevel.Z3_optimize_assert(_ctx_pointer, optimize._optimize, ast._ast)
+end
+
+def optimize_assert_soft(optimize, ast, str, sym)
+  Z3::VeryLowLevel.Z3_optimize_assert_soft(_ctx_pointer, optimize._optimize, ast._ast, str, sym)
 end
 
 def optimize_check(optimize)
@@ -1012,6 +1564,10 @@ end
 
 def optimize_get_help(optimize)
   Z3::VeryLowLevel.Z3_optimize_get_help(_ctx_pointer, optimize._optimize)
+end
+
+def optimize_get_lower(optimize, num)
+  Z3::VeryLowLevel.Z3_optimize_get_lower(_ctx_pointer, optimize._optimize, num)
 end
 
 def optimize_get_model(optimize)
@@ -1030,8 +1586,20 @@ def optimize_get_statistics(optimize)
   Z3::VeryLowLevel.Z3_optimize_get_statistics(_ctx_pointer, optimize._optimize)
 end
 
+def optimize_get_upper(optimize, num)
+  Z3::VeryLowLevel.Z3_optimize_get_upper(_ctx_pointer, optimize._optimize, num)
+end
+
 def optimize_inc_ref(optimize)
   Z3::VeryLowLevel.Z3_optimize_inc_ref(_ctx_pointer, optimize._optimize)
+end
+
+def optimize_maximize(optimize, ast)
+  Z3::VeryLowLevel.Z3_optimize_maximize(_ctx_pointer, optimize._optimize, ast._ast)
+end
+
+def optimize_minimize(optimize, ast)
+  Z3::VeryLowLevel.Z3_optimize_minimize(_ctx_pointer, optimize._optimize, ast._ast)
 end
 
 def optimize_pop(optimize)
@@ -1042,8 +1610,36 @@ def optimize_push(optimize)
   Z3::VeryLowLevel.Z3_optimize_push(_ctx_pointer, optimize._optimize)
 end
 
+def optimize_set_params(optimize, params)
+  Z3::VeryLowLevel.Z3_optimize_set_params(_ctx_pointer, optimize._optimize, params._params)
+end
+
 def optimize_to_string(optimize)
   Z3::VeryLowLevel.Z3_optimize_to_string(_ctx_pointer, optimize._optimize)
+end
+
+def param_descrs_dec_ref(param_descrs)
+  Z3::VeryLowLevel.Z3_param_descrs_dec_ref(_ctx_pointer, param_descrs._param_descrs)
+end
+
+def param_descrs_get_kind(param_descrs, sym)
+  Z3::VeryLowLevel.Z3_param_descrs_get_kind(_ctx_pointer, param_descrs._param_descrs, sym)
+end
+
+def param_descrs_get_name(param_descrs, num)
+  Z3::VeryLowLevel.Z3_param_descrs_get_name(_ctx_pointer, param_descrs._param_descrs, num)
+end
+
+def param_descrs_inc_ref(param_descrs)
+  Z3::VeryLowLevel.Z3_param_descrs_inc_ref(_ctx_pointer, param_descrs._param_descrs)
+end
+
+def param_descrs_size(param_descrs)
+  Z3::VeryLowLevel.Z3_param_descrs_size(_ctx_pointer, param_descrs._param_descrs)
+end
+
+def param_descrs_to_string(param_descrs)
+  Z3::VeryLowLevel.Z3_param_descrs_to_string(_ctx_pointer, param_descrs._param_descrs)
 end
 
 def params_dec_ref(params)
@@ -1054,8 +1650,28 @@ def params_inc_ref(params)
   Z3::VeryLowLevel.Z3_params_inc_ref(_ctx_pointer, params._params)
 end
 
+def params_set_bool(params, sym, bool)
+  Z3::VeryLowLevel.Z3_params_set_bool(_ctx_pointer, params._params, sym, bool)
+end
+
+def params_set_double(params, sym, double)
+  Z3::VeryLowLevel.Z3_params_set_double(_ctx_pointer, params._params, sym, double)
+end
+
+def params_set_symbol(params, sym1, sym2)
+  Z3::VeryLowLevel.Z3_params_set_symbol(_ctx_pointer, params._params, sym1, sym2)
+end
+
+def params_set_uint(params, sym, num)
+  Z3::VeryLowLevel.Z3_params_set_uint(_ctx_pointer, params._params, sym, num)
+end
+
 def params_to_string(params)
   Z3::VeryLowLevel.Z3_params_to_string(_ctx_pointer, params._params)
+end
+
+def params_validate(params, param_descrs)
+  Z3::VeryLowLevel.Z3_params_validate(_ctx_pointer, params._params, param_descrs._param_descrs)
 end
 
 def pattern_to_ast(pattern)
@@ -1066,8 +1682,20 @@ def pattern_to_string(pattern)
   Z3::VeryLowLevel.Z3_pattern_to_string(_ctx_pointer, pattern._pattern)
 end
 
+def polynomial_subresultants(ast1, ast2, ast3)
+  Z3::VeryLowLevel.Z3_polynomial_subresultants(_ctx_pointer, ast1._ast, ast2._ast, ast3._ast)
+end
+
 def probe_and(probe1, probe2)
   Z3::VeryLowLevel.Z3_probe_and(_ctx_pointer, probe1._probe, probe2._probe)
+end
+
+def probe_apply(probe, goal)
+  Z3::VeryLowLevel.Z3_probe_apply(_ctx_pointer, probe._probe, goal._goal)
+end
+
+def probe_const(double)
+  Z3::VeryLowLevel.Z3_probe_const(_ctx_pointer, double)
 end
 
 def probe_dec_ref(probe)
@@ -1162,6 +1790,10 @@ def rcf_mk_rational(str)
   Z3::VeryLowLevel.Z3_rcf_mk_rational(_ctx_pointer, str)
 end
 
+def rcf_mk_small_int(num)
+  Z3::VeryLowLevel.Z3_rcf_mk_small_int(_ctx_pointer, num)
+end
+
 def rcf_mul(num1, num2)
   Z3::VeryLowLevel.Z3_rcf_mul(_ctx_pointer, num1._rcf_num, num2._rcf_num)
 end
@@ -1174,6 +1806,18 @@ def rcf_neq(num1, num2)
   Z3::VeryLowLevel.Z3_rcf_neq(_ctx_pointer, num1._rcf_num, num2._rcf_num)
 end
 
+def rcf_num_to_decimal_string(num1, num2)
+  Z3::VeryLowLevel.Z3_rcf_num_to_decimal_string(_ctx_pointer, num1._rcf_num, num2)
+end
+
+def rcf_num_to_string(num, bool1, bool2)
+  Z3::VeryLowLevel.Z3_rcf_num_to_string(_ctx_pointer, num._rcf_num, bool1, bool2)
+end
+
+def rcf_power(num1, num2)
+  Z3::VeryLowLevel.Z3_rcf_power(_ctx_pointer, num1._rcf_num, num2)
+end
+
 def rcf_sub(num1, num2)
   Z3::VeryLowLevel.Z3_rcf_sub(_ctx_pointer, num1._rcf_num, num2._rcf_num)
 end
@@ -1182,8 +1826,16 @@ def reset_memory
   Z3::VeryLowLevel.Z3_reset_memory()
 end
 
+def set_param_value(config, str1, str2)
+  Z3::VeryLowLevel.Z3_set_param_value(config._config, str1, str2)
+end
+
 def simplify(ast)
   Z3::VeryLowLevel.Z3_simplify(_ctx_pointer, ast._ast)
+end
+
+def simplify_ex(ast, params)
+  Z3::VeryLowLevel.Z3_simplify_ex(_ctx_pointer, ast._ast, params._params)
 end
 
 def simplify_get_help
@@ -1194,8 +1846,8 @@ def simplify_get_param_descrs
   Z3::VeryLowLevel.Z3_simplify_get_param_descrs(_ctx_pointer)
 end
 
-def solver_assert(solver, ast1)
-  Z3::VeryLowLevel.Z3_solver_assert(_ctx_pointer, solver._solver, ast1._ast)
+def solver_assert(solver, ast)
+  Z3::VeryLowLevel.Z3_solver_assert(_ctx_pointer, solver._solver, ast._ast)
 end
 
 def solver_assert_and_track(solver, ast1, ast2)
@@ -1208,6 +1860,10 @@ end
 
 def solver_dec_ref(solver)
   Z3::VeryLowLevel.Z3_solver_dec_ref(_ctx_pointer, solver._solver)
+end
+
+def solver_get_assertions(solver)
+  Z3::VeryLowLevel.Z3_solver_get_assertions(_ctx_pointer, solver._solver)
 end
 
 def solver_get_help(solver)
@@ -1238,6 +1894,10 @@ def solver_get_statistics(solver)
   Z3::VeryLowLevel.Z3_solver_get_statistics(_ctx_pointer, solver._solver)
 end
 
+def solver_get_unsat_core(solver)
+  Z3::VeryLowLevel.Z3_solver_get_unsat_core(_ctx_pointer, solver._solver)
+end
+
 def solver_inc_ref(solver)
   Z3::VeryLowLevel.Z3_solver_inc_ref(_ctx_pointer, solver._solver)
 end
@@ -1254,6 +1914,10 @@ def solver_reset(solver)
   Z3::VeryLowLevel.Z3_solver_reset(_ctx_pointer, solver._solver)
 end
 
+def solver_set_params(solver, params)
+  Z3::VeryLowLevel.Z3_solver_set_params(_ctx_pointer, solver._solver, params._params)
+end
+
 def solver_to_string(solver)
   Z3::VeryLowLevel.Z3_solver_to_string(_ctx_pointer, solver._solver)
 end
@@ -1264,6 +1928,62 @@ end
 
 def sort_to_string(sort)
   Z3::VeryLowLevel.Z3_sort_to_string(_ctx_pointer, sort._sort)
+end
+
+def stats_dec_ref(stats)
+  Z3::VeryLowLevel.Z3_stats_dec_ref(_ctx_pointer, stats._stats)
+end
+
+def stats_get_double_value(stats, num)
+  Z3::VeryLowLevel.Z3_stats_get_double_value(_ctx_pointer, stats._stats, num)
+end
+
+def stats_get_key(stats, num)
+  Z3::VeryLowLevel.Z3_stats_get_key(_ctx_pointer, stats._stats, num)
+end
+
+def stats_get_uint_value(stats, num)
+  Z3::VeryLowLevel.Z3_stats_get_uint_value(_ctx_pointer, stats._stats, num)
+end
+
+def stats_inc_ref(stats)
+  Z3::VeryLowLevel.Z3_stats_inc_ref(_ctx_pointer, stats._stats)
+end
+
+def stats_is_double(stats, num)
+  Z3::VeryLowLevel.Z3_stats_is_double(_ctx_pointer, stats._stats, num)
+end
+
+def stats_is_uint(stats, num)
+  Z3::VeryLowLevel.Z3_stats_is_uint(_ctx_pointer, stats._stats, num)
+end
+
+def stats_size(stats)
+  Z3::VeryLowLevel.Z3_stats_size(_ctx_pointer, stats._stats)
+end
+
+def stats_to_string(stats)
+  Z3::VeryLowLevel.Z3_stats_to_string(_ctx_pointer, stats._stats)
+end
+
+def tactic_and_then(tactic1, tactic2)
+  Z3::VeryLowLevel.Z3_tactic_and_then(_ctx_pointer, tactic1._tactic, tactic2._tactic)
+end
+
+def tactic_apply(tactic, goal)
+  Z3::VeryLowLevel.Z3_tactic_apply(_ctx_pointer, tactic._tactic, goal._goal)
+end
+
+def tactic_apply_ex(tactic, goal, params)
+  Z3::VeryLowLevel.Z3_tactic_apply_ex(_ctx_pointer, tactic._tactic, goal._goal, params._params)
+end
+
+def tactic_cond(probe, tactic1, tactic2)
+  Z3::VeryLowLevel.Z3_tactic_cond(_ctx_pointer, probe._probe, tactic1._tactic, tactic2._tactic)
+end
+
+def tactic_dec_ref(tactic)
+  Z3::VeryLowLevel.Z3_tactic_dec_ref(_ctx_pointer, tactic._tactic)
 end
 
 def tactic_fail
@@ -1282,12 +2002,60 @@ def tactic_get_descr(str)
   Z3::VeryLowLevel.Z3_tactic_get_descr(_ctx_pointer, str)
 end
 
+def tactic_get_help(tactic)
+  Z3::VeryLowLevel.Z3_tactic_get_help(_ctx_pointer, tactic._tactic)
+end
+
+def tactic_get_param_descrs(tactic)
+  Z3::VeryLowLevel.Z3_tactic_get_param_descrs(_ctx_pointer, tactic._tactic)
+end
+
+def tactic_inc_ref(tactic)
+  Z3::VeryLowLevel.Z3_tactic_inc_ref(_ctx_pointer, tactic._tactic)
+end
+
+def tactic_or_else(tactic1, tactic2)
+  Z3::VeryLowLevel.Z3_tactic_or_else(_ctx_pointer, tactic1._tactic, tactic2._tactic)
+end
+
+def tactic_par_and_then(tactic1, tactic2)
+  Z3::VeryLowLevel.Z3_tactic_par_and_then(_ctx_pointer, tactic1._tactic, tactic2._tactic)
+end
+
+def tactic_repeat(tactic, num)
+  Z3::VeryLowLevel.Z3_tactic_repeat(_ctx_pointer, tactic._tactic, num)
+end
+
 def tactic_skip
   Z3::VeryLowLevel.Z3_tactic_skip(_ctx_pointer)
 end
 
+def tactic_try_for(tactic, num)
+  Z3::VeryLowLevel.Z3_tactic_try_for(_ctx_pointer, tactic._tactic, num)
+end
+
+def tactic_using_params(tactic, params)
+  Z3::VeryLowLevel.Z3_tactic_using_params(_ctx_pointer, tactic._tactic, params._params)
+end
+
+def tactic_when(probe, tactic)
+  Z3::VeryLowLevel.Z3_tactic_when(_ctx_pointer, probe._probe, tactic._tactic)
+end
+
+def to_app(ast)
+  Z3::VeryLowLevel.Z3_to_app(_ctx_pointer, ast._ast)
+end
+
 def to_func_decl(ast)
   Z3::VeryLowLevel.Z3_to_func_decl(_ctx_pointer, ast._ast)
+end
+
+def toggle_warning_messages(bool)
+  Z3::VeryLowLevel.Z3_toggle_warning_messages(bool)
+end
+
+def translate(ast, context)
+  Z3::VeryLowLevel.Z3_translate(_ctx_pointer, ast._ast, context._context)
 end
 
 def update_param_value(str1, str2)

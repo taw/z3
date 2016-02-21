@@ -29,6 +29,9 @@ class GenerateAPI
       get_estimated_alloc_size
       get_string
       mk_array_ext
+      solver_translate
+      param_descrs_get_documentation
+      mk_context
 
       is_string_sort
       mk_string_sort
