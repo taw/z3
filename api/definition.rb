@@ -18,7 +18,74 @@ class Definition
 
   def api_arguments
     raise if @arguments.any?{|a,| a != :in}
-    ["???"]
+    arg_types = @arguments.map(&:last)
+    arg_types.shift if arg_types[0] == "CONTEXT"
+    case arg_types
+    when ["AST"]
+      ["ast"]
+    when ["AST", "AST"]
+      ["ast1", "ast2"]
+    when ["AST", "AST", "AST"]
+      ["ast1", "ast2", "ast3"]
+    when ["AST", "AST", "AST", "AST"]
+      ["ast1", "ast2", "ast3", "ast4"]
+    when ["AST", "AST", "SORT"]
+      ["ast1", "ast2", "sort"]
+    when ["STRING", "SORT"]
+      ["str", "sort"]
+    when ["STRING"]
+      ["str"]
+    when ["SOLVER"]
+      ["solver"]
+    when ["SOLVER", "AST"]
+      ["solver", "ast1"]
+    when ["SOLVER", "AST", "AST"]
+      ["solver", "ast1", "ast2"]
+    when ["SOLVER", "UINT"]
+      ["solver", "num"]
+    when ["RCF_NUM"]
+      ["num"]
+    when ["RCF_NUM", "RCF_NUM"]
+      ["num1", "num2"]
+    when ["PROBE"]
+      ["probe"]
+    when ["PROBE", "PROBE"]
+      ["probe1", "probe2"]
+    when ["UINT"]
+      ["num"]
+    when ["AST", "UINT"]
+      ["ast", "num"]
+    when []
+      []
+    when ["SORT"]
+      ["sort"]
+    when ["SORT", "SORT"]
+      ["sort1", "sort2"]
+    when ["SORT", "UINT"]
+      ["sort", "num"]
+    when ["STRING", "STRING"]
+      ["str1", "str2"]
+    when ["FUNC_DECL", "AST", "AST"]
+      ["func_decl", "ast1", "ast2"]
+    when ["SYMBOL", "SORT"]
+      ["symbol", "sort"]
+    when ["SYMBOL"]
+      ["symbol"]
+    when ["GOAL"]
+      ["goal"]
+    when ["MODEL"]
+      ["model"]
+    when ["PARAMS"]
+      ["params"]
+    when ["OPTIMIZE"]
+      ["optimize"]
+    when ["PATTERN"]
+      ["pattern"]
+    else
+      raise "Unknown API argument combinations #{arg_types.inspect}"
+      # p arg_types
+      # require 'pry'; binding.pry
+    end
   end
 
   def api_def
@@ -30,7 +97,28 @@ class Definition
   end
 
   def ffi_call_args
-    ["???"]
+    raise if @arguments.any?{|a,| a != :in}
+    arg_types = @arguments.map(&:last)
+    result = []
+    if arg_types[0] == "CONTEXT"
+      result << "_ctx_pointer"
+      arg_types.shift
+    end
+    result + arg_types.zip(api_arguments).map do |t,n|
+      case t
+      when "AST", "SORT", "SOLVER", "MODEL", "GOAL", "FIXEDPOINT", "FUNC_DECL",
+          "PATTERN", "PROBE", "RCF_NUM", "OPTIMIZE", "PARAMS"
+        "#{n}._#{t.downcase}"
+      when "SYMBOL"
+        # FFI but not wrapped
+        n
+      when "INT", "UINT", "STRING", "BOOLEAN"
+        n
+      else
+        raise "Unknown API/FFI argument #{t}"
+        # require 'pry'; binding.pry
+      end
+    end
   end
 
   def api_body
@@ -45,14 +133,42 @@ class Definition
       ":string"
     when "UINT"
       ":uint"
+    when "INT"
+      ":int"
+    when "INT64"
+      ":int64"
+    when "UINT64"
+      ":uint64"
+    when "DOUBLE"
+      ":double"
+    when "FLOAT"
+      ":float"
+    when "BOOL"
+      ":bool"
     when "CONTEXT"
       "ctx_pointer"
-    when "AST"
-      "ast_pointer"
-    when "SORT"
-      "sort_pointer"
+    when "AST",
+         "FIXEDPOINT",
+         "FUNC_DECL",
+         "FUNC_ENTRY",
+         "FUNC_INTERP",
+         "GOAL",
+         "GOAL",
+         "OPTIMIZE",
+         "PARAMS",
+         "PARAM_DESCRS",
+         "PROBE",
+         "SOLVER",
+         "SORT",
+         "SYMBOL",
+         "TACTIC",
+         "STATS",
+         "RCF_NUM",
+         "MODEL",
+         "PATTERN"
+      "#{type.downcase}_pointer"
     else
-      raise "Unsupported return type #{ret_type}"
+      raise "Unsupported type `#{type.inspect}'"
     end
   end
 
