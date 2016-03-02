@@ -3,8 +3,8 @@
 require_relative "../lib/z3"
 
 def check_multiplication_laws_1
-  a = Z3::Ast.int("a")
-  b = Z3::Ast.int("b")
+  a = Z3.Int("a")
+  b = Z3.Int("b")
   solver = Z3::Solver.new
   puts "Checking if (a+b)(a-b)==a*a-b*b"
   solver.prove!(
@@ -13,17 +13,17 @@ def check_multiplication_laws_1
 end
 
 def check_inequalities
-  a = Z3::Ast.int("a")
-  b = Z3::Ast.int("b")
+  a = Z3.Int("a")
+  b = Z3.Int("b")
   solver = Z3::Solver.new
   puts "Checking if a+b >= a"
-  solver.prove!(a+b >= a)
+  solver.prove! a+b >= a
 
   solver = Z3::Solver.new
-  solver.assert(a >= 0)
-  solver.assert(b >= 0)
+  solver.assert a >= 0
+  solver.assert b >= 0
   puts "Checking if a+b >= a if a,b >= 0"
-  solver.prove!(a+b >= a)
+  solver.prove! a+b >= a
 end
 
 check_multiplication_laws_1

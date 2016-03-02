@@ -57,6 +57,11 @@ module Z3::LowLevel
     ### Automatically generated, do not edit that file
     eval open("#{__dir__}/low_level_auto.rb").read
 
+    # Should be private
+    def _ctx_pointer
+      @_ctx_pointer ||= Z3::Context.instance._context
+    end
+
     private
 
     def asts_vector(args)
@@ -64,10 +69,6 @@ module Z3::LowLevel
       c_args = FFI::MemoryPointer.new(:pointer, args.size)
       c_args.write_array_of_pointer args.map(&:_ast)
       c_args
-    end
-
-    def _ctx_pointer
-      @_ctx_pointer ||= Z3::Context.instance._context
     end
   end
 end

@@ -40,9 +40,12 @@ class Z3::Model
 
   def each
     consts.sort_by(&:name).each do |c|
+      # This is absolutely dreadful
+      _ast = Z3::LowLevel.model_get_const_interp(self, c)
+      _txt = Z3::VeryLowLevel.Z3_ast_to_string(Z3::LowLevel._ctx_pointer, _ast)
       yield(
         c.name,
-        Z3::Ast::new(Z3::LowLevel.model_get_const_interp(self, c))
+        _txt
       )
     end
   end

@@ -12,14 +12,14 @@ class Z3::FuncDecl
     Z3::LowLevel.get_arity(self)
   end
 
-  def to_ast
-    Z3::Ast.new(Z3::LowLevel.func_decl_to_ast(self))
-  end
+  # def to_ast
+  #   Z3::Ast.new(Z3::LowLevel.func_decl_to_ast(self))
+  # end
 
-  def ast_parameter(i)
-    # vs arity ?
-    Z3::Ast.new(Z3::LowLevel.get_decl_ast_parameter(self, i))
-  end
+  # def ast_parameter(i)
+  #   # vs arity ?
+  #   Z3::Ast.new(Z3::LowLevel.get_decl_ast_parameter(self, i))
+  # end
 
   def to_s
     name
