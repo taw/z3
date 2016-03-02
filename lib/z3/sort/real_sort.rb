@@ -8,8 +8,6 @@ module Z3
       RealValue
     end
 
-    class <<self
-      public :new
-    end
+    public_class_method :new
   end
 end

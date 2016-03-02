@@ -16,8 +16,6 @@ module Z3
       end
     end
 
-    class <<self
-      public :new
-    end
+    public_class_method :new
   end
 end

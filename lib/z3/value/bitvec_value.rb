@@ -1,7 +1,5 @@
 module Z3
   class BitvecValue < Value
-    class <<self
-      public :new
-    end
+    public_class_method :new
   end
 end

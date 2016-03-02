@@ -12,8 +12,6 @@ module Z3
       LowLevel.get_bv_sort_size(self)
     end
 
-    class <<self
-      public :new
-    end
+    public_class_method :new
   end
 end

@@ -26,8 +26,6 @@ module Z3
       from_const(false)
     end
 
-    class <<self
-      public :new
-    end
+    public_class_method :new
   end
 end

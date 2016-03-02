@@ -1,9 +1,5 @@
 module Z3
   class BoolValue < Value
-    class <<self
-      public :new
-    end
-
     def ~
       ::Z3.Not(self)
     end
@@ -23,5 +19,7 @@ module Z3
     def implies(other)
       Z3.Implies(self, other)
     end
+
+    public_class_method :new
   end
 end

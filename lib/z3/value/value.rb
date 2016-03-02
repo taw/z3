@@ -38,8 +38,6 @@ module Z3
       ::Z3.Le(self, other)
     end
 
-    class << self
-      private :new
-    end
+    private_class_method :new
   end
 end

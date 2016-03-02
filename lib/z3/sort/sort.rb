@@ -35,8 +35,6 @@ module Z3
       raise "SubclassResponsibility"
     end
 
-    class <<self
-      private :new
-    end
+    private_class_method :new
   end
 end
