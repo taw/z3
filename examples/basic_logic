@@ -3,16 +3,16 @@
 require_relative "../lib/z3"
 
 def check_if_true_is_true
-  a = Z3::Ast.true
-  b = Z3::Ast.true
+  a = Z3.True
+  b = Z3.True
   solver = Z3::Solver.new
   puts "Checking if true == true"
   solver.prove!(a == b)
 end
 
 def check_if_true_is_false
-  a = Z3::Ast.true
-  b = Z3::Ast.false
+  a = Z3.True
+  b = Z3.False
   solver = Z3::Solver.new
   puts "Checking if true == false"
   solver.prove!(a==b)
@@ -20,16 +20,16 @@ end
 
 # We prove it by checking that negation is unsatisfiable
 def check_de_morgan_law_1
-  a = Z3::Ast::bool("a")
-  b = Z3::Ast::bool("b")
+  a = Z3.Bool("a")
+  b = Z3.Bool("b")
   solver = Z3::Solver.new
   puts "Proving ~(a & b) == (~a | ~b)"
   solver.prove!(~(a & b) == (~a | ~b))
 end
 
 def check_de_morgan_law_2
-  a = Z3::Ast::bool("a")
-  b = Z3::Ast::bool("b")
+  a = Z3.Bool("a")
+  b = Z3.Bool("b")
   solver = Z3::Solver.new
   puts "Proving ~(a | b) == (~a & ~b)"
   solver.prove!(~(a | b) == (~a & ~b))

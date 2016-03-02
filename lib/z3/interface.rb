@@ -19,24 +19,28 @@ module Z3
     BoolSort.new.True
   end
 
+  def False
+    BoolSort.new.False
+  end
+
   def And(a,b)
     a, b = coerce_to_same_bool_sort(a, b)
-    BoolSort.new.And(a,b)
+    BoolSort.new.new(Z3::LowLevel.mk_and([a, b]))
   end
 
   def Or(a,b)
     a, b = coerce_to_same_bool_sort(a, b)
-    BoolSort.new.Or(a,b)
+    BoolSort.new.new(Z3::LowLevel.mk_or([a, b]))
   end
 
   def Implies(a,b)
     a, b = coerce_to_same_bool_sort(a, b)
-    BoolSort.new.Implies(a,b)
+    BoolSort.new.new(Z3::LowLevel.mk_implies(a, b))
   end
 
   def Iff(a,b)
     a, b = coerce_to_same_bool_sort(a, b)
-    BoolSort.new.Iff(a,b)
+    BoolSort.new.new(Z3::LowLevel.mk_iff(a, b))
   end
 
   def Add(a,b)

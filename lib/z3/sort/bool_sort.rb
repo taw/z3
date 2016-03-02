@@ -19,11 +19,11 @@ module Z3
     end
 
     def True
-      from_value(true)
+      from_const(true)
     end
 
     def False
-      from_value(false)
+      from_const(false)
     end
 
     class <<self
