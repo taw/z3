@@ -23,14 +23,14 @@ module Z3
     BoolSort.new.False
   end
 
-  def And(a,b)
-    a, b = coerce_to_same_bool_sort(a, b)
-    BoolSort.new.new(Z3::LowLevel.mk_and([a, b]))
+  def And(*args)
+    args = coerce_to_same_bool_sort(*args)
+    BoolSort.new.new(Z3::LowLevel.mk_and(args))
   end
 
-  def Or(a,b)
-    a, b = coerce_to_same_bool_sort(a, b)
-    BoolSort.new.new(Z3::LowLevel.mk_or([a, b]))
+  def Or(*args)
+    args = coerce_to_same_bool_sort(*args)
+    BoolSort.new.new(Z3::LowLevel.mk_or(args))
   end
 
   def Implies(a,b)
@@ -43,9 +43,10 @@ module Z3
     BoolSort.new.new(Z3::LowLevel.mk_iff(a, b))
   end
 
-  def Add(a,b)
-    a, b = coerce_to_same_arith_sort(a, b)
-    a.sort.new(LowLevel.mk_add([a, b]))
+  def Add(*args)
+    raise ArgumentError if args.empty?
+    args = coerce_to_same_arith_sort(*args)
+    args[0].sort.new(LowLevel.mk_add(args))
   end
 
   def Sub(a,b)
@@ -53,9 +54,9 @@ module Z3
     a.sort.new(LowLevel.mk_sub([a, b]))
   end
 
-  def Mul(a,b)
-    a, b = coerce_to_same_arith_sort(a, b)
-    a.sort.new(LowLevel.mk_mul([a, b]))
+  def Mul(*args)
+    args = coerce_to_same_arith_sort(*args)
+    args[0].sort.new(LowLevel.mk_mul(args))
   end
 
   def Div(a,b)
@@ -74,9 +75,9 @@ module Z3
     BoolSort.new.new(LowLevel.mk_eq(a, b))
   end
 
-  def Distinct(a, b)
-    a, b = coerce_to_same_sort(a, b)
-    BoolSort.new.new(LowLevel.mk_distinct([a, b]))
+  def Distinct(*args)
+    args = coerce_to_same_sort(*args)
+    BoolSort.new.new(LowLevel.mk_distinct(args))
   end
 
   def Gt(a, b)
@@ -123,29 +124,23 @@ module Z3
     raise Z3::Exception, "No idea how to autoconvert `#{a.class}': `#{a.inspect}'"
   end
 
-  def coerce_to_same_sort(a,b)
-    a = from_const(a) unless a.is_a?(Value)
-    b = from_const(b) unless b.is_a?(Value)
-    return [a,b] if a.sort == b.sort
-    if a.sort > b.sort
-      [a, a.sort.from_value(b)]
-    elsif a.sort < b.sort
-      [b.sort.from_value(a), b]
-    else
-      raise "#{a.sort} and #{b.sort} sorts can't be converted to one sort"
-    end
+  def coerce_to_same_sort(*args)
+    args = args.map{|a| a.is_a?(Value) ? a : from_const(a)}
+    # This will raise exception unless one of the sorts is highest
+    max_sort = args.map(&:sort).max
+    args.map{|a| a.sort == max_sort ? a : max_sort.from_value(a) }
   end
 
-  def coerce_to_same_bool_sort(a,b)
-    a, b = coerce_to_same_sort(a,b)
-    raise Z3::Exception, "Bool value expected" unless a.is_a?(BoolValue)
-    [a, b]
+  def coerce_to_same_bool_sort(*args)
+    args = coerce_to_same_sort(*args)
+    raise Z3::Exception, "Bool value expected" unless args[0].is_a?(BoolValue)
+    args
   end
 
-  def coerce_to_same_arith_sort(a,b)
-    a, b = coerce_to_same_sort(a,b)
-    raise Z3::Exception, "Int or Real value expected" unless a.is_a?(IntValue) or a.is_a?(RealValue)
-    [a, b]
+  def coerce_to_same_arith_sort(*args)
+    args = coerce_to_same_sort(*args)
+    raise Z3::Exception, "Int or Real value expected" unless args[0].is_a?(IntValue) or args[0].is_a?(RealValue)
+    args
   end
 
   class << self

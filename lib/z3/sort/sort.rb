@@ -15,7 +15,8 @@ module Z3
       false
     end
 
-    # Reimplementing Comparable, partial order
+    # Reimplementing Comparable
+    # Check if it can handle partial orders OK
     def <(other)
       raise ArgumentError unless other.is_a?(Sort)
       other > self
@@ -27,8 +28,16 @@ module Z3
     end
 
     def <=(other)
-      raise ArgumentErrorunless other.is_a?(Sort)
+      raise ArgumentError unless other.is_a?(Sort)
       other >= self
+    end
+
+    def <=>(other)
+      raise ArgumentError unless other.is_a?(Sort)
+      return 0 if self == other
+      return 1 if self > other
+      return -1 if other > self
+      nil
     end
 
     def to_s
