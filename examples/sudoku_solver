@@ -16,14 +16,14 @@ class SudokuSolver
     end
 
     @cells.each do |row|
-      @solver.assert Z3::Ast.distinct(*row)
+      @solver.assert Z3.Distinct(*row)
     end
     @cells.transpose.each do |column|
-      @solver.assert Z3::Ast.distinct(*column)
+      @solver.assert Z3.Distinct(*column)
     end
     @cells.each_slice(3) do |rows|
       rows.transpose.each_slice(3) do |square|
-        @solver.assert Z3::Ast.distinct(*square.flatten)
+        @solver.assert Z3.Distinct(*square.flatten)
       end
     end
 
@@ -38,7 +38,7 @@ class SudokuSolver
   private
 
   def cell_var(cell, i, j)
-    v = Z3::Ast.int("cell[#{i+1},#{j+1}]")
+    v = Z3.Int("cell[#{i+1},#{j+1}]")
     @solver.assert v >= 1
     @solver.assert v <= 9
     @solver.assert v == cell if cell != nil

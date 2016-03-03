@@ -112,7 +112,7 @@ class Bridges
   end
 
   def int012(x, y, d)
-    v = Z3::Ast.int("#{x},#{y},#{d}")
+    v = Z3.Int("#{x},#{y},#{d}")
     @solver.assert v >= 0
     @solver.assert v <= 2
     v

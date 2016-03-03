@@ -21,6 +21,7 @@ require_relative "z3/sort/bitvec_sort"
 
 # ASTs
 require_relative "z3/value/value"
+require_relative "z3/value/arith_value"
 require_relative "z3/value/int_value"
 require_relative "z3/value/real_value"
 require_relative "z3/value/bool_value"

@@ -22,22 +22,14 @@ module Z3
       ::Z3.Distinct(self, other)
     end
 
-    def >(other)
-      ::Z3.Gt(self, other)
-    end
-
-    def >=(other)
-      ::Z3.Ge(self, other)
-    end
-
-    def <=(other)
-      ::Z3.Lt(self, other)
-    end
-
-    def <(other)
-      ::Z3.Le(self, other)
-    end
-
     private_class_method :new
+
+    class << self
+      def new_from_pointer(_ast)
+        _txt = Z3::VeryLowLevel.Z3_ast_to_string(Z3::LowLevel._ctx_pointer, _ast)
+        # raise "No idea how to convert this value"
+        # if == Z3::LowLevel.mk_bool_sort
+      end
+    end
   end
 end

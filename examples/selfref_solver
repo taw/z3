@@ -10,12 +10,12 @@ class SelfRefPuzzleSolver
     @q = {}
     @a = {}
     (1..20).each do |i|
-      @q[i] = Z3::Ast.int("q#{i}")
+      @q[i] = Z3.Int("q#{i}")
       assert @q[i] >= 1
       assert @q[i] <= 5
       @a[i] = {}
       (1..5).each do |j|
-        @a[i][j] = Z3::Ast.int("a#{i},#{' ABCDE'[j]}")
+        @a[i][j] = Z3.Int("a#{i},#{' ABCDE'[j]}")
         assert (@a[i][j] == 0) == (@q[i] != j)
         assert (@a[i][j] == 1) == (@q[i] == j)
       end
@@ -27,23 +27,23 @@ class SelfRefPuzzleSolver
   end
 
   def cons_in(*ary)
-    Z3::Ast.or(*ary.map{|i| cons_answers == i})
+    Z3.Or(*ary.map{|i| cons_answers == i})
   end
 
   def solve!
-    @a_answers = Z3::Ast.add(*(1..20).map{|i| @a[i][1]})
-    @b_answers = Z3::Ast.add(*(1..20).map{|i| @a[i][2]})
-    @c_answers = Z3::Ast.add(*(1..20).map{|i| @a[i][3]})
-    @d_answers = Z3::Ast.add(*(1..20).map{|i| @a[i][4]})
-    @e_answers = Z3::Ast.add(*(1..20).map{|i| @a[i][5]})
+    @a_answers = Z3.Add(*(1..20).map{|i| @a[i][1]})
+    @b_answers = Z3.Add(*(1..20).map{|i| @a[i][2]})
+    @c_answers = Z3.Add(*(1..20).map{|i| @a[i][3]})
+    @d_answers = Z3.Add(*(1..20).map{|i| @a[i][4]})
+    @e_answers = Z3.Add(*(1..20).map{|i| @a[i][5]})
     @cons_answers = b_answers + c_answers + d_answers
 
     # Question 1
     assert (q[1] == 1) == (q[1] == 2)
-    assert (q[1] == 2) == Z3::Ast.and(q[1] != 2, q[2] == 2)
-    assert (q[1] == 3) == Z3::Ast.and(q[1] != 2, q[2] != 2, q[3] == 2)
-    assert (q[1] == 4) == Z3::Ast.and(q[1] != 2, q[2] != 2, q[3] != 2, q[4] == 2)
-    assert (q[1] == 5) == Z3::Ast.and(q[1] != 2, q[2] != 2, q[3] != 2, q[4] != 2, q[5] == 2)
+    assert (q[1] == 2) == Z3.And(q[1] != 2, q[2] == 2)
+    assert (q[1] == 3) == Z3.And(q[1] != 2, q[2] != 2, q[3] == 2)
+    assert (q[1] == 4) == Z3.And(q[1] != 2, q[2] != 2, q[3] != 2, q[4] == 2)
+    assert (q[1] == 5) == Z3.And(q[1] != 2, q[2] != 2, q[3] != 2, q[4] != 2, q[5] == 2)
 
     # Question 2
     assert q[ 1] != q[ 2]
@@ -81,25 +81,25 @@ class SelfRefPuzzleSolver
     assert (a_answers == 8) == (q[4] == 5)
 
     # Question 5
-    assert Z3::Ast.implies(q[5] == 1, q[5] == q[1])
-    assert Z3::Ast.implies(q[5] == 2, q[5] == q[2])
-    assert Z3::Ast.implies(q[5] == 3, q[5] == q[3])
-    assert Z3::Ast.implies(q[5] == 4, q[5] == q[4])
-    assert Z3::Ast.implies(q[5] == 5, q[5] == q[5])
+    assert Z3.Implies(q[5] == 1, q[5] == q[1])
+    assert Z3.Implies(q[5] == 2, q[5] == q[2])
+    assert Z3.Implies(q[5] == 3, q[5] == q[3])
+    assert Z3.Implies(q[5] == 4, q[5] == q[4])
+    assert Z3.Implies(q[5] == 5, q[5] == q[5])
 
     # Question 6
     assert (q[17] == 3) == (q[6] == 1)
     assert (q[17] == 4) == (q[6] == 2)
     assert (q[17] == 5) == (q[6] == 3)
-    assert Z3::Ast.or(q[17] == 1, q[17] == 2) == (q[6] == 4)
+    assert Z3.Or(q[17] == 1, q[17] == 2) == (q[6] == 4)
     assert q[6] != 5
 
     # Question 7
-    assert Z3::Ast.or(q[7] - q[8] == 4, q[8] - q[7] == 4) == (q[7] == 1)
-    assert Z3::Ast.or(q[7] - q[8] == 3, q[8] - q[7] == 3) == (q[7] == 2)
-    assert Z3::Ast.or(q[7] - q[8] == 2, q[8] - q[7] == 2) == (q[7] == 3)
-    assert Z3::Ast.or(q[7] - q[8] == 1, q[8] - q[7] == 1) == (q[7] == 4)
-    assert Z3::Ast.or(q[7] - q[8] == 0, q[8] - q[7] == 0) == (q[7] == 5)
+    assert Z3.Or(q[7] - q[8] == 4, q[8] - q[7] == 4) == (q[7] == 1)
+    assert Z3.Or(q[7] - q[8] == 3, q[8] - q[7] == 3) == (q[7] == 2)
+    assert Z3.Or(q[7] - q[8] == 2, q[8] - q[7] == 2) == (q[7] == 3)
+    assert Z3.Or(q[7] - q[8] == 1, q[8] - q[7] == 1) == (q[7] == 4)
+    assert Z3.Or(q[7] - q[8] == 0, q[8] - q[7] == 0) == (q[7] == 5)
 
     # Question 8
     assert (a_answers + e_answers == 4) == (q[8] == 1)
@@ -110,10 +110,10 @@ class SelfRefPuzzleSolver
 
     # Question 9
     assert (q[10] == q[9]) == (q[9] == 1)
-    assert Z3::Ast.and(q[10] != q[9], q[11] == q[9]) == (q[9] == 2)
-    assert Z3::Ast.and(q[10] != q[9], q[11] != q[9], q[12] == q[9]) == (q[9] == 3)
-    assert Z3::Ast.and(q[10] != q[9], q[11] != q[9], q[12] != q[9], q[13] == q[9]) == (q[9] == 4)
-    assert Z3::Ast.and(q[10] != q[9], q[11] != q[9], q[12] != q[9], q[13] != q[9], q[14] == q[9]) == (q[9] == 5)
+    assert Z3.And(q[10] != q[9], q[11] == q[9]) == (q[9] == 2)
+    assert Z3.And(q[10] != q[9], q[11] != q[9], q[12] == q[9]) == (q[9] == 3)
+    assert Z3.And(q[10] != q[9], q[11] != q[9], q[12] != q[9], q[13] == q[9]) == (q[9] == 4)
+    assert Z3.And(q[10] != q[9], q[11] != q[9], q[12] != q[9], q[13] != q[9], q[14] == q[9]) == (q[9] == 5)
 
     # Question 10
     assert (q[16] == 4) == (q[10] == 1)
@@ -123,7 +123,7 @@ class SelfRefPuzzleSolver
     assert (q[16] == 3) == (q[10] == 5)
 
     # Question 11
-    prec_b_answers = Z3::Ast.add(*(1..10).map{|i| @a[i][2]})
+    prec_b_answers = Z3.Add(*(1..10).map{|i| @a[i][2]})
     assert (prec_b_answers == 0) == (q[11] == 1)
     assert (prec_b_answers == 1) == (q[11] == 2)
     assert (prec_b_answers == 2) == (q[11] == 3)
@@ -131,11 +131,11 @@ class SelfRefPuzzleSolver
     assert (prec_b_answers == 4) == (q[11] == 5)
 
     # Question 12
-    assert Z3::Ast.implies(q[12] == 1, cons_in(2,4,6,8,10,12,14,16,18,20))
-    assert Z3::Ast.implies(q[12] == 2, cons_in(1,3,5,7,9,11,13,15,17,19))
-    assert Z3::Ast.implies(q[12] == 3, cons_in(1,4,9,16))
-    assert Z3::Ast.implies(q[12] == 4, cons_in(2,3,5,7,11,13,17,19))
-    assert Z3::Ast.implies(q[12] == 5, cons_in(5,10,15,20))
+    assert Z3.Implies(q[12] == 1, cons_in(2,4,6,8,10,12,14,16,18,20))
+    assert Z3.Implies(q[12] == 2, cons_in(1,3,5,7,9,11,13,15,17,19))
+    assert Z3.Implies(q[12] == 3, cons_in(1,4,9,16))
+    assert Z3.Implies(q[12] == 4, cons_in(2,3,5,7,11,13,17,19))
+    assert Z3.Implies(q[12] == 5, cons_in(5,10,15,20))
 
     # Question 13
     assert q[1] != 1
@@ -170,7 +170,7 @@ class SelfRefPuzzleSolver
     assert (q[6] == 3) == (q[17] == 1)
     assert (q[6] == 4) == (q[17] == 2)
     assert (q[6] == 5) == (q[17] == 3)
-    assert Z3::Ast.and(q[6] != 3, q[6] != 4, q[6] != 5) == (q[17] == 4)
+    assert Z3.And(q[6] != 3, q[6] != 4, q[6] != 5) == (q[17] == 4)
     assert q[17] != 5
 
     # Question 18
@@ -178,7 +178,7 @@ class SelfRefPuzzleSolver
     assert (a_answers == c_answers) == (q[18] == 2)
     assert (a_answers == d_answers) == (q[18] == 3)
     assert (a_answers == e_answers) == (q[18] == 4)
-    assert Z3::Ast.and(
+    assert Z3.And(
       a_answers != b_answers,
       a_answers != c_answers,
       a_answers != d_answers,

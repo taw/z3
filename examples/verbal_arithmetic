@@ -6,7 +6,7 @@ class VerbalArithmetic
   def initialize(a, b, c)
     @solver = Z3::Solver.new
     @vars = Hash.new do |ht,name|
-      v = Z3::Ast.int(name)
+      v = Z3.Int(name)
       @solver.assert v >= 0
       @solver.assert v <= 9
       ht[name] = v
@@ -21,7 +21,7 @@ class VerbalArithmetic
     @solver.assert @b[0] != 0
     @solver.assert @c[0] != 0
     @solver.assert word_value(@a) + word_value(@b) == word_value(@c)
-    @solver.assert Z3::Ast.distinct(*@vars.values)
+    @solver.assert Z3.Distinct(*@vars.values)
 
     if @solver.check == :sat
       @model = @solver.model

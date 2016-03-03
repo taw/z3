@@ -23,7 +23,7 @@ class Z3::Model
   end
 
   def model_eval(ast, model_completion=false)
-    Z3::Ast.new(Z3::LowLevel.model_eval(self, ast, model_completion))
+    Z3::Value.new_from_pointer(Z3::LowLevel.model_eval(self, ast, model_completion))
   end
 
   def [](ast)
@@ -40,12 +40,10 @@ class Z3::Model
 
   def each
     consts.sort_by(&:name).each do |c|
-      # This is absolutely dreadful
       _ast = Z3::LowLevel.model_get_const_interp(self, c)
-      _txt = Z3::VeryLowLevel.Z3_ast_to_string(Z3::LowLevel._ctx_pointer, _ast)
       yield(
         c.name,
-        _txt
+        Z3::Value.new_from_pointer(_ast)
       )
     end
   end
