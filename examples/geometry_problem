@@ -4,17 +4,17 @@ require_relative "../lib/z3"
 
 solver = Z3::Solver.new
 
-ax = Z3::Ast.real("a.x")
-ay = Z3::Ast.real("a.y")
-bx = Z3::Ast.real("b.x")
-by = Z3::Ast.real("b.y")
-cx = Z3::Ast.real("c.x")
-cy = Z3::Ast.real("c.y")
-dx = Z3::Ast.real("d.x")
-dy = Z3::Ast.real("d.y")
+ax = Z3.Real("a.x")
+ay = Z3.Real("a.y")
+bx = Z3.Real("b.x")
+by = Z3.Real("b.y")
+cx = Z3.Real("c.x")
+cy = Z3.Real("c.y")
+dx = Z3.Real("d.x")
+dy = Z3.Real("d.y")
 
-a_c = Z3::Ast.real("|a-c|")
-b_d = Z3::Ast.real("|b-d|")
+a_c = Z3.Real("|a-c|")
+b_d = Z3.Real("|b-d|")
 
 solver.assert(bx == 0)
 solver.assert(by == 0)
