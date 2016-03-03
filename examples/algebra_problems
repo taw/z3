@@ -22,7 +22,7 @@ end
 
 class AlgebraProblem01 < AlgebraProblem
   def solve!
-    x = Z3::Ast.real("x")
+    x = Z3.Real("x")
     solver.assert 5*(-3*x - 2) - (x - 3) == -4*(4*x + 5) + 13
     print_solution! "01"
     # No nice way to say x is unconstrained
@@ -31,17 +31,17 @@ end
 
 class AlgebraProblem03 < AlgebraProblem
   def declare_abs(var, expr)
-    solver.assert Z3::Ast.or(
-      Z3::Ast.and(var == expr,  expr >= 0),
-      Z3::Ast.and(var == -expr, expr <= 0)
+    solver.assert Z3.Or(
+      Z3.And(var == expr,  expr >= 0),
+      Z3.And(var == -expr, expr <= 0)
     )
   end
 
   def solve!
-    x = Z3::Ast.real("x")
-    xm2abs = Z3::Ast.real("|x-2|")
+    x = Z3.Real("x")
+    xm2abs = Z3.Real("|x-2|")
     declare_abs(xm2abs, x-2)
-    m6abs = Z3::Ast.real("|-6|")
+    m6abs = Z3.Real("|-6|")
     declare_abs(m6abs, -6)
     solver.assert x < 2
     solver.assert xm2abs == 4*m6abs
@@ -56,11 +56,11 @@ class AlgebraProblem04 < AlgebraProblem
   end
 
   def solve!
-    ax = Z3::Ast.real("ax")
-    ay = Z3::Ast.real("ay")
-    bx = Z3::Ast.real("bx")
-    by = Z3::Ast.real("by")
-    a_b = Z3::Ast.real("|a-b|")
+    ax = Z3.Real("ax")
+    ay = Z3.Real("ay")
+    bx = Z3.Real("bx")
+    by = Z3.Real("by")
+    a_b = Z3.Real("|a-b|")
     declare_distance(a_b, ax, ay, bx, by)
     solver.assert ax == -4
     solver.assert ay == -5
@@ -72,8 +72,8 @@ end
 
 class AlgebraProblem05 < AlgebraProblem
   def solve!
-    x = Z3::Ast.real("x")
-    y = Z3::Ast.real("y")
+    x = Z3.Real("x")
+    y = Z3.Real("y")
     solver.assert 2*x - 4*y == 9
     solver.assert y == 0
     print_solution! "05"
@@ -86,11 +86,11 @@ class AlgebraProblem06 < AlgebraProblem
   end
 
   def solve!
-    x1 = Z3::Ast.real("x1")
-    y1 = Z3::Ast.real("y1")
-    x2 = Z3::Ast.real("x2")
-    y2 = Z3::Ast.real("y2")
-    answer = Z3::Ast.real("answer")
+    x1 = Z3.Real("x1")
+    y1 = Z3.Real("y1")
+    x2 = Z3.Real("x2")
+    y2 = Z3.Real("y2")
+    answer = Z3.Real("answer")
     solver.assert x2 == 2
     solver.assert x1 == 1
     declare_f(x1, y1)
@@ -102,15 +102,15 @@ end
 
 class AlgebraProblem10 < AlgebraProblem
   def declare_abs(var, expr)
-    solver.assert Z3::Ast.or(
-      Z3::Ast.and(var == expr,  expr >= 0),
-      Z3::Ast.and(var == -expr, expr <= 0)
+    solver.assert Z3.Or(
+      Z3.And(var == expr,  expr >= 0),
+      Z3.And(var == -expr, expr <= 0)
     )
   end
 
   def solve!
-    x = Z3::Ast.real("x")
-    y = Z3::Ast.real("|-2x + 2|")
+    x = Z3.Real("x")
+    y = Z3.Real("|-2x + 2|")
     declare_abs(y, -2*x + 2)
     solver.assert y - 3 == -3
     print_solution! "10"

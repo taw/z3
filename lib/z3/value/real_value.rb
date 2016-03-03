@@ -16,6 +16,18 @@ module Z3
       ::Z3.Div(self, other)
     end
 
+    def **(other)
+      ::Z3.Power(self, other)
+    end
+
+    def -@
+      sort.new(LowLevel.mk_unary_minus(self))
+    end
+
+    def coerce(other)
+      [sort.from_const(other), self]
+    end
+
     public_class_method :new
   end
 end

@@ -63,6 +63,12 @@ module Z3
     a.sort.new(LowLevel.mk_div(a, b))
   end
 
+  def Power(a, b)
+    # Wait, is this even legitimate that it's I**I and R**R?
+    a, b = coerce_to_same_arith_sort(a, b)
+    a.sort.new(LowLevel.mk_power(a, b))
+  end
+
   def Eq(a, b)
     a, b = coerce_to_same_sort(a, b)
     BoolSort.new.new(LowLevel.mk_eq(a, b))
@@ -121,12 +127,12 @@ module Z3
     a = from_const(a) unless a.is_a?(Value)
     b = from_const(b) unless b.is_a?(Value)
     return [a,b] if a.sort == b.sort
-    if a.sort < b.sort
+    if a.sort > b.sort
       [a, a.sort.from_value(b)]
-    elsif a.sort > b.sort
+    elsif a.sort < b.sort
       [b.sort.from_value(a), b]
     else
-      raise "No idea how to autoconvert #{a.sort} and #{b.sort}"
+      raise "#{a.sort} and #{b.sort} sorts can't be converted to one sort"
     end
   end
 

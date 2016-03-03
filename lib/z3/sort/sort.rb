@@ -5,8 +5,30 @@ module Z3
       @_sort = _sort
     end
 
+    include Comparable
     def ==(other)
       other.is_a?(Sort) and @_sort == other._sort
+    end
+
+    def >(other)
+      raise ArgumentError unless other.is_a?(Sort)
+      false
+    end
+
+    # Reimplementing Comparable, partial order
+    def <(other)
+      raise ArgumentError unless other.is_a?(Sort)
+      other > self
+    end
+
+    def >=(other)
+      raise ArgumentError unless other.is_a?(Sort)
+      self == other or self > other
+    end
+
+    def <=(other)
+      raise ArgumentErrorunless other.is_a?(Sort)
+      other >= self
     end
 
     def to_s
