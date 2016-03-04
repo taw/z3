@@ -1,8 +1,8 @@
 # Solver and Model specs are codependent, so half of functionality of each is tested in other class's tests
 describe Z3::Solver do
   let(:solver) { Z3::Solver.new }
-  let(:a) { Z3::Ast.int("a") }
-  let(:b) { Z3::Ast.int("b") }
+  let(:a) { Z3.Int("a") }
+  let(:b) { Z3.Int("b") }
 
   it "basic functionality" do
     solver.assert(a == b)

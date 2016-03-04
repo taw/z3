@@ -74,29 +74,29 @@ class LetterConnections
         if x == 0
           @solver.assert @dir[[x,y]] != 0
         else
-          @solver.assert Z3::Ast.implies(@dir[[x,y]] == 0, @line[[x,y]] == @line[[x-1,y]])
-          @solver.assert Z3::Ast.implies(@dir[[x,y]] == 0, @dir[[x-1,y]] != 2)
+          @solver.assert Z3.Implies(@dir[[x,y]] == 0, @line[[x,y]] == @line[[x-1,y]])
+          @solver.assert Z3.Implies(@dir[[x,y]] == 0, @dir[[x-1,y]] != 2)
         end
         # Direction Up
         if y == 0
           @solver.assert @dir[[x,y]] != 1
         else
-          @solver.assert Z3::Ast.implies(@dir[[x,y]] == 1, @line[[x,y]] == @line[[x,y-1]])
-          @solver.assert Z3::Ast.implies(@dir[[x,y]] == 1, @dir[[x,y-1]] != 3)
+          @solver.assert Z3.Implies(@dir[[x,y]] == 1, @line[[x,y]] == @line[[x,y-1]])
+          @solver.assert Z3.Implies(@dir[[x,y]] == 1, @dir[[x,y-1]] != 3)
         end
         # Direction Right
         if x == @xsize - 1
           @solver.assert @dir[[x,y]] != 2
         else
-          @solver.assert Z3::Ast.implies(@dir[[x,y]] == 2, @line[[x,y]] == @line[[x+1,y]])
-          @solver.assert Z3::Ast.implies(@dir[[x,y]] == 2, @dir[[x+1,y]] != 0)
+          @solver.assert Z3.Implies(@dir[[x,y]] == 2, @line[[x,y]] == @line[[x+1,y]])
+          @solver.assert Z3.Implies(@dir[[x,y]] == 2, @dir[[x+1,y]] != 0)
         end
         # Direction Down
         if y == @ysize - 1
           @solver.assert @dir[[x,y]] != 3
         else
-          @solver.assert Z3::Ast.implies(@dir[[x,y]] == 3, @line[[x,y]] == @line[[x,y+1]])
-          @solver.assert Z3::Ast.implies(@dir[[x,y]] == 3, @dir[[x,y+1]] != 1)
+          @solver.assert Z3.Implies(@dir[[x,y]] == 3, @line[[x,y]] == @line[[x,y+1]])
+          @solver.assert Z3.Implies(@dir[[x,y]] == 3, @dir[[x,y+1]] != 1)
         end
       end
     end
@@ -128,14 +128,14 @@ class LetterConnections
   end
 
   def line_var(x, y)
-    v = Z3::Ast.int("l#{x},#{y}")
+    v = Z3.Int("l#{x},#{y}")
     @solver.assert v >= 0
     @solver.assert v < @letters.size
     v
   end
 
   def dir_var(x, y)
-    v = Z3::Ast.int("d#{x},#{y}")
+    v = Z3.Int("d#{x},#{y}")
     @solver.assert v >= 0
     @solver.assert v <= 3
     v
@@ -154,7 +154,7 @@ class LetterConnections
 
   # Surely Z3 must have a thing for it
   def condition_exactly_one(conds)
-    @solver.assert Z3::Ast.or(*conds)
+    @solver.assert Z3.Or(*conds)
     (0...conds.size).each do |ci|
       (0...conds.size).each do |cj|
         if ci < cj

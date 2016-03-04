@@ -87,7 +87,7 @@ class Kakuro
   end
 
   def cell_var(x,y)
-    v = Z3::Ast.int("c#{x},#{y}")
+    v = Z3.Int("c#{x},#{y}")
     @solver.assert v >= 1
     @solver.assert v <= 9
     v
@@ -103,8 +103,8 @@ class Kakuro
       y += dy
     end
     return if vs.empty?
-    @solver.assert Z3::Ast.distinct(*vs)
-    @solver.assert Z3::Ast.add(*vs) == sum
+    @solver.assert Z3.Distinct(*vs)
+    @solver.assert Z3.Add(*vs) == sum
   end
 end
 

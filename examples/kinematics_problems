@@ -32,9 +32,9 @@ class KinematicsProblem01 < KinematicsProblem
   Determine the distance traveled before takeoff.
   """
   def solve!
-    a = Z3::Ast.real("a")
-    t = Z3::Ast.real("t")
-    d = Z3::Ast.real("d")
+    a = Z3.Real("a")
+    t = Z3.Real("t")
+    d = Z3.Real("d")
     assert a == 3.20
     assert t == 32.8
     assert d == a*t*t/2
@@ -47,9 +47,9 @@ class KinematicsProblem02 < KinematicsProblem
   A car starts from rest and accelerates uniformly over a time of 5.21 seconds for a distance of 110 m. Determine the acceleration of the car.
   """
   def solve!
-    a = Z3::Ast.real("a")
-    t = Z3::Ast.real("t")
-    d = Z3::Ast.real("d")
+    a = Z3.Real("a")
+    t = Z3.Real("t")
+    d = Z3.Real("d")
     assert d == a*t*t/2
     assert t == 5.21
     assert d == 110
@@ -63,10 +63,10 @@ class KinematicsProblem03 < KinematicsProblem
   If Upton free falls for 2.60 seconds, what will be his final velocity and how far will he fall?
   """
   def solve!
-    a = Z3::Ast.real("a")
-    t = Z3::Ast.real("t")
-    v = Z3::Ast.real("v")
-    d = Z3::Ast.real("d")
+    a = Z3.Real("a")
+    t = Z3.Real("t")
+    v = Z3.Real("v")
+    d = Z3.Real("d")
     assert a == 9.81
     assert d == a*t*t/2
     assert v == a*t
@@ -80,11 +80,11 @@ class KinematicsProblem04 < KinematicsProblem
   A race car accelerates uniformly from 18.5 m/s to 46.1 m/s in 2.47 seconds. Determine the acceleration of the car and the distance traveled.
   """
   def solve!
-    a = Z3::Ast.real("a")
-    t = Z3::Ast.real("t")
-    vs= Z3::Ast.real("vs")
-    ve = Z3::Ast.real("ve")
-    d = Z3::Ast.real("d")
+    a = Z3.Real("a")
+    t = Z3.Real("t")
+    vs= Z3.Real("vs")
+    ve = Z3.Real("ve")
+    d = Z3.Real("d")
     assert vs == 18.5
     assert ve == 46.1
     assert t == 2.47
@@ -101,9 +101,9 @@ class KinematicsProblem05 < KinematicsProblem
   Determine the time for the feather to fall to the surface of the moon.
   """
   def solve!
-    a = Z3::Ast.real("a")
-    t = Z3::Ast.real("t")
-    d = Z3::Ast.real("d")
+    a = Z3.Real("a")
+    t = Z3.Real("t")
+    d = Z3.Real("d")
     assert a == 1.67
     assert d == 1.40
     assert t >= 0
@@ -119,10 +119,10 @@ class KinematicsProblem06 < KinematicsProblem
   then what is the acceleration and what is the distance that the sled travels?
   """
   def solve!
-    a = Z3::Ast.real("a")
-    t = Z3::Ast.real("t")
-    d = Z3::Ast.real("d")
-    v = Z3::Ast.real("v")
+    a = Z3.Real("a")
+    t = Z3.Real("t")
+    d = Z3.Real("d")
+    v = Z3.Real("v")
     assert v == 444
     assert t == 1.83
     assert v == a*t
@@ -137,10 +137,10 @@ class KinematicsProblem07 < KinematicsProblem
   Determine the acceleration of the bike.
   """
   def solve!
-    a = Z3::Ast.real("a")
-    t = Z3::Ast.real("t")
-    d = Z3::Ast.real("d")
-    v = Z3::Ast.real("v")
+    a = Z3.Real("a")
+    t = Z3.Real("t")
+    d = Z3.Real("d")
+    v = Z3.Real("v")
     assert v == 7.10
     assert d == 35.4
     assert a*t == v
@@ -157,10 +157,10 @@ class KinematicsProblem08 < KinematicsProblem
   Assuming this minimum acceleration, what is the minimum allowed length for the runway?
   """
   def solve!
-    a = Z3::Ast.real("a")
-    t = Z3::Ast.real("t")
-    d = Z3::Ast.real("d")
-    v = Z3::Ast.real("v")
+    a = Z3.Real("a")
+    t = Z3.Real("t")
+    d = Z3.Real("d")
+    v = Z3.Real("v")
     assert a == 3
     assert v == 65
     assert a*t == v
@@ -175,9 +175,9 @@ class KinematicsProblem09 < KinematicsProblem
   Determine the skidding distance of the car (assume uniform acceleration).
   """
   def solve!
-    t = Z3::Ast.real("t")
-    d = Z3::Ast.real("d")
-    v = Z3::Ast.real("v")
+    t = Z3.Real("t")
+    d = Z3.Real("d")
+    v = Z3.Real("v")
     assert v == 22.4
     assert t == 2.55
     assert d == t*v/2
@@ -191,10 +191,10 @@ class KinematicsProblem10 < KinematicsProblem
   Determine the takeoff speed of the kangaroo.
   """
   def solve!
-    a = Z3::Ast.real("a")
-    t = Z3::Ast.real("t")
-    d = Z3::Ast.real("d")
-    v = Z3::Ast.real("v")
+    a = Z3.Real("a")
+    t = Z3.Real("t")
+    d = Z3.Real("d")
+    v = Z3.Real("v")
     assert d == 2.62
     assert a == -9.81
     assert d == v*t/2

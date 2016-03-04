@@ -22,7 +22,7 @@ class LightUp
         next if v == "."
         @solver.assert @lamps[[x,y]] == 0
         if ("0".."4").include?(v)
-          @solver.assert Z3::Ast.add(*lamps_next_to_cell(x,y)) == v.to_i
+          @solver.assert Z3.Add(*lamps_next_to_cell(x,y)) == v.to_i
         end
       end
     end
@@ -31,9 +31,9 @@ class LightUp
     # No lamp is in raycast of another lamp
     (0...@ysize).each do |y|
       (0...@xsize).each do |x|
-        raycast = Z3::Ast.add(*raycast_cells(x,y))
-        @solver.assert Z3::Ast.implies(@lamps[[x,y]] == 0, raycast >= 1)
-        @solver.assert Z3::Ast.implies(@lamps[[x,y]] == 1, raycast == 0)
+        raycast = Z3.Add(*raycast_cells(x,y))
+        @solver.assert Z3.Implies(@lamps[[x,y]] == 0, raycast >= 1)
+        @solver.assert Z3.Implies(@lamps[[x,y]] == 1, raycast == 0)
       end
     end
 
@@ -85,7 +85,7 @@ class LightUp
   end
 
   def int01(x,y)
-    v = Z3::Ast.int("l#{x},#{y}")
+    v = Z3.Int("l#{x},#{y}")
     @solver.assert v >= 0
     @solver.assert v <= 1
     v
