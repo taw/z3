@@ -12,6 +12,14 @@ module Z3
       LowLevel.get_bv_sort_size(self)
     end
 
+    def to_s
+      "BitVec(#{size})"
+    end
+
+    def inspect
+      "BitVecSort(#{size})"
+    end
+
     public_class_method :new
   end
 end

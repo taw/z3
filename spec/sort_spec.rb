@@ -1,22 +1,47 @@
 describe Z3::Sort do
-  it "#bool creates Bool sort" do
-    expect(Z3::Sort.bool.to_s).to eq("Bool")
-    expect(Z3::Sort.bool.inspect).to eq("Z3::Sort<Bool>")
+  let(:bool_sort) { Z3::BoolSort.new }
+  let(:int_sort)  { Z3::IntSort.new }
+  let(:real_sort) { Z3::RealSort.new }
+  let(:bv8_sort)  { Z3::BitvecSort.new(8) }
+  let(:bv32_sort) { Z3::BitvecSort.new(32) }
+
+  let(:sorts) { [bool_sort, int_sort, real_sort, bv8_sort, bv32_sort] }
+
+  it "can't instantiate Sort abstract superclass" do
+    expect{ Z3::Sort.new }.to raise_error(NoMethodError)
   end
 
-  it "#int creates Int sort" do
-    expect(Z3::Sort.int.to_s).to eq("Int")
-    expect(Z3::Sort.int.inspect).to eq("Z3::Sort<Int>")
+  it "#to_s" do
+    expect(bool_sort.to_s).to eq("Bool")
+    expect( int_sort.to_s).to eq("Int")
+    expect(real_sort.to_s).to eq("Real")
+    expect( bv8_sort.to_s).to eq("BitVec(8)")
+    expect(bv32_sort.to_s).to eq("BitVec(32)")
   end
 
-  it "#real creates Real sort" do
-    expect(Z3::Sort.real.to_s).to eq("Real")
-    expect(Z3::Sort.real.inspect).to eq("Z3::Sort<Real>")
+  it "#inspect" do
+    expect(bool_sort.inspect).to eq("BoolSort")
+    expect( int_sort.inspect).to eq("IntSort")
+    expect(real_sort.inspect).to eq("RealSort")
+    expect( bv8_sort.inspect).to eq("BitVecSort(8)")
+    expect(bv32_sort.inspect).to eq("BitVecSort(32)")
   end
 
-  it "supports ==" do
-    expect(Z3::Sort.bool).to eq(Z3::Sort.bool)
-    expect(Z3::Sort.int).to eq(Z3::Sort.int)
-    expect(Z3::Sort.bool).to_not eq(Z3::Sort.int)
+  describe "==" do
+    it "all Sorts are value-objects" do
+      expect(bool_sort).to eq( Z3::BoolSort.new )
+      expect( int_sort).to eq( Z3::IntSort.new )
+      expect(real_sort).to eq( Z3::RealSort.new )
+      expect( bv8_sort).to eq( Z3::BitvecSort.new(8) )
+      expect(bv32_sort).to eq( Z3::BitvecSort.new(32) )
+    end
+
+    it "is == to itself and no other sort" do
+      sorts.each do |sort1|
+        sorts.each do |sort2|
+          expect(sort1 == sort2).to eq(sort1.to_s == sort2.to_s)
+        end
+      end
+    end
   end
 end

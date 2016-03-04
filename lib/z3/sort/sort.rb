@@ -45,7 +45,7 @@ module Z3
     end
 
     def inspect
-      "Z3::Sort<#{to_s}>"
+      "#{self}Sort"
     end
 
     def var(name)
