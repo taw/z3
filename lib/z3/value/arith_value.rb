@@ -41,8 +41,13 @@ module Z3
       sort.new(LowLevel.mk_unary_minus(self))
     end
 
+    # Recast so 1 + x:Float
+    # is:  (+ 1.0 x)
+    # not: (+ (to_real 1) x)
     def coerce(other)
-      [sort.from_const(other), self]
+      other_sort = Value.sort_for_const(other)
+      max_sort = [sort, other_sort].max
+      [max_sort.from_const(other), max_sort.from_value(self)]
     end
   end
 end

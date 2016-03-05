@@ -66,6 +66,11 @@ module Z3
       raise "SubclassResponsibility"
     end
 
+    def from_value(v)
+      return v if v.sort == self
+      raise Z3::Exception, "Can't convert #{v.sort} into #{self}"
+    end
+
     private_class_method :new
   end
 end

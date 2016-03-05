@@ -101,7 +101,7 @@ module Z3
   end
 
   def Not(a)
-    a = from_const(a) unless a.is_a?(Value)
+    a = Value.from_const(a) unless a.is_a?(Value)
     raise Z3::Exception, "No idea how to autoconvert `#{a.class}': `#{a.inspect}'" unless a.is_a?(BoolValue)
     BoolSort.new.new(LowLevel.mk_not(a))
   end
@@ -116,19 +116,21 @@ module Z3
 
   private
 
-  def from_const(a)
-    return BoolSort.new.True if a == true
-    return BoolSort.new.False if a == false
-    return IntSort.new.from_const(a) if a.is_a?(Integer)
-    return RealSort.new.from_const(a) if a.is_a?(Float)
-    raise Z3::Exception, "No idea how to autoconvert `#{a.class}': `#{a.inspect}'"
-  end
-
   def coerce_to_same_sort(*args)
-    args = args.map{|a| a.is_a?(Value) ? a : from_const(a)}
     # This will raise exception unless one of the sorts is highest
-    max_sort = args.map(&:sort).max
-    args.map{|a| a.sort == max_sort ? a : max_sort.from_value(a) }
+    # So [true, IntSort]
+    max_sort = args.map{|a| a.is_a?(Value) ? a.sort : Value.sort_for_const(a)}.max
+    args.map do |a|
+      if a.is_a?(Value)
+        if  a.sort == max_sort
+          a
+        else
+          max_sort.from_value(a)
+        end
+      else
+        max_sort.from_const(a)
+      end
+    end
   end
 
   def coerce_to_same_bool_sort(*args)

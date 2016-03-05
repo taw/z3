@@ -19,6 +19,8 @@ module Z3
     def from_value(val)
       if val.is_a?(IntValue)
         new LowLevel.mk_int2real(val)
+      elsif val.is_a?(RealValue)
+        val
       else
         raise Z3::Exception, "Cannot convert #{val.class} to #{self.class}"
       end
