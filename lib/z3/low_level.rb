@@ -54,9 +54,6 @@ module Z3::LowLevel
       Z3::VeryLowLevel.Z3_mk_distinct(_ctx_pointer, asts.size, asts_vector(asts))
     end
 
-    ### Automatically generated, do not edit that file
-    eval open("#{__dir__}/low_level_auto.rb").read
-
     # Should be private
     def _ctx_pointer
       @_ctx_pointer ||= Z3::Context.instance._context

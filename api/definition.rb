@@ -119,7 +119,7 @@ class Definition
     when "BOOL"
       ":bool"
     when "CONTEXT"
-      "ctx_pointer"
+      ":ctx_pointer"
     when "AST",
          "FIXEDPOINT",
          "FUNC_DECL",
@@ -147,7 +147,7 @@ class Definition
          "CONSTRUCTOR_LIST",
          "APPLY_RESULT",
          "APP"
-      "#{type.downcase}_pointer"
+      ":#{type.downcase}_pointer"
     # These are enums
          # "ERROR_CODE"
          # "PRINT_MODE"
