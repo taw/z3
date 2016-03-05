@@ -83,17 +83,20 @@ describe Z3::Value do
       end
 
       it "raises exception if type cast is not possible" do
+        # Int/Real has #>= #+ etc. but they don't like these arguments
         expect{a.send op, c}.to raise_error(ArgumentError)
-        expect{c.send op, a}.to raise_error(ArgumentError)
         expect{e.send op, c}.to raise_error(ArgumentError)
-        expect{c.send op, e}.to raise_error(ArgumentError)
-        expect{c.send op, d}.to raise_error(ArgumentError)
         expect{a.send op, true}.to raise_error(ArgumentError)
-        expect{c.send op, true}.to raise_error(ArgumentError)
-        expect{e.send op, true}.to raise_error(ArgumentError)
         expect{a.send op, false}.to raise_error(ArgumentError)
-        expect{c.send op, false}.to raise_error(ArgumentError)
+        expect{e.send op, true}.to raise_error(ArgumentError)
         expect{e.send op, false}.to raise_error(ArgumentError)
+
+        # Bool doesn't have #>= #+ etc.
+        expect{c.send op, a}.to raise_error(NoMethodError)
+        expect{c.send op, d}.to raise_error(NoMethodError)
+        expect{c.send op, e}.to raise_error(NoMethodError)
+        expect{c.send op, true}.to raise_error(NoMethodError)
+        expect{c.send op, false}.to raise_error(NoMethodError)
       end
     end
   end
