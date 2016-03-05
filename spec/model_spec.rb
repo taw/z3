@@ -19,12 +19,12 @@ describe Z3::Model do
     solver.assert(a == 2)
     solver.assert(b == a+2)
     expect(solver.check).to eq(:sat)
-    expect(model.model_eval(a).inspect).to eq("Z3::Ast<2 :: Int>")
-    expect(model.model_eval(b).inspect).to eq("Z3::Ast<4 :: Int>")
-    expect(model.model_eval(c).inspect).to eq("Z3::Ast<c :: Int>")
-    expect(model.model_eval(a, true).inspect).to eq("Z3::Ast<2 :: Int>")
-    expect(model.model_eval(b, true).inspect).to eq("Z3::Ast<4 :: Int>")
-    expect(model.model_eval(c, true).inspect).to eq("Z3::Ast<0 :: Int>")
+    expect(model.model_eval(a).to_s).to eq("2")
+    expect(model.model_eval(b).to_s).to eq("4")
+    expect(model.model_eval(c).to_s).to eq("c")
+    expect(model.model_eval(a, true).to_s).to eq("2")
+    expect(model.model_eval(b, true).to_s).to eq("4")
+    expect(model.model_eval(c, true).to_s).to eq("0")
   end
 
   it "#to_s" do
