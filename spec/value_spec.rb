@@ -1,15 +1,15 @@
-describe Z3::Ast do
-  let(:a) { Z3::Ast.int("a") }
-  let(:b) { Z3::Ast.int("b") }
-  let(:c) { Z3::Ast.bool("c") }
-  let(:d) { Z3::Ast.bool("d") }
-  let(:e) { Z3::Ast.real("e") }
-  let(:f) { Z3::Ast.real("f") }
+describe Z3::Value do
+  let(:a) { Z3.Int("a") }
+  let(:b) { Z3.Int("b") }
+  let(:c) { Z3.Bool("c") }
+  let(:d) { Z3.Bool("d") }
+  let(:e) { Z3.Real("e") }
+  let(:f) { Z3.Real("f") }
 
   it "#sort returns Sort object" do
-    expect(a.sort).to eq(Z3::Sort.int)
-    expect(c.sort).to eq(Z3::Sort.bool)
-    expect(e.sort).to eq(Z3::Sort.real)
+    expect(a.sort).to eq(Z3::IntSort.new)
+    expect(c.sort).to eq(Z3::BoolSort.new)
+    expect(e.sort).to eq(Z3::RealSort.new)
   end
 
   it "#to_s" do
@@ -17,8 +17,8 @@ describe Z3::Ast do
   end
 
   it "#inspect" do
-    expect(a.inspect).to eq("Z3::Ast<a :: Int>")
-    expect((e+f).inspect).to eq("Z3::Ast<(+ e f) :: Real>")
+    expect(a.inspect).to eq("Value<a :: Int>")
+    expect((e+f).inspect).to eq("Value<(+ e f) :: Real>")
   end
 
   describe "#~" do
@@ -27,8 +27,8 @@ describe Z3::Ast do
     end
 
     it "raises exception if type cast is not possible" do
-      expect{~a}.to raise_error(Z3::Exception)
-      expect{~e}.to raise_error(Z3::Exception)
+      expect{~a}.to raise_error(NoMethodError)
+      expect{~e}.to raise_error(NoMethodError)
     end
   end
 
@@ -38,12 +38,12 @@ describe Z3::Ast do
     end
 
     it "raises exception if type cast is not possible" do
-      expect{a&b}.to raise_error(Z3::Exception)
-      expect{e&f}.to raise_error(Z3::Exception)
-      expect{a&c}.to raise_error(Z3::Exception)
-      expect{e&c}.to raise_error(Z3::Exception)
-      expect{c&a}.to raise_error(Z3::Exception)
-      expect{c&e}.to raise_error(Z3::Exception)
+      expect{a&b}.to raise_error(NoMethodError)
+      expect{e&f}.to raise_error(NoMethodError)
+      expect{a&c}.to raise_error(NoMethodError)
+      expect{e&c}.to raise_error(NoMethodError)
+      expect{c&a}.to raise_error(ArgumentError)
+      expect{c&e}.to raise_error(ArgumentError)
     end
   end
 
@@ -53,12 +53,12 @@ describe Z3::Ast do
     end
 
     it "raises exception if type cast is not possible" do
-      expect{a|b}.to raise_error(Z3::Exception)
-      expect{e|f}.to raise_error(Z3::Exception)
-      expect{a|c}.to raise_error(Z3::Exception)
-      expect{e|c}.to raise_error(Z3::Exception)
-      expect{c|a}.to raise_error(Z3::Exception)
-      expect{c|e}.to raise_error(Z3::Exception)
+      expect{a|b}.to raise_error(NoMethodError)
+      expect{e|f}.to raise_error(NoMethodError)
+      expect{a|c}.to raise_error(NoMethodError)
+      expect{e|c}.to raise_error(NoMethodError)
+      expect{c|a}.to raise_error(ArgumentError)
+      expect{c|e}.to raise_error(ArgumentError)
     end
   end
 
@@ -83,17 +83,17 @@ describe Z3::Ast do
       end
 
       it "raises exception if type cast is not possible" do
-        expect{a.send op, c}.to raise_error(Z3::Exception)
-        expect{c.send op, a}.to raise_error(Z3::Exception)
-        expect{e.send op, c}.to raise_error(Z3::Exception)
-        expect{c.send op, e}.to raise_error(Z3::Exception)
-        expect{c.send op, d}.to raise_error(Z3::Exception)
-        expect{a.send op, true}.to raise_error(Z3::Exception)
-        expect{c.send op, true}.to raise_error(Z3::Exception)
-        expect{e.send op, true}.to raise_error(Z3::Exception)
-        expect{a.send op, false}.to raise_error(Z3::Exception)
-        expect{c.send op, false}.to raise_error(Z3::Exception)
-        expect{e.send op, false}.to raise_error(Z3::Exception)
+        expect{a.send op, c}.to raise_error(ArgumentError)
+        expect{c.send op, a}.to raise_error(ArgumentError)
+        expect{e.send op, c}.to raise_error(ArgumentError)
+        expect{c.send op, e}.to raise_error(ArgumentError)
+        expect{c.send op, d}.to raise_error(ArgumentError)
+        expect{a.send op, true}.to raise_error(ArgumentError)
+        expect{c.send op, true}.to raise_error(ArgumentError)
+        expect{e.send op, true}.to raise_error(ArgumentError)
+        expect{a.send op, false}.to raise_error(ArgumentError)
+        expect{c.send op, false}.to raise_error(ArgumentError)
+        expect{e.send op, false}.to raise_error(ArgumentError)
       end
     end
   end
@@ -121,16 +121,16 @@ describe Z3::Ast do
     end
 
     it "raises exception if type cast is not possible" do
-      expect{a == c}.to raise_error(Z3::Exception)
-      expect{e == c}.to raise_error(Z3::Exception)
-      expect{a == true}.to raise_error(Z3::Exception)
-      expect{e == true}.to raise_error(Z3::Exception)
-      # expect{true == a}.to raise_error(Z3::Exception)
-      # expect{true == e}.to raise_error(Z3::Exception)
-      expect{c == 42}.to raise_error(Z3::Exception)
-      expect{c == 42.5}.to raise_error(Z3::Exception)
-      expect{42 == c}.to raise_error(Z3::Exception)
-      expect{42.5 == c}.to raise_error(Z3::Exception)
+      expect{a == c}.to raise_error(ArgumentError)
+      expect{e == c}.to raise_error(ArgumentError)
+      expect{a == true}.to raise_error(ArgumentError)
+      expect{e == true}.to raise_error(ArgumentError)
+      # expect{true == a}.to raise_error(ArgumentError)
+      # expect{true == e}.to raise_error(ArgumentError)
+      expect{c == 42}.to raise_error(ArgumentError)
+      expect{c == 42.5}.to raise_error(ArgumentError)
+      expect{42 == c}.to raise_error(ArgumentError)
+      expect{42.5 == c}.to raise_error(ArgumentError)
     end
   end
 
@@ -157,16 +157,16 @@ describe Z3::Ast do
     end
 
     it "raises exception if type cast is not possible" do
-      expect{a != c}.to raise_error(Z3::Exception)
-      expect{e != c}.to raise_error(Z3::Exception)
-      expect{a != true}.to raise_error(Z3::Exception)
-      expect{e != true}.to raise_error(Z3::Exception)
-      # expect{true != a}.to raise_error(Z3::Exception)
-      # expect{true != e}.to raise_error(Z3::Exception)
-      expect{c != 42}.to raise_error(Z3::Exception)
-      expect{c != 42.5}.to raise_error(Z3::Exception)
-      # expect{42 != c}.to raise_error(Z3::Exception)
-      # expect{42.5 != c}.to raise_error(Z3::Exception)
+      expect{a != c}.to raise_error(ArgumentError)
+      expect{e != c}.to raise_error(ArgumentError)
+      expect{a != true}.to raise_error(ArgumentError)
+      expect{e != true}.to raise_error(ArgumentError)
+      # expect{true != a}.to raise_error(ArgumentError)
+      # expect{true != e}.to raise_error(ArgumentError)
+      expect{c != 42}.to raise_error(ArgumentError)
+      expect{c != 42.5}.to raise_error(ArgumentError)
+      # expect{42 != c}.to raise_error(ArgumentError)
+      # expect{42.5 != c}.to raise_error(ArgumentError)
     end
   end
 end

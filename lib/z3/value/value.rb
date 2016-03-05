@@ -11,7 +11,7 @@ module Z3
     end
 
     def inspect
-      "#{self.class}<#{to_s} :: #{sort.to_s}>"
+      "Value<#{to_s} :: #{sort.to_s}>"
     end
 
     def ==(other)
