@@ -125,12 +125,36 @@ def validate_max_without_branching!
   )
 end
 
+def validate_is_power_of_two!
+  """
+  unsigned int v; // we want to see if v is a power of 2
+  bool f;         // the result goes here
+
+  f = (v & (v - 1)) == 0;
+  """
+  solver = Z3::Solver.new
+  v = Z3.Bitvec("v", 32)
+  f = (v & (v - 1)) == 0
+
+  powers_of_two = (0..31).map{|i| 2**i}
+  naive_is_f_power_of_two = Z3.Or(*powers_of_two.map{|k| v == k})
+
+  puts "Validating is power of two"
+  solver.prove!(
+    Z3.Or(
+      f == naive_is_f_power_of_two,
+      v == 0,
+    )
+  )
+end
+
 validate_sign_by_shift!
 validate_opposite_sign_by_xor!
 validate_abs_without_branching_1!
 validate_abs_without_branching_2!
 validate_min_without_branching!
 validate_max_without_branching!
+validate_is_power_of_two!
 
 """
 Based on https://graphics.stanford.edu/~seander/bithacks.html
