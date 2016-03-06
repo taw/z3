@@ -74,10 +74,63 @@ def validate_abs_without_branching_2!
   )
 end
 
+def c_boolean(solver, bool_expr, name)
+  expr_val = Z3.Bitvec(name, 32)
+  solver.assert(
+    Z3.Or(
+      Z3.And(bool_expr, expr_val == 1),
+      Z3.And(~bool_expr, expr_val == 0),
+    )
+  )
+  expr_val
+end
+
+def validate_min_without_branching!
+  """
+  int x;  // we want to find the minimum of x and y
+  int y;
+  int r;  // the result goes here
+  r = y ^ ((x ^ y) & -(x < y)); // min(x, y)
+  """
+  solver = Z3::Solver.new
+  x = Z3.Bitvec("x", 32)
+  y = Z3.Bitvec("y", 32)
+  r = y ^ ((x ^ y) & -c_boolean(solver, x < y, "t"))
+  puts "Validating min without branching"
+  solver.prove!(
+    Z3.Or(
+      Z3.And(x <= y, r == x),
+      Z3.And(y <= y, r == y),
+    )
+  )
+end
+
+def validate_max_without_branching!
+  """
+  int x;  // we want to find the minimum of x and y
+  int y;
+  int r;  // the result goes here
+  r = x ^ ((x ^ y) & -(x < y)); // max(x, y)
+  """
+  solver = Z3::Solver.new
+  x = Z3.Bitvec("x", 32)
+  y = Z3.Bitvec("y", 32)
+  r = x ^ ((x ^ y) & -c_boolean(solver, x < y, "t"))
+  puts "Validating max without branching"
+  solver.prove!(
+    Z3.Or(
+      Z3.And(x >= y, r == x),
+      Z3.And(y >= y, r == y),
+    )
+  )
+end
+
 validate_sign_by_shift!
 validate_opposite_sign_by_xor!
 validate_abs_without_branching_1!
 validate_abs_without_branching_2!
+validate_min_without_branching!
+validate_max_without_branching!
 
 """
 Based on https://graphics.stanford.edu/~seander/bithacks.html
