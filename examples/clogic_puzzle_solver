@@ -1,0 +1,135 @@
+#!/usr/bin/env ruby
+
+# NOTE: This is not part of integration test suite as it's fairly slow (30s or so on my machine)
+
+require_relative "../lib/z3"
+
+class CLogicPuzzleSolver
+  attr_reader :solver, :wv
+  def initialize
+    @solver = Z3::Solver.new
+    @digits = ["b", "c", "d", "f", "g", "h", "i", "j", "l", "n", "o", "q", "s", "t", "u", "v", "w", "x", "y", "z"]
+    @digit_vars = Hash[@digits.map{|v| [v, digit_var(v)]}]
+    @words = [
+      "bytwycju",
+      "bzuwtwol",
+      "cgyoyfjg",
+      "ctvtwysu",
+      "dhcqxtfw",
+      "diffhlnl",
+      "fjivucti",
+      "htwizvwi",
+      "jqxizzxq",
+      "niiqztgs",
+      "nshtztns",
+      "nttuhlnq",
+      "oigsjgoj",
+      "oncycbxh",
+      "oqbctlzh",
+      "oqcnwbsd",
+      "sfgsoxdd",
+      "sugvqgww",
+      "syhjizjq",
+      "szblgodf",
+      "thhwohwn",
+      "ttligxut",
+      "uclfqvdu",
+      "udluvhcz",
+      "ugdztnwv",
+      "uxztiywn",
+      "vugljtyn",
+      "vyhyjivb",
+      "wwnnnqbw",
+      "xbfziozy",
+      "xsvuojtx",
+      "yjjowdqh",
+      "yzdgotby",
+      "yzvyjjdy",
+      "zoljwdfl",
+    ]
+    @wv = Hash[@words.map{|w| [w, word_var(w)]}]
+  end
+
+  def digit_var(name)
+    v = Z3.Bitvec(name, 32)
+    solver.assert v >= 0
+    solver.assert v <= 9
+    v
+  end
+
+  def word_var(name)
+    v = Z3.Bitvec(name, 32)
+    digits = name.chars.map{|c| @digit_vars[c] }
+    val_v = digits.inject(0){|a,b| a*10+b}
+    solver.assert val_v == v
+    v
+  end
+
+  def solve!
+    # Everyone occurs twice, this is not quite that
+    solver.assert Z3.Add(*@digit_vars.values) == 90
+
+    # ^| operator precedence is not like Python's for some reason
+
+    solver.assert wv["bytwycju"] + wv["yzvyjjdy"] ^ wv["vugljtyn"] + wv["ugdztnwv"] | wv["xbfziozy"] == wv["bzuwtwol"]
+    solver.assert wv["wwnnnqbw"] - wv["uclfqvdu"] & wv["oncycbxh"] |(wv["oqcnwbsd"] ^ wv["cgyoyfjg"])== wv["vyhyjivb"]
+    solver.assert wv["yzdgotby"] | wv["oigsjgoj"] | wv["ttligxut"] - wv["dhcqxtfw"] & wv["szblgodf"] == wv["sfgsoxdd"]
+    solver.assert wv["yjjowdqh"] & wv["niiqztgs"] + wv["ctvtwysu"] & wv["diffhlnl"] - wv["thhwohwn"] == wv["xsvuojtx"]
+    solver.assert wv["nttuhlnq"] ^ wv["oqbctlzh"] - wv["nshtztns"] ^ wv["htwizvwi"] + wv["udluvhcz"] == wv["syhjizjq"]
+
+    solver.assert wv["bytwycju"] ^ wv["wwnnnqbw"] & wv["yzdgotby"] + wv["yjjowdqh"] - wv["nttuhlnq"] == wv["fjivucti"]
+    solver.assert wv["yzvyjjdy"] ^ wv["uclfqvdu"] & wv["oigsjgoj"] + wv["niiqztgs"] - wv["oqbctlzh"] == wv["zoljwdfl"]
+    solver.assert wv["vugljtyn"] ^ wv["oncycbxh"] & wv["ttligxut"] + wv["ctvtwysu"] - wv["nshtztns"] == wv["sugvqgww"]
+    solver.assert wv["ugdztnwv"] ^ wv["oqcnwbsd"] & wv["dhcqxtfw"] + wv["diffhlnl"] - wv["htwizvwi"] == wv["uxztiywn"]
+    solver.assert wv["xbfziozy"] ^ wv["cgyoyfjg"] & wv["szblgodf"] + wv["thhwohwn"] - wv["udluvhcz"] == wv["jqxizzxq"]
+
+    key = %W[iw hu fv lu dv cy og lc gy fq od lo fq is ig gu hs hi ds cy oo os iu fs gu lh dq lv gu iw hv gu di hs cy oc iw gc]
+
+    if solver.check == :sat
+      model = solver.model
+      model_vars = {}
+      model.each do |k,v|
+        v = v.to_s.sub(/\A#x/, "").to_i(16)
+        model_vars[k] = v
+        puts "#{k.to_s}=#{v.to_s}"
+      end
+      result = key.map do |ab|
+        a,b = ab.chars
+        av = model_vars[a]
+        bv = model_vars[b]
+        (10*av+bv).chr
+      end
+      puts "Result: #{result.join}"
+    else
+      puts "failed to solve"
+    end
+  end
+end
+
+CLogicPuzzleSolver.new.solve!
+
+# The puzzle:
+"""
+We've captured a strange message. It looks like it is encrypted somehow ...
+iw, hu, fv, lu, dv, cy, og, lc, gy, fq, od, lo, fq, is, ig, gu, hs, hi, ds, cy, oo, os, iu, fs, gu, lh, dq, lv, gu, iw, hv, gu, di, hs, cy, oc, iw, gc
+
+
+We've also intercepted what seems to be a hint to the key:
+bytwycju + yzvyjjdy ^ vugljtyn + ugdztnwv | xbfziozy = bzuwtwol
+    ^         ^          ^          ^          ^
+wwnnnqbw - uclfqvdu & oncycbxh | oqcnwbsd ^ cgyoyfjg = vyhyjivb
+    &         &          &          &          &
+yzdgotby | oigsjgoj | ttligxut - dhcqxtfw & szblgodf = sfgsoxdd
+    +         +          +          +          +
+yjjowdqh & niiqztgs + ctvtwysu & diffhlnl - thhwohwn = xsvuojtx
+    -         -           -         -          -
+nttuhlnq ^ oqbctlzh - nshtztns ^ htwizvwi + udluvhcz = syhjizjq
+    =         =           =         =          =
+fjivucti   zoljwdfl   sugvqgww   uxztiywn   jqxizzxq
+
+Note:
+  assume q != 0
+  a letter is a decimal digit is a letter
+  each digit has exactly two different letter representations
+  C-like operator precedence
+"""

@@ -56,6 +56,12 @@ module Z3
       ::Z3.Lt(self, other)
     end
 
+    def coerce(other)
+      other_sort = Value.sort_for_const(other)
+      max_sort = [sort, other_sort].max
+      [max_sort.from_const(other), max_sort.from_value(self)]
+    end
+
     public_class_method :new
   end
 end
