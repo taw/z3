@@ -1,7 +1,11 @@
 module Z3
   class BitvecValue < Value
     def ~
-      ::Z3.Not(self)
+      sort.new(LowLevel.mk_bvnot(self))
+    end
+
+    def -@
+      sort.new(LowLevel.mk_bvneg(self))
     end
 
     def &(other)
@@ -14,6 +18,18 @@ module Z3
 
     def ^(other)
       Z3.Xor(self, other)
+    end
+
+    def +(other)
+      ::Z3.Add(self, other)
+    end
+
+    def -(other)
+      ::Z3.Sub(self, other)
+    end
+
+    def *(other)
+      ::Z3.Mul(self, other)
     end
 
     def >>(other)

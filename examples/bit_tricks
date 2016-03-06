@@ -34,8 +34,50 @@ def validate_opposite_sign_by_xor!
   )
 end
 
+def validate_abs_without_branching_1!
+  """
+  int v;           // we want to find the absolute value of v
+  unsigned int r;  // the result goes here
+  int const mask = v >> sizeof(int) * CHAR_BIT - 1;
+  r = (v + mask) ^ mask;
+  """
+  solver = Z3::Solver.new
+  v = Z3.Bitvec("v", 32)
+  mask = v >> 31
+  r = (v + mask) ^ mask
+  puts "Validating abs without branching, version 1"
+  solver.prove!(
+    Z3.Or(
+      Z3.And(v >= 0, r==v),
+      Z3.And(v < 0, r==-v)
+    )
+  )
+end
+
+def validate_abs_without_branching_2!
+  """
+  int v;           // we want to find the absolute value of v
+  unsigned int r;  // the result goes here
+  int const mask = v >> sizeof(int) * CHAR_BIT - 1;
+  r = (v ^ mask) - mask;
+  """
+  solver = Z3::Solver.new
+  v = Z3.Bitvec("v", 32)
+  mask = v >> 31
+  r = (v^mask) - mask
+  puts "Validating abs without branching, version 2"
+  solver.prove!(
+    Z3.Or(
+      Z3.And(v >= 0, r==v),
+      Z3.And(v < 0, r==-v)
+    )
+  )
+end
+
 validate_sign_by_shift!
 validate_opposite_sign_by_xor!
+validate_abs_without_branching_1!
+validate_abs_without_branching_2!
 
 """
 Based on https://graphics.stanford.edu/~seander/bithacks.html

@@ -77,18 +77,45 @@ module Z3
 
   def Add(*args)
     raise ArgumentError if args.empty?
-    args = coerce_to_same_arith_sort(*args)
-    args[0].sort.new(LowLevel.mk_add(args))
+    args = coerce_to_same_sort(*args)
+    case args[0]
+    when ArithValue
+      args[0].sort.new(LowLevel.mk_add(args))
+    when BitvecValue
+      args.inject do |a,b|
+        a.sort.new(LowLevel.mk_bvadd(a,b))
+      end
+    else
+      raise ArgumentError, "Can't perform logic operations on #{args[0].sort} values, only Int/Real/Bitvec"
+    end
   end
 
-  def Sub(a,b)
-    a, b = coerce_to_same_arith_sort(a, b)
-    a.sort.new(LowLevel.mk_sub([a, b]))
+  def Sub(*args)
+    args = coerce_to_same_sort(*args)
+    case args[0]
+    when ArithValue
+      args[0].sort.new(LowLevel.mk_sub(args))
+    when BitvecValue
+      args.inject do |a,b|
+        a.sort.new(LowLevel.mk_bvsub(a,b))
+      end
+    else
+      raise ArgumentError, "Can't perform logic operations on #{args[0].sort} values, only Int/Real/Bitvec"
+    end
   end
 
   def Mul(*args)
-    args = coerce_to_same_arith_sort(*args)
-    args[0].sort.new(LowLevel.mk_mul(args))
+    args = coerce_to_same_sort(*args)
+    case args[0]
+    when ArithValue
+      args[0].sort.new(LowLevel.mk_mul(args))
+    when BitvecValue
+      args.inject do |a,b|
+        a.sort.new(LowLevel.mk_bvmul(a,b))
+      end
+    else
+      raise ArgumentError, "Can't perform logic operations on #{args[0].sort} values, only Int/Real/Bitvec"
+    end
   end
 
   def Div(a,b)

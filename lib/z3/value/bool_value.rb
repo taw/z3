@@ -1,7 +1,7 @@
 module Z3
   class BoolValue < Value
     def ~
-      ::Z3.Not(self)
+      sort.new(LowLevel.mk_not(self))
     end
 
     def &(other)
