@@ -12,6 +12,10 @@ module Z3
       Z3.Or(self, other)
     end
 
+    def ^(other)
+      Z3.Xor(self, other)
+    end
+
     def iff(other)
       Z3.Iff(self, other)
     end

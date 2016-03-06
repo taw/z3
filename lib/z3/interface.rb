@@ -11,8 +11,8 @@ module Z3
     BoolSort.new.var(v)
   end
 
-  def Bitval(n, v)
-    BitvalSort.new(n).var(v)
+  def Bitvec(v, n)
+    BitvecSort.new(n).var(v)
   end
 
   def True
@@ -24,13 +24,45 @@ module Z3
   end
 
   def And(*args)
-    args = coerce_to_same_bool_sort(*args)
-    BoolSort.new.new(Z3::LowLevel.mk_and(args))
+    args = coerce_to_same_sort(*args)
+    case args[0]
+    when BoolValue
+      BoolSort.new.new(Z3::LowLevel.mk_and(args))
+    when BitvecValue
+      args.inject do |a,b|
+        a.sort.new(Z3::LowLevel.mk_bvand(a, b))
+      end
+    else
+      raise ArgumentError, "Can't perform logic operations on #{a.sort} values, only Bool and Bitvec"
+    end
   end
 
   def Or(*args)
-    args = coerce_to_same_bool_sort(*args)
-    BoolSort.new.new(Z3::LowLevel.mk_or(args))
+    args = coerce_to_same_sort(*args)
+    case args[0]
+    when BoolValue
+      BoolSort.new.new(Z3::LowLevel.mk_or(args))
+    when BitvecValue
+      args.inject do |a,b|
+        a.sort.new(Z3::LowLevel.mk_bvor(a, b))
+      end
+    else
+      raise ArgumentError, "Can't perform logic operations on #{a.sort} values, only Bool and Bitvec"
+    end
+  end
+
+  def Xor(*args)
+    args = coerce_to_same_sort(*args)
+    case args[0]
+    when BoolValue
+      BoolSort.new.new(Z3::LowLevel.mk_xor(args))
+    when BitvecValue
+      args.inject do |a,b|
+        a.sort.new(Z3::LowLevel.mk_bvxor(a, b))
+      end
+    else
+      raise ArgumentError, "Can't perform logic operations on #{a.sort} values, only Bool and Bitvec"
+    end
   end
 
   def Implies(a,b)
@@ -82,28 +114,67 @@ module Z3
 
   def Gt(a, b)
     a, b = coerce_to_same_sort(a, b)
-    BoolSort.new.new(LowLevel.mk_gt(a, b))
+    case a
+    when ArithValue
+      BoolSort.new.new(LowLevel.mk_gt(a, b))
+    when BitvecValue
+      BoolSort.new.new(LowLevel.mk_bvsgt(a, b))
+    else
+      raise ArgumentError, "Can't compare #{a.sort} values"
+    end
   end
 
   def Ge(a, b)
     a, b = coerce_to_same_sort(a, b)
-    BoolSort.new.new(LowLevel.mk_ge(a, b))
+    case a
+    when ArithValue
+      BoolSort.new.new(LowLevel.mk_ge(a, b))
+    when BitvecValue
+      BoolSort.new.new(LowLevel.mk_bvsge(a, b))
+    else
+      raise ArgumentError, "Can't compare #{a.sort} values"
+    end
   end
 
   def Lt(a, b)
     a, b = coerce_to_same_sort(a, b)
-    BoolSort.new.new(LowLevel.mk_lt(a, b))
+    case a
+    when ArithValue
+      BoolSort.new.new(LowLevel.mk_lt(a, b))
+    when BitvecValue
+      BoolSort.new.new(LowLevel.mk_bvslt(a, b))
+    else
+      raise ArgumentError, "Can't compare #{a.sort} values"
+    end
   end
 
   def Le(a, b)
     a, b = coerce_to_same_sort(a, b)
-    BoolSort.new.new(LowLevel.mk_le(a, b))
+    case a
+    when ArithValue
+      BoolSort.new.new(LowLevel.mk_le(a, b))
+    when BitvecValue
+      BoolSort.new.new(LowLevel.mk_bvsle(a, b))
+    else
+      raise ArgumentError, "Can't compare #{a.sort} values"
+    end
   end
 
   def Not(a)
     a = Value.from_const(a) unless a.is_a?(Value)
     raise Z3::Exception, "No idea how to autoconvert `#{a.class}': `#{a.inspect}'" unless a.is_a?(BoolValue)
     BoolSort.new.new(LowLevel.mk_not(a))
+  end
+
+  # Presume arithmetic (sign-extend)
+  def RShift(a, b)
+    a, b = coerce_to_same_bv_sort(a, b)
+    a.sort.new(LowLevel.mk_bvashr(a, b))
+  end
+
+  def LShift(a, b)
+    a, b = coerce_to_same_bv_sort(a, b)
+    a.sort.new(LowLevel.mk_bvshl(a, b))
   end
 
   def version
@@ -142,6 +213,12 @@ module Z3
   def coerce_to_same_arith_sort(*args)
     args = coerce_to_same_sort(*args)
     raise Z3::Exception, "Int or Real value expected" unless args[0].is_a?(IntValue) or args[0].is_a?(RealValue)
+    args
+  end
+
+  def coerce_to_same_bv_sort(*args)
+    args = coerce_to_same_sort(*args)
+    raise Z3::Exception, "Bitvec value with same nize expected" unless args[0].is_a?(BitvecValue)
     args
   end
 

@@ -15,16 +15,16 @@ describe Z3::Sort do
     expect(bool_sort.to_s).to eq("Bool")
     expect( int_sort.to_s).to eq("Int")
     expect(real_sort.to_s).to eq("Real")
-    expect( bv8_sort.to_s).to eq("BitVec(8)")
-    expect(bv32_sort.to_s).to eq("BitVec(32)")
+    expect( bv8_sort.to_s).to eq("Bitvec(8)")
+    expect(bv32_sort.to_s).to eq("Bitvec(32)")
   end
 
   it "#inspect" do
     expect(bool_sort.inspect).to eq("BoolSort")
     expect( int_sort.inspect).to eq("IntSort")
     expect(real_sort.inspect).to eq("RealSort")
-    expect( bv8_sort.inspect).to eq("BitVecSort(8)")
-    expect(bv32_sort.inspect).to eq("BitVecSort(32)")
+    expect( bv8_sort.inspect).to eq("BitvecSort(8)")
+    expect(bv32_sort.inspect).to eq("BitvecSort(32)")
   end
 
   describe "==" do

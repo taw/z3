@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/z3"
+
+def validate_sign_by_shift!
+  """
+  sign = v >> (sizeof(int) * CHAR_BIT - 1);
+  """
+  solver = Z3::Solver.new
+  v = Z3.Bitvec("v", 32)
+  s = v >> 31
+  puts "Validating sign trick:"
+  solver.prove! ((v < 0) & (s == -1)) | ((v >= 0) & (s == 0))
+end
+
+def validate_opposite_sign_by_xor!
+  """
+  int x, y;               // input values to compare signs
+  bool f = ((x ^ y) < 0); // true iff x and y have opposite signs
+  """
+  solver = Z3::Solver.new
+  x = Z3.Bitvec("x", 32)
+  y = Z3.Bitvec("y", 32)
+  f = (x^y) < 0
+
+  puts "Validating sign trick:"
+  solver.prove!(
+    Z3.Or(
+      Z3.And(x >= 0, y >= 0, f == false),
+      Z3.And(x < 0, y < 0, f == false),
+      Z3.And(x >= 0, y < 0, f == true),
+      Z3.And(x < 0, y >= 0, f == true),
+    )
+  )
+end
+
+validate_sign_by_shift!
+validate_opposite_sign_by_xor!
+
+"""
+Based on https://graphics.stanford.edu/~seander/bithacks.html
+"""

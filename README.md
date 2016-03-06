@@ -8,9 +8,11 @@ It's in extremely early stages of development. Pull requests always welcome.
 
 The rest of `Z3` is high level API, but the interface is extremely unstable at this point, and it's pretty much guaranteed to  change many times. Check specs or `examples/` directory for usage.
 
-You can use most Ruby operators to construct ASTs, but use `~ | &` instead of `! || &&` for boolean operators.
+You can use most Ruby operators to construct Z3 expressions, but use `~ | &` instead of `! || &&` for boolean operators. They unfortunately have wrong operator precedence so you'll need to use some extra parentheses.
 
 As for API internals, attributes starting with `_` are FFI internals you shouldn't touch, other attributes are generally legitimate Ruby objects.
+
+Bit vectors are treated as signed by default. [well, mostly, more systematic treatment of this is on TODO list]
 
 ### Requirements
 
