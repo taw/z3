@@ -12,22 +12,18 @@ class GenerateAPI
     end
   end
 
-  def indent(str, level)
-    str.gsub(/^/, level).gsub(/ *$/, "")
-  end
-
   def run!
     puts ""
     (Pathname(__dir__) + "../lib/z3/very_low_level_auto.rb").open("w") do |fh|
       fh.puts 'module Z3::VeryLowLevel'
-      fh.puts indent(supported_definitions.map(&:ffi).join("\n"), "  ")
+      fh.puts supported_definitions.map(&:ffi).join("\n")
       fh.puts 'end'
     end
 
     (Pathname(__dir__) + "../lib/z3/low_level_auto.rb").open("w") do |fh|
       fh.puts 'module Z3::LowLevel'
       fh.puts '  class << self'
-      fh.puts indent(supported_definitions.map(&:api).join("\n"), "    ")
+      fh.puts supported_definitions.map(&:api).join("\n")
       fh.puts '  end'
       fh.puts 'end'
     end
