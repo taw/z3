@@ -1,0 +1,178 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/z3"
+
+class LogicPuzzle
+  def initialize(count)
+    # In puzzles of this kind, all assignments are of same size
+    @count = count
+    @solver   = Z3::Solver.new
+    @vars = {}
+    @dict = {}
+  end
+
+  def vars(name, *vals)
+    raise "All assignments must have same number of elements" unless vals.size == @count
+    vars = @count.times.map{|i| Z3.Int("#{i}-#{name}") }
+    vars.each do |v|
+      @solver.assert v >= 0
+      @solver.assert v < @count
+    end
+    @solver.assert Z3.Distinct(*vars)
+    @dict[name] = vals
+    @vars[name] = vars
+  end
+
+  def attribute(idx, key, val)
+    raise "Attribute #{key} not defined" unless @vars.has_key?(key)
+    val_idx = @dict[key].index(val) or raise "Value #{val} for attribute #{key} not possible"
+    @vars[key][idx] == val_idx
+  end
+
+  def solve!
+    add_assertions!
+    if @solver.check == :sat
+      @solver.model.each do |k,v|
+        i, name = k.split("-", 2)
+        puts "#{k} = #{@dict[name][v.to_i]}"
+      end
+    else
+      puts "Puzzle has no solutions"
+    end
+  end
+
+  # Not sure if there's much point is this helper
+  def implies!(k1, v1, k2, v2)
+    @count.times do |i|
+      @solver.assert Z3.Implies(attribute(i, k1, v1), attribute(i, k2, v2))
+    end
+  end
+end
+
+class FourHackersPuzzle < LogicPuzzle
+  def initialize
+    super(4)
+    vars *%W[name Armand Dragonene Frogger Phineus]
+    vars *%W[alias Badger Griffin Lennard Monks]
+    vars *%W[country Belgium England Norway Yemen]
+    vars *%W[language C Java Lisp Perl]
+    vars *%W[amount 10000 80000 160000 640000]
+  end
+
+  def add_assertions!
+    implies! "name", "Phineus", "amount", "10000"
+    implies! "alias", "Lennard", "amount", "160000"
+    implies! "alias", "Lennard", "country", "England"
+    # 2nd connection less money transferred than C coder
+    @count.times do |i|
+      # <z3> If i is C coder, then amount it transferred is > amount transferred by [1]
+      Z3.Implies(
+        attribute(i, "language", "C"),
+        @vars["amount"][1] < @vars["amount"][i]
+      )
+    end
+    @count.times do |i|
+      @solver.assert Z3.Implies(attribute(i, "language", "C"), ~attribute(i, "country", "Norway"))
+    end
+    implies! "name", "Armand", "alias", "Monks"
+    # Armand stole more than Frogger
+    @count.times do |i|
+      @count.times do |j|
+        @solver.assert Z3.Implies(
+          attribute(i, "name", "Armand") & attribute(j, "name", "Frogger"),
+          @vars["amount"][i] > @vars["amount"][j]
+        )
+      end
+    end
+    implies! "name", "Dragonene", "country", "Belgium"
+    # X Dragonene less money than Perl coder
+    @count.times do |i|
+      @count.times do |j|
+        @solver.assert Z3.Implies(
+          attribute(i, "name", "Dragonene") & attribute(j, "language", "Perl"),
+          @vars["amount"][i] < @vars["amount"][j]
+        )
+      end
+    end
+    # perl coder made the connection before Dragonene?
+    @count.times do |i|
+      @count.times do |j|
+        @solver.assert Z3.Implies(
+          attribute(i, "name", "Dragonene") & attribute(j, "language", "Perl"),
+          i > j
+        )
+      end
+    end
+    # Lisp coder more money than Griffin
+    @count.times do |i|
+      @count.times do |j|
+        @solver.assert Z3.Implies(
+          attribute(i, "alias", "Griffin") & attribute(j, "language", "Lisp"),
+          @vars["amount"][i] < @vars["amount"][j]
+        )
+      end
+    end
+    # 3rd connection used Java
+    @solver.assert attribute(2, "language", "Java")
+    # Badger stole more than Yemen coder
+    @count.times do |i|
+      @count.times do |j|
+        @solver.assert Z3.Implies(
+          attribute(i, "alias", "Badger") & attribute(j, "country", "Yemen"),
+          @vars["amount"][i] > @vars["amount"][j]
+        )
+      end
+    end
+  end
+end
+
+
+FourHackersPuzzle.new.solve!
+
+"""
+
+There is little we can do but wait, so we may as well take another job.
+It seems there has been a bank robbery. Scotland Yard has turned to us for help in figuring out who did it.
+We have been the given the following information:
+
+    There were 4 hackers each connecting one after another.
+    Each hacker has a name and another alias too.
+    Each hacker connected from a different country.
+    Each hacker connected using a different programming language.
+    Each hacker transferred a different amount of money.
+
+    The 4 hacker names: Armand Dragonene Frogger Phineus
+    The 4 hacker aliases: Badger Griffin Lennard Monks
+    The 4 countries: Belgium England Norway Yemen
+    The 4 coding langauges: C Java Lisp Perl
+    The 4 amounts: 10000 80000 160000 640000
+    You must also determine the order the hackers connected: 1st, 2nd, 3rd, 4th
+
+Perhaps following the news may help. The attacks all took place on the 29th, but the newspapers reported it for a couple of days afterwards as they found new information:
+
+https://www.sabrefilms.co.uk/revolutionelite/casefiles/case9/img1.jpg
+https://www.sabrefilms.co.uk/revolutionelite/casefiles/case9/img2.jpg
+https://www.sabrefilms.co.uk/revolutionelite/casefiles/case9/img3.jpg
+
+--------------------------------------------------------------------------------
+
+  Phineus => 10000
+  Lennard => 160000 && !England
+  2nd connection less money transferred than C coder
+  C coder !Norwary
+* Armand (Monks)
+  Armand stole more than Frogger
+* Dragonene => Belgium
+X Dragonene less money than Perl coder
+  perl coder made the connection before Dragonene?
+  Lisp coder more money than Griffin
+* 3rd connection used Java
+  Badger stole more than Yemen coder
+
+  name    alias   country   language  amount
+1   Phineus       Griffin   Yemen             C   10000
+2   Frogger        Badger           Norway      Perl          80000
+3   Dragonene   Lennard   Belgium           Java    160000
+4   Armand      Monks             England           Lisp         640000
+
+"""
