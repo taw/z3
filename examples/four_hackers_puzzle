@@ -2,16 +2,42 @@
 
 require_relative "../lib/z3"
 
+class LogicPuzzleCase
+  attr_reader :index
+  def initialize(puzzle, index)
+    @puzzle = puzzle
+    @index = index
+  end
+
+  def method_missing(k, *args)
+    if @puzzle.has_key?(k.to_s) and args.size == 1
+      @puzzle.attribute(@index, k.to_s, *args)
+    else
+      super
+    end
+  end
+
+  def var(name)
+    @puzzle.vars[name][@index]
+  end
+end
+
 class LogicPuzzle
+  attr_reader :vars, :dict
   def initialize(count)
     # In puzzles of this kind, all assignments are of same size
     @count = count
     @solver   = Z3::Solver.new
     @vars = {}
     @dict = {}
+    @cases = @count.times.map{|i| LogicPuzzleCase.new(self, i) }
   end
 
-  def vars(name, *vals)
+  def each(&blk)
+    @cases.each(&blk)
+  end
+
+  def attribute_values(name, *vals)
     raise "All assignments must have same number of elements" unless vals.size == @count
     vars = @count.times.map{|i| Z3.Int("#{i}-#{name}") }
     vars.each do |v|
@@ -21,6 +47,10 @@ class LogicPuzzle
     @solver.assert Z3.Distinct(*vars)
     @dict[name] = vals
     @vars[name] = vars
+  end
+
+  def has_key?(key)
+    @vars.has_key?(key)
   end
 
   def attribute(idx, key, val)
@@ -41,85 +71,84 @@ class LogicPuzzle
     end
   end
 
-  # Not sure if there's much point is this helper
-  def implies!(k1, v1, k2, v2)
-    @count.times do |i|
-      @solver.assert Z3.Implies(attribute(i, k1, v1), attribute(i, k2, v2))
-    end
+  def implies!(a, b)
+    @solver.assert Z3.Implies(a, b)
   end
 end
 
 class FourHackersPuzzle < LogicPuzzle
   def initialize
     super(4)
-    vars *%W[name Armand Dragonene Frogger Phineus]
-    vars *%W[alias Badger Griffin Lennard Monks]
-    vars *%W[country Belgium England Norway Yemen]
-    vars *%W[language C Java Lisp Perl]
-    vars *%W[amount 10000 80000 160000 640000]
+    attribute_values *%W[name Armand Dragonene Frogger Phineus]
+    attribute_values *%W[alias Badger Griffin Lennard Monks]
+    attribute_values *%W[country Belgium England Norway Yemen]
+    attribute_values *%W[language C Java Lisp Perl]
+    attribute_values *%W[amount 10000 80000 160000 640000]
   end
 
   def add_assertions!
-    implies! "name", "Phineus", "amount", "10000"
-    implies! "alias", "Lennard", "amount", "160000"
-    implies! "alias", "Lennard", "country", "England"
-    # 2nd connection less money transferred than C coder
-    @count.times do |i|
-      # <z3> If i is C coder, then amount it transferred is > amount transferred by [1]
-      Z3.Implies(
-        attribute(i, "language", "C"),
-        @vars["amount"][1] < @vars["amount"][i]
+    each do |hacker|
+      implies!( hacker.name("Phineus"), hacker.amount("10000") )
+      implies!( hacker.alias("Lennard"), hacker.amount("160000") )
+      implies!( hacker.alias("Lennard"), ~hacker.country("England") )
+      # 2nd connection less money transferred than C coder
+      implies!(
+        hacker.language("C"),
+        @cases[1].var("amount") < hacker.var("amount")
       )
+      implies!( hacker.language("C"), ~hacker.country("Norway") )
+      implies!( hacker.name("Armand"), hacker.alias("Monks") )
     end
-    @count.times do |i|
-      @solver.assert Z3.Implies(attribute(i, "language", "C"), ~attribute(i, "country", "Norway"))
-    end
-    implies! "name", "Armand", "alias", "Monks"
+
     # Armand stole more than Frogger
-    @count.times do |i|
-      @count.times do |j|
-        @solver.assert Z3.Implies(
-          attribute(i, "name", "Armand") & attribute(j, "name", "Frogger"),
-          @vars["amount"][i] > @vars["amount"][j]
+    each do |a|
+      each do |b|
+        implies!(
+          a.name("Armand") & b.name("Frogger"),
+          a.var("amount") > b.var("amount")
         )
       end
     end
-    implies! "name", "Dragonene", "country", "Belgium"
+
+    each do |hacker|
+      implies!( hacker.name("Dragonene"), hacker.country("Belgium") )
+    end
+
     # X Dragonene less money than Perl coder
-    @count.times do |i|
-      @count.times do |j|
-        @solver.assert Z3.Implies(
-          attribute(i, "name", "Dragonene") & attribute(j, "language", "Perl"),
-          @vars["amount"][i] < @vars["amount"][j]
+    each do |a|
+      each do |b|
+        implies!(
+          a.name("Dragonene") & b.language("Perl"),
+          a.var("amount") < b.var("amount")
         )
       end
     end
     # perl coder made the connection before Dragonene?
-    @count.times do |i|
-      @count.times do |j|
-        @solver.assert Z3.Implies(
-          attribute(i, "name", "Dragonene") & attribute(j, "language", "Perl"),
-          i > j
+    each do |a|
+      each do |b|
+        implies!(
+          a.name("Dragonene") & b.language("Perl"),
+          a.index > b.index
         )
       end
     end
     # Lisp coder more money than Griffin
-    @count.times do |i|
-      @count.times do |j|
-        @solver.assert Z3.Implies(
-          attribute(i, "alias", "Griffin") & attribute(j, "language", "Lisp"),
-          @vars["amount"][i] < @vars["amount"][j]
+    each do |a|
+      each do |b|
+        implies!(
+          a.alias("Griffin") & b.language("Lisp"),
+          a.var("amount") < b.var("amount")
         )
       end
     end
     # 3rd connection used Java
     @solver.assert attribute(2, "language", "Java")
     # Badger stole more than Yemen coder
-    @count.times do |i|
-      @count.times do |j|
-        @solver.assert Z3.Implies(
-          attribute(i, "alias", "Badger") & attribute(j, "country", "Yemen"),
-          @vars["amount"][i] > @vars["amount"][j]
+    each do |a|
+      each do |b|
+        implies!(
+          a.alias("Badger") & b.country("Yemen"),
+          a.var("amount") > b.var("amount")
         )
       end
     end
