@@ -142,7 +142,7 @@ class FourHackersPuzzle < LogicPuzzle
       end
     end
     # 3rd connection used Java
-    @solver.assert attribute(2, "language", "Java")
+    @solver.assert @cases[2].language("Java")
     # Badger stole more than Yemen coder
     each do |a|
       each do |b|
