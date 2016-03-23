@@ -9,16 +9,15 @@ class LogicPuzzleCase
     @index = index
   end
 
-  def method_missing(k, *args)
-    if @puzzle.has_key?(k.to_s) and args.size == 1
-      @puzzle.attribute(@index, k.to_s, *args)
+  def method_missing(key, *args)
+    key = key.to_s
+    if @puzzle.has_key?(key) and args.size == 1
+      @puzzle.attribute(@index, key, *args)
+    elsif @puzzle.has_key?(key) and args.size == 0
+      @puzzle.vars[key][@index]
     else
       super
     end
-  end
-
-  def var(name)
-    @puzzle.vars[name][@index]
   end
 end
 
@@ -26,11 +25,11 @@ class LogicPuzzle
   attr_reader :vars, :dict
   def initialize(count)
     # In puzzles of this kind, all assignments are of same size
-    @count = count
-    @solver   = Z3::Solver.new
-    @vars = {}
-    @dict = {}
-    @cases = @count.times.map{|i| LogicPuzzleCase.new(self, i) }
+    @count  = count
+    @solver = Z3::Solver.new
+    @vars   = {}
+    @dict   = {}
+    @cases  = @count.times.map{|i| LogicPuzzleCase.new(self, i) }
   end
 
   def each(&blk)
@@ -92,10 +91,7 @@ class FourHackersPuzzle < LogicPuzzle
       implies!( hacker.alias("Lennard"), hacker.amount("160000") )
       implies!( hacker.alias("Lennard"), ~hacker.country("England") )
       # 2nd connection less money transferred than C coder
-      implies!(
-        hacker.language("C"),
-        @cases[1].var("amount") < hacker.var("amount")
-      )
+      implies!( hacker.language("C"), @cases[1].amount < hacker.amount )
       implies!( hacker.language("C"), ~hacker.country("Norway") )
       implies!( hacker.name("Armand"), hacker.alias("Monks") )
     end
@@ -105,7 +101,7 @@ class FourHackersPuzzle < LogicPuzzle
       each do |b|
         implies!(
           a.name("Armand") & b.name("Frogger"),
-          a.var("amount") > b.var("amount")
+          a.amount > b.amount
         )
       end
     end
@@ -114,12 +110,12 @@ class FourHackersPuzzle < LogicPuzzle
       implies!( hacker.name("Dragonene"), hacker.country("Belgium") )
     end
 
-    # X Dragonene less money than Perl coder
+    # Dragonene less money than Perl coder
     each do |a|
       each do |b|
         implies!(
           a.name("Dragonene") & b.language("Perl"),
-          a.var("amount") < b.var("amount")
+          a.amount < b.amount
         )
       end
     end
@@ -137,7 +133,7 @@ class FourHackersPuzzle < LogicPuzzle
       each do |b|
         implies!(
           a.alias("Griffin") & b.language("Lisp"),
-          a.var("amount") < b.var("amount")
+          a.amount < b.amount
         )
       end
     end
@@ -148,18 +144,16 @@ class FourHackersPuzzle < LogicPuzzle
       each do |b|
         implies!(
           a.alias("Badger") & b.country("Yemen"),
-          a.var("amount") > b.var("amount")
+          a.amount > b.amount
         )
       end
     end
   end
 end
 
-
 FourHackersPuzzle.new.solve!
 
 """
-
 There is little we can do but wait, so we may as well take another job.
 It seems there has been a bank robbery. Scotland Yard has turned to us for help in figuring out who did it.
 We have been the given the following information:
@@ -184,24 +178,17 @@ https://www.sabrefilms.co.uk/revolutionelite/casefiles/case9/img2.jpg
 https://www.sabrefilms.co.uk/revolutionelite/casefiles/case9/img3.jpg
 
 --------------------------------------------------------------------------------
-
+Extracted rules:
   Phineus => 10000
   Lennard => 160000 && !England
   2nd connection less money transferred than C coder
   C coder !Norwary
-* Armand (Monks)
+  Armand (Monks)
   Armand stole more than Frogger
-* Dragonene => Belgium
-X Dragonene less money than Perl coder
+  Dragonene => Belgium
+  Dragonene less money than Perl coder
   perl coder made the connection before Dragonene?
   Lisp coder more money than Griffin
-* 3rd connection used Java
+  3rd connection used Java
   Badger stole more than Yemen coder
-
-  name    alias   country   language  amount
-1   Phineus       Griffin   Yemen             C   10000
-2   Frogger        Badger           Norway      Perl          80000
-3   Dragonene   Lennard   Belgium           Java    160000
-4   Armand      Monks             England           Lisp         640000
-
 """
