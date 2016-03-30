@@ -1,0 +1,122 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/z3"
+
+class KnightsPuzzle
+  def initialize
+    @x_size = 4
+    @y_size = 4
+    @num_moves = 12
+    @solver = Z3::Solver.new
+    @boards = (@num_moves+1).times.map{|t| board(t) }
+    @moves = @num_moves.times.map{|t| move(t)}
+    setup_board @boards[0], """
+    bbb.
+    xb.w
+    ..ww
+    x.xw
+    """
+    setup_board @boards[-1], """
+    www.
+    xw.b
+    ..bb
+    x.xb
+    """
+    @num_moves.times do |t|
+      setup_board_move @boards[t], @boards[t+1], @moves[t]
+    end
+  end
+
+  def print_board(t)
+    puts "State #{t}:"
+    puts @boards[t].transpose.map{|row| row.map{|c| ".wbx"[@model[c].to_i]}.join }.join("\n")
+  end
+
+  def print_move(t)
+    move = Hash[@moves[t].map{|k,v| [k,@model[v].to_i]}]
+    figure = " wbx"[move[:figure]]
+    puts "#{figure}: #{move[:start_x]},#{move[:start_y]} -> #{move[:end_x]},#{move[:end_y]}"
+    puts ""
+  end
+
+  def solve!
+    if @solver.check == :sat
+      @model = @solver.model
+      puts "Solved"
+      @num_moves.times do |t|
+        print_board(t)
+        print_move(t)
+      end
+      print_board(@num_moves)
+    else
+      puts "Puzzle can't be solved"
+    end
+  end
+
+  private
+
+  def setup_board_move(board_start, board_end, move)
+    @x_size.times.map do |x|
+      @y_size.times.map do |y|
+        # If not part of the move, stays the same
+        starts_here = (move[:start_x] == x) & (move[:start_y] == y)
+        ends_here = (move[:end_x] == x) & (move[:end_y] == y)
+        @solver.assert Z3::Implies(~starts_here & ~ends_here, board_start[x][y] == board_end[x][y])
+        # Every move starts with figure, ends on empty space
+        @solver.assert Z3::Implies(starts_here, board_start[x][y] == move[:figure])
+        @solver.assert Z3::Implies(starts_here, board_end[x][y] == 0)
+        @solver.assert Z3::Implies(ends_here, board_start[x][y] == 0)
+        @solver.assert Z3::Implies(ends_here, board_end[x][y] == move[:figure])
+      end
+    end
+  end
+
+  def board(t)
+    @x_size.times.map do |x|
+      @y_size.times.map do |y|
+        v = Z3::Int("b[#{t},#{x},#{y}]")
+        @solver.assert v >= 0
+        @solver.assert v <= 3
+        v
+      end
+    end
+  end
+
+  def setup_board(vars, str)
+    str = str.split.map(&:chomp)
+    4.times do |x|
+      4.times do |y|
+        c = str[y][x]
+        i = ".wbx".index(c) or raise "Unknown character #{c}"
+        @solver.assert vars[x][y] == i
+      end
+    end
+  end
+
+  def abs(t)
+    Z3::IfThenElse(t >= 0, t, -t)
+  end
+
+  def move(t)
+    move_start_x = Z3::Int("move_start_x_#{t}")
+    move_start_y = Z3::Int("move_start_y_#{t}")
+    move_end_x   = Z3::Int("move_end_x_#{t}")
+    move_end_y   = Z3::Int("move_end_y_#{t}")
+    figure       = Z3::Int("move_figure_#{t}")
+    @solver.assert (figure >= 1) & (figure <= 2)
+    @solver.assert (move_start_x >= 0) & (move_start_x < @x_size)
+    @solver.assert (move_start_y >= 0) & (move_start_y < @y_size)
+    @solver.assert (move_end_x >= 0) & (move_end_x < @x_size)
+    @solver.assert (move_end_y >= 0) & (move_end_y < @y_size)
+
+    # 8 possible moves
+    @solver.assert (
+      ((abs(move_start_x - move_end_x) == 2) & (abs(move_start_y - move_end_y) == 1)) |
+      ((abs(move_start_x - move_end_x) == 1) & (abs(move_start_y - move_end_y) == 2))
+    )
+
+    {start_x: move_start_x, start_y: move_start_y, end_x: move_end_x, end_y: move_end_y, figure: figure}
+  end
+end
+
+KnightsPuzzle.new.solve!

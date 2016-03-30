@@ -75,6 +75,12 @@ module Z3
     BoolSort.new.new(Z3::LowLevel.mk_iff(a, b))
   end
 
+  def IfThenElse(a, b, c)
+    a, = coerce_to_same_bool_sort(a)
+    b, c = coerce_to_same_sort(b, c)
+    b.sort.new(Z3::LowLevel.mk_ite(a, b, c))
+  end
+
   def Add(*args)
     raise ArgumentError if args.empty?
     args = coerce_to_same_sort(*args)
