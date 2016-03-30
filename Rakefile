@@ -7,3 +7,7 @@ desc "Clean up"
 task :clean do
   system "trash z3-*.gem coverage"
 end
+
+task "gem:build"
+  system "gem build z3.gemspec"
+end
