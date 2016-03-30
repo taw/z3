@@ -12,13 +12,13 @@ class KnightsPuzzle
     @moves = @num_moves.times.map{|t| move(t)}
     setup_board @boards[0], """
     bbb.
-    xb.w
+    xbxw
     ..ww
     x.xw
     """
     setup_board @boards[-1], """
     www.
-    xw.b
+    xwxb
     ..bb
     x.xb
     """
