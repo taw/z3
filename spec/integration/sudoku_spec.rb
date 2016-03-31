@@ -1,6 +1,6 @@
 describe "Sudoku" do
   it "can solve sudoku" do
-    expect("sudoku_solver").to have_output <<EOF
+    expect("sudoku").to have_output <<EOF
 8 6 3 5 7 9 2 4 1
 9 2 5 3 1 4 8 7 6
 4 7 1 8 2 6 9 5 3

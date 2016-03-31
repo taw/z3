@@ -1,6 +1,6 @@
 describe "Bridges" do
   it "can solve bridges puzzle" do
-    expect("bridges_solver").to have_output <<EOF
+    expect("bridges").to have_output <<EOF
 
  3========6========4
  |        ‖        ‖

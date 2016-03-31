@@ -1,6 +1,6 @@
 describe "Kinematics Problems" do
   it "can solve kinematics problems" do
-    expect("kinematics_solver").to have_output <<EOF
+    expect("kinematics_problems").to have_output <<EOF
 Solution to problem 01:
 * a = (/ 16.0 5.0)
 * d = (/ 215168.0 125.0)

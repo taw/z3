@@ -1,6 +1,6 @@
 describe "LightUp" do
   it "can solve light up puzzle" do
-    expect("light_up_solver").to have_output <<EOF
+    expect("light_up").to have_output <<EOF
   * 0
 *
 x 2*x

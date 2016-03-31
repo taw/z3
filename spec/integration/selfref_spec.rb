@@ -1,6 +1,6 @@
 describe "Self-Referential Aptitude Test" do
     it "can solve Self-Referential Aptitude Test" do
-    expect("selfref_solver").to have_output <<EOF
+    expect("selfref").to have_output <<EOF
 Q 1: D
 Q 2: A
 Q 3: D

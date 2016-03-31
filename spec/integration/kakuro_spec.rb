@@ -1,6 +1,6 @@
 describe "Kakuro" do
   it "can solve kakuro puzzle" do
-    expect("kakuro_solver").to have_output <<EOF
+    expect("kakuro").to have_output <<EOF
   x     x     x   10/   24/   29/     x   11/   21/   10/
   x   11/   19/24  [8]   [9]   [7]    /6   [2]   [3]   [1]
   /31  [8]   [9]   [2]   [7]   [5]  10/20  [9]   [8]   [3]

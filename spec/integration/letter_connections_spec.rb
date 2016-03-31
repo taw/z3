@@ -1,6 +1,6 @@
 describe "Letter Connections" do
   it "can solve letter connections puzzle" do
-    expect("letter_connections_solver").to have_output <<EOF
+    expect("letter_connections").to have_output <<EOF
 →k →k *K *J →f →f →f →f *F *E
 ↑k ↓F →J ↑j ↑f →e →e →e →e ↑e
 ↑k →f →f →f ↑f ↑e *G ←g ←g ←g
