@@ -1,7 +1,6 @@
 describe "Basic Logic" do
-  let(:executable) { "#{__dir__}/../../examples/basic_logic" }
   it "can solve basic logic problems" do
-    expect(IO.popen(executable).read).to eq <<EOF
+    expect("basic_logic").to have_output <<EOF
 Checking if true == true
 Proven
 Checking if true == false

@@ -1,7 +1,6 @@
 describe "Bridges" do
-  let(:executable) { "#{__dir__}/../../examples/bridges_solver" }
   it "can solve bridges puzzle" do
-    expect(IO.popen(executable).read.gsub(/ *$/, "")).to eq <<EOF
+    expect("bridges_solver").to have_output <<EOF
 
  3========6========4
  |        ‖        ‖

@@ -1,7 +1,6 @@
 describe "Algebra Problems" do
-  let(:executable) { "#{__dir__}/../../examples/algebra_problems" }
   it "can solve algebra puzzles" do
-    expect(IO.popen(executable).read).to eq <<EOF
+    expect("algebra_problems").to have_output <<EOF
 Solution to problem 01:
 Solution to problem 03:
 * x = (- 22.0)

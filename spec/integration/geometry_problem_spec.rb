@@ -1,7 +1,6 @@
 describe "Geometry Problem" do
-  let(:executable) { "#{__dir__}/../../examples/geometry_problem" }
   it "can solve geometry problem" do
-    expect(IO.popen(executable).read).to eq <<EOF
+    expect("geometry_problem").to have_output <<EOF
 * a.x = 0.0
 * a.y = (root-obj (+ (^ x 2) (- 300)) 1)
 * b.x = 0.0

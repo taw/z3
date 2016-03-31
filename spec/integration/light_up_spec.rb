@@ -1,7 +1,6 @@
 describe "LightUp" do
-  let(:executable) { "#{__dir__}/../../examples/light_up_solver" }
   it "can solve light up puzzle" do
-    expect(IO.popen(executable).read.gsub(/ *$/, "")).to eq <<EOF
+    expect("light_up_solver").to have_output <<EOF
   * 0
 *
 x 2*x

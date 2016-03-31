@@ -1,7 +1,6 @@
 describe "Kinematics Problems" do
-  let(:executable) { "#{__dir__}/../../examples/kinematics_problems" }
   it "can solve kinematics problems" do
-    expect(IO.popen(executable).read).to eq <<EOF
+    expect("kinematics_solver").to have_output <<EOF
 Solution to problem 01:
 * a = (/ 16.0 5.0)
 * d = (/ 215168.0 125.0)

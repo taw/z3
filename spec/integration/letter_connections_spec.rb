@@ -1,7 +1,6 @@
 describe "Letter Connections" do
-  let(:executable) { "#{__dir__}/../../examples/letter_connections_solver" }
   it "can solve letter connections puzzle" do
-    expect(IO.popen(executable).read.gsub(/ *$/, "")).to eq <<EOF
+    expect("letter_connections_solver").to have_output <<EOF
 →k →k *K *J →f →f →f →f *F *E
 ↑k ↓F →J ↑j ↑f →e →e →e →e ↑e
 ↑k →f →f →f ↑f ↑e *G ←g ←g ←g

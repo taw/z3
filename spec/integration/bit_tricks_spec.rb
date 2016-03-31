@@ -1,7 +1,6 @@
 describe "Bit Tricks" do
-  let(:executable) { "#{__dir__}/../../examples/bit_tricks" }
   it "can validate bit tricks" do
-    expect(IO.popen(executable).read.gsub(/ *$/, "")).to eq <<EOF
+    expect("bit_tricks").to have_output <<EOF
 Validating sign trick:
 Proven
 Validating sign trick:
