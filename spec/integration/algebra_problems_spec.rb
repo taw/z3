@@ -1,5 +1,5 @@
 describe "Algebra Problems" do
-  it "can solve algebra puzzles" do
+  it do
     expect("algebra_problems").to have_output <<EOF
 Solution to problem 01:
 Solution to problem 03:

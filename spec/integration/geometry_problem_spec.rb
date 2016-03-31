@@ -1,5 +1,5 @@
 describe "Geometry Problem" do
-  it "can solve geometry problem" do
+  it do
     expect("geometry_problem").to have_output <<EOF
 * a.x = 0.0
 * a.y = (root-obj (+ (^ x 2) (- 300)) 1)

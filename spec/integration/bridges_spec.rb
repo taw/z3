@@ -1,5 +1,5 @@
 describe "Bridges" do
-  it "can solve bridges puzzle" do
+  it do
     expect("bridges").to have_output <<EOF
 
  3========6========4

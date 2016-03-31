@@ -1,5 +1,5 @@
-describe "LightUp" do
-  it "can solve light up puzzle" do
+describe "Light Up" do
+  it do
     expect("light_up").to have_output <<EOF
   * 0
 *

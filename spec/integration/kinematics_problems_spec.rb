@@ -1,5 +1,5 @@
 describe "Kinematics Problems" do
-  it "can solve kinematics problems" do
+  it do
     expect("kinematics_problems").to have_output <<EOF
 Solution to problem 01:
 * a = (/ 16.0 5.0)

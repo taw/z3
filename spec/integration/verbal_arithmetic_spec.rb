@@ -1,5 +1,5 @@
 describe "Verbal Arithmetic" do
-  it "can solve verbal arithmetic puzzles" do
+  it do
     expect("verbal_arithmetic").to have_output <<EOF
 [["S", 9], ["E", 5], ["N", 6], ["D", 7]]
 [["M", 1], ["O", 0], ["R", 8], ["E", 5]]

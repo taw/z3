@@ -1,5 +1,5 @@
 describe "Bit Tricks" do
-  it "can validate bit tricks" do
+  it do
     expect("bit_tricks").to have_output <<EOF
 Validating sign trick:
 Proven

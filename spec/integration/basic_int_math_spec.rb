@@ -1,5 +1,5 @@
-describe "Basic Int Math" do
-  it "can solve basic integer math problems" do
+describe "Basic Integer Math" do
+  it do
     expect("basic_int_math").to have_output <<EOF
 Checking if (a+b)(a-b)==a*a-b*b
 Proven

@@ -1,5 +1,5 @@
 describe "Kakuro" do
-  it "can solve kakuro puzzle" do
+  it do
     expect("kakuro").to have_output <<EOF
   x     x     x   10/   24/   29/     x   11/   21/   10/
   x   11/   19/24  [8]   [9]   [7]    /6   [2]   [3]   [1]

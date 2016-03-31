@@ -1,5 +1,5 @@
-describe "Basic Logic" do
-  it "can solve basic logic problems" do
+describe "Basic Logic Problems" do
+  it do
     expect("basic_logic").to have_output <<EOF
 Checking if true == true
 Proven

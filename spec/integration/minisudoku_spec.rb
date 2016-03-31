@@ -1,5 +1,5 @@
 describe "MiniSudoku" do
-  it "can solve minisudoku" do
+  it do
     expect("minisudoku").to have_output <<EOF
 2 1 5 4 3 6
 3 6 4 1 2 5
