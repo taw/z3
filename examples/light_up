@@ -1,9 +1,11 @@
 #!/usr/bin/env ruby
 
+require "pathname"
 require_relative "../lib/z3"
 
 class LightUp
-  def initialize(data)
+  def initialize(path)
+    data = Pathname(path).read
     data = data.split.map{|line| line.strip.chars}
     @xsize = data[0].size
     @ysize = data.size
@@ -92,14 +94,5 @@ class LightUp
   end
 end
 
-LightUp.new(
-"""
-....0..
-.......
-x.2.x..
-...3...
-..x.x.3
-.......
-..1....
-"""
-).solve!
+path = ARGV[0] || Pathname(__dir__) + "light_up-1.txt"
+LightUp.new(path).solve!
