@@ -17,10 +17,13 @@
 #
 # This affects few enough real world puzzles and would complicate solution enough
 # that I let it be.
+
+require "pathname"
 require_relative "../lib/z3"
 
 class LetterConnections
-  def initialize(data)
+  def initialize(path)
+    data = Pathname(path).read
     data = data.strip.split("\n")
     @xsize = data[0].size
     @ysize = data.size
@@ -183,17 +186,5 @@ class LetterConnections
   end
 end
 
-LetterConnections.new(
-"""
-..KJ....FE
-.FJ.......
-......G...
-.K.I......
-.......D..
-IE......B.
-...H...CD.
-...A..C...
-.A.H......
-...B.G....
-"""
-).solve!
+path = ARGV[0] || Pathname(__dir__) + "letter_connections-1.txt"
+LetterConnections.new(path).solve!
