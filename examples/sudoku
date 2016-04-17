@@ -1,9 +1,15 @@
 #!/usr/bin/env ruby
 
+
+require "pathname"
 require_relative "../lib/z3"
 
 class SudokuSolver
-  def initialize(data)
+  def initialize(path)
+    data = Pathname(path).read
+    data = data.strip.split("\n").map do |line|
+      line.split.map{|c| c == "_" ? nil : c.to_i}
+    end
     @data = data
     @solver = Z3::Solver.new
   end
@@ -52,16 +58,5 @@ class SudokuSolver
   end
 end
 
-_ = nil
-sudoku = SudokuSolver.new([
-  [_, 6, _, 5, _, 9, _, 4, _],
-  [9, 2, _, _, _, _, _, 7, 6],
-  [_, _, 1, _, _, _, 9, _, _],
-  [7, _, _, 6, _, 3, _, _, 9],
-  [_, _, _, _, _, _, _, _, _],
-  [3, _, _, 4, _, 1, _, _, 7],
-  [_, _, 6, _, _, _, 7, _, _],
-  [2, 4, _, _, _, _, _, 6, 5],
-  [_, 9, _, 1, _, 8, _, 3, _],
-])
-sudoku.solve!
+path = ARGV[0] || Pathname(__dir__) + "sudoku-1.txt"
+SudokuSolver.new(path).solve!
