@@ -27,3 +27,7 @@ On other systems use appropriate package manager.
 Ruby API tries to catch the most common mistakes, but if you use API in a weird way you can get C crash instead of nice Ruby exception.
 
 Memory will leak a good deal. Generally avoid in long running processes.
+
+### Python versions
+
+Most of example solvers have Python versions available from https://github.com/taw/puzzle-solvers
