@@ -55,6 +55,15 @@ module Z3::LowLevel
     end
 
     # Should be private
+
+    def unpack_ast_vector(_ast_vector)
+      n = Z3::VeryLowLevel.Z3_ast_vector_size(_ctx_pointer, _ast_vector)
+      (0...n).map do |i|
+        _ast = Z3::VeryLowLevel.Z3_ast_vector_get(_ctx_pointer, _ast_vector, i)
+        Z3::Value.new_from_pointer(_ast)
+      end
+    end
+
     def _ctx_pointer
       @_ctx_pointer ||= Z3::Context.instance._context
     end

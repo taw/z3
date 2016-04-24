@@ -34,11 +34,7 @@ module Z3
 
     def assertions
       _ast_vector = Z3::LowLevel.solver_get_assertions(self)
-      n = Z3::VeryLowLevel.Z3_ast_vector_size(Z3::LowLevel._ctx_pointer, _ast_vector)
-      (0...n).map{|i|
-        _ast = Z3::VeryLowLevel.Z3_ast_vector_get(Z3::LowLevel._ctx_pointer, _ast_vector, i)
-        Z3::Value.new_from_pointer(_ast)
-      }
+      Z3::LowLevel.unpack_ast_vector(_ast_vector)
     end
 
     def prove!(ast)
