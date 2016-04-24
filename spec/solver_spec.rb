@@ -19,4 +19,15 @@ describe Z3::Solver do
     solver.pop
     expect(solver.check).to eq(:sat)
   end
+
+  it "#assertions" do
+    solver.assert a + b == 4
+    solver.assert b >= 2
+    solver.assert Z3.Or(a == 2, a == -2)
+    expect(solver.assertions).to eq([
+      "(= (+ a b) 4)",
+      "(>= b 2)",
+      "(or (= a 2) (= a (- 2)))",
+    ])
+  end
 end
