@@ -19,12 +19,12 @@ describe Z3::Model do
     solver.assert(a == 2)
     solver.assert(b == a+2)
     expect(solver.check).to eq(:sat)
-    expect(model.model_eval(a).to_s).to eq("2")
-    expect(model.model_eval(b).to_s).to eq("4")
-    expect(model.model_eval(c).to_s).to eq("c")
-    expect(model.model_eval(a, true).to_s).to eq("2")
-    expect(model.model_eval(b, true).to_s).to eq("4")
-    expect(model.model_eval(c, true).to_s).to eq("0")
+    expect(model.model_eval(a)).to eq(2)
+    expect(model.model_eval(b)).to eq(4)
+    expect(model.model_eval(c)).to eq(c)
+    expect(model.model_eval(a, true)).to eq(2)
+    expect(model.model_eval(b, true)).to eq(4)
+    expect(model.model_eval(c, true)).to eq(0)
   end
 
   it "#to_s" do

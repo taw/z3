@@ -72,5 +72,22 @@ module Z3
     end
 
     private_class_method :new
+
+    def self.from_pointer(_sort)
+      kind = Z3::VeryLowLevel.Z3_get_sort_kind(Z3::LowLevel._ctx_pointer, _sort)
+      case kind
+      when 1
+        BoolSort.new
+      when 2
+        IntSort.new
+      when 3
+        RealSort.new
+      when 4
+        Z3::VeryLowLevel.Z3_get_bv_sort_size(Z3::LowLevel._ctx_pointer, _sort)
+        BitvecSort.new(n)
+      else
+        raise "Unknown sort kind #{kind}"
+      end
+    end
   end
 end

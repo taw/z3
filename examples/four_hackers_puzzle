@@ -63,7 +63,7 @@ class LogicPuzzle
     if @solver.check == :sat
       @solver.model.each do |k,v|
         i, name = k.split("-", 2)
-        puts "#{k} = #{@dict[name][v.to_i]}"
+        puts "#{k} = #{@dict[name][v.to_s.to_i]}"
       end
     else
       puts "Puzzle has no solutions"

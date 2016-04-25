@@ -39,9 +39,8 @@ module Z3
       end
 
       def new_from_pointer(_ast)
-        _txt = Z3::VeryLowLevel.Z3_ast_to_string(Z3::LowLevel._ctx_pointer, _ast)
-        # raise "No idea how to convert this value"
-        # if == Z3::LowLevel.mk_bool_sort
+        _sort = Z3::VeryLowLevel.Z3_get_sort(Z3::LowLevel._ctx_pointer, _ast)
+        Sort.from_pointer(_sort).new(_ast)
       end
     end
   end
