@@ -24,7 +24,7 @@ describe Z3::Solver do
     solver.assert a + b == 4
     solver.assert b >= 2
     solver.assert Z3.Or(a == 2, a == -2)
-    expect(solver.assertions).to eq([
+    expect(solver.assertions).to be_same_as([
       a + b == 4,
       b >= 2,
       (a == 2) | (a == -2),

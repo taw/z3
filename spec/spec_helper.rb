@@ -40,3 +40,9 @@ RSpec::Matchers.define :have_output do |expected|
     actual.gsub(/ *$/, "") == expected.gsub(/ *$/, "")
   end
 end
+
+RSpec::Matchers.define :be_same_as do |expected|
+  match do |file_name|
+    [actual.class, actual.inspect] == [expected.class, expected.inspect]
+  end
+end

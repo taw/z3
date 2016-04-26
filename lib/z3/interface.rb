@@ -23,6 +23,10 @@ module Z3
     BoolSort.new.False
   end
 
+  def Const(v)
+    Value.sort_for_const(v).from_const(v)
+  end
+
   def And(*args)
     args = coerce_to_same_sort(*args)
     case args[0]
