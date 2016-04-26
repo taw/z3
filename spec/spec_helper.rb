@@ -46,3 +46,27 @@ RSpec::Matchers.define :be_same_as do |expected|
     [actual.class, actual.inspect] == [expected.class, expected.inspect]
   end
 end
+
+RSpec::Matchers.define :have_solution do |expected|
+  match do |asts|
+    solver = setup_solver(asts)
+    solver.check == :sat and expected.all?{|var,val| solver.model[var].to_s == val.to_s}
+  end
+
+  failure_message do |asts|
+    solver = setup_solver(asts)
+    if solver.check == :sat
+      "expected #{asts.inspect} to have solution #{expected.inspect}, got #{solver.model} instead"
+    else
+      "expected #{asts.inspect} to have solution #{expected.inspect}, but not solvable"
+    end
+  end
+
+  def setup_solver(asts)
+    Z3::Solver.new.tap do |solver|
+      asts.each do |ast|
+        solver.assert ast
+      end
+    end
+  end
+end
