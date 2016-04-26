@@ -16,8 +16,12 @@ module Z3::LowLevel
       Z3::VeryLowLevel.Z3_set_error_handler(_ctx_pointer, block)
     end
 
-    def mk_context
-      Z3::VeryLowLevel.Z3_mk_context
+    def mk_context(config)
+      Z3::VeryLowLevel.Z3_mk_context(config)
+    end
+
+    def mk_config
+      Z3::VeryLowLevel.Z3_mk_config
     end
 
     def model_eval(model, ast, model_completion)
