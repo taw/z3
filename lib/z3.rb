@@ -31,3 +31,6 @@ require_relative "z3/value/bitvec_value"
 
 # Python-style interface
 require_relative "z3/interface"
+
+# Printer
+require_relative "z3/printer"
