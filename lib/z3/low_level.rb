@@ -17,7 +17,7 @@ module Z3::LowLevel
     end
 
     def mk_context
-      Z3::VeryLowLevel.Z3_mk_context
+      Z3::VeryLowLevel.Z3_mk_context(Z3::VeryLowLevel.Z3_mk_config)
     end
 
     def model_eval(model, ast, model_completion)

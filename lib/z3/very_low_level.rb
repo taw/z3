@@ -29,7 +29,7 @@ module Z3::VeryLowLevel
   callback :error_handler, [:pointer, :int], :void
   attach_function :Z3_get_version, [:pointer, :pointer, :pointer, :pointer], :void
   attach_function :Z3_set_error_handler, [:ctx_pointer, :error_handler], :void
-  attach_function :Z3_mk_context, [], :ctx_pointer
+  attach_function :Z3_mk_context, [:config_pointer], :ctx_pointer
   attach_function :Z3_model_eval, [:ctx_pointer, :model_pointer, :ast_pointer, :bool, :pointer], :int
   attach_function :Z3_mk_and, [:ctx_pointer, :int, :pointer], :ast_pointer
   attach_function :Z3_mk_or, [:ctx_pointer, :int, :pointer], :ast_pointer
