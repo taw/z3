@@ -12,5 +12,10 @@ Gem::Specification.new do |s|
   s.homepage     = "https://github.com/taw/z3"
   s.license      = "MIT"
   s.requirements = "z3 library"
+  # development
+  s.add_development_dependency 'pry'
+  # tests
+  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'simplecov'
   s.add_runtime_dependency 'ffi'
 end
