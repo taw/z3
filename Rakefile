@@ -1,4 +1,7 @@
-task "default" => "test"
+task "default" => "spec"
+task "test" => "spec"
+task "test:integration" => "spec:integration"
+task "test:unit" => "spec:unit"
 
 desc "Regenerate API"
 task "api" do
@@ -11,8 +14,18 @@ task "clean" do
 end
 
 desc "Run tests"
-task "test" do
+task "spec" do
   system "rspec"
+end
+
+desc "Run unit tests"
+task "spec:unit" do
+  system "rspec spec/*_spec.rb"
+end
+
+desc "Run integration tests"
+task "spec:integration" do
+  system "rspec spec/integration/*_spec.rb"
 end
 
 desc "Build gem"
