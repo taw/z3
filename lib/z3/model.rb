@@ -11,7 +11,9 @@ class Z3::Model
   end
 
   def consts
-    (0...num_consts).map{|i| Z3::FuncDecl.new(Z3::LowLevel.model_get_const_decl(self, i)) }
+    (0...num_consts).map do |i|
+      Z3::FuncDecl.new(Z3::LowLevel.model_get_const_decl(self, i))
+    end
   end
 
   def num_sorts
@@ -40,10 +42,9 @@ class Z3::Model
 
   def each
     consts.sort_by(&:name).each do |c|
-      _ast = Z3::LowLevel.model_get_const_interp(self, c)
       yield(
-        c.name,
-        Z3::Value.new_from_pointer(_ast)
+        c.range.var(c.name),
+        Z3::Value.new_from_pointer(Z3::LowLevel.model_get_const_interp(self, c))
       )
     end
   end

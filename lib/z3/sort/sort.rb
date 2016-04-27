@@ -1,13 +1,13 @@
 module Z3
-  class Sort
-    attr_reader :_sort
-    def initialize(_sort)
-      @_sort = _sort
+  class Sort < AST
+    def initialize(_ast)
+      super(_ast)
+      raise Z3::Exception, "Sorts must have AST kind sort" unless ast_kind == :sort
     end
 
     include Comparable
     def ==(other)
-      other.is_a?(Sort) and @_sort == other._sort
+      other.is_a?(Sort) and @_ast == other._ast
     end
 
     def >(other)
@@ -70,8 +70,6 @@ module Z3
       return v if v.sort == self
       raise Z3::Exception, "Can't convert #{v.sort} into #{self}"
     end
-
-    private_class_method :new
 
     def self.from_pointer(_sort)
       kind = Z3::VeryLowLevel.Z3_get_sort_kind(Z3::LowLevel._ctx_pointer, _sort)

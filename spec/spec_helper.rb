@@ -47,6 +47,12 @@ RSpec::Matchers.define :be_same_as do |expected|
   end
 end
 
+RSpec::Matchers.define :stringify do |expected|
+  match do |actual|
+    actual.to_s == expected
+  end
+end
+
 RSpec::Matchers.define :have_solution do |expected|
   match do |asts|
     solver = setup_solver(asts)

@@ -69,10 +69,12 @@ class Definition
     end
     result + arg_types.zip(api_arguments).map do |t,n|
       case t
-      when "AST", "SORT", "SOLVER", "MODEL", "GOAL", "FIXEDPOINT", "FUNC_DECL",
-          "PATTERN", "PROBE", "RCF_NUM", "OPTIMIZE", "PARAMS", "PARAM_DESCRS", "TACTIC",
-          "CONTEXT", "AST_VECTOR", "AST_MAP", "APPLY_RESULT", "FUNC_INTERP", "CONFIG",
-          "CONSTRUCTOR", "CONSTRUCTOR_LIST", "STATS", "FUNC_ENTRY", "APP"
+      when "AST", "SORT", "FUNC_DECL", "PATTERN", "APP"
+        "#{n}._ast"
+      when "SOLVER", "MODEL", "GOAL", "FIXEDPOINT",
+           "PROBE", "RCF_NUM", "OPTIMIZE", "PARAMS", "PARAM_DESCRS", "TACTIC",
+           "CONTEXT", "AST_VECTOR", "AST_MAP", "APPLY_RESULT", "FUNC_INTERP", "CONFIG",
+           "CONSTRUCTOR", "CONSTRUCTOR_LIST", "STATS", "FUNC_ENTRY"
         "#{n}._#{t.downcase}"
       when "SYMBOL"
         # FFI but not wrapped

@@ -3,7 +3,7 @@ describe Z3::IntSort do
     expect(subject.from_const(0).inspect).to eq("Value<0 :: Int>")
     expect(subject.from_const(42).inspect).to eq("Value<42 :: Int>")
     expect(subject.from_const(1_000_000_000_000).inspect).to eq("Value<1000000000000 :: Int>")
-    expect(subject.from_const(-1_000_000_000_000).inspect).to eq("Value<(- 1000000000000) :: Int>")
+    expect(subject.from_const(-1_000_000_000_000).inspect).to eq("Value<-1000000000000 :: Int>")
   end
 
   it "raises exception when trying to convert constants of wrong type" do

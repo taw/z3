@@ -27,6 +27,13 @@ describe Z3::Model do
     expect(model.model_eval(c, true)).to be_same_as(Z3.Const(0))
   end
 
+  it "#to_a" do
+    solver.assert(a == 2)
+    solver.assert(b == a+2)
+    expect(solver.check).to eq(:sat)
+    expect(model.to_a).to be_same_as([[Z3.Int("a"), Z3.Const(2)], [Z3.Int("b"), Z3.Const(4)]])
+  end
+
   it "#to_s" do
     solver.assert(a == 2)
     solver.assert(b == a+2)

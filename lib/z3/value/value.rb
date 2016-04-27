@@ -1,13 +1,10 @@
 module Z3
-  class Value
-    attr_reader :_ast, :sort
+  class Value < AST
+    attr_reader :sort
     def initialize(_ast, sort)
-      @_ast = _ast
+      super(_ast)
       @sort = sort
-    end
-
-    def to_s
-      Z3::LowLevel.ast_to_string(self)
+      raise Z3::Exception, "Values must have AST kind numeral or app" unless [:numeral, :app].include?(ast_kind)
     end
 
     def inspect
@@ -21,8 +18,6 @@ module Z3
     def !=(other)
       ::Z3.Distinct(self, other)
     end
-
-    private_class_method :new
 
     class << self
       def sort_for_const(a)

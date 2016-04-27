@@ -8,6 +8,7 @@ require_relative "z3/low_level"
 require_relative "z3/low_level_auto"
 
 # Classes
+require_relative "z3/ast"
 require_relative "z3/context"
 require_relative "z3/solver"
 require_relative "z3/model"

@@ -26,7 +26,7 @@ describe Definition do
       expect(ffi).to eq("  attach_function :Z3_mk_numeral, [:ctx_pointer, :string, :sort_pointer], :ast_pointer")
       expect(api_def).to eq("mk_numeral(str, sort)")
       expect(api_body).to eq(
-        "Z3::VeryLowLevel.Z3_mk_numeral(_ctx_pointer, str, sort._sort)"
+        "Z3::VeryLowLevel.Z3_mk_numeral(_ctx_pointer, str, sort._ast)"
       )
     end
   end
@@ -39,6 +39,18 @@ describe Definition do
       expect(api_def).to eq("mk_bv_sort(num)")
       expect(api_body).to eq(
         "Z3::VeryLowLevel.Z3_mk_bv_sort(_ctx_pointer, num)"
+      )
+    end
+  end
+
+  describe "get_arity" do
+    let(:defstr) { "def_API('Z3_get_arity', UINT, (_in(CONTEXT), _in(FUNC_DECL)))" }
+    it do
+      expect(supported).to eq(true)
+      expect(ffi).to eq("  attach_function :Z3_get_arity, [:ctx_pointer, :func_decl_pointer], :uint")
+      expect(api_def).to eq("get_arity(func_decl)")
+      expect(api_body).to eq(
+        "Z3::VeryLowLevel.Z3_get_arity(_ctx_pointer, func_decl._ast)"
       )
     end
   end
