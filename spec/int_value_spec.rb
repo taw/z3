@@ -71,4 +71,8 @@ describe Z3::IntValue do
     expect([a == 2, b == 2, x == (a <= b)]).to have_solution(x => true)
     expect([a == 1, b == 2, x == (a <= b)]).to have_solution(x => true)
   end
+
+  it "**" do
+    expect([a == 3, b == 4, c == (a ** b)]).to have_solution(c => 81)
+  end
 end

@@ -24,6 +24,10 @@ module Z3
       Z3.Implies(self, other)
     end
 
+    def ite(a, b)
+      Z3.IfThenElse(self, a, b)
+    end
+
     public_class_method :new
   end
 end

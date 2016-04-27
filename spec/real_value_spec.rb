@@ -56,4 +56,9 @@ describe Z3::RealValue do
     expect([a == 2, b == 2, x == (a <= b)]).to have_solution(x => true)
     expect([a == 1, b == 2, x == (a <= b)]).to have_solution(x => true)
   end
+
+  it "**" do
+    expect([a == 3, b == 4, c == (a ** b)]).to have_solution(c => 81)
+    expect([a == 81, b == 0.25, c == (a ** b)]).to have_solution(c => 3)
+  end
 end

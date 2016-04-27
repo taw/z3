@@ -81,7 +81,7 @@ module Z3
       when 3
         RealSort.new
       when 4
-        Z3::VeryLowLevel.Z3_get_bv_sort_size(Z3::LowLevel._ctx_pointer, _sort)
+        n = Z3::VeryLowLevel.Z3_get_bv_sort_size(Z3::LowLevel._ctx_pointer, _sort)
         BitvecSort.new(n)
       else
         raise "Unknown sort kind #{kind}"

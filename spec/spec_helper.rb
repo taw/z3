@@ -62,9 +62,9 @@ RSpec::Matchers.define :have_solution do |expected|
   failure_message do |asts|
     solver = setup_solver(asts)
     if solver.check == :sat
-      "expected #{asts.inspect} to have solution #{expected.inspect}, got #{solver.model} instead"
+      "expected #{asts.inspect} to have solution #{expected.inspect}, instead got #{solver.model}"
     else
-      "expected #{asts.inspect} to have solution #{expected.inspect}, but not solvable"
+      "expected #{asts.inspect} to have solution #{expected.inspect}, instead not solvable"
     end
   end
 
