@@ -2,6 +2,12 @@
 
 require_relative "../lib/z3"
 
+def c_boolean(expr)
+  one  = Z3::BitvecSort.new(32).from_const(1)
+  zero = Z3::BitvecSort.new(32).from_const(0)
+  expr.ite(one, zero)
+end
+
 def validate_sign_by_shift!
   """
   sign = v >> (sizeof(int) * CHAR_BIT - 1);
@@ -47,10 +53,7 @@ def validate_abs_without_branching_1!
   r = (v + mask) ^ mask
   puts "Validating abs without branching, version 1"
   solver.prove!(
-    Z3.Or(
-      Z3.And(v.signed_ge(0), r== v),
-      Z3.And(v.signed_lt(0), r==-v)
-    )
+    v.signed_ge(0).ite(r == v, r == -v)
   )
 end
 
@@ -67,22 +70,8 @@ def validate_abs_without_branching_2!
   r = (v^mask) - mask
   puts "Validating abs without branching, version 2"
   solver.prove!(
-    Z3.Or(
-      Z3.And(v.signed_ge(0), r==v),
-      Z3.And(v.signed_lt(0), r==-v)
-    )
+    v.signed_ge(0).ite(r == v, r == -v)
   )
-end
-
-def c_boolean(solver, bool_expr, name)
-  expr_val = Z3.Bitvec(name, 32)
-  solver.assert(
-    Z3.Or(
-      Z3.And(bool_expr, expr_val == 1),
-      Z3.And(~bool_expr, expr_val == 0),
-    )
-  )
-  expr_val
 end
 
 def validate_min_without_branching!
@@ -95,13 +84,10 @@ def validate_min_without_branching!
   solver = Z3::Solver.new
   x = Z3.Bitvec("x", 32)
   y = Z3.Bitvec("y", 32)
-  r = y ^ ((x ^ y) & -c_boolean(solver, x.signed_lt(y), "t"))
+  r = y ^ ((x ^ y) & -c_boolean(x.signed_lt(y)))
   puts "Validating min without branching"
   solver.prove!(
-    Z3.Or(
-      Z3.And(x.signed_le(y), r == x),
-      Z3.And(y.signed_le(x), r == y),
-    )
+    x.signed_le(y).ite(r == x, r == y)
   )
 end
 
@@ -115,13 +101,10 @@ def validate_max_without_branching!
   solver = Z3::Solver.new
   x = Z3.Bitvec("x", 32)
   y = Z3.Bitvec("y", 32)
-  r = x ^ ((x ^ y) & -c_boolean(solver, x.signed_lt(y), "t"))
+  r = x ^ ((x ^ y) & -c_boolean(x.signed_lt(y)))
   puts "Validating max without branching"
   solver.prove!(
-    Z3.Or(
-      Z3.And(x.signed_gt(y), r == x),
-      Z3.And(y.signed_ge(y), r == y),
-    )
+    x.signed_ge(y).ite(r == x, r == y)
   )
 end
 
