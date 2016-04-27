@@ -59,7 +59,9 @@ module Z3
     args = coerce_to_same_sort(*args)
     case args[0]
     when BoolValue
-      BoolSort.new.new(Z3::LowLevel.mk_xor(args))
+      args.inject do |a,b|
+        BoolSort.new.new(Z3::LowLevel.mk_xor(a, b))
+      end
     when BitvecValue
       args.inject do |a,b|
         a.sort.new(Z3::LowLevel.mk_bvxor(a, b))
