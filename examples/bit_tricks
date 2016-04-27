@@ -10,7 +10,7 @@ def validate_sign_by_shift!
   v = Z3.Bitvec("v", 32)
   s = v >> 31
   puts "Validating sign trick:"
-  solver.prove! ((v < 0) & (s == -1)) | ((v >= 0) & (s == 0))
+  solver.prove! (v.signed_lt(0) & (s == -1)) | (v.signed_ge(0) & (s == 0))
 end
 
 def validate_opposite_sign_by_xor!
@@ -21,15 +21,15 @@ def validate_opposite_sign_by_xor!
   solver = Z3::Solver.new
   x = Z3.Bitvec("x", 32)
   y = Z3.Bitvec("y", 32)
-  f = (x^y) < 0
+  f = (x^y).signed_lt(0)
 
   puts "Validating sign trick:"
   solver.prove!(
     Z3.Or(
-      Z3.And(x >= 0, y >= 0, f == false),
-      Z3.And(x < 0, y < 0, f == false),
-      Z3.And(x >= 0, y < 0, f == true),
-      Z3.And(x < 0, y >= 0, f == true),
+      Z3.And(x.signed_ge(0), y.signed_ge(0), f == false),
+      Z3.And(x.signed_lt(0), y.signed_lt(0), f == false),
+      Z3.And(x.signed_ge(0), y.signed_lt(0), f == true),
+      Z3.And(x.signed_lt(0), y.signed_ge(0), f == true),
     )
   )
 end
@@ -48,8 +48,8 @@ def validate_abs_without_branching_1!
   puts "Validating abs without branching, version 1"
   solver.prove!(
     Z3.Or(
-      Z3.And(v >= 0, r==v),
-      Z3.And(v < 0, r==-v)
+      Z3.And(v.signed_ge(0), r== v),
+      Z3.And(v.signed_lt(0), r==-v)
     )
   )
 end
@@ -68,8 +68,8 @@ def validate_abs_without_branching_2!
   puts "Validating abs without branching, version 2"
   solver.prove!(
     Z3.Or(
-      Z3.And(v >= 0, r==v),
-      Z3.And(v < 0, r==-v)
+      Z3.And(v.signed_ge(0), r==v),
+      Z3.And(v.signed_lt(0), r==-v)
     )
   )
 end
@@ -95,12 +95,12 @@ def validate_min_without_branching!
   solver = Z3::Solver.new
   x = Z3.Bitvec("x", 32)
   y = Z3.Bitvec("y", 32)
-  r = y ^ ((x ^ y) & -c_boolean(solver, x < y, "t"))
+  r = y ^ ((x ^ y) & -c_boolean(solver, x.signed_lt(y), "t"))
   puts "Validating min without branching"
   solver.prove!(
     Z3.Or(
-      Z3.And(x <= y, r == x),
-      Z3.And(y <= y, r == y),
+      Z3.And(x.signed_le(y), r == x),
+      Z3.And(y.signed_le(x), r == y),
     )
   )
 end
@@ -115,12 +115,12 @@ def validate_max_without_branching!
   solver = Z3::Solver.new
   x = Z3.Bitvec("x", 32)
   y = Z3.Bitvec("y", 32)
-  r = x ^ ((x ^ y) & -c_boolean(solver, x < y, "t"))
+  r = x ^ ((x ^ y) & -c_boolean(solver, x.signed_lt(y), "t"))
   puts "Validating max without branching"
   solver.prove!(
     Z3.Or(
-      Z3.And(x >= y, r == x),
-      Z3.And(y >= y, r == y),
+      Z3.And(x.signed_gt(y), r == x),
+      Z3.And(y.signed_ge(y), r == y),
     )
   )
 end

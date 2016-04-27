@@ -167,7 +167,7 @@ module Z3
     when ArithExpr
       BoolSort.new.new(LowLevel.mk_gt(a, b))
     when BitvecExpr
-      BoolSort.new.new(LowLevel.mk_bvsgt(a, b))
+      raise Z3::Exception, "Use #signed_gt or #unsigned_gt for Bitvec, not >"
     else
       raise ArgumentError, "Can't compare #{a.sort} values"
     end
@@ -179,7 +179,7 @@ module Z3
     when ArithExpr
       BoolSort.new.new(LowLevel.mk_ge(a, b))
     when BitvecExpr
-      BoolSort.new.new(LowLevel.mk_bvsge(a, b))
+      raise Z3::Exception, "Use #signed_ge or #unsigned_ge for Bitvec, not >="
     else
       raise ArgumentError, "Can't compare #{a.sort} values"
     end
@@ -191,7 +191,7 @@ module Z3
     when ArithExpr
       BoolSort.new.new(LowLevel.mk_lt(a, b))
     when BitvecExpr
-      BoolSort.new.new(LowLevel.mk_bvslt(a, b))
+      raise Z3::Exception, "Use #signed_lt or #unsigned_lt for Bitvec, not <"
     else
       raise ArgumentError, "Can't compare #{a.sort} values"
     end
@@ -203,10 +203,50 @@ module Z3
     when ArithExpr
       BoolSort.new.new(LowLevel.mk_le(a, b))
     when BitvecExpr
-      BoolSort.new.new(LowLevel.mk_bvsle(a, b))
+      raise Z3::Exception, "Use #signed_le or #unsigned_le for Bitvec, not <="
     else
       raise ArgumentError, "Can't compare #{a.sort} values"
     end
+  end
+
+  def UnsignedGt(a, b)
+    a, b = coerce_to_same_bv_sort(a, b)
+    BoolSort.new.new(Z3::LowLevel.mk_bvugt(a, b))
+  end
+
+  def UnsignedGe(a, b)
+    a, b = coerce_to_same_bv_sort(a, b)
+    BoolSort.new.new(Z3::LowLevel.mk_bvuge(a, b))
+  end
+
+  def UnsignedLt(a, b)
+    a, b = coerce_to_same_bv_sort(a, b)
+    BoolSort.new.new(Z3::LowLevel.mk_bvult(a, b))
+  end
+
+  def UnsignedLe(a, b)
+    a, b = coerce_to_same_bv_sort(a, b)
+    BoolSort.new.new(Z3::LowLevel.mk_bvule(a, b))
+  end
+
+  def SignedGt(a, b)
+    a, b = coerce_to_same_bv_sort(a, b)
+    BoolSort.new.new(Z3::LowLevel.mk_bvsgt(a, b))
+  end
+
+  def SignedGe(a, b)
+    a, b = coerce_to_same_bv_sort(a, b)
+    BoolSort.new.new(Z3::LowLevel.mk_bvsge(a, b))
+  end
+
+  def SignedLt(a, b)
+    a, b = coerce_to_same_bv_sort(a, b)
+    BoolSort.new.new(Z3::LowLevel.mk_bvslt(a, b))
+  end
+
+  def SignedLe(a, b)
+    a, b = coerce_to_same_bv_sort(a, b)
+    BoolSort.new.new(Z3::LowLevel.mk_bvsle(a, b))
   end
 
   def Not(a)

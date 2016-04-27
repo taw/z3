@@ -41,19 +41,51 @@ module Z3
     end
 
     def >(other)
-      ::Z3.Gt(self, other)
+      Z3.Gt(self, other)
     end
 
     def >=(other)
-      ::Z3.Ge(self, other)
+      Z3.Ge(self, other)
     end
 
     def <=(other)
-      ::Z3.Le(self, other)
+      Z3.Le(self, other)
     end
 
     def <(other)
-      ::Z3.Lt(self, other)
+      Z3.Lt(self, other)
+    end
+
+    def signed_gt(other)
+      Z3::SignedGt(self, other)
+    end
+
+    def signed_ge(other)
+      Z3::SignedGe(self, other)
+    end
+
+    def signed_lt(other)
+      Z3::SignedLt(self, other)
+    end
+
+    def signed_le(other)
+      Z3::SignedLe(self, other)
+    end
+
+    def unsigned_gt(other)
+      Z3::UnsignedGt(self, other)
+    end
+
+    def unsigned_ge(other)
+      Z3::UnsignedGe(self, other)
+    end
+
+    def unsigned_lt(other)
+      Z3::UnsignedLt(self, other)
+    end
+
+    def unsigned_le(other)
+      Z3::UnsignedLe(self, other)
     end
 
     def coerce(other)

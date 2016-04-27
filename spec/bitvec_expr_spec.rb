@@ -52,4 +52,52 @@ describe Z3::BitvecExpr do
   it "~" do
     expect([a == 50, b == ~a]).to have_solution(b => 205)
   end
+
+  it ">" do
+    expect{ a > b }.to raise_error(Z3::Exception)
+    expect([a == 100, b ==  20, x == a.unsigned_gt(b)]).to have_solution(x => true)
+    expect([a == 100, b == 100, x == a.unsigned_gt(b)]).to have_solution(x => false)
+    expect([a == 100, b == 120, x == a.unsigned_gt(b)]).to have_solution(x => false)
+    expect([a == 100, b == 200, x == a.unsigned_gt(b)]).to have_solution(x => false)
+    expect([a == 100, b ==  20, x == a.signed_gt(b)]).to have_solution(x => true)
+    expect([a == 100, b == 100, x == a.signed_gt(b)]).to have_solution(x => false)
+    expect([a == 100, b == 120, x == a.signed_gt(b)]).to have_solution(x => false)
+    expect([a == 100, b == 200, x == a.signed_gt(b)]).to have_solution(x => true)
+  end
+
+  it ">=" do
+    expect{ a >= b }.to raise_error(Z3::Exception)
+    expect([a == 100, b ==  20, x == a.unsigned_ge(b)]).to have_solution(x => true)
+    expect([a == 100, b == 100, x == a.unsigned_ge(b)]).to have_solution(x => true)
+    expect([a == 100, b == 120, x == a.unsigned_ge(b)]).to have_solution(x => false)
+    expect([a == 100, b == 200, x == a.unsigned_ge(b)]).to have_solution(x => false)
+    expect([a == 100, b ==  20, x == a.signed_ge(b)]).to have_solution(x => true)
+    expect([a == 100, b == 100, x == a.signed_ge(b)]).to have_solution(x => true)
+    expect([a == 100, b == 120, x == a.signed_ge(b)]).to have_solution(x => false)
+    expect([a == 100, b == 200, x == a.signed_ge(b)]).to have_solution(x => true)
+  end
+
+  it "<" do
+    expect{ a < b }.to raise_error(Z3::Exception)
+    expect([a == 100, b ==  20, x == a.unsigned_lt(b)]).to have_solution(x => false)
+    expect([a == 100, b == 100, x == a.unsigned_lt(b)]).to have_solution(x => false)
+    expect([a == 100, b == 120, x == a.unsigned_lt(b)]).to have_solution(x =>  true)
+    expect([a == 100, b == 200, x == a.unsigned_lt(b)]).to have_solution(x =>  true)
+    expect([a == 100, b ==  20, x == a.signed_lt(b)]).to have_solution(x => false)
+    expect([a == 100, b == 100, x == a.signed_lt(b)]).to have_solution(x => false)
+    expect([a == 100, b == 120, x == a.signed_lt(b)]).to have_solution(x =>  true)
+    expect([a == 100, b == 200, x == a.signed_lt(b)]).to have_solution(x => false)
+  end
+
+  it "<=" do
+    expect{ a <= b }.to raise_error(Z3::Exception)
+    expect([a == 100, b ==  20, x == a.unsigned_le(b)]).to have_solution(x => false)
+    expect([a == 100, b == 100, x == a.unsigned_le(b)]).to have_solution(x =>  true)
+    expect([a == 100, b == 120, x == a.unsigned_le(b)]).to have_solution(x =>  true)
+    expect([a == 100, b == 200, x == a.unsigned_le(b)]).to have_solution(x =>  true)
+    expect([a == 100, b ==  20, x == a.signed_le(b)]).to have_solution(x => false)
+    expect([a == 100, b == 100, x == a.signed_le(b)]).to have_solution(x =>  true)
+    expect([a == 100, b == 120, x == a.signed_le(b)]).to have_solution(x =>  true)
+    expect([a == 100, b == 200, x == a.signed_le(b)]).to have_solution(x => false)
+  end
 end
