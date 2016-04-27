@@ -1,7 +1,7 @@
-describe Z3::RealValue do
-  let(:a) { Z3::Real("a") }
-  let(:b) { Z3::Real("b") }
-  let(:c) { Z3::Real("c") }
+describe Z3::IntExpr do
+  let(:a) { Z3::Int("a") }
+  let(:b) { Z3::Int("b") }
+  let(:c) { Z3::Int("c") }
   let(:x) { Z3::Bool("x") }
 
   it "+" do
@@ -17,10 +17,25 @@ describe Z3::RealValue do
   end
 
   it "/" do
-    expect([a ==  10, b ==  3, c == a / b]).to have_solution(c => "10/3")
-    expect([a == -10, b ==  3, c == a / b]).to have_solution(c => "-10/3")
-    expect([a ==  10, b == -3, c == a / b]).to have_solution(c => "-10/3")
-    expect([a == -10, b == -3, c == a / b]).to have_solution(c => "10/3")
+    expect([a ==  10, b ==  3, c == a / b]).to have_solution(c =>  3)
+    expect([a == -10, b ==  3, c == a / b]).to have_solution(c => -4)
+    expect([a ==  10, b == -3, c == a / b]).to have_solution(c => -3)
+    expect([a == -10, b == -3, c == a / b]).to have_solution(c =>  4)
+  end
+
+  # Can't say these make much sense, but let's document what Z3 actually does
+  it "rem" do
+    expect([a ==  10, b ==  3, c == a.rem(b)]).to have_solution(c => 10 -  3 *  3)
+    expect([a == -10, b ==  3, c == a.rem(b)]).to have_solution(c =>-10 -  3 * -4)
+    expect([a ==  10, b == -3, c == a.rem(b)]).to have_solution(c =>-( 10 - -3 * -3))
+    expect([a == -10, b == -3, c == a.rem(b)]).to have_solution(c =>-(-10 - -3 *  4))
+  end
+
+  it "mod" do
+    expect([a ==  10, b ==  3, c == a.mod(b)]).to have_solution(c => 1)
+    expect([a ==  10, b == -3, c == a.mod(b)]).to have_solution(c => 1)
+    expect([a == -10, b ==  3, c == a.mod(b)]).to have_solution(c => 2)
+    expect([a == -10, b == -3, c == a.mod(b)]).to have_solution(c => 2)
   end
 
   it "==" do
@@ -59,6 +74,5 @@ describe Z3::RealValue do
 
   it "**" do
     expect([a == 3, b == 4, c == (a ** b)]).to have_solution(c => 81)
-    expect([a == 81, b == 0.25, c == (a ** b)]).to have_solution(c => 3)
   end
 end

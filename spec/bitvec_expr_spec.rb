@@ -1,4 +1,4 @@
-describe Z3::BitvecValue do
+describe Z3::BitvecExpr do
   let(:a) { Z3::Bitvec("a", 8) }
   let(:b) { Z3::Bitvec("b", 8) }
   let(:c) { Z3::Bitvec("c", 8) }

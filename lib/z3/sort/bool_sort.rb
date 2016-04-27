@@ -4,15 +4,15 @@ module Z3
       super LowLevel.mk_bool_sort
     end
 
-    def value_class
-      BoolValue
+    def expr_class
+      BoolExpr
     end
 
     def from_const(val)
       if val == true
-        BoolValue.new(LowLevel.mk_true, self)
+        BoolExpr.new(LowLevel.mk_true, self)
       elsif val == false
-        BoolValue.new(LowLevel.mk_false, self)
+        BoolExpr.new(LowLevel.mk_false, self)
       else
         raise Z3::Exception, "Cannot convert #{val.class} to #{self.class}"
       end

@@ -23,12 +23,12 @@ require_relative "z3/sort/bool_sort"
 require_relative "z3/sort/bitvec_sort"
 
 # ASTs
-require_relative "z3/value/value"
-require_relative "z3/value/arith_value"
-require_relative "z3/value/int_value"
-require_relative "z3/value/real_value"
-require_relative "z3/value/bool_value"
-require_relative "z3/value/bitvec_value"
+require_relative "z3/expr/expr"
+require_relative "z3/expr/arith_expr"
+require_relative "z3/expr/int_expr"
+require_relative "z3/expr/real_expr"
+require_relative "z3/expr/bool_expr"
+require_relative "z3/expr/bitvec_expr"
 
 # Python-style interface
 require_relative "z3/interface"

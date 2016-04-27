@@ -1,5 +1,5 @@
 module Z3
-  class BoolValue < Value
+  class BoolExpr < Expr
     def ~
       sort.new(LowLevel.mk_not(self))
     end

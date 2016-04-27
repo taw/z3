@@ -1,5 +1,5 @@
 module Z3
-  class Value < AST
+  class Expr < AST
     attr_reader :sort
     def initialize(_ast, sort)
       super(_ast)
@@ -8,7 +8,7 @@ module Z3
     end
 
     def inspect
-      "Value<#{to_s} :: #{sort.to_s}>"
+      "#{sort.to_s}<#{to_s}>"
     end
 
     def ==(other)

@@ -1,6 +1,6 @@
 module Z3
-  # IntValue / RealValue
-  module ArithValue
+  # IntExpr / RealExpr
+  module ArithExpr
     def +(other)
       ::Z3.Add(self, other)
     end
@@ -15,14 +15,6 @@ module Z3
 
     def /(other)
       ::Z3.Div(self, other)
-    end
-
-    def mod(other)
-      ::Z3.Mod(self, other)
-    end
-
-    def rem(other)
-      ::Z3.Rem(self, other)
     end
 
     def **(other)
@@ -53,7 +45,7 @@ module Z3
     # is:  (+ 1.0 x)
     # not: (+ (to_real 1) x)
     def coerce(other)
-      other_sort = Value.sort_for_const(other)
+      other_sort = Expr.sort_for_const(other)
       max_sort = [sort, other_sort].max
       [max_sort.from_const(other), max_sort.from_value(self)]
     end

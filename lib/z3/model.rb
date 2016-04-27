@@ -25,7 +25,7 @@ class Z3::Model
   end
 
   def model_eval(ast, model_completion=false)
-    Z3::Value.new_from_pointer(Z3::LowLevel.model_eval(self, ast, model_completion))
+    Z3::Expr.new_from_pointer(Z3::LowLevel.model_eval(self, ast, model_completion))
   end
 
   def [](ast)
@@ -44,7 +44,7 @@ class Z3::Model
     consts.sort_by(&:name).each do |c|
       yield(
         c.range.var(c.name),
-        Z3::Value.new_from_pointer(Z3::LowLevel.model_get_const_interp(self, c))
+        Z3::Expr.new_from_pointer(Z3::LowLevel.model_get_const_interp(self, c))
       )
     end
   end

@@ -59,7 +59,7 @@ module Z3
 
     # We pretend to be a class, sort of
     def new(_ast)
-      value_class.new(_ast, self)
+      expr_class.new(_ast, self)
     end
 
     def value_class

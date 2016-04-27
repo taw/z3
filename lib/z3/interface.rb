@@ -24,50 +24,50 @@ module Z3
   end
 
   def Const(v)
-    Value.sort_for_const(v).from_const(v)
+    Expr.sort_for_const(v).from_const(v)
   end
 
   def And(*args)
     args = coerce_to_same_sort(*args)
     case args[0]
-    when BoolValue
+    when BoolExpr
       BoolSort.new.new(Z3::LowLevel.mk_and(args))
-    when BitvecValue
+    when BitvecExpr
       args.inject do |a,b|
         a.sort.new(Z3::LowLevel.mk_bvand(a, b))
       end
     else
-      raise ArgumentError, "Can't perform logic operations on #{a.sort} values, only Bool and Bitvec"
+      raise ArgumentError, "Can't perform logic operations on #{a.sort} exprs, only Bool and Bitvec"
     end
   end
 
   def Or(*args)
     args = coerce_to_same_sort(*args)
     case args[0]
-    when BoolValue
+    when BoolExpr
       BoolSort.new.new(Z3::LowLevel.mk_or(args))
-    when BitvecValue
+    when BitvecExpr
       args.inject do |a,b|
         a.sort.new(Z3::LowLevel.mk_bvor(a, b))
       end
     else
-      raise ArgumentError, "Can't perform logic operations on #{a.sort} values, only Bool and Bitvec"
+      raise ArgumentError, "Can't perform logic operations on #{a.sort} exprs, only Bool and Bitvec"
     end
   end
 
   def Xor(*args)
     args = coerce_to_same_sort(*args)
     case args[0]
-    when BoolValue
+    when BoolExpr
       args.inject do |a,b|
         BoolSort.new.new(Z3::LowLevel.mk_xor(a, b))
       end
-    when BitvecValue
+    when BitvecExpr
       args.inject do |a,b|
         a.sort.new(Z3::LowLevel.mk_bvxor(a, b))
       end
     else
-      raise ArgumentError, "Can't perform logic operations on #{a.sort} values, only Bool and Bitvec"
+      raise ArgumentError, "Can't perform logic operations on #{a.sort} exprs, only Bool and Bitvec"
     end
   end
 
@@ -91,23 +91,23 @@ module Z3
     raise ArgumentError if args.empty?
     args = coerce_to_same_sort(*args)
     case args[0]
-    when ArithValue
+    when ArithExpr
       args[0].sort.new(LowLevel.mk_add(args))
-    when BitvecValue
+    when BitvecExpr
       args.inject do |a,b|
         a.sort.new(LowLevel.mk_bvadd(a,b))
       end
     else
-      raise ArgumentError, "Can't perform logic operations on #{args[0].sort} values, only Int/Real/Bitvec"
+      raise ArgumentError, "Can't perform logic operations on #{args[0].sort} exprs, only Int/Real/Bitvec"
     end
   end
 
   def Sub(*args)
     args = coerce_to_same_sort(*args)
     case args[0]
-    when ArithValue
+    when ArithExpr
       args[0].sort.new(LowLevel.mk_sub(args))
-    when BitvecValue
+    when BitvecExpr
       args.inject do |a,b|
         a.sort.new(LowLevel.mk_bvsub(a,b))
       end
@@ -119,9 +119,9 @@ module Z3
   def Mul(*args)
     args = coerce_to_same_sort(*args)
     case args[0]
-    when ArithValue
+    when ArithExpr
       args[0].sort.new(LowLevel.mk_mul(args))
-    when BitvecValue
+    when BitvecExpr
       args.inject do |a,b|
         a.sort.new(LowLevel.mk_bvmul(a,b))
       end
@@ -164,9 +164,9 @@ module Z3
   def Gt(a, b)
     a, b = coerce_to_same_sort(a, b)
     case a
-    when ArithValue
+    when ArithExpr
       BoolSort.new.new(LowLevel.mk_gt(a, b))
-    when BitvecValue
+    when BitvecExpr
       BoolSort.new.new(LowLevel.mk_bvsgt(a, b))
     else
       raise ArgumentError, "Can't compare #{a.sort} values"
@@ -176,9 +176,9 @@ module Z3
   def Ge(a, b)
     a, b = coerce_to_same_sort(a, b)
     case a
-    when ArithValue
+    when ArithExpr
       BoolSort.new.new(LowLevel.mk_ge(a, b))
-    when BitvecValue
+    when BitvecExpr
       BoolSort.new.new(LowLevel.mk_bvsge(a, b))
     else
       raise ArgumentError, "Can't compare #{a.sort} values"
@@ -188,9 +188,9 @@ module Z3
   def Lt(a, b)
     a, b = coerce_to_same_sort(a, b)
     case a
-    when ArithValue
+    when ArithExpr
       BoolSort.new.new(LowLevel.mk_lt(a, b))
-    when BitvecValue
+    when BitvecExpr
       BoolSort.new.new(LowLevel.mk_bvslt(a, b))
     else
       raise ArgumentError, "Can't compare #{a.sort} values"
@@ -200,9 +200,9 @@ module Z3
   def Le(a, b)
     a, b = coerce_to_same_sort(a, b)
     case a
-    when ArithValue
+    when ArithExpr
       BoolSort.new.new(LowLevel.mk_le(a, b))
-    when BitvecValue
+    when BitvecExpr
       BoolSort.new.new(LowLevel.mk_bvsle(a, b))
     else
       raise ArgumentError, "Can't compare #{a.sort} values"
@@ -239,9 +239,9 @@ module Z3
   def coerce_to_same_sort(*args)
     # This will raise exception unless one of the sorts is highest
     # So [true, IntSort]
-    max_sort = args.map{|a| a.is_a?(Value) ? a.sort : Value.sort_for_const(a)}.max
+    max_sort = args.map{|a| a.is_a?(Expr) ? a.sort : Expr.sort_for_const(a)}.max
     args.map do |a|
-      if a.is_a?(Value)
+      if a.is_a?(Expr)
         if  a.sort == max_sort
           a
         else
@@ -255,25 +255,25 @@ module Z3
 
   def coerce_to_same_bool_sort(*args)
     args = coerce_to_same_sort(*args)
-    raise Z3::Exception, "Bool value expected" unless args[0].is_a?(BoolValue)
+    raise Z3::Exception, "Bool value expected" unless args[0].is_a?(BoolExpr)
     args
   end
 
   def coerce_to_same_arith_sort(*args)
     args = coerce_to_same_sort(*args)
-    raise Z3::Exception, "Int or Real value expected" unless args[0].is_a?(IntValue) or args[0].is_a?(RealValue)
+    raise Z3::Exception, "Int or Real value expected" unless args[0].is_a?(IntExpr) or args[0].is_a?(RealExpr)
     args
   end
 
   def coerce_to_same_bv_sort(*args)
     args = coerce_to_same_sort(*args)
-    raise Z3::Exception, "Bitvec value with same size expected" unless args[0].is_a?(BitvecValue)
+    raise Z3::Exception, "Bitvec value with same size expected" unless args[0].is_a?(BitvecExpr)
     args
   end
 
   def coerce_to_same_int_sort(*args)
     args = coerce_to_same_sort(*args)
-    raise Z3::Exception, "Int value expected" unless args[0].is_a?(IntValue)
+    raise Z3::Exception, "Int value expected" unless args[0].is_a?(IntExpr)
     args
   end
 

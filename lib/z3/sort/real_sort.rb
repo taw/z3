@@ -4,8 +4,8 @@ module Z3
       super LowLevel.mk_real_sort
     end
 
-    def value_class
-      RealValue
+    def expr_class
+      RealExpr
     end
 
     def from_const(val)
@@ -17,9 +17,9 @@ module Z3
     end
 
     def from_value(val)
-      if val.is_a?(IntValue)
+      if val.is_a?(IntExpr)
         new LowLevel.mk_int2real(val)
-      elsif val.is_a?(RealValue)
+      elsif val.is_a?(RealExpr)
         val
       else
         raise Z3::Exception, "Cannot convert #{val.class} to #{self.class}"

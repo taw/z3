@@ -4,8 +4,8 @@ module Z3
       super LowLevel.mk_int_sort
     end
 
-    def value_class
-      IntValue
+    def expr_class
+      IntExpr
     end
 
     def from_const(val)

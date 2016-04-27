@@ -1,4 +1,4 @@
-describe Z3::BoolValue do
+describe Z3::BoolExpr do
   let(:a) { Z3::Bool("a") }
   let(:b) { Z3::Bool("b") }
   let(:c) { Z3::Bool("c") }

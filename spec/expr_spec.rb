@@ -1,4 +1,4 @@
-describe Z3::Value do
+describe Z3::Expr do
   let(:a) { Z3.Int("a") }
   let(:b) { Z3.Int("b") }
   let(:c) { Z3.Bool("c") }
@@ -17,8 +17,8 @@ describe Z3::Value do
   end
 
   it "#inspect" do
-    expect(a.inspect).to eq("Value<a :: Int>")
-    expect((e+f).inspect).to eq("Value<(+ e f) :: Real>")
+    expect(a.inspect).to eq("Int<a>")
+    expect((e+f).inspect).to eq("Real<(+ e f)>")
   end
 
   describe "#~" do

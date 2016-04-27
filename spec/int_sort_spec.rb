@@ -1,9 +1,9 @@
 describe Z3::IntSort do
   it "can instantiate constants" do
-    expect(subject.from_const(0).inspect).to eq("Value<0 :: Int>")
-    expect(subject.from_const(42).inspect).to eq("Value<42 :: Int>")
-    expect(subject.from_const(1_000_000_000_000).inspect).to eq("Value<1000000000000 :: Int>")
-    expect(subject.from_const(-1_000_000_000_000).inspect).to eq("Value<-1000000000000 :: Int>")
+    expect(subject.from_const(0).inspect).to eq("Int<0>")
+    expect(subject.from_const(42).inspect).to eq("Int<42>")
+    expect(subject.from_const(1_000_000_000_000).inspect).to eq("Int<1000000000000>")
+    expect(subject.from_const(-1_000_000_000_000).inspect).to eq("Int<-1000000000000>")
   end
 
   it "raises exception when trying to convert constants of wrong type" do
@@ -13,6 +13,6 @@ describe Z3::IntSort do
   end
 
   it "can instantiate variables" do
-    expect(Z3.Int("a").inspect).to eq("Value<a :: Int>")
+    expect(Z3.Int("a").inspect).to eq("Int<a>")
   end
 end

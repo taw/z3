@@ -4,8 +4,8 @@ module Z3
       super LowLevel.mk_bv_sort(n)
     end
 
-    def value_class
-      BitvecValue
+    def expr_class
+      BitvecExpr
     end
 
     def from_const(val)

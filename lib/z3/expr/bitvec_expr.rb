@@ -1,5 +1,5 @@
 module Z3
-  class BitvecValue < Value
+  class BitvecExpr < Expr
     def ~
       sort.new(LowLevel.mk_bvnot(self))
     end

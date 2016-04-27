@@ -1,6 +1,6 @@
 module Z3
-  class IntValue < Value
-    include ArithValue
+  class RealExpr < Expr
+    include ArithExpr
 
     public_class_method :new
   end

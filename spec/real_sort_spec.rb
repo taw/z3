@@ -1,13 +1,13 @@
 describe Z3::RealSort do
   it "can instantiate constants" do
-    expect(subject.from_const(0).inspect).to eq("Value<0 :: Real>")
-    expect(subject.from_const(42).inspect).to eq("Value<42 :: Real>")
-    expect(subject.from_const(1_000_000_000_000).inspect).to eq("Value<1000000000000 :: Real>")
-    expect(subject.from_const(-1_000_000_000_000).inspect).to eq("Value<-1000000000000 :: Real>")
-    expect(subject.from_const(0.0).inspect).to eq("Value<0 :: Real>")
-    expect(subject.from_const(-0.0).inspect).to eq("Value<0 :: Real>")
-    expect(subject.from_const(3.14).inspect).to eq("Value<157/50 :: Real>")
-    expect(subject.from_const(-3.14).inspect).to eq("Value<-157/50 :: Real>")
+    expect(subject.from_const(0).inspect).to eq("Real<0>")
+    expect(subject.from_const(42).inspect).to eq("Real<42>")
+    expect(subject.from_const(1_000_000_000_000).inspect).to eq("Real<1000000000000>")
+    expect(subject.from_const(-1_000_000_000_000).inspect).to eq("Real<-1000000000000>")
+    expect(subject.from_const(0.0).inspect).to eq("Real<0>")
+    expect(subject.from_const(-0.0).inspect).to eq("Real<0>")
+    expect(subject.from_const(3.14).inspect).to eq("Real<157/50>")
+    expect(subject.from_const(-3.14).inspect).to eq("Real<-157/50>")
   end
 
   it "raises exception when trying to convert constants of wrong type" do
@@ -19,6 +19,6 @@ describe Z3::RealSort do
   end
 
   it "can instantiate variables" do
-    expect(Z3.Real("a").inspect).to eq("Value<a :: Real>")
+    expect(Z3.Real("a").inspect).to eq("Real<a>")
   end
 end
