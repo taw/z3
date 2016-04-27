@@ -62,6 +62,7 @@ class LogicPuzzle
     add_assertions!
     if @solver.check == :sat
       @solver.model.each do |k,v|
+        k = k.to_s.gsub("|", "")
         i, name = k.split("-", 2)
         puts "#{k} = #{@dict[name][v.to_s.to_i]}"
       end
