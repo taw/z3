@@ -133,6 +133,16 @@ module Z3
     a.sort.new(LowLevel.mk_div(a, b))
   end
 
+  def Mod(a,b)
+    a, b = coerce_to_same_int_sort(a, b)
+    a.sort.new(LowLevel.mk_mod(a, b))
+  end
+
+  def Rem(a,b)
+    a, b = coerce_to_same_int_sort(a, b)
+    a.sort.new(LowLevel.mk_rem(a, b))
+  end
+
   def Power(a, b)
     # Wait, is this even legitimate that it's I**I and R**R?
     a, b = coerce_to_same_arith_sort(a, b)
@@ -255,7 +265,13 @@ module Z3
 
   def coerce_to_same_bv_sort(*args)
     args = coerce_to_same_sort(*args)
-    raise Z3::Exception, "Bitvec value with same nize expected" unless args[0].is_a?(BitvecValue)
+    raise Z3::Exception, "Bitvec value with same size expected" unless args[0].is_a?(BitvecValue)
+    args
+  end
+
+  def coerce_to_same_int_sort(*args)
+    args = coerce_to_same_sort(*args)
+    raise Z3::Exception, "Int value expected" unless args[0].is_a?(IntValue)
     args
   end
 

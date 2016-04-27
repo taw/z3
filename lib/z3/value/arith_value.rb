@@ -17,6 +17,14 @@ module Z3
       ::Z3.Div(self, other)
     end
 
+    def mod(other)
+      ::Z3.Mod(self, other)
+    end
+
+    def rem(other)
+      ::Z3.Rem(self, other)
+    end
+
     def **(other)
       ::Z3.Power(self, other)
     end
