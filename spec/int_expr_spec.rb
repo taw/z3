@@ -75,4 +75,8 @@ describe Z3::IntExpr do
   it "**" do
     expect([a == 3, b == 4, c == (a ** b)]).to have_solution(c => 81)
   end
+
+  it "unary -" do
+    expect([a == 3, b == -a]).to have_solution(b => -3)
+  end
 end

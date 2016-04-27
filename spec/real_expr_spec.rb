@@ -61,4 +61,10 @@ describe Z3::RealExpr do
     expect([a == 3, b == 4, c == (a ** b)]).to have_solution(c => 81)
     expect([a == 81, b == 0.25, c == (a ** b)]).to have_solution(c => 3)
   end
+
+  it "unary -" do
+    expect([a == 3, b == -a]).to have_solution(b => -3)
+    expect([a == 0, b == -a]).to have_solution(b => 0)
+    expect([a == 3.5, b == -a]).to have_solution(b => "-7/2")
+  end
 end
