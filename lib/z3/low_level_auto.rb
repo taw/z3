@@ -312,10 +312,6 @@ module Z3::LowLevel
       Z3::VeryLowLevel.Z3_fpa_get_sbits(_ctx_pointer, sort._ast)
     end
 
-    def func_decl_to_string(func_decl) #=> :string
-      Z3::VeryLowLevel.Z3_func_decl_to_string(_ctx_pointer, func_decl._ast)
-    end
-
     def func_entry_dec_ref(func_entry) #=> :void
       Z3::VeryLowLevel.Z3_func_entry_dec_ref(_ctx_pointer, func_entry._func_entry)
     end
@@ -1910,10 +1906,6 @@ module Z3::LowLevel
 
     def solver_to_string(solver) #=> :string
       Z3::VeryLowLevel.Z3_solver_to_string(_ctx_pointer, solver._solver)
-    end
-
-    def sort_to_string(sort) #=> :string
-      Z3::VeryLowLevel.Z3_sort_to_string(_ctx_pointer, sort._ast)
     end
 
     def stats_dec_ref(stats) #=> :void

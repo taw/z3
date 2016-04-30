@@ -72,6 +72,9 @@ class GenerateAPI
       "sort_to_ast",
       "func_decl_to_ast",
       "app_to_ast",
+      # Aliases
+      "func_decl_to_string",
+      "sort_to_string",
     ].to_set
   end
 

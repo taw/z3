@@ -41,7 +41,7 @@ module Z3
     end
 
     def to_s
-      LowLevel.sort_to_string(self)
+      LowLevel.ast_to_string(self)
     end
 
     def inspect

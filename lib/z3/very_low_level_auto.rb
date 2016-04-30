@@ -77,7 +77,6 @@ module Z3::VeryLowLevel
   attach_function :Z3_fpa_get_numeral_exponent_string, [:ctx_pointer, :ast_pointer], :string
   attach_function :Z3_fpa_get_numeral_significand_string, [:ctx_pointer, :ast_pointer], :string
   attach_function :Z3_fpa_get_sbits, [:ctx_pointer, :sort_pointer], :uint
-  attach_function :Z3_func_decl_to_string, [:ctx_pointer, :func_decl_pointer], :string
   attach_function :Z3_func_entry_dec_ref, [:ctx_pointer, :func_entry_pointer], :void
   attach_function :Z3_func_entry_get_arg, [:ctx_pointer, :func_entry_pointer, :uint], :ast_pointer
   attach_function :Z3_func_entry_get_num_args, [:ctx_pointer, :func_entry_pointer], :uint
@@ -477,7 +476,6 @@ module Z3::VeryLowLevel
   attach_function :Z3_solver_reset, [:ctx_pointer, :solver_pointer], :void
   attach_function :Z3_solver_set_params, [:ctx_pointer, :solver_pointer, :params_pointer], :void
   attach_function :Z3_solver_to_string, [:ctx_pointer, :solver_pointer], :string
-  attach_function :Z3_sort_to_string, [:ctx_pointer, :sort_pointer], :string
   attach_function :Z3_stats_dec_ref, [:ctx_pointer, :stats_pointer], :void
   attach_function :Z3_stats_get_double_value, [:ctx_pointer, :stats_pointer, :uint], :double
   attach_function :Z3_stats_get_key, [:ctx_pointer, :stats_pointer, :uint], :string
