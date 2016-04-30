@@ -45,12 +45,30 @@ describe Z3::BitvecExpr do
     expect([a == 50, b == 27, c == (a ^ b)]).to have_solution(c => 41)
   end
 
+  it "xnor" do
+    expect([a == 50, b == 27, c == a.xnor(b)]).to have_solution(c => 214)
+  end
+
   it "unary -" do
     expect([a == 50, b == -a]).to have_solution(b => 206)
   end
 
   it "~" do
     expect([a == 50, b == ~a]).to have_solution(b => 205)
+  end
+
+  it ">>" do
+    expect([a == 234, b == 2, c == a.unsigned_rshift(b)]).to have_solution(c => 58)
+    expect([a == 234, b == 2, c == a.signed_rshift(b)]).to have_solution(c => 250)
+    expect{ a.rshift(b) }.to raise_error(Z3::Exception)
+    expect{ a >> b }.to raise_error(Z3::Exception)
+  end
+
+  it "<< (sign-independent)" do
+    expect([a == 234, b == 2, c == a.signed_lshift(b)]).to have_solution(c => 168)
+    expect([a == 234, b == 2, c == a.unsigned_lshift(b)]).to have_solution(c => 168)
+    expect([a == 234, b == 2, c == a.lshift(b)]).to have_solution(c => 168)
+    expect([a == 234, b == 2, c == (a << b)]).to have_solution(c => 168)
   end
 
   it ">" do

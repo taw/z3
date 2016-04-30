@@ -50,8 +50,8 @@ module Z3
 
     def var(name)
       new(
-        Z3::LowLevel.mk_const(
-          Z3::LowLevel.mk_string_symbol(name),
+        LowLevel.mk_const(
+          LowLevel.mk_string_symbol(name),
           self,
         )
       )
@@ -72,7 +72,7 @@ module Z3
     end
 
     def self.from_pointer(_sort)
-      kind = Z3::VeryLowLevel.Z3_get_sort_kind(Z3::LowLevel._ctx_pointer, _sort)
+      kind = Z3::VeryLowLevel.Z3_get_sort_kind(LowLevel._ctx_pointer, _sort)
       case kind
       when 1
         BoolSort.new
@@ -81,7 +81,7 @@ module Z3
       when 3
         RealSort.new
       when 4
-        n = Z3::VeryLowLevel.Z3_get_bv_sort_size(Z3::LowLevel._ctx_pointer, _sort)
+        n = Z3::VeryLowLevel.Z3_get_bv_sort_size(LowLevel._ctx_pointer, _sort)
         BitvecSort.new(n)
       else
         raise "Unknown sort kind #{kind}"

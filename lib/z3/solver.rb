@@ -2,44 +2,44 @@ module Z3
   class Solver
     attr_reader :_solver
     def initialize
-      @_solver = Z3::LowLevel.mk_solver
-      Z3::LowLevel.solver_inc_ref(self)
+      @_solver = LowLevel.mk_solver
+      LowLevel.solver_inc_ref(self)
     end
 
     def push
-      Z3::LowLevel.solver_push(self)
+      LowLevel.solver_push(self)
     end
 
     def pop(n=1)
-      Z3::LowLevel.solver_pop(self, n)
+      LowLevel.solver_pop(self, n)
     end
 
     def reset
-      Z3::LowLevel.solver_reset(self)
+      LowLevel.solver_reset(self)
     end
 
     def assert(ast)
-      Z3::LowLevel.solver_assert(self, ast)
+      LowLevel.solver_assert(self, ast)
     end
 
     def check
-      check_sat_results(Z3::LowLevel.solver_check(self))
+      check_sat_results(LowLevel.solver_check(self))
     end
 
     def model
       Z3::Model.new(
-        Z3::LowLevel.solver_get_model(self)
+        LowLevel.solver_get_model(self)
       )
     end
 
     def assertions
-      _ast_vector = Z3::LowLevel.solver_get_assertions(self)
-      Z3::LowLevel.unpack_ast_vector(_ast_vector)
+      _ast_vector = LowLevel.solver_get_assertions(self)
+      LowLevel.unpack_ast_vector(_ast_vector)
     end
 
     def statistics
       _stats = LowLevel::solver_get_statistics(self)
-      Z3::LowLevel.unpack_statistics(_stats)
+      LowLevel.unpack_statistics(_stats)
     end
 
     def prove!(ast)
