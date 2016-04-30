@@ -20,6 +20,20 @@ module Z3
       ast_kind_lookup[kind_id] or raise Z3::Exception, "Unknown AST kind #{kind_id}"
     end
 
+    def func_decl
+      raise Z3::Exception, "Only app ASTs can have func decls" unless ast_kind == :app
+      FuncDecl.new(LowLevel::get_app_decl(self))
+    end
+
+    def arguments
+      raise Z3::Exception, "Only app ASTs can have arguments" unless ast_kind == :app
+      num = LowLevel::get_app_num_args(self)
+      (0...num).map do |i|
+        _ast = LowLevel::get_app_arg(self, i)
+        Z3::Expr.new_from_pointer(_ast)
+      end
+    end
+
     def to_s
       Z3::Printer.new.format(self)
     end

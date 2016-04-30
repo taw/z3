@@ -23,7 +23,7 @@ Solution to problem 04:
 Solution to problem 05:
 * a = 167/100
 * d = 7/5
-* t = (root-obj (+ (* 167 (^ x 2)) (- 280)) 2)
+* t = 1.2948539325?
 Solution to problem 06:
 * a = 14800/61
 * d = 20313/50
@@ -46,8 +46,8 @@ Solution to problem 09:
 Solution to problem 10:
 * a = -981/100
 * d = 131/50
-* t = (root-obj (+ (* 981 (^ x 2)) (- 524)) 2)
-* v = (root-obj (+ (* 2500 (^ x 2)) (- 128511)) 2)
+* t = 0.7308548609?
+* v = 7.1696861856?
 EOF
   end
 end

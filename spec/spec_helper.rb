@@ -51,6 +51,10 @@ RSpec::Matchers.define :stringify do |expected|
   match do |actual|
     actual.to_s == expected
   end
+
+  failure_message do
+    "Expected #{actual.inspect} to stringify to `#{expected}', got `#{actual.to_s}' instead"
+  end
 end
 
 RSpec::Matchers.define :have_solution do |expected|

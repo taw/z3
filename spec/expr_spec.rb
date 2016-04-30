@@ -1,3 +1,5 @@
+# TODO: This spec doesn't reflect current functionality all that well
+
 describe Z3::Expr do
   let(:a) { Z3.Int("a") }
   let(:b) { Z3.Int("b") }
@@ -13,17 +15,17 @@ describe Z3::Expr do
   end
 
   it "#to_s" do
-    expect(a.to_s).to eq("a")
+    expect(a.sexpr).to eq("a")
   end
 
   it "#inspect" do
     expect(a.inspect).to eq("Int<a>")
-    expect((e+f).inspect).to eq("Real<(+ e f)>")
+    expect((e+f).inspect).to eq("Real<(e + f)>")
   end
 
   describe "#~" do
     it "allows negating boolean variables" do
-      expect((~c).to_s).to eq("(not c)")
+      expect((~c).sexpr).to eq("(not c)")
     end
 
     it "raises exception if type cast is not possible" do
@@ -34,7 +36,7 @@ describe Z3::Expr do
 
   describe "#&" do
     it "allows and of boolean variables" do
-      expect((c & d).to_s).to eq("(and c d)")
+      expect((c & d).sexpr).to eq("(and c d)")
     end
 
     it "raises exception if type cast is not possible" do
@@ -49,7 +51,7 @@ describe Z3::Expr do
 
   describe "#|" do
     it "allows or of boolean variables" do
-      expect((c | d).to_s).to eq("(or c d)")
+      expect((c | d).sexpr).to eq("(or c d)")
     end
 
     it "raises exception if type cast is not possible" do
@@ -65,21 +67,21 @@ describe Z3::Expr do
   %W[+ - * <= < >= >].each do |op|
     describe "#{op} arithmetic operator" do
       it "allows + of int or real variables" do
-        expect((a.send op, b).to_s).to eq "(#{op} a b)"
-        expect((e.send op, f).to_s).to eq "(#{op} e f)"
+        expect((a.send op, b).sexpr).to eq "(#{op} a b)"
+        expect((e.send op, f).sexpr).to eq "(#{op} e f)"
       end
 
       it "casts to correct type if possible" do
-        expect((a.send op, e).to_s).to eq "(#{op} (to_real a) e)"
-        expect((e.send op, a).to_s).to eq "(#{op} e (to_real a))"
-        expect((a.send op, 42).to_s).to eq "(#{op} a 42)"
-        expect((42.send op, a).to_s).to eq "(#{op} 42 a)"
-        expect((a.send op, 42.5).to_s).to eq "(#{op} (to_real a) (/ 85.0 2.0))"
-        expect((42.5.send op, a).to_s).to eq "(#{op} (/ 85.0 2.0) (to_real a))"
-        expect((e.send op, 42).to_s).to eq "(#{op} e 42.0)"
-        expect((42.send op, e).to_s).to eq "(#{op} 42.0 e)"
-        expect((e.send op, 42.5).to_s).to eq "(#{op} e (/ 85.0 2.0))"
-        expect((42.5.send op, e).to_s).to eq "(#{op} (/ 85.0 2.0) e)"
+        expect((a.send op, e).sexpr).to eq "(#{op} (to_real a) e)"
+        expect((e.send op, a).sexpr).to eq "(#{op} e (to_real a))"
+        expect((a.send op, 42).sexpr).to eq "(#{op} a 42)"
+        expect((42.send op, a).sexpr).to eq "(#{op} 42 a)"
+        expect((a.send op, 42.5).sexpr).to eq "(#{op} (to_real a) (/ 85.0 2.0))"
+        expect((42.5.send op, a).sexpr).to eq "(#{op} (/ 85.0 2.0) (to_real a))"
+        expect((e.send op, 42).sexpr).to eq "(#{op} e 42.0)"
+        expect((42.send op, e).sexpr).to eq "(#{op} 42.0 e)"
+        expect((e.send op, 42.5).sexpr).to eq "(#{op} e (/ 85.0 2.0))"
+        expect((42.5.send op, e).sexpr).to eq "(#{op} (/ 85.0 2.0) e)"
       end
 
       it "raises exception if type cast is not possible" do
@@ -103,24 +105,24 @@ describe Z3::Expr do
 
   describe "#==" do
     it "allows == of variables of same sort" do
-      expect((a == b).to_s).to eq "(= a b)"
-      expect((c == d).to_s).to eq "(= c d)"
-      expect((e == f).to_s).to eq "(= e f)"
+      expect((a == b).sexpr).to eq "(= a b)"
+      expect((c == d).sexpr).to eq "(= c d)"
+      expect((e == f).sexpr).to eq "(= e f)"
     end
 
     it "casts to correct type if possible" do
-      expect((a == 42).to_s).to eq "(= a 42)"
-      expect((42 == a).to_s).to eq "(= a 42)"
-      expect((a == e).to_s).to eq "(= (to_real a) e)"
-      expect((e == a).to_s).to eq "(= e (to_real a))"
-      expect((c == true).to_s).to eq "(= c true)"
-      expect((c == false).to_s).to eq "(= c false)"
-      expect((a == 42.5).to_s).to eq "(= (to_real a) (/ 85.0 2.0))"
-      expect((42.5 == a).to_s).to eq "(= (to_real a) (/ 85.0 2.0))"
-      expect((e == 42.5).to_s).to eq "(= e (/ 85.0 2.0))"
-      expect((42.5 == e).to_s).to eq "(= e (/ 85.0 2.0))"
-      # expect((true == c).to_s).to eq "(= true c)"
-      # expect((false == c).to_s).to eq "(= false c)"
+      expect((a == 42).sexpr).to eq "(= a 42)"
+      expect((42 == a).sexpr).to eq "(= a 42)"
+      expect((a == e).sexpr).to eq "(= (to_real a) e)"
+      expect((e == a).sexpr).to eq "(= e (to_real a))"
+      expect((c == true).sexpr).to eq "(= c true)"
+      expect((c == false).sexpr).to eq "(= c false)"
+      expect((a == 42.5).sexpr).to eq "(= (to_real a) (/ 85.0 2.0))"
+      expect((42.5 == a).sexpr).to eq "(= (to_real a) (/ 85.0 2.0))"
+      expect((e == 42.5).sexpr).to eq "(= e (/ 85.0 2.0))"
+      expect((42.5 == e).sexpr).to eq "(= e (/ 85.0 2.0))"
+      # expect((true == c).sexpr).to eq "(= true c)"
+      # expect((false == c).sexpr).to eq "(= false c)"
     end
 
     it "raises exception if type cast is not possible" do
@@ -139,24 +141,24 @@ describe Z3::Expr do
 
   describe "#!=" do
     it "allows != of variables of same sort" do
-      expect((a != b).to_s).to eq "(distinct a b)"
-      expect((c != d).to_s).to eq "(distinct c d)"
-      expect((e != f).to_s).to eq "(distinct e f)"
+      expect((a != b).sexpr).to eq "(distinct a b)"
+      expect((c != d).sexpr).to eq "(distinct c d)"
+      expect((e != f).sexpr).to eq "(distinct e f)"
     end
 
     it "casts to correct type if possible" do
-      expect((a != 42).to_s).to eq "(distinct a 42)"
-      # expect((42 != a).to_s).to eq "(distinct a 42)"
-      expect((a != e).to_s).to eq "(distinct (to_real a) e)"
-      expect((e != a).to_s).to eq "(distinct e (to_real a))"
-      expect((c != true).to_s).to eq "(distinct c true)"
-      expect((c != false).to_s).to eq "(distinct c false)"
-      expect((a != 42.5).to_s).to eq "(distinct (to_real a) (/ 85.0 2.0))"
-      # expect((42.5 != a).to_s).to eq "(distinct (to_real a) (/ 85.0 2.0))"
-      expect((e != 42.5).to_s).to eq "(distinct e (/ 85.0 2.0))"
-      # expect((42.5 != e).to_s).to eq "(distinct e (/ 85.0 2.0))"
-      # expect((true != c).to_s).to eq "(distinct true c)"
-      # expect((false != c).to_s).to eq "(distinct false c)"
+      expect((a != 42).sexpr).to eq "(distinct a 42)"
+      # expect((42 != a).sexpr).to eq "(distinct a 42)"
+      expect((a != e).sexpr).to eq "(distinct (to_real a) e)"
+      expect((e != a).sexpr).to eq "(distinct e (to_real a))"
+      expect((c != true).sexpr).to eq "(distinct c true)"
+      expect((c != false).sexpr).to eq "(distinct c false)"
+      expect((a != 42.5).sexpr).to eq "(distinct (to_real a) (/ 85.0 2.0))"
+      # expect((42.5 != a).sexpr).to eq "(distinct (to_real a) (/ 85.0 2.0))"
+      expect((e != 42.5).sexpr).to eq "(distinct e (/ 85.0 2.0))"
+      # expect((42.5 != e).sexpr).to eq "(distinct e (/ 85.0 2.0))"
+      # expect((true != c).sexpr).to eq "(distinct true c)"
+      # expect((false != c).sexpr).to eq "(distinct false c)"
     end
 
     it "raises exception if type cast is not possible" do
