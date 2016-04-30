@@ -65,16 +65,11 @@ module Z3
     private
 
     def check_sat_results(r)
-      case r
-      when 1
-        :sat
-      when 0
-        :unknown
-      when -1
-        :unsat
-      else
-        raise "Wrong SAT result #{r}"
-      end
+      {
+        -1 => :unsat,
+        0 => :unknown,
+        1 => :sat,
+      }[r] or raise Z3::Exception, "Wrong SAT result #{r}"
     end
   end
 end
