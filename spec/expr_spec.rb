@@ -20,7 +20,7 @@ describe Z3::Expr do
 
   it "#inspect" do
     expect(a.inspect).to eq("Int<a>")
-    expect((e+f).inspect).to eq("Real<(e + f)>")
+    expect((e+f).inspect).to eq("Real<e + f>")
   end
 
   describe "#~" do

@@ -26,16 +26,26 @@ describe Z3::Printer do
     let(:c) { Z3::Int("c") }
 
     it "binary operators" do
-      expect(a + b).to stringify("(a + b)")
-      expect(a - b).to stringify("(a - b)")
-      expect(a * b).to stringify("(a * b)")
+      expect(a + b).to stringify("a + b")
+      expect(a - b).to stringify("a - b")
+      expect(a * b).to stringify("a * b")
       expect(a / b).to stringify("div(a, b)")
       expect(a.mod b).to stringify("mod(a, b)")
       expect(a.rem b).to stringify("rem(a, b)")
     end
 
+    it "parentheses" do
+      expect(a + b + c).to stringify("(a + b) + c")
+      expect(a + b * c).to stringify("a + (b * c)")
+      expect((a + b) * c).to stringify("(a + b) * c")
+      expect(a.mod(b + c)).to stringify("mod(a, b + c)")
+      expect(a.mod(b) + c).to stringify("mod(a, b) + c")
+    end
+
     it "unary operators" do
-      expect(-a).to stringify("(- a)")
+      expect(-a).to stringify("-a")
+      expect(-(a + b)).to stringify("-(a + b)")
+      expect((-a) + (-b)).to stringify("(-a) + (-b)")
     end
   end
 end

@@ -1,20 +1,40 @@
 module Z3
   class Printer
     def format(a)
-      case a.ast_kind
-      when :numeral
-        format_numeral(a)
-      when :app
-        format_app(a)
-      when :var, :quantifier, :func_decl, :unknown
-        a.sexpr
-      else
-        raise Z3::Exception, "Unknown AST kind #{a.ast_kind}"
+      format_ast(a).to_s
+    end
+
+    private
+
+    class PrintedExpr
+      attr_reader :str, :priority
+      def initialize(str, priority)
+        @str = str
+        @priority = priority
+      end
+      def to_s
+        @str
+      end
+      def enforce_parentheses
+        if @priority
+          "(#{@str})"
+        else
+          @str
+        end
       end
     end
 
-    def format_numeral(a)
-      Z3::LowLevel.get_numeral_string(a)
+    def format_ast(a)
+      case a.ast_kind
+      when :numeral
+        PrintedExpr.new(Z3::LowLevel.get_numeral_string(a), false)
+      when :app
+        format_app(a)
+      when :var, :quantifier, :func_decl, :unknown
+        PrintedExpr.new(a.sexpr, false)
+      else
+        raise Z3::Exception, "Unknown AST kind #{a.ast_kind}"
+      end
     end
 
     def format_app(a)
@@ -23,17 +43,17 @@ module Z3
       end
       decl = a.func_decl
       name = decl.name
-      args = a.arguments
-      return name if args.size == 0
+      args = a.arguments.map{|x| format_ast(x)}
+      return PrintedExpr.new(name, false) if args.size == 0
       # All operators
       if name !~ /[a-z0-9]/
         if args.size == 2
-          return "(#{args[0]} #{name} #{args[1]})"
+          return PrintedExpr.new("#{args[0].enforce_parentheses} #{name} #{args[1].enforce_parentheses}", true)
         elsif args.size == 1
-          return "(#{name} #{args[0]})"
+          return PrintedExpr.new("#{name}#{args[0].enforce_parentheses}", true)
         end
       end
-      "#{name}(#{args.join(", ")})"
+      PrintedExpr.new("#{name}(#{args.join(", ")})", false)
     end
   end
 end
