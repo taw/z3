@@ -5,29 +5,53 @@ module Z3
     end
 
     def &(other)
-      Z3.And(self, other)
+      Expr.And(self, other)
     end
 
     def |(other)
-      Z3.Or(self, other)
+      Expr.Or(self, other)
     end
 
     def ^(other)
-      Z3.Xor(self, other)
+      Expr.Xor(self, other)
     end
 
     def iff(other)
-      Z3.Iff(self, other)
+      BoolExpr.Iff(self, other)
     end
 
     def implies(other)
-      Z3.Implies(self, other)
+      BoolExpr.Implies(self, other)
     end
 
     def ite(a, b)
-      Z3.IfThenElse(self, a, b)
+      BoolExpr.IfThenElse(self, a, b)
     end
 
     public_class_method :new
+
+    class << self
+      def coerce_to_same_bool_sort(*args)
+        args = coerce_to_same_sort(*args)
+        raise Z3::Exception, "Bool value expected" unless args[0].is_a?(BoolExpr)
+        args
+      end
+
+      def Implies(a,b)
+        a, b = coerce_to_same_bool_sort(a, b)
+        BoolSort.new.new(LowLevel.mk_implies(a, b))
+      end
+
+      def Iff(a,b)
+        a, b = coerce_to_same_bool_sort(a, b)
+        BoolSort.new.new(LowLevel.mk_iff(a, b))
+      end
+
+      def IfThenElse(a, b, c)
+        a, = coerce_to_same_bool_sort(a)
+        b, c = coerce_to_same_sort(b, c)
+        b.sort.new(LowLevel.mk_ite(a, b, c))
+      end
+    end
   end
 end

@@ -9,91 +9,179 @@ module Z3
     end
 
     def &(other)
-      Z3.And(self, other)
+      Expr.And(self, other)
     end
 
     def |(other)
-      Z3.Or(self, other)
+      Expr.Or(self, other)
     end
 
     def ^(other)
-      Z3.Xor(self, other)
+      Expr.Xor(self, other)
     end
 
     def +(other)
-      ::Z3.Add(self, other)
+      Expr.Add(self, other)
     end
 
     def -(other)
-      ::Z3.Sub(self, other)
+      Expr.Sub(self, other)
     end
 
     def *(other)
-      ::Z3.Mul(self, other)
+      Expr.Mul(self, other)
     end
 
     def >>(other)
-      Z3.RShift(self, other)
+      raise Z3::Exception, "Use #signed_rshift or #unsigned_rshift for Bitvec, not >>"
+    end
+
+    def signed_rshift(other)
+      BitvecExpr.SignedRShift(self, other)
+    end
+
+    def unsigned_rshift(other)
+      BitvecExpr.UnsignedRShift(self, other)
+    end
+
+    def rshift(other)
+      raise Z3::Exception, "Use #signed_rshift or #unsigned_rshift for Bitvec, not #rshift"
     end
 
     def <<(other)
-      Z3.LShift(self, other)
+      BitvecExpr.LShift(self, other)
+    end
+
+    def signed_lshift(other)
+      BitvecExpr.LShift(self, other)
+    end
+
+    def unsigned_lshift(other)
+      BitvecExpr.LShift(self, other)
+    end
+
+    def lshift(other)
+      BitvecExpr.LShift(self, other)
     end
 
     def >(other)
-      Z3.Gt(self, other)
+      Expr.Gt(self, other)
     end
 
     def >=(other)
-      Z3.Ge(self, other)
+      Expr.Ge(self, other)
     end
 
     def <=(other)
-      Z3.Le(self, other)
+      Expr.Le(self, other)
     end
 
     def <(other)
-      Z3.Lt(self, other)
+      Expr.Lt(self, other)
     end
 
     def signed_gt(other)
-      Z3::SignedGt(self, other)
+      BitvecExpr.SignedGt(self, other)
     end
 
     def signed_ge(other)
-      Z3::SignedGe(self, other)
+      BitvecExpr.SignedGe(self, other)
     end
 
     def signed_lt(other)
-      Z3::SignedLt(self, other)
+      BitvecExpr.SignedLt(self, other)
     end
 
     def signed_le(other)
-      Z3::SignedLe(self, other)
+      BitvecExpr.SignedLe(self, other)
     end
 
     def unsigned_gt(other)
-      Z3::UnsignedGt(self, other)
+      BitvecExpr.UnsignedGt(self, other)
     end
 
     def unsigned_ge(other)
-      Z3::UnsignedGe(self, other)
+      BitvecExpr.UnsignedGe(self, other)
     end
 
     def unsigned_lt(other)
-      Z3::UnsignedLt(self, other)
+      BitvecExpr.UnsignedLt(self, other)
     end
 
     def unsigned_le(other)
-      Z3::UnsignedLe(self, other)
+      BitvecExpr.UnsignedLe(self, other)
     end
 
     def coerce(other)
-      other_sort = Value.sort_for_const(other)
+      other_sort = Expr.sort_for_const(other)
       max_sort = [sort, other_sort].max
       [max_sort.from_const(other), max_sort.from_value(self)]
     end
 
     public_class_method :new
+
+    class << self
+      def coerce_to_same_bv_sort(*args)
+        args = coerce_to_same_sort(*args)
+        raise Z3::Exception, "Bitvec value with same size expected" unless args[0].is_a?(BitvecExpr)
+        args
+      end
+
+      def SignedRShift(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        a.sort.new(LowLevel.mk_bvashr(a, b))
+      end
+
+      def UnignedRShift(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        a.sort.new(LowLevel.mk_bvlshr(a, b))
+      end
+
+      # Signed/Unsigned act the same
+      def LShift(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        a.sort.new(LowLevel.mk_bvshl(a, b))
+      end
+
+      def UnsignedGt(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        BoolSort.new.new(Z3::LowLevel.mk_bvugt(a, b))
+      end
+
+      def UnsignedGe(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        BoolSort.new.new(Z3::LowLevel.mk_bvuge(a, b))
+      end
+
+      def UnsignedLt(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        BoolSort.new.new(Z3::LowLevel.mk_bvult(a, b))
+      end
+
+      def UnsignedLe(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        BoolSort.new.new(Z3::LowLevel.mk_bvule(a, b))
+      end
+
+      def SignedGt(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        BoolSort.new.new(Z3::LowLevel.mk_bvsgt(a, b))
+      end
+
+      def SignedGe(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        BoolSort.new.new(Z3::LowLevel.mk_bvsge(a, b))
+      end
+
+      def SignedLt(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        BoolSort.new.new(Z3::LowLevel.mk_bvslt(a, b))
+      end
+
+      def SignedLe(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        BoolSort.new.new(Z3::LowLevel.mk_bvsle(a, b))
+      end
+    end
   end
 end

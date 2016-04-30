@@ -1,39 +1,39 @@
 module Z3
   class ArithExpr < Expr
     def +(other)
-      ::Z3.Add(self, other)
+      Expr.Add(self, other)
     end
 
     def -(other)
-      ::Z3.Sub(self, other)
+      Expr.Sub(self, other)
     end
 
     def *(other)
-      ::Z3.Mul(self, other)
+      Expr.Mul(self, other)
     end
 
     def /(other)
-      ::Z3.Div(self, other)
+      ArithExpr.Div(self, other)
     end
 
     def **(other)
-      ::Z3.Power(self, other)
+      ArithExpr.Power(self, other)
     end
 
     def >(other)
-      ::Z3.Gt(self, other)
+      Expr.Gt(self, other)
     end
 
     def >=(other)
-      ::Z3.Ge(self, other)
+      Expr.Ge(self, other)
     end
 
     def <=(other)
-      ::Z3.Le(self, other)
+      Expr.Le(self, other)
     end
 
     def <(other)
-      ::Z3.Lt(self, other)
+      Expr.Lt(self, other)
     end
 
     def -@
@@ -47,6 +47,25 @@ module Z3
       other_sort = Expr.sort_for_const(other)
       max_sort = [sort, other_sort].max
       [max_sort.from_const(other), max_sort.from_value(self)]
+    end
+
+    class << self
+      def coerce_to_same_arith_sort(*args)
+        args = coerce_to_same_sort(*args)
+        raise Z3::Exception, "Int or Real value expected" unless args[0].is_a?(IntExpr) or args[0].is_a?(RealExpr)
+        args
+      end
+
+      def Div(a,b)
+        a, b = coerce_to_same_arith_sort(a, b)
+        a.sort.new(LowLevel.mk_div(a, b))
+      end
+
+      def Power(a, b)
+        # Wait, is this even legitimate that it's I**I and R**R?
+        a, b = coerce_to_same_arith_sort(a, b)
+        a.sort.new(LowLevel.mk_power(a, b))
+      end
     end
   end
 end

@@ -14,7 +14,7 @@ def validate_sign_by_shift!
   """
   solver = Z3::Solver.new
   v = Z3.Bitvec("v", 32)
-  s = v >> 31
+  s = v.signed_rshift(31)
   puts "Validating sign trick:"
   solver.prove! (v.signed_lt(0) & (s == -1)) | (v.signed_ge(0) & (s == 0))
 end
@@ -49,7 +49,7 @@ def validate_abs_without_branching_1!
   """
   solver = Z3::Solver.new
   v = Z3.Bitvec("v", 32)
-  mask = v >> 31
+  mask = v.signed_rshift(31)
   r = (v + mask) ^ mask
   puts "Validating abs without branching, version 1"
   solver.prove!(
@@ -66,7 +66,7 @@ def validate_abs_without_branching_2!
   """
   solver = Z3::Solver.new
   v = Z3.Bitvec("v", 32)
-  mask = v >> 31
+  mask = v.signed_rshift(31)
   r = (v^mask) - mask
   puts "Validating abs without branching, version 2"
   solver.prove!(
