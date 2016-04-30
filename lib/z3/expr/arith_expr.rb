@@ -1,6 +1,5 @@
 module Z3
-  # IntExpr / RealExpr
-  module ArithExpr
+  class ArithExpr < Expr
     def +(other)
       ::Z3.Add(self, other)
     end

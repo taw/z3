@@ -37,7 +37,7 @@ module Z3
         a.sort.new(Z3::LowLevel.mk_bvand(a, b))
       end
     else
-      raise ArgumentError, "Can't perform logic operations on #{a.sort} exprs, only Bool and Bitvec"
+      raise Z3::Exception, "Can't perform logic operations on #{a.sort} exprs, only Bool and Bitvec"
     end
   end
 
@@ -51,7 +51,7 @@ module Z3
         a.sort.new(Z3::LowLevel.mk_bvor(a, b))
       end
     else
-      raise ArgumentError, "Can't perform logic operations on #{a.sort} exprs, only Bool and Bitvec"
+      raise Z3::Exception, "Can't perform logic operations on #{a.sort} exprs, only Bool and Bitvec"
     end
   end
 
@@ -67,7 +67,7 @@ module Z3
         a.sort.new(Z3::LowLevel.mk_bvxor(a, b))
       end
     else
-      raise ArgumentError, "Can't perform logic operations on #{a.sort} exprs, only Bool and Bitvec"
+      raise Z3::Exception, "Can't perform logic operations on #{a.sort} exprs, only Bool and Bitvec"
     end
   end
 
@@ -88,7 +88,7 @@ module Z3
   end
 
   def Add(*args)
-    raise ArgumentError if args.empty?
+    raise Z3::Exception if args.empty?
     args = coerce_to_same_sort(*args)
     case args[0]
     when ArithExpr
@@ -98,7 +98,7 @@ module Z3
         a.sort.new(LowLevel.mk_bvadd(a,b))
       end
     else
-      raise ArgumentError, "Can't perform logic operations on #{args[0].sort} exprs, only Int/Real/Bitvec"
+      raise Z3::Exception, "Can't perform logic operations on #{args[0].sort} exprs, only Int/Real/Bitvec"
     end
   end
 
@@ -112,7 +112,7 @@ module Z3
         a.sort.new(LowLevel.mk_bvsub(a,b))
       end
     else
-      raise ArgumentError, "Can't perform logic operations on #{args[0].sort} values, only Int/Real/Bitvec"
+      raise Z3::Exception, "Can't perform logic operations on #{args[0].sort} values, only Int/Real/Bitvec"
     end
   end
 
@@ -126,7 +126,7 @@ module Z3
         a.sort.new(LowLevel.mk_bvmul(a,b))
       end
     else
-      raise ArgumentError, "Can't perform logic operations on #{args[0].sort} values, only Int/Real/Bitvec"
+      raise Z3::Exception, "Can't perform logic operations on #{args[0].sort} values, only Int/Real/Bitvec"
     end
   end
 
@@ -169,7 +169,7 @@ module Z3
     when BitvecExpr
       raise Z3::Exception, "Use #signed_gt or #unsigned_gt for Bitvec, not >"
     else
-      raise ArgumentError, "Can't compare #{a.sort} values"
+      raise Z3::Exception, "Can't compare #{a.sort} values"
     end
   end
 
@@ -181,7 +181,7 @@ module Z3
     when BitvecExpr
       raise Z3::Exception, "Use #signed_ge or #unsigned_ge for Bitvec, not >="
     else
-      raise ArgumentError, "Can't compare #{a.sort} values"
+      raise Z3::Exception, "Can't compare #{a.sort} values"
     end
   end
 
@@ -193,7 +193,7 @@ module Z3
     when BitvecExpr
       raise Z3::Exception, "Use #signed_lt or #unsigned_lt for Bitvec, not <"
     else
-      raise ArgumentError, "Can't compare #{a.sort} values"
+      raise Z3::Exception, "Can't compare #{a.sort} values"
     end
   end
 
@@ -205,7 +205,7 @@ module Z3
     when BitvecExpr
       raise Z3::Exception, "Use #signed_le or #unsigned_le for Bitvec, not <="
     else
-      raise ArgumentError, "Can't compare #{a.sort} values"
+      raise Z3::Exception, "Can't compare #{a.sort} values"
     end
   end
 

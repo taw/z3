@@ -1,7 +1,5 @@
 module Z3
-  class RealExpr < Expr
-    include ArithExpr
-
+  class RealExpr < ArithExpr
     public_class_method :new
   end
 end

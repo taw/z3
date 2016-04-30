@@ -1,7 +1,5 @@
 module Z3
-  class IntExpr < Expr
-    include ArithExpr
-
+  class IntExpr < ArithExpr
     def mod(other)
       ::Z3.Mod(self, other)
     end
