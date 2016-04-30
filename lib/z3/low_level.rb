@@ -57,11 +57,27 @@ module Z3::LowLevel
     # Should be private
 
     def unpack_ast_vector(_ast_vector)
-      n = Z3::VeryLowLevel.Z3_ast_vector_size(_ctx_pointer, _ast_vector)
-      (0...n).map do |i|
-        _ast = Z3::VeryLowLevel.Z3_ast_vector_get(_ctx_pointer, _ast_vector, i)
+      ast_vector_size(_ast_vector).times.map do |i|
+        _ast = ast_vector_get(_ast_vector, i)
         Z3::Expr.new_from_pointer(_ast)
       end
+    end
+
+    def unpack_statistics(_stats)
+      stats = {}
+      stats_size(_stats).times.map do |i|
+        key = stats_get_key(_stats, i)
+        if stats_is_double(_stats, i)
+          val = stats_get_double_value(_stats, i)
+        elsif stats_is_uint(_stats, i)
+          val = stats_get_uint_value(_stats, i)
+        else
+          raise Z3::Exception, "Stat is neither double nor uint, that's not supposed to happen"
+        end
+        raise Z3::Exception, "Key #{key} duplicated in stats" if stats.has_key?(key)
+        stats[key] = val
+      end
+      stats
     end
 
     def _ctx_pointer

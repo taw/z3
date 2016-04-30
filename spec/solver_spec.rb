@@ -30,4 +30,12 @@ describe Z3::Solver do
       (a == 2) | (a == -2),
     ])
   end
+
+  it "#statistics" do
+    solver.assert a + b == 4
+    solver.assert b >= 2
+    solver.assert Z3.Or(a == 2, a == -2)
+    stats = solver.statistics
+    expect(stats.keys).to match_array(["rlimit count", "max memory", "memory", "num allocs"])
+  end
 end

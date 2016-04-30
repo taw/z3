@@ -75,6 +75,11 @@ class GenerateAPI
       # Aliases
       "func_decl_to_string",
       "sort_to_string",
+
+      # We just unpack and throw away, so we shouldn't need these
+      "Z3_stats_inc_ref",
+      "Z3_stats_dec_ref",
+      "Z3_stats_to_string",
     ].to_set
   end
 

@@ -46,7 +46,7 @@ class Definition
       if cnts[n] == 1
         n
       else
-        i = "#{n}#{idx[n] += 1}"
+        "#{n}#{idx[n] += 1}"
       end
     end
   end
@@ -70,11 +70,15 @@ class Definition
     result + arg_types.zip(api_arguments).map do |t,n|
       case t
       when "AST", "SORT", "FUNC_DECL", "PATTERN", "APP"
+        # C type aliases for AST
         "#{n}._ast"
+      when "AST_VECTOR", "STATS"
+        # Always unpacked right away
+        n
       when "SOLVER", "MODEL", "GOAL", "FIXEDPOINT",
            "PROBE", "RCF_NUM", "OPTIMIZE", "PARAMS", "PARAM_DESCRS", "TACTIC",
-           "CONTEXT", "AST_VECTOR", "AST_MAP", "APPLY_RESULT", "FUNC_INTERP", "CONFIG",
-           "CONSTRUCTOR", "CONSTRUCTOR_LIST", "STATS", "FUNC_ENTRY"
+           "CONTEXT", "AST_MAP", "APPLY_RESULT", "FUNC_INTERP", "CONFIG",
+           "CONSTRUCTOR", "CONSTRUCTOR_LIST", "FUNC_ENTRY"
         "#{n}._#{t.downcase}"
       when "SYMBOL"
         # FFI but not wrapped

@@ -137,39 +137,39 @@ module Z3::LowLevel
     end
 
     def ast_vector_dec_ref(ast_vector) #=> :void
-      Z3::VeryLowLevel.Z3_ast_vector_dec_ref(_ctx_pointer, ast_vector._ast_vector)
+      Z3::VeryLowLevel.Z3_ast_vector_dec_ref(_ctx_pointer, ast_vector)
     end
 
     def ast_vector_get(ast_vector, num) #=> :ast_pointer
-      Z3::VeryLowLevel.Z3_ast_vector_get(_ctx_pointer, ast_vector._ast_vector, num)
+      Z3::VeryLowLevel.Z3_ast_vector_get(_ctx_pointer, ast_vector, num)
     end
 
     def ast_vector_inc_ref(ast_vector) #=> :void
-      Z3::VeryLowLevel.Z3_ast_vector_inc_ref(_ctx_pointer, ast_vector._ast_vector)
+      Z3::VeryLowLevel.Z3_ast_vector_inc_ref(_ctx_pointer, ast_vector)
     end
 
     def ast_vector_push(ast_vector, ast) #=> :void
-      Z3::VeryLowLevel.Z3_ast_vector_push(_ctx_pointer, ast_vector._ast_vector, ast._ast)
+      Z3::VeryLowLevel.Z3_ast_vector_push(_ctx_pointer, ast_vector, ast._ast)
     end
 
     def ast_vector_resize(ast_vector, num) #=> :void
-      Z3::VeryLowLevel.Z3_ast_vector_resize(_ctx_pointer, ast_vector._ast_vector, num)
+      Z3::VeryLowLevel.Z3_ast_vector_resize(_ctx_pointer, ast_vector, num)
     end
 
     def ast_vector_set(ast_vector, num, ast) #=> :void
-      Z3::VeryLowLevel.Z3_ast_vector_set(_ctx_pointer, ast_vector._ast_vector, num, ast._ast)
+      Z3::VeryLowLevel.Z3_ast_vector_set(_ctx_pointer, ast_vector, num, ast._ast)
     end
 
     def ast_vector_size(ast_vector) #=> :uint
-      Z3::VeryLowLevel.Z3_ast_vector_size(_ctx_pointer, ast_vector._ast_vector)
+      Z3::VeryLowLevel.Z3_ast_vector_size(_ctx_pointer, ast_vector)
     end
 
     def ast_vector_to_string(ast_vector) #=> :string
-      Z3::VeryLowLevel.Z3_ast_vector_to_string(_ctx_pointer, ast_vector._ast_vector)
+      Z3::VeryLowLevel.Z3_ast_vector_to_string(_ctx_pointer, ast_vector)
     end
 
     def ast_vector_translate(ast_vector, context) #=> :ast_vector_pointer
-      Z3::VeryLowLevel.Z3_ast_vector_translate(_ctx_pointer, ast_vector._ast_vector, context._context)
+      Z3::VeryLowLevel.Z3_ast_vector_translate(_ctx_pointer, ast_vector, context._context)
     end
 
     def datatype_update_field(func_decl, ast1, ast2) #=> :ast_pointer
@@ -1909,39 +1909,39 @@ module Z3::LowLevel
     end
 
     def stats_dec_ref(stats) #=> :void
-      Z3::VeryLowLevel.Z3_stats_dec_ref(_ctx_pointer, stats._stats)
+      Z3::VeryLowLevel.Z3_stats_dec_ref(_ctx_pointer, stats)
     end
 
     def stats_get_double_value(stats, num) #=> :double
-      Z3::VeryLowLevel.Z3_stats_get_double_value(_ctx_pointer, stats._stats, num)
+      Z3::VeryLowLevel.Z3_stats_get_double_value(_ctx_pointer, stats, num)
     end
 
     def stats_get_key(stats, num) #=> :string
-      Z3::VeryLowLevel.Z3_stats_get_key(_ctx_pointer, stats._stats, num)
+      Z3::VeryLowLevel.Z3_stats_get_key(_ctx_pointer, stats, num)
     end
 
     def stats_get_uint_value(stats, num) #=> :uint
-      Z3::VeryLowLevel.Z3_stats_get_uint_value(_ctx_pointer, stats._stats, num)
+      Z3::VeryLowLevel.Z3_stats_get_uint_value(_ctx_pointer, stats, num)
     end
 
     def stats_inc_ref(stats) #=> :void
-      Z3::VeryLowLevel.Z3_stats_inc_ref(_ctx_pointer, stats._stats)
+      Z3::VeryLowLevel.Z3_stats_inc_ref(_ctx_pointer, stats)
     end
 
     def stats_is_double(stats, num) #=> :bool
-      Z3::VeryLowLevel.Z3_stats_is_double(_ctx_pointer, stats._stats, num)
+      Z3::VeryLowLevel.Z3_stats_is_double(_ctx_pointer, stats, num)
     end
 
     def stats_is_uint(stats, num) #=> :bool
-      Z3::VeryLowLevel.Z3_stats_is_uint(_ctx_pointer, stats._stats, num)
+      Z3::VeryLowLevel.Z3_stats_is_uint(_ctx_pointer, stats, num)
     end
 
     def stats_size(stats) #=> :uint
-      Z3::VeryLowLevel.Z3_stats_size(_ctx_pointer, stats._stats)
+      Z3::VeryLowLevel.Z3_stats_size(_ctx_pointer, stats)
     end
 
     def stats_to_string(stats) #=> :string
-      Z3::VeryLowLevel.Z3_stats_to_string(_ctx_pointer, stats._stats)
+      Z3::VeryLowLevel.Z3_stats_to_string(_ctx_pointer, stats)
     end
 
     def tactic_and_then(tactic1, tactic2) #=> :tactic_pointer

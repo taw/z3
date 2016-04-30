@@ -37,6 +37,11 @@ module Z3
       Z3::LowLevel.unpack_ast_vector(_ast_vector)
     end
 
+    def statistics
+      _stats = LowLevel::solver_get_statistics(self)
+      Z3::LowLevel.unpack_statistics(_stats)
+    end
+
     def prove!(ast)
       push
       assert(~ast)
