@@ -49,6 +49,14 @@ describe Z3::BitvecExpr do
     expect([a == 50, b == 27, c == a.xnor(b)]).to have_solution(c => 214)
   end
 
+  it "nand" do
+    expect([a == 50, b == 27, c == a.nand(b)]).to have_solution(c => 237)
+  end
+
+  it "nor" do
+    expect([a == 50, b == 27, c == a.nor(b)]).to have_solution(c => 196)
+  end
+
   it "unary -" do
     expect([a == 50, b == -a]).to have_solution(b => 206)
   end
@@ -57,7 +65,7 @@ describe Z3::BitvecExpr do
     expect([a == 50, b == ~a]).to have_solution(b => 205)
   end
 
-  it ">>" do
+  it ">> (sign-dependent)" do
     expect([a == 234, b == 2, c == a.unsigned_rshift(b)]).to have_solution(c => 58)
     expect([a == 234, b == 2, c == a.signed_rshift(b)]).to have_solution(c => 250)
     expect{ a.rshift(b) }.to raise_error(Z3::Exception)

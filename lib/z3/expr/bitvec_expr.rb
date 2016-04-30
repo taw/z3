@@ -24,6 +24,14 @@ module Z3
       BitvecExpr.Xnor(self, other)
     end
 
+    def nand(other)
+      BitvecExpr.Nand(self, other)
+    end
+
+    def nor(other)
+      BitvecExpr.Nor(self, other)
+    end
+
     def +(other)
       Expr.Add(self, other)
     end
@@ -151,6 +159,20 @@ module Z3
         args = coerce_to_same_bv_sort(*args)
         args.inject do |a,b|
           a.sort.new(LowLevel.mk_bvxnor(a, b))
+        end
+      end
+
+      def Nand(*args)
+        args = coerce_to_same_bv_sort(*args)
+        args.inject do |a,b|
+          a.sort.new(LowLevel.mk_bvnand(a, b))
+        end
+      end
+
+      def Nor(*args)
+        args = coerce_to_same_bv_sort(*args)
+        args.inject do |a,b|
+          a.sort.new(LowLevel.mk_bvnor(a, b))
         end
       end
 
