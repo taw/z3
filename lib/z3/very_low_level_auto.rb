@@ -16,7 +16,6 @@ module Z3::VeryLowLevel
   attach_function :Z3_algebraic_root, [:ctx_pointer, :ast_pointer, :uint], :ast_pointer
   attach_function :Z3_algebraic_sign, [:ctx_pointer, :ast_pointer], :int
   attach_function :Z3_algebraic_sub, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
-  attach_function :Z3_app_to_ast, [:ctx_pointer, :app_pointer], :ast_pointer
   attach_function :Z3_apply_result_convert_model, [:ctx_pointer, :apply_result_pointer, :uint, :model_pointer], :model_pointer
   attach_function :Z3_apply_result_dec_ref, [:ctx_pointer, :apply_result_pointer], :void
   attach_function :Z3_apply_result_get_num_subgoals, [:ctx_pointer, :apply_result_pointer], :uint
@@ -78,7 +77,6 @@ module Z3::VeryLowLevel
   attach_function :Z3_fpa_get_numeral_exponent_string, [:ctx_pointer, :ast_pointer], :string
   attach_function :Z3_fpa_get_numeral_significand_string, [:ctx_pointer, :ast_pointer], :string
   attach_function :Z3_fpa_get_sbits, [:ctx_pointer, :sort_pointer], :uint
-  attach_function :Z3_func_decl_to_ast, [:ctx_pointer, :func_decl_pointer], :ast_pointer
   attach_function :Z3_func_decl_to_string, [:ctx_pointer, :func_decl_pointer], :string
   attach_function :Z3_func_entry_dec_ref, [:ctx_pointer, :func_entry_pointer], :void
   attach_function :Z3_func_entry_get_arg, [:ctx_pointer, :func_entry_pointer, :uint], :ast_pointer
@@ -418,7 +416,6 @@ module Z3::VeryLowLevel
   attach_function :Z3_params_set_uint, [:ctx_pointer, :params_pointer, :symbol_pointer, :uint], :void
   attach_function :Z3_params_to_string, [:ctx_pointer, :params_pointer], :string
   attach_function :Z3_params_validate, [:ctx_pointer, :params_pointer, :param_descrs_pointer], :void
-  attach_function :Z3_pattern_to_ast, [:ctx_pointer, :pattern_pointer], :ast_pointer
   attach_function :Z3_pattern_to_string, [:ctx_pointer, :pattern_pointer], :string
   attach_function :Z3_polynomial_subresultants, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_vector_pointer
   attach_function :Z3_probe_and, [:ctx_pointer, :probe_pointer, :probe_pointer], :probe_pointer
@@ -480,7 +477,6 @@ module Z3::VeryLowLevel
   attach_function :Z3_solver_reset, [:ctx_pointer, :solver_pointer], :void
   attach_function :Z3_solver_set_params, [:ctx_pointer, :solver_pointer, :params_pointer], :void
   attach_function :Z3_solver_to_string, [:ctx_pointer, :solver_pointer], :string
-  attach_function :Z3_sort_to_ast, [:ctx_pointer, :sort_pointer], :ast_pointer
   attach_function :Z3_sort_to_string, [:ctx_pointer, :sort_pointer], :string
   attach_function :Z3_stats_dec_ref, [:ctx_pointer, :stats_pointer], :void
   attach_function :Z3_stats_get_double_value, [:ctx_pointer, :stats_pointer, :uint], :double
@@ -510,8 +506,6 @@ module Z3::VeryLowLevel
   attach_function :Z3_tactic_try_for, [:ctx_pointer, :tactic_pointer, :uint], :tactic_pointer
   attach_function :Z3_tactic_using_params, [:ctx_pointer, :tactic_pointer, :params_pointer], :tactic_pointer
   attach_function :Z3_tactic_when, [:ctx_pointer, :probe_pointer, :tactic_pointer], :tactic_pointer
-  attach_function :Z3_to_app, [:ctx_pointer, :ast_pointer], :app_pointer
-  attach_function :Z3_to_func_decl, [:ctx_pointer, :ast_pointer], :func_decl_pointer
   attach_function :Z3_toggle_warning_messages, [:bool], :void
   attach_function :Z3_translate, [:ctx_pointer, :ast_pointer, :ctx_pointer], :ast_pointer
   attach_function :Z3_update_param_value, [:ctx_pointer, :string, :string], :void

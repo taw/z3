@@ -68,10 +68,6 @@ module Z3::LowLevel
       Z3::VeryLowLevel.Z3_algebraic_sub(_ctx_pointer, ast1._ast, ast2._ast)
     end
 
-    def app_to_ast(app) #=> :ast_pointer
-      Z3::VeryLowLevel.Z3_app_to_ast(_ctx_pointer, app._ast)
-    end
-
     def apply_result_convert_model(apply_result, num, model) #=> :model_pointer
       Z3::VeryLowLevel.Z3_apply_result_convert_model(_ctx_pointer, apply_result._apply_result, num, model._model)
     end
@@ -314,10 +310,6 @@ module Z3::LowLevel
 
     def fpa_get_sbits(sort) #=> :uint
       Z3::VeryLowLevel.Z3_fpa_get_sbits(_ctx_pointer, sort._ast)
-    end
-
-    def func_decl_to_ast(func_decl) #=> :ast_pointer
-      Z3::VeryLowLevel.Z3_func_decl_to_ast(_ctx_pointer, func_decl._ast)
     end
 
     def func_decl_to_string(func_decl) #=> :string
@@ -1676,10 +1668,6 @@ module Z3::LowLevel
       Z3::VeryLowLevel.Z3_params_validate(_ctx_pointer, params._params, param_descrs._param_descrs)
     end
 
-    def pattern_to_ast(pattern) #=> :ast_pointer
-      Z3::VeryLowLevel.Z3_pattern_to_ast(_ctx_pointer, pattern._ast)
-    end
-
     def pattern_to_string(pattern) #=> :string
       Z3::VeryLowLevel.Z3_pattern_to_string(_ctx_pointer, pattern._ast)
     end
@@ -1924,10 +1912,6 @@ module Z3::LowLevel
       Z3::VeryLowLevel.Z3_solver_to_string(_ctx_pointer, solver._solver)
     end
 
-    def sort_to_ast(sort) #=> :ast_pointer
-      Z3::VeryLowLevel.Z3_sort_to_ast(_ctx_pointer, sort._ast)
-    end
-
     def sort_to_string(sort) #=> :string
       Z3::VeryLowLevel.Z3_sort_to_string(_ctx_pointer, sort._ast)
     end
@@ -2042,14 +2026,6 @@ module Z3::LowLevel
 
     def tactic_when(probe, tactic) #=> :tactic_pointer
       Z3::VeryLowLevel.Z3_tactic_when(_ctx_pointer, probe._probe, tactic._tactic)
-    end
-
-    def to_app(ast) #=> :app_pointer
-      Z3::VeryLowLevel.Z3_to_app(_ctx_pointer, ast._ast)
-    end
-
-    def to_func_decl(ast) #=> :func_decl_pointer
-      Z3::VeryLowLevel.Z3_to_func_decl(_ctx_pointer, ast._ast)
     end
 
     def toggle_warning_messages(bool) #=> :void
