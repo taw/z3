@@ -93,14 +93,14 @@ class Definition
   end
 
   def api_body
-    "Z3::VeryLowLevel.Z3_#{@name}(#{ffi_call_args.join(", ")})"
+    "VeryLowLevel.Z3_#{@name}(#{ffi_call_args.join(", ")})"
   end
 
   def api
     [
-      "    def #{api_def} #=> #{ffi_ret_type}\n",
-      "      #{api_body}\n",
-      "    end\n",
+      "      def #{api_def} #=> #{ffi_ret_type}\n",
+      "        #{api_body}\n",
+      "      end\n",
     ].join
   end
 
@@ -174,7 +174,7 @@ class Definition
   end
 
   def ffi
-    "  attach_function :Z3_#{@name}, [#{ffi_args.join(", ")}], #{ffi_ret_type}"
+    "    attach_function :Z3_#{@name}, [#{ffi_args.join(", ")}], #{ffi_ret_type}"
   end
 
   private

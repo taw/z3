@@ -15,15 +15,19 @@ class GenerateAPI
   def run!
     puts ""
     (Pathname(__dir__) + "../lib/z3/very_low_level_auto.rb").open("w") do |fh|
-      fh.puts 'module Z3::VeryLowLevel'
+      fh.puts 'module Z3'
+      fh.puts '  module VeryLowLevel'
       fh.puts supported_definitions.map(&:ffi).join("\n")
+      fh.puts '  end'
       fh.puts 'end'
     end
 
     (Pathname(__dir__) + "../lib/z3/low_level_auto.rb").open("w") do |fh|
-      fh.puts 'module Z3::LowLevel'
-      fh.puts '  class << self'
+      fh.puts 'module Z3'
+      fh.puts '  module LowLevel'
+      fh.puts '    class << self'
       fh.puts supported_definitions.map(&:api).join("\n")
+      fh.puts '    end'
       fh.puts '  end'
       fh.puts 'end'
     end
