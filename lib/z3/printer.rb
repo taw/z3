@@ -39,21 +39,25 @@ module Z3
 
     def format_app(a)
       if LowLevel::is_algebraic_number(a)
-        return LowLevel::get_numeral_decimal_string(a, 10)
-      end
-      decl = a.func_decl
-      name = decl.name
-      args = a.arguments.map{|x| format_ast(x)}
-      return PrintedExpr.new(name, false) if args.size == 0
-      # All operators
-      if name !~ /[a-z0-9]/
-        if args.size == 2
-          return PrintedExpr.new("#{args[0].enforce_parentheses} #{name} #{args[1].enforce_parentheses}", true)
-        elsif args.size == 1
-          return PrintedExpr.new("#{name}#{args[0].enforce_parentheses}", true)
+        PrintedExpr.new(LowLevel::get_numeral_decimal_string(a, 10))
+      elsif LowLevel::is_as_array(a)
+        decl = FuncDecl.new( LowLevel::get_as_array_func_decl(a) )
+        PrintedExpr.new(decl.sexpr.gsub(/k!\d+/, "k!"), false)
+      else
+        decl = a.func_decl
+        name = decl.name
+        args = a.arguments.map{|x| format_ast(x)}
+        return PrintedExpr.new(name, false) if args.size == 0
+        # All operators
+        if name !~ /[a-z0-9]/
+          if args.size == 2
+            return PrintedExpr.new("#{args[0].enforce_parentheses} #{name} #{args[1].enforce_parentheses}", true)
+          elsif args.size == 1
+            return PrintedExpr.new("#{name}#{args[0].enforce_parentheses}", true)
+          end
         end
+        PrintedExpr.new("#{name}(#{args.join(", ")})", false)
       end
-      PrintedExpr.new("#{name}(#{args.join(", ")})", false)
     end
   end
 end

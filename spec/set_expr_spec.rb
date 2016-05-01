@@ -24,9 +24,9 @@ module Z3
         b.include?(3),
         c == a.union(b),
       ]).to have_solution(
-        a => "as-array",
-        b => "as-array",
-        c => "as-array",
+        a => "(declare-fun k! (Int) Bool)",
+        b => "(declare-fun k! (Int) Bool)",
+        c => "(declare-fun k! (Int) Bool)",
       )
     end
 
@@ -38,9 +38,9 @@ module Z3
         b.include?(3),
         c == a.difference(b),
       ]).to have_solution(
-        a => "as-array",
-        b => "as-array",
-        c => "as-array",
+        a => "(declare-fun k! (Int) Bool)",
+        b => "(declare-fun k! (Int) Bool)",
+        c => "(declare-fun k! (Int) Bool)",
       )
     end
 
@@ -52,9 +52,9 @@ module Z3
         b.include?(3),
         c == a.intersection(b),
       ]).to have_solution(
-        a => "as-array",
-        b => "as-array",
-        c => "as-array",
+        a => "(declare-fun k! (Int) Bool)",
+        b => "(declare-fun k! (Int) Bool)",
+        c => "(declare-fun k! (Int) Bool)",
       )
     end
   end
