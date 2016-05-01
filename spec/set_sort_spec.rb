@@ -14,5 +14,14 @@ module Z3
       expect(bv32_set.var("a").inspect).to eq("Set(Bitvec(32))<a>")
       expect(int_set_set.var("a").inspect).to eq("Set(Set(Int))<a>")
     end
+
+    # These are pretty awful formattings
+    it "can instantiate full set" do
+      expect(int_set.Full.inspect).to eq("Set(Int)<const(true)>")
+    end
+
+    it "can instantiate empty set" do
+      expect(int_set.Empty.inspect).to eq("Set(Int)<const(false)>")
+    end
   end
 end

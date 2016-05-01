@@ -18,6 +18,14 @@ module Z3
       "SetSort(#{element_sort})"
     end
 
+    def Empty
+      new(LowLevel.mk_empty_set(self))
+    end
+
+    def Full
+      new(LowLevel.mk_full_set(self))
+    end
+
     public_class_method :new
   end
 end

@@ -72,7 +72,7 @@ module Z3
     end
 
     def self.from_pointer(_sort)
-      kind = Z3::VeryLowLevel.Z3_get_sort_kind(LowLevel._ctx_pointer, _sort)
+      kind = VeryLowLevel.Z3_get_sort_kind(LowLevel._ctx_pointer, _sort)
       case kind
       when 1
         BoolSort.new
@@ -81,8 +81,16 @@ module Z3
       when 3
         RealSort.new
       when 4
-        n = Z3::VeryLowLevel.Z3_get_bv_sort_size(LowLevel._ctx_pointer, _sort)
+        n = VeryLowLevel.Z3_get_bv_sort_size(LowLevel._ctx_pointer, _sort)
         BitvecSort.new(n)
+      when 5
+        domain = from_pointer(VeryLowLevel.Z3_get_array_sort_domain(LowLevel._ctx_pointer, _sort))
+        range = from_pointer(VeryLowLevel.Z3_get_array_sort_range(LowLevel._ctx_pointer, _sort))
+        if range == BoolSort.new
+          SetSort.new(domain)
+        else
+          ArraySort.new(domain, range)
+        end
       else
         raise "Unknown sort kind #{kind}"
       end
