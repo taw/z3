@@ -21,6 +21,8 @@ require_relative "z3/sort/int_sort"
 require_relative "z3/sort/real_sort"
 require_relative "z3/sort/bool_sort"
 require_relative "z3/sort/bitvec_sort"
+require_relative "z3/sort/set_sort"
+require_relative "z3/sort/array_sort"
 
 # ASTs
 require_relative "z3/expr/expr"
@@ -29,6 +31,8 @@ require_relative "z3/expr/int_expr"
 require_relative "z3/expr/real_expr"
 require_relative "z3/expr/bool_expr"
 require_relative "z3/expr/bitvec_expr"
+require_relative "z3/expr/set_expr"
+require_relative "z3/expr/array_expr"
 
 # Python-style interface
 require_relative "z3/interface"
