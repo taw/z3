@@ -2,8 +2,7 @@ module Z3
   class Exception < StandardError
   end
 
-
-  Z3::LowLevel.set_error_handler do |ctx, error|
+  LowLevel.set_error_handler do |ctx, error|
     error_codes_enum = %W[
       Z3_OK
       Z3_SORT_ERROR

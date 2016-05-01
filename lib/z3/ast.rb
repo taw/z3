@@ -16,7 +16,7 @@ module Z3
         5 => :func_decl,
         1000 => :unknown,
       }
-      kind_id = Z3::LowLevel.get_ast_kind(self)
+      kind_id = LowLevel.get_ast_kind(self)
       ast_kind_lookup[kind_id] or raise Z3::Exception, "Unknown AST kind #{kind_id}"
     end
 
@@ -30,16 +30,16 @@ module Z3
       num = LowLevel::get_app_num_args(self)
       (0...num).map do |i|
         _ast = LowLevel::get_app_arg(self, i)
-        Z3::Expr.new_from_pointer(_ast)
+        Expr.new_from_pointer(_ast)
       end
     end
 
     def to_s
-      Z3::Printer.new.format(self)
+      Printer.new.format(self)
     end
 
     def sexpr
-      Z3::LowLevel.ast_to_string(self)
+      LowLevel.ast_to_string(self)
     end
 
     private_class_method :new

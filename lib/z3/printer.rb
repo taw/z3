@@ -8,7 +8,7 @@ module Z3
 
     class PrintedExpr
       attr_reader :str, :priority
-      def initialize(str, priority)
+      def initialize(str, priority=false)
         @str = str
         @priority = priority
       end
@@ -27,11 +27,11 @@ module Z3
     def format_ast(a)
       case a.ast_kind
       when :numeral
-        PrintedExpr.new(Z3::LowLevel.get_numeral_string(a), false)
+        PrintedExpr.new(Z3::LowLevel.get_numeral_string(a))
       when :app
         format_app(a)
       when :var, :quantifier, :func_decl, :unknown
-        PrintedExpr.new(a.sexpr, false)
+        PrintedExpr.new(a.sexpr)
       else
         raise Z3::Exception, "Unknown AST kind #{a.ast_kind}"
       end
@@ -42,7 +42,7 @@ module Z3
         PrintedExpr.new(LowLevel::get_numeral_decimal_string(a, 10))
       elsif LowLevel::is_as_array(a)
         decl = FuncDecl.new( LowLevel::get_as_array_func_decl(a) )
-        PrintedExpr.new(decl.sexpr.gsub(/k!\d+/, "k!"), false)
+        PrintedExpr.new(decl.sexpr.gsub(/k!\d+/, "k!"))
       else
         decl = a.func_decl
         name = decl.name
@@ -56,7 +56,7 @@ module Z3
             return PrintedExpr.new("#{name}#{args[0].enforce_parentheses}", true)
           end
         end
-        PrintedExpr.new("#{name}(#{args.join(", ")})", false)
+        PrintedExpr.new("#{name}(#{args.join(", ")})")
       end
     end
   end

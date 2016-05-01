@@ -6,26 +6,26 @@ module Z3
     end
 
     def name
-      Z3::LowLevel.get_symbol_string(Z3::LowLevel.get_decl_name(self))
+      LowLevel.get_symbol_string(LowLevel.get_decl_name(self))
     end
 
     def arity
-      Z3::LowLevel.get_arity(self)
+      LowLevel.get_arity(self)
     end
 
     def domain(i)
       a = arity
       raise Z3::Exception, "Trying to access domain #{i} but function arity is #{a}" if i < 0 or i >= a
-      Sort.from_pointer(Z3::LowLevel::get_domain(self, i))
+      Sort.from_pointer(LowLevel::get_domain(self, i))
     end
 
     def range
-      Sort.from_pointer(Z3::LowLevel::get_range(self))
+      Sort.from_pointer(LowLevel::get_range(self))
     end
 
     # def ast_parameter(i)
     #   # vs arity ?
-    #   Z3::Ast.new(Z3::LowLevel.get_decl_ast_parameter(self, i))
+    #   Z3::Ast.new(LowLevel.get_decl_ast_parameter(self, i))
     # end
 
     def to_s
