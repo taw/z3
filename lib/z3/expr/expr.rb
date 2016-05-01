@@ -24,15 +24,7 @@ module Z3
         # This will raise exception unless one of the sorts is highest
         max_sort = args.map{|a| a.is_a?(Expr) ? a.sort : Expr.sort_for_const(a)}.max
         args.map do |a|
-          if a.is_a?(Expr)
-            if  a.sort == max_sort
-              a
-            else
-              max_sort.from_value(a)
-            end
-          else
-            max_sort.from_const(a)
-          end
+          max_sort.cast(a)
         end
       end
 

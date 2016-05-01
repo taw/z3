@@ -54,6 +54,14 @@ module Z3::LowLevel
       Z3::VeryLowLevel.Z3_mk_distinct(_ctx_pointer, asts.size, asts_vector(asts))
     end
 
+    def mk_set_union(asts)
+      Z3::VeryLowLevel.Z3_mk_set_union(_ctx_pointer, asts.size, asts_vector(asts))
+    end
+
+    def mk_set_intersect(asts)
+      Z3::VeryLowLevel.Z3_mk_set_intersect(_ctx_pointer, asts.size, asts_vector(asts))
+    end
+
     # Should be private
 
     def unpack_ast_vector(_ast_vector)

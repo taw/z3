@@ -36,5 +36,7 @@ module Z3::VeryLowLevel
   attach_function :Z3_mk_add, [:ctx_pointer, :int, :pointer], :ast_pointer
   attach_function :Z3_mk_sub, [:ctx_pointer, :int, :pointer], :ast_pointer
   attach_function :Z3_mk_mul, [:ctx_pointer, :int, :pointer], :ast_pointer
+  attach_function :Z3_mk_set_union, [:ctx_pointer, :int, :pointer], :ast_pointer
+  attach_function :Z3_mk_set_intersect, [:ctx_pointer, :int, :pointer], :ast_pointer
   attach_function :Z3_mk_distinct, [:ctx_pointer, :int, :pointer], :ast_pointer
 end

@@ -71,6 +71,18 @@ module Z3
       raise Z3::Exception, "Can't convert #{v.sort} into #{self}"
     end
 
+    def cast(a)
+      if a.is_a?(Expr)
+        if  a.sort == self
+          a
+        else
+          from_value(a)
+        end
+      else
+        from_const(a)
+      end
+    end
+
     def self.from_pointer(_sort)
       kind = VeryLowLevel.Z3_get_sort_kind(LowLevel._ctx_pointer, _sort)
       case kind
