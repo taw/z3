@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   # development
   s.add_development_dependency 'pry'
   # tests
+  s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'simplecov'
   s.add_runtime_dependency 'ffi'
