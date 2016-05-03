@@ -1,5 +1,3 @@
-require "rake"
-
 Gem::Specification.new do |s|
   s.name         = "z3"
   s.version      = "0.0.20160427"
