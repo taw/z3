@@ -38,7 +38,7 @@ end
 RSpec::Matchers.define :have_output do |expected|
   match do |file_name|
     executable_path = "#{__dir__}/../examples/#{file_name}"
-    actual = IO.popen(executable_path).read
+    actual = IO.popen("ruby -r./spec/coverage_helper #{executable_path}").read
     actual.gsub(/ *$/, "") == expected.gsub(/ *$/, "")
   end
 end
