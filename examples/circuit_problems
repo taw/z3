@@ -1,0 +1,87 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/z3"
+
+# It's totally possible everything is backwards
+class CircuitProblem
+  def initialize
+    @solver = Z3::Solver.new
+    @pins = {}
+  end
+
+  def battery(name, battery_voltage)
+    plus    = create_pin("#{name}+")
+    minus   = create_pin("#{name}-")
+    current = create_current("#{name}", "#{name}+", "#{name}-")
+    @solver.assert plus[:voltage] - minus[:voltage] == battery_voltage
+  end
+
+  def resistor(name, resistance)
+    a = create_pin("#{name}a")
+    b = create_pin("#{name}b")
+    current = create_current("#{name}", "#{name}a", "#{name}b")
+    # dV = RI
+    @solver.assert (a[:voltage] - b[:voltage]) == current * resistance
+  end
+
+  def connect(a, b)
+    create_current("Wire #{a} #{b}", a, b)
+    @solver.assert @pins[a][:voltage] == @pins[b][:voltage]
+  end
+
+  def solve!
+    @pins.each do |name, pin|
+      # All current flows are equal
+      @solver.assert Z3.Add(*pin[:current]) == 0
+    end
+    if @solver.check == :sat
+      model = @solver.model
+      model.each do |n,v|
+        next unless n.to_s == "I V"
+        puts "* #{n} = #{v}"
+      end
+    else
+      puts "Can't solve the problem"
+    end
+  end
+
+  def ground(name)
+    @solver.assert @pins[name][:voltage] == 0
+  end
+
+  private
+
+  def create_pin(name)
+    raise "Pin named #{name} already exists" if @pins[name]
+    @pins[name] = {
+      voltage: Z3.Real("V #{name}"),
+      current: [],
+    }
+  end
+
+  def create_current(name, source, sink)
+    raise "No such pin: #{source}" unless @pins[source]
+    raise "No such pin: #{sink}" unless @pins[sink]
+    current = Z3.Real("I #{name}")
+    @pins[source][:current] << current
+    @pins[sink][:current] << -current
+    current
+  end
+end
+
+# http://physics.info/circuits-r/practice.shtml
+def problem_1!
+  problem = CircuitProblem.new
+  problem.battery  "V",  125
+  problem.resistor "R1", 20
+  problem.resistor "R2", 30
+  problem.resistor "R3", 50
+  problem.ground "V-"
+  problem.connect "V-", "R1a"
+  problem.connect "R1b", "R2a"
+  problem.connect "R2b", "R3a"
+  problem.connect "R3b", "V+"
+  problem.solve!
+end
+
+problem_1!
