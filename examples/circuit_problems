@@ -84,4 +84,24 @@ def problem_1!
   problem.solve!
 end
 
+def problem_2!
+  problem = CircuitProblem.new
+  problem.battery  "V",  125
+  problem.resistor "R1", 20
+  problem.resistor "R2", 100
+  problem.resistor "R3", 50
+  problem.ground "V-"
+  problem.connect "V-", "R1a"
+  problem.connect "V-", "R2a"
+  problem.connect "V-", "R3a"
+  problem.connect "V+", "R1b"
+  problem.connect "V+", "R2b"
+  problem.connect "V+", "R3b"
+  problem.solve!
+end
+
+puts "Problem 1"
 problem_1!
+puts ""
+puts "Problem 2"
+problem_2!
