@@ -24,24 +24,43 @@ class CircuitProblem
     @solver.assert (a[:voltage] - b[:voltage]) == current * resistance
   end
 
+  # This is super simple diode model
+  def diode(name)
+    a = create_pin("#{name}+")
+    b = create_pin("#{name}-")
+    current = create_current("#{name}", "#{name}+", "#{name}-")
+    # * current can't flow backwards
+    # * if voltage is reversed, current is stopped (infinite resistance)
+    # * if current is flowing, voltage is equalized (zero resistance)
+    # * voltage is same or current is zero
+    @solver.assert current >= 0
+    @solver.assert a[:voltage] <= b[:voltage]
+    # @solver.assert Z3.Implies(current > 0, a[:voltage] == b[:voltage])
+    # @solver.assert Z3.Implies(a[:voltage] < b[:voltage], current == 0)
+    @solver.assert Z3.Or(a[:voltage] == b[:voltage], current == 0)
+  end
+
   def connect(a, b)
     create_current("Wire #{a} #{b}", a, b)
     @solver.assert @pins[a][:voltage] == @pins[b][:voltage]
   end
 
-  def solve!
-    @pins.each do |name, pin|
-      # All current flows are equal
-      @solver.assert Z3.Add(*pin[:current]) == 0
-    end
-    if @solver.check == :sat
-      model = @solver.model
+  def solve!(*vars)
+    setup_flow_rules!
+    with_solved_model do |model|
       model.each do |n,v|
-        next unless n.to_s == "I V"
+        next unless vars.include?(n.to_s)
         puts "* #{n} = #{v}"
       end
-    else
-      puts "Can't solve the problem"
+    end
+  end
+
+  def debug!
+    setup_flow_rules!
+    with_solved_model do |model|
+      model.each do |n,v|
+        puts "* #{n} = #{v}"
+      end
     end
   end
 
@@ -50,6 +69,21 @@ class CircuitProblem
   end
 
   private
+
+  def with_solved_model
+    if @solver.check == :sat
+      yield @solver.model
+    else
+      puts "Can't solve the problem"
+    end
+  end
+
+  def setup_flow_rules!
+    @pins.each do |name, pin|
+      # All current flows are equal
+      @solver.assert Z3.Add(*pin[:current]) == 0
+    end
+  end
 
   def create_pin(name)
     raise "Pin named #{name} already exists" if @pins[name]
@@ -73,31 +107,57 @@ end
 def problem_1!
   problem = CircuitProblem.new
   problem.battery  "V",  125
+  problem.ground "V-"
   problem.resistor "R1", 20
   problem.resistor "R2", 30
   problem.resistor "R3", 50
-  problem.ground "V-"
   problem.connect "V-", "R1a"
   problem.connect "R1b", "R2a"
   problem.connect "R2b", "R3a"
   problem.connect "R3b", "V+"
-  problem.solve!
+  problem.solve! "I V"
 end
 
 def problem_2!
   problem = CircuitProblem.new
   problem.battery  "V",  125
+  problem.ground "V-"
   problem.resistor "R1", 20
   problem.resistor "R2", 100
   problem.resistor "R3", 50
-  problem.ground "V-"
   problem.connect "V-", "R1a"
   problem.connect "V-", "R2a"
   problem.connect "V-", "R3a"
   problem.connect "V+", "R1b"
   problem.connect "V+", "R2b"
   problem.connect "V+", "R3b"
-  problem.solve!
+  problem.solve! "I V"
+end
+
+def problem_3!
+  # V+ [ D1 -> ] La
+  # V- [ D2 -> ] La
+  # V+ [ D3 <- ] Lb
+  # V- [ D4 <- ] Lb
+  [100, 50, 0, -50, -100].each do |v|
+    problem = CircuitProblem.new
+    problem.battery "V", v
+    problem.ground "V-"
+    problem.resistor "L", 100
+    problem.diode "D1"
+    problem.diode "D2"
+    problem.diode "D3"
+    problem.diode "D4"
+    problem.connect "D1-", "V+"
+    problem.connect "D1+",      "La"
+    problem.connect "D2-", "V-"
+    problem.connect "D2+",      "La"
+    problem.connect "D3-",      "Lb"
+    problem.connect "D3+", "V+"
+    problem.connect "D4-",      "Lb"
+    problem.connect "D4+", "V-"
+    problem.solve! "I V", "I L"
+  end
 end
 
 puts "Problem 1"
@@ -105,3 +165,6 @@ problem_1!
 puts ""
 puts "Problem 2"
 problem_2!
+puts ""
+puts "Problem 3"
+problem_3!
