@@ -157,5 +157,12 @@ module Z3
       expect([a ==  100, d ==  a.sign_ext(4)]).to have_solution(d => 100)
       expect([a == -100, d ==  a.sign_ext(4)]).to have_solution(d => 2**12-100)
     end
+
+    it "rotate_left / rotate_right" do
+      expect([a == 0b0101_0110, b == a.rotate_left(1)]).to have_solution(b => 0b101_0110_0)
+      expect([a == 0b0101_0110, b == a.rotate_left(4)]).to have_solution(b => 0b0110_0101)
+      expect([a == 0b0101_0110, b == a.rotate_right(1)]).to have_solution(b => 0b0_0101_011)
+      expect([a == 0b0101_0110, b == a.rotate_right(4)]).to have_solution(b => 0b0110_0101)
+    end
   end
 end

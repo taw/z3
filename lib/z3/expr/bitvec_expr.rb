@@ -44,6 +44,14 @@ module Z3
       Expr.Mul(self, other)
     end
 
+    def rotate_left(num)
+      sort.new(LowLevel.mk_rotate_left(num, self))
+    end
+
+    def rotate_right(num)
+      sort.new(LowLevel.mk_rotate_right(num, self))
+    end
+
     def zero_ext(size)
       BitvecSort.new(sort.size + size).new(LowLevel.mk_zero_ext(size, self))
     end
