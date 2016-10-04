@@ -44,6 +44,30 @@ module Z3
       Expr.Mul(self, other)
     end
 
+    def add_no_overflow?(other)
+      raise Z3::Exception, "Use #signed_add_no_overflow? or #unsigned_add_no_overflow? for Bitvec, not #add_no_overflow?"
+    end
+
+    def signed_add_no_overflow?(other)
+      BitvecExpr.SignedAddNoOverflow(self, other)
+    end
+
+    def unsigned_add_no_overflow?(other)
+      BitvecExpr.UnsignedAddNoOverflow(self, other)
+    end
+
+    def add_no_underflow?(other)
+      BitvecExpr.AddNoUnderflow(self, other)
+    end
+
+    def signed_add_no_underflow?(other)
+      BitvecExpr.AddNoUndeflow(self, other)
+    end
+
+    def unsigned_add_no_underflow?(other)
+      raise "Unsigned + cannot underflow"
+    end
+
     def >>(other)
       raise Z3::Exception, "Use #signed_rshift or #unsigned_rshift for Bitvec, not >>"
     end
@@ -214,6 +238,21 @@ module Z3
       def SignedLe(a, b)
         a, b = coerce_to_same_bv_sort(a, b)
         BoolSort.new.new(LowLevel.mk_bvsle(a, b))
+      end
+
+      def SignedAddNoOverflow(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        BoolSort.new.new(LowLevel.mk_bvadd_no_overflow(a, b, true))
+      end
+
+      def UnsignedAddNoOverflow(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        BoolSort.new.new(LowLevel.mk_bvadd_no_overflow(a, b, false))
+      end
+
+      def AddNoUnderflow(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        BoolSort.new.new(LowLevel.mk_bvadd_no_underflow(a, b))
       end
     end
   end

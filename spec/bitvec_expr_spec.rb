@@ -127,5 +127,27 @@ module Z3
       expect([a == 100, b == 120, x == a.signed_le(b)]).to have_solution(x =>  true)
       expect([a == 100, b == 200, x == a.signed_le(b)]).to have_solution(x => false)
     end
+
+    it "signed_add_no_overflow?" do
+      expect([a ==  100, b ==  100, x == a.signed_add_no_overflow?(b)]).to have_solution(x => false)
+      expect([a ==   50, b ==   50, x == a.signed_add_no_overflow?(b)]).to have_solution(x => true)
+      expect([a ==  -50, b ==  -50, x == a.signed_add_no_overflow?(b)]).to have_solution(x => true)
+      expect([a == -100, b == -100, x == a.signed_add_no_overflow?(b)]).to have_solution(x => true)
+    end
+
+    it "unsigned_add_no_overflow?" do
+      expect([a ==  100, b ==  100, x == a.unsigned_add_no_overflow?(b)]).to have_solution(x => true)
+      expect([a ==   50, b ==   50, x == a.unsigned_add_no_overflow?(b)]).to have_solution(x => true)
+      expect([a ==  -50, b ==  -50, x == a.unsigned_add_no_overflow?(b)]).to have_solution(x => false)
+      expect([a == -100, b == -100, x == a.unsigned_add_no_overflow?(b)]).to have_solution(x => false)
+    end
+
+    # Inherently signed, unsigned add can't underflow
+    it "add_no_underflow?" do
+      expect([a ==  100, b ==  100, x == a.add_no_underflow?(b)]).to have_solution(x => true)
+      expect([a ==   50, b ==   50, x == a.add_no_underflow?(b)]).to have_solution(x => true)
+      expect([a ==  -50, b ==  -50, x == a.add_no_underflow?(b)]).to have_solution(x => true)
+      expect([a == -100, b == -100, x == a.add_no_underflow?(b)]).to have_solution(x => false)
+    end
   end
 end
