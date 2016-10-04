@@ -3,6 +3,7 @@ module Z3
     let(:a) { Z3.Bitvec("a", 8) }
     let(:b) { Z3.Bitvec("b", 8) }
     let(:c) { Z3.Bitvec("c", 8) }
+    let(:d) { Z3.Bitvec("d", 12) }
     let(:x) { Z3.Bool("x") }
 
     it "==" do
@@ -148,6 +149,13 @@ module Z3
       expect([a ==   50, b ==   50, x == a.add_no_underflow?(b)]).to have_solution(x => true)
       expect([a ==  -50, b ==  -50, x == a.add_no_underflow?(b)]).to have_solution(x => true)
       expect([a == -100, b == -100, x == a.add_no_underflow?(b)]).to have_solution(x => false)
+    end
+
+    it "zero_ext / sign_ext" do
+      expect([a ==  100, d ==  a.zero_ext(4)]).to have_solution(d => 100)
+      expect([a == -100, d ==  a.zero_ext(4)]).to have_solution(d => 2**8-100)
+      expect([a ==  100, d ==  a.sign_ext(4)]).to have_solution(d => 100)
+      expect([a == -100, d ==  a.sign_ext(4)]).to have_solution(d => 2**12-100)
     end
   end
 end

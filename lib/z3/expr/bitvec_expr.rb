@@ -44,6 +44,14 @@ module Z3
       Expr.Mul(self, other)
     end
 
+    def zero_ext(size)
+      BitvecSort.new(sort.size + size).new(LowLevel.mk_zero_ext(size, self))
+    end
+
+    def sign_ext(size)
+      BitvecSort.new(sort.size + size).new(LowLevel.mk_sign_ext(size, self))
+    end
+
     def add_no_overflow?(other)
       raise Z3::Exception, "Use #signed_add_no_overflow? or #unsigned_add_no_overflow? for Bitvec, not #add_no_overflow?"
     end
