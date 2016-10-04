@@ -103,6 +103,10 @@ module Z3
         else
           ArraySort.new(domain, range)
         end
+      when 9
+        e = VeryLowLevel.Z3_fpa_get_ebits(LowLevel._ctx_pointer, _sort)
+        s = VeryLowLevel.Z3_fpa_get_sbits(LowLevel._ctx_pointer, _sort)
+        FloatSort.new(e, s)
       else
         raise "Unknown sort kind #{kind}"
       end
