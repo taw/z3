@@ -114,6 +114,16 @@ module Z3
       raise "Unsigned + cannot underflow"
     end
 
+    def div_no_overflow?(other)
+      BitvecExpr.SignedDivNoOverflow(self, other)
+    end
+    def signed_div_no_overflow?(other)
+      BitvecExpr.SignedDivNoOverflow(self, other)
+    end
+    def unsigned_div_no_overflow?(other)
+      raise "Unsigned / cannot underflow"
+    end
+
     def >>(other)
       raise Z3::Exception, "Use #signed_rshift or #unsigned_rshift for Bitvec, not >>"
     end
@@ -318,6 +328,11 @@ module Z3
       def SignedMulNoUnderflow(a, b)
         a, b = coerce_to_same_bv_sort(a, b)
         BoolSort.new.new(LowLevel.mk_bvmul_no_underflow(a, b))
+      end
+
+      def SignedDivNoOverflow(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        BoolSort.new.new(LowLevel.mk_bvsdiv_no_overflow(a, b))
       end
     end
   end

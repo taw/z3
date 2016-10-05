@@ -160,6 +160,13 @@ module Z3
       expect([a == -128, x == a.signed_neg_no_overflow?]).to have_solution(x => false)
     end
 
+    # Unsigned div can't overflow, and signed div can only overflow for one value
+    it "signed_div_no_overflow?" do
+      expect([a ==  -128, b == -1, x == a.signed_div_no_overflow?(b)]).to have_solution(x => false)
+      expect([a ==  -128, b == -2, x == a.signed_div_no_overflow?(b)]).to have_solution(x => true)
+      expect([a ==   127, b ==  1, x == a.signed_div_no_overflow?(b)]).to have_solution(x => true)
+    end
+
     ## This API is broken, z3 returns unevaluated bvsmul_noovfl(10, 10) instead of actual answer
 
     # it "signed_mul_no_overflow?" do
