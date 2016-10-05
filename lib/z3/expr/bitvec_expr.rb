@@ -73,15 +73,27 @@ module Z3
     end
 
     def add_no_underflow?(other)
-      BitvecExpr.AddNoUnderflow(self, other)
+      BitvecExpr.SignedAddNoUnderflow(self, other)
     end
 
     def signed_add_no_underflow?(other)
-      BitvecExpr.AddNoUndeflow(self, other)
+      BitvecExpr.SignedAddNoUnderflow(self, other)
     end
 
     def unsigned_add_no_underflow?(other)
       raise "Unsigned + cannot underflow"
+    end
+
+    def unsigned_neg_no_overflow?
+      raise "There is no unsigned negation"
+    end
+
+    def signed_neg_no_overflow?
+      BitvecExpr.SignedNegNoOverflow(self)
+    end
+
+    def neg_no_overflow?
+      BitvecExpr.SignedNegNoOverflow(self)
     end
 
     def >>(other)
@@ -266,9 +278,13 @@ module Z3
         BoolSort.new.new(LowLevel.mk_bvadd_no_overflow(a, b, false))
       end
 
-      def AddNoUnderflow(a, b)
+      def SignedAddNoUnderflow(a, b)
         a, b = coerce_to_same_bv_sort(a, b)
         BoolSort.new.new(LowLevel.mk_bvadd_no_underflow(a, b))
+      end
+
+      def SignedNegNoOverflow(a)
+        BoolSort.new.new(LowLevel.mk_bvneg_no_overflow(a))
       end
     end
   end

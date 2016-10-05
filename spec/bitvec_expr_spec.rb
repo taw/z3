@@ -144,11 +144,20 @@ module Z3
     end
 
     # Inherently signed, unsigned add can't underflow
-    it "add_no_underflow?" do
-      expect([a ==  100, b ==  100, x == a.add_no_underflow?(b)]).to have_solution(x => true)
-      expect([a ==   50, b ==   50, x == a.add_no_underflow?(b)]).to have_solution(x => true)
-      expect([a ==  -50, b ==  -50, x == a.add_no_underflow?(b)]).to have_solution(x => true)
-      expect([a == -100, b == -100, x == a.add_no_underflow?(b)]).to have_solution(x => false)
+    it "signed_add_no_underflow?" do
+      expect([a ==  100, b ==  100, x == a.signed_add_no_underflow?(b)]).to have_solution(x => true)
+      expect([a ==   50, b ==   50, x == a.signed_add_no_underflow?(b)]).to have_solution(x => true)
+      expect([a ==  -50, b ==  -50, x == a.signed_add_no_underflow?(b)]).to have_solution(x => true)
+      expect([a == -100, b == -100, x == a.signed_add_no_underflow?(b)]).to have_solution(x => false)
+    end
+
+    # Inherently signed, there is no signed neg
+    it "neg_no_overflow?" do
+      expect([a ==  100, x == a.signed_neg_no_overflow?]).to have_solution(x => true)
+      expect([a == -100, x == a.signed_neg_no_overflow?]).to have_solution(x => true)
+      expect([a ==    0, x == a.signed_neg_no_overflow?]).to have_solution(x => true)
+      expect([a ==  127, x == a.signed_neg_no_overflow?]).to have_solution(x => true)
+      expect([a == -128, x == a.signed_neg_no_overflow?]).to have_solution(x => false)
     end
 
     it "zero_ext / sign_ext" do
