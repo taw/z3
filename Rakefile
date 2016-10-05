@@ -1,3 +1,5 @@
+require "json"
+
 task "default" => "spec"
 task "test" => "spec"
 task "test:integration" => "spec:integration"
@@ -37,4 +39,15 @@ desc "Upload gem"
 task "gem:push" => "gem:build" do
   gem_file = Dir["z3-*.gem"][-1] or raise "No gem found"
   system "gem", "push", gem_file
+end
+
+desc "Report missing APIs"
+task "coverage:missing" do
+  data = JSON.load(open("coverage/.resultset.json"))["RSpec"]["coverage"]
+  lla_path = data.keys.find{|k| k.end_with?("lib/z3/low_level_auto.rb")}
+  coverage = data[lla_path].zip(File.readlines(lla_path).map(&:strip))
+  missing = coverage.each_cons(2).map(&:flatten).select{|_,_,bc,_| bc == 0}.map{|_,a,_,_| a}
+  open("missing_apis.txt", "w") do |file|
+    file.puts missing
+  end
 end
