@@ -94,3 +94,38 @@ RSpec::Matchers.define :have_solution do |expected|
     end
   end
 end
+
+RSpec::Matchers.define :have_solutions do |expected|
+  match do |asts|
+    solutions = get_all_solutions(asts)
+    expect(solutions).to match(expected)
+  end
+
+  failure_message do |asts|
+    solutions = get_all_solutions(asts)
+    "expected #{asts.inspect} to have solutions:\n#{expected.map{|s| "* #{s.inspect}\n"}.join}, instead got:\n#{solutions.map{|s| "* #{s.inspect}\n"}.join}"
+  end
+
+  def get_all_solutions(asts)
+    vars = expected.map(&:keys)
+    raise "All expectations need same set of keys" unless vars.uniq.size == 1
+    vars = vars[0]
+    solver = setup_solver(asts)
+    solutions = []
+    while solver.check == :sat
+      model = solver.model
+      solution = Hash[vars.map{|v| [v, model.model_eval(v, true)] }]
+      solutions << solution
+      solver.assert Z3.Or(*solution.map{|var,val| var != val})
+    end
+    solutions
+  end
+
+  def setup_solver(asts)
+    Z3::Solver.new.tap do |solver|
+      asts.each do |ast|
+        solver.assert ast
+      end
+    end
+  end
+end

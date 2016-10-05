@@ -4,21 +4,12 @@ module Z3
     let(:a) { sort.var("a") }
 
     it "list all possible options" do
-      solver = Z3::Solver.new
-      solutions = []
-      while solver.check == :sat
-        model = solver.model
-        solution = model.model_eval(a, true)
-        solutions << solution
-        solver.assert a != solution
-      end
-
-      expect(solutions).to match([
-        sort.nearest_ties_away,
-        sort.nearest_ties_even,
-        sort.towards_zero,
-        sort.towards_negative,
-        sort.towards_positive,
+      expect([a == a]).to have_solutions([
+        { a => sort.nearest_ties_away },
+        { a => sort.nearest_ties_even },
+        { a => sort.towards_zero },
+        { a => sort.towards_negative },
+        { a => sort.towards_positive },
       ])
     end
   end
