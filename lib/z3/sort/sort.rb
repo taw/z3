@@ -44,6 +44,14 @@ module Z3
       LowLevel.ast_to_string(self)
     end
 
+    def eql?(other)
+      self == other
+    end
+
+    def hash
+      self.class.hash
+    end
+
     def inspect
       "#{self}Sort"
     end

@@ -34,19 +34,11 @@ module Z3
     end
 
     it "shortcut syntax" do
-      expect(float_16).not_to eq(float_32)
-
-      expect(float_16).to eq(float_half)
-      expect(float_16).to eq(float_5_11)
-
-      expect(float_32).to eq(float_single)
-      expect(float_32).to eq(float_8_24)
-
-      expect(float_64).to eq(float_double)
-      expect(float_64).to eq(float_11_53)
-
-      expect(float_128).to eq(float_quadruple)
-      expect(float_128).to eq(float_15_113)
+      expect([float_16, float_32, float_64, float_128]).to be_all_different
+      expect([float_16, float_half, float_5_11]).to be_all_same
+      expect([float_32, float_single, float_8_24]).to be_all_same
+      expect([float_64, float_double, float_11_53]).to be_all_same
+      expect([float_128, float_quadruple, float_15_113]).to be_all_same
     end
   end
 end

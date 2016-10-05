@@ -49,6 +49,18 @@ RSpec::Matchers.define :be_same_as do |expected|
   end
 end
 
+RSpec::Matchers.define :be_all_same do
+  match do |array|
+    array.uniq.size == 1
+  end
+end
+
+RSpec::Matchers.define :be_all_different do
+  match do |array|
+    array.uniq.size == array.size
+  end
+end
+
 RSpec::Matchers.define :stringify do |expected|
   match do |actual|
     actual.to_s == expected
