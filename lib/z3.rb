@@ -33,6 +33,7 @@ require_relative "z3/expr/int_expr"
 require_relative "z3/expr/real_expr"
 require_relative "z3/expr/bool_expr"
 require_relative "z3/expr/bitvec_expr"
+require_relative "z3/expr/rounding_mode_expr"
 require_relative "z3/expr/set_expr"
 require_relative "z3/expr/array_expr"
 
