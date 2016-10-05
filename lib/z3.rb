@@ -22,6 +22,7 @@ require_relative "z3/sort/real_sort"
 require_relative "z3/sort/bool_sort"
 require_relative "z3/sort/bitvec_sort"
 require_relative "z3/sort/float_sort"
+require_relative "z3/sort/rounding_mode_sort"
 require_relative "z3/sort/set_sort"
 require_relative "z3/sort/array_sort"
 

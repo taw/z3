@@ -107,6 +107,8 @@ module Z3
         e = VeryLowLevel.Z3_fpa_get_ebits(LowLevel._ctx_pointer, _sort)
         s = VeryLowLevel.Z3_fpa_get_sbits(LowLevel._ctx_pointer, _sort)
         FloatSort.new(e, s)
+      when 10
+        RoundingModeSort.new
       else
         raise "Unknown sort kind #{kind}"
       end
