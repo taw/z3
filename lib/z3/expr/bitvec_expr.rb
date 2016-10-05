@@ -64,10 +64,12 @@ module Z3
       raise Z3::Exception, "Use #signed_add_no_overflow? or #unsigned_add_no_overflow? for Bitvec, not #add_no_overflow?"
     end
 
+    def add_no_overflow?(other)
+      raise "Use signed_add_no_overflow? or unsigned_add_no_overflow?"
+    end
     def signed_add_no_overflow?(other)
       BitvecExpr.SignedAddNoOverflow(self, other)
     end
-
     def unsigned_add_no_overflow?(other)
       BitvecExpr.UnsignedAddNoOverflow(self, other)
     end
@@ -75,11 +77,9 @@ module Z3
     def add_no_underflow?(other)
       BitvecExpr.SignedAddNoUnderflow(self, other)
     end
-
     def signed_add_no_underflow?(other)
       BitvecExpr.SignedAddNoUnderflow(self, other)
     end
-
     def unsigned_add_no_underflow?(other)
       raise "Unsigned + cannot underflow"
     end
@@ -87,13 +87,31 @@ module Z3
     def unsigned_neg_no_overflow?
       raise "There is no unsigned negation"
     end
-
     def signed_neg_no_overflow?
       BitvecExpr.SignedNegNoOverflow(self)
     end
-
     def neg_no_overflow?
       BitvecExpr.SignedNegNoOverflow(self)
+    end
+
+    def mul_no_overflow?(other)
+      raise "Use signed_mul_no_overflow? or unsigned_mul_no_overflow?"
+    end
+    def signed_mul_no_overflow?(other)
+      BitvecExpr.SignedMulNoOverflow(self, other)
+    end
+    def unsigned_mul_no_overflow?(other)
+      BitvecExpr.UnsignedMulNoOverflow(self, other)
+    end
+
+    def mul_no_underflow?(other)
+      BitvecExpr.SignedMulNoUnderflow(self, other)
+    end
+    def signed_mul_no_underflow?(other)
+      BitvecExpr.SignedMulNoUnderflow(self, other)
+    end
+    def unsigned_mul_no_underflow?(other)
+      raise "Unsigned + cannot underflow"
     end
 
     def >>(other)
@@ -285,6 +303,21 @@ module Z3
 
       def SignedNegNoOverflow(a)
         BoolSort.new.new(LowLevel.mk_bvneg_no_overflow(a))
+      end
+
+      def SignedMulNoOverflow(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        BoolSort.new.new(LowLevel.mk_bvmul_no_overflow(a, b, true))
+      end
+
+      def UnsignedMulNoOverflow(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        BoolSort.new.new(LowLevel.mk_bvmul_no_overflow(a, b, false))
+      end
+
+      def SignedMulNoUnderflow(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        BoolSort.new.new(LowLevel.mk_bvmul_no_underflow(a, b))
       end
     end
   end

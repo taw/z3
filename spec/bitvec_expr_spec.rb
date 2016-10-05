@@ -152,13 +152,36 @@ module Z3
     end
 
     # Inherently signed, there is no signed neg
-    it "neg_no_overflow?" do
+    it "signed_neg_no_overflow?" do
       expect([a ==  100, x == a.signed_neg_no_overflow?]).to have_solution(x => true)
       expect([a == -100, x == a.signed_neg_no_overflow?]).to have_solution(x => true)
       expect([a ==    0, x == a.signed_neg_no_overflow?]).to have_solution(x => true)
       expect([a ==  127, x == a.signed_neg_no_overflow?]).to have_solution(x => true)
       expect([a == -128, x == a.signed_neg_no_overflow?]).to have_solution(x => false)
     end
+
+    ## This API is broken, z3 returns unevaluated bvsmul_noovfl(10, 10) instead of actual answer
+
+    # it "signed_mul_no_overflow?" do
+    #   expect([a ==   10, b ==   10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => true)
+    #   expect([a ==   20, b ==   10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => false)
+    #   expect([a ==   20, b ==   20, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => false)
+    #   expect([a ==  -10, b ==  -10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => true)
+    # end
+    #
+    # it "unsigned_mul_no_overflow?" do
+    #   expect([a ==   10, b ==   10, x == a.unsigned_mul_no_overflow?(b)]).to have_solution(x => true)
+    #   expect([a ==   20, b ==   10, x == a.unsigned_mul_no_overflow?(b)]).to have_solution(x => true)
+    #   expect([a ==   20, b ==   20, x == a.unsigned_mul_no_overflow?(b)]).to have_solution(x => false)
+    #   expect([a ==  -10, b ==  -10, x == a.unsigned_mul_no_overflow?(b)]).to have_solution(x => false)
+    # end
+    #
+    # # Inherently signed, unsigned can't underflow
+    # it "signed_mul_no_underflow?" do
+    #   expect([a ==  -10, b ==  -10, x == a.signed_mul_no_underflow?(b)]).to have_solution(x => true)
+    #   expect([a ==  -20, b ==  -20, x == a.signed_mul_no_underflow?(b)]).to have_solution(x => true)
+    #   expect([a ==  -20, b ==   20, x == a.signed_mul_no_underflow?(b)]).to have_solution(x => false)
+    # end
 
     it "zero_ext / sign_ext" do
       expect([a ==  100, d ==  a.zero_ext(4)]).to have_solution(d => 100)
