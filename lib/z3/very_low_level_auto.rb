@@ -276,7 +276,6 @@ module Z3
     attach_function :Z3_mk_fpa_nan, [:ctx_pointer, :sort_pointer], :ast_pointer
     attach_function :Z3_mk_fpa_neg, [:ctx_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_fpa_numeral_double, [:ctx_pointer, :double, :sort_pointer], :ast_pointer
-    attach_function :Z3_mk_fpa_numeral_float, [:ctx_pointer, :float, :sort_pointer], :ast_pointer
     attach_function :Z3_mk_fpa_numeral_int, [:ctx_pointer, :int, :sort_pointer], :ast_pointer
     attach_function :Z3_mk_fpa_numeral_int64_uint64, [:ctx_pointer, :bool, :int64, :uint64, :sort_pointer], :ast_pointer
     attach_function :Z3_mk_fpa_numeral_int_uint, [:ctx_pointer, :bool, :int, :uint, :sort_pointer], :ast_pointer

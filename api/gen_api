@@ -84,6 +84,9 @@ class GenerateAPI
       "Z3_stats_inc_ref",
       "Z3_stats_dec_ref",
       "Z3_stats_to_string",
+
+      # Extra constructors we'll never need
+      "mk_fpa_numeral_float",
     ].to_set
   end
 

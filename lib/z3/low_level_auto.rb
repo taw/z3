@@ -1105,10 +1105,6 @@ module Z3
         VeryLowLevel.Z3_mk_fpa_numeral_double(_ctx_pointer, double, sort._ast)
       end
 
-      def mk_fpa_numeral_float(float, sort) #=> :ast_pointer
-        VeryLowLevel.Z3_mk_fpa_numeral_float(_ctx_pointer, float, sort._ast)
-      end
-
       def mk_fpa_numeral_int(num, sort) #=> :ast_pointer
         VeryLowLevel.Z3_mk_fpa_numeral_int(_ctx_pointer, num, sort._ast)
       end
