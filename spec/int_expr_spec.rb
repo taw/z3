@@ -1,9 +1,9 @@
 module Z3
   describe IntExpr do
-    let(:a) { Z3::Int("a") }
-    let(:b) { Z3::Int("b") }
-    let(:c) { Z3::Int("c") }
-    let(:x) { Z3::Bool("x") }
+    let(:a) { Z3.Int("a") }
+    let(:b) { Z3.Int("b") }
+    let(:c) { Z3.Int("c") }
+    let(:x) { Z3.Bool("x") }
 
     it "+" do
       expect([a == 2, b == 4, c == a + b]).to have_solution(c => 6)
@@ -79,6 +79,13 @@ module Z3
 
     it "unary -" do
       expect([a == 3, b == -a]).to have_solution(b => -3)
+    end
+
+    it "simplify" do
+      a = Z3.Const(5)
+      b = Z3.Const(3)
+      expect((a+b).inspect).to eq("Int<5 + 3>")
+      expect((a+b).simplify.inspect).to eq("Int<8>")
     end
   end
 end

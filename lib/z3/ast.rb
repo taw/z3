@@ -42,6 +42,10 @@ module Z3
       LowLevel.ast_to_string(self)
     end
 
+    def simplify
+      sort.new(LowLevel.simplify(self))
+    end
+
     private_class_method :new
   end
 end
