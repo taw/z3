@@ -67,6 +67,26 @@ module Z3
       "FloatSort(#{ebits}, #{sbits})"
     end
 
+    def nan
+      new LowLevel.mk_fpa_nan(self)
+    end
+
+    def positive_infinity
+      new LowLevel.mk_fpa_inf(self, false)
+    end
+
+    def negative_infinity
+      new LowLevel.mk_fpa_inf(self, true)
+    end
+
+    def positive_zero
+      new LowLevel.mk_fpa_zero(self, false)
+    end
+
+    def negative_zero
+      new LowLevel.mk_fpa_zero(self, true)
+    end
+
     public_class_method :new
   end
 end

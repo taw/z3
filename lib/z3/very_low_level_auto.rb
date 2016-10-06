@@ -280,8 +280,6 @@ module Z3
     attach_function :Z3_mk_fpa_numeral_int64_uint64, [:ctx_pointer, :bool, :int64, :uint64, :sort_pointer], :ast_pointer
     attach_function :Z3_mk_fpa_numeral_int_uint, [:ctx_pointer, :bool, :int, :uint, :sort_pointer], :ast_pointer
     attach_function :Z3_mk_fpa_rem, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
-    attach_function :Z3_mk_fpa_rna, [:ctx_pointer], :ast_pointer
-    attach_function :Z3_mk_fpa_rne, [:ctx_pointer], :ast_pointer
     attach_function :Z3_mk_fpa_round_nearest_ties_to_away, [:ctx_pointer], :ast_pointer
     attach_function :Z3_mk_fpa_round_nearest_ties_to_even, [:ctx_pointer], :ast_pointer
     attach_function :Z3_mk_fpa_round_to_integral, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
@@ -289,9 +287,6 @@ module Z3
     attach_function :Z3_mk_fpa_round_toward_positive, [:ctx_pointer], :ast_pointer
     attach_function :Z3_mk_fpa_round_toward_zero, [:ctx_pointer], :ast_pointer
     attach_function :Z3_mk_fpa_rounding_mode_sort, [:ctx_pointer], :sort_pointer
-    attach_function :Z3_mk_fpa_rtn, [:ctx_pointer], :ast_pointer
-    attach_function :Z3_mk_fpa_rtp, [:ctx_pointer], :ast_pointer
-    attach_function :Z3_mk_fpa_rtz, [:ctx_pointer], :ast_pointer
     attach_function :Z3_mk_fpa_sort, [:ctx_pointer, :uint, :uint], :sort_pointer
     attach_function :Z3_mk_fpa_sort_128, [:ctx_pointer], :sort_pointer
     attach_function :Z3_mk_fpa_sort_16, [:ctx_pointer], :sort_pointer

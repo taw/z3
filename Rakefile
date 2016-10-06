@@ -46,7 +46,7 @@ task "coverage:missing" do
   data = JSON.load(open("coverage/.resultset.json"))["RSpec"]["coverage"]
   lla_path = data.keys.find{|k| k.end_with?("lib/z3/low_level_auto.rb")}
   coverage = data[lla_path].zip(File.readlines(lla_path).map(&:strip))
-  missing = coverage.each_cons(2).map(&:flatten).select{|_,_,bc,_| bc == 0}.map{|_,a,_,_| a}
+  missing = coverage.each_cons(2).map(&:flatten).select{|_,_,bc,_| bc == 0}.map{|_,a,_,_| a.sub(/\Adef /, "")}
   # Also missing is everything that uses too fancy calling convention for automated generation
   # That's currently 73 functions
   open("missing_apis.txt", "w") do |file|

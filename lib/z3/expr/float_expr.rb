@@ -41,6 +41,50 @@ module Z3
       FloatExpr.Div(self, other, mode)
     end
 
+    def abs
+      sort.new LowLevel.mk_fpa_abs(self)
+    end
+
+    def -@
+      sort.new LowLevel.mk_fpa_neg(self)
+    end
+
+    def infinite?
+      BoolSort.new.new LowLevel.mk_fpa_is_infinite(self)
+    end
+
+    def nan?
+      BoolSort.new.new LowLevel.mk_fpa_is_nan(self)
+    end
+
+    def negative?
+      BoolSort.new.new LowLevel.mk_fpa_is_negative(self)
+    end
+
+    def normal?
+      BoolSort.new.new LowLevel.mk_fpa_is_normal(self)
+    end
+
+    def positive?
+      BoolSort.new.new LowLevel.mk_fpa_is_positive(self)
+    end
+
+    def subnormal?
+      BoolSort.new.new LowLevel.mk_fpa_is_subnormal(self)
+    end
+
+    def zero?
+      BoolSort.new.new LowLevel.mk_fpa_is_zero(self)
+    end
+
+    def max(other)
+      FloatExpr.Max(self, other)
+    end
+
+    def min(other)
+      FloatExpr.Min(self, other)
+    end
+
     def exponent_string
       LowLevel.fpa_get_numeral_exponent_string(self)
     end
@@ -114,6 +158,18 @@ module Z3
         a, b = coerce_to_same_float_sort(a, b)
         m = coerce_to_mode_sort(m)
         a.sort.new(LowLevel.mk_fpa_div(m, a, b))
+      end
+
+      # Weirdly this dies when trying to calll Z3_get_ast_kind, while min works on same call
+      #
+      # def Max(a, b)
+      #   a, b = coerce_to_same_float_sort(a, b)
+      #   a.sort.new(LowLevel.mk_fpa_max(a, b))
+      # end
+
+      def Min(a, b)
+        a, b = coerce_to_same_float_sort(a, b)
+        a.sort.new(LowLevel.mk_fpa_min(a, b))
       end
     end
   end

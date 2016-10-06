@@ -1121,14 +1121,6 @@ module Z3
         VeryLowLevel.Z3_mk_fpa_rem(_ctx_pointer, ast1._ast, ast2._ast)
       end
 
-      def mk_fpa_rna #=> :ast_pointer
-        VeryLowLevel.Z3_mk_fpa_rna(_ctx_pointer)
-      end
-
-      def mk_fpa_rne #=> :ast_pointer
-        VeryLowLevel.Z3_mk_fpa_rne(_ctx_pointer)
-      end
-
       def mk_fpa_round_nearest_ties_to_away #=> :ast_pointer
         VeryLowLevel.Z3_mk_fpa_round_nearest_ties_to_away(_ctx_pointer)
       end
@@ -1155,18 +1147,6 @@ module Z3
 
       def mk_fpa_rounding_mode_sort #=> :sort_pointer
         VeryLowLevel.Z3_mk_fpa_rounding_mode_sort(_ctx_pointer)
-      end
-
-      def mk_fpa_rtn #=> :ast_pointer
-        VeryLowLevel.Z3_mk_fpa_rtn(_ctx_pointer)
-      end
-
-      def mk_fpa_rtp #=> :ast_pointer
-        VeryLowLevel.Z3_mk_fpa_rtp(_ctx_pointer)
-      end
-
-      def mk_fpa_rtz #=> :ast_pointer
-        VeryLowLevel.Z3_mk_fpa_rtz(_ctx_pointer)
       end
 
       def mk_fpa_sort(num1, num2) #=> :sort_pointer

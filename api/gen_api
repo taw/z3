@@ -87,6 +87,13 @@ class GenerateAPI
 
       # Extra constructors we'll never need
       "mk_fpa_numeral_float",
+
+      # Aliases
+      "mk_fpa_rna",
+      "mk_fpa_rne",
+      "mk_fpa_rtn",
+      "mk_fpa_rtp",
+      "mk_fpa_rtz",
     ].to_set
   end
 
