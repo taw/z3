@@ -38,6 +38,11 @@ require_relative "z3/expr/rounding_mode_expr"
 require_relative "z3/expr/set_expr"
 require_relative "z3/expr/array_expr"
 
+# Tactics, Probes, and Goals
+require_relative "z3/tactic"
+require_relative "z3/probe"
+require_relative "z3/goal"
+
 # Python-style interface
 require_relative "z3/interface"
 
