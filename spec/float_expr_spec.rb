@@ -38,6 +38,30 @@ module Z3
       )
     end
 
+    it "%" do
+      expect([a == 13.5, b == 3.0, c == a.rem(b)]).to have_solution(
+        c => float_double.from_const(1.5),
+      )
+    end
+
+    it "abs" do
+      expect([a == 7.5, c == a.abs]).to have_solution(
+        c => float_double.from_const(7.5),
+      )
+      expect([a == -7.5, c == a.abs]).to have_solution(
+        c => float_double.from_const(7.5),
+      )
+    end
+
+    it "neg" do
+      expect([a == 7.5, c == -a]).to have_solution(
+        c => float_double.from_const(7.5),
+      )
+      expect([a == -7.5, c == -a]).to have_solution(
+        c => float_double.from_const(7.5),
+      )
+    end
+
     # Broken in z3
     # it "max" do
     #   expect([a == 2.0, b == 3.0, c == a.max(b)]).to have_solution(
@@ -118,6 +142,26 @@ module Z3
       expect([x == nan.subnormal?]).to have_solution(x => false)
       expect([x == float_double.from_const(1.5).subnormal?]).to have_solution(x => false)
       expect([x == float_double.from_const(1234 * 0.5**1040).subnormal?]).to have_solution(x => true)
+    end
+
+    it "positive?" do
+      expect([x == positive_zero.positive?]).to have_solution(x => true)
+      expect([x == negative_zero.positive?]).to have_solution(x => false)
+      expect([x == positive_infinity.positive?]).to have_solution(x => true)
+      expect([x == negative_infinity.positive?]).to have_solution(x => false)
+      expect([x == float_double.from_const(1.5).positive?]).to have_solution(x => true)
+      expect([x == float_double.from_const(-1.5).positive?]).to have_solution(x => false)
+      expect([x == nan.positive?]).to have_solution(x => false)
+    end
+
+    it "negative?" do
+      expect([x == positive_zero.negative?]).to have_solution(x => false)
+      expect([x == negative_zero.negative?]).to have_solution(x => true)
+      expect([x == positive_infinity.negative?]).to have_solution(x => false)
+      expect([x == negative_infinity.negative?]).to have_solution(x => true)
+      expect([x == float_double.from_const(1.5).negative?]).to have_solution(x => false)
+      expect([x == float_double.from_const(-1.5).negative?]).to have_solution(x => true)
+      expect([x == nan.negative?]).to have_solution(x => false)
     end
   end
 end

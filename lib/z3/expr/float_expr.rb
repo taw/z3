@@ -41,6 +41,10 @@ module Z3
       FloatExpr.Div(self, other, mode)
     end
 
+    def rem(other)
+      FloatExpr.Rem(self, other)
+    end
+
     def abs
       sort.new LowLevel.mk_fpa_abs(self)
     end
@@ -158,6 +162,11 @@ module Z3
         a, b = coerce_to_same_float_sort(a, b)
         m = coerce_to_mode_sort(m)
         a.sort.new(LowLevel.mk_fpa_div(m, a, b))
+      end
+
+      def Rem(a, b)
+        a, b = coerce_to_same_float_sort(a, b)
+        a.sort.new(LowLevel.mk_fpa_rem(a, b))
       end
 
       # Weirdly this dies when trying to calll Z3_get_ast_kind, while min works on same call
