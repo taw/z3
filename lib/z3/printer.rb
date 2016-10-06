@@ -43,6 +43,11 @@ module Z3
       elsif LowLevel::is_as_array(a)
         decl = FuncDecl.new( LowLevel::get_as_array_func_decl(a) )
         PrintedExpr.new(decl.sexpr.gsub(/k!\d+/, "k!"))
+      elsif a.func_decl.name == "fp.numeral" and a.sort.is_a?(FloatSort)
+        s = a.significand_string
+        e = a.exponent_string
+        e = "+#{e}" if e[0] != "-"
+        PrintedExpr.new("#{s}B#{e}")
       else
         decl = a.func_decl
         name = decl.name

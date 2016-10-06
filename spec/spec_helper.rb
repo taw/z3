@@ -98,7 +98,7 @@ end
 RSpec::Matchers.define :have_solutions do |expected|
   match do |asts|
     solutions = get_all_solutions(asts)
-    expect(solutions).to match(expected)
+    solutions == expected
   end
 
   failure_message do |asts|
@@ -117,6 +117,10 @@ RSpec::Matchers.define :have_solutions do |expected|
       solution = Hash[vars.map{|v| [v, model.model_eval(v, true)] }]
       solutions << solution
       solver.assert Z3.Or(*solution.map{|var,val| var != val})
+      if solutions.size >= 10
+        binding.pry
+        raise "Too many solutions found, presumably infinite loop"
+      end
     end
     solutions
   end

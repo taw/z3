@@ -31,6 +31,26 @@ module Z3
       FloatExpr
     end
 
+    def from_const(val)
+      if val.is_a?(Float)
+        new LowLevel.mk_fpa_numeral_double(val, self)
+      elsif val.is_a?(Integer)
+        val_f = val.to_f
+        # FIXME, there are other constructors
+        raise Z3::Exception, "Out of range" unless val_f == val
+        new LowLevel.mk_fpa_numeral_double(val_f, self)
+      else
+        raise Z3::Exception, "Cannot convert #{val.class} to #{self.class}"
+      end
+    end
+
+    def >(other)
+      raise ArgumentError unless other.is_a?(Sort)
+      return true if other.is_a?(IntSort) # This is nasty...
+      return true if other.is_a?(RealSort) # This is nasty...
+      false
+    end
+
     def ebits
       LowLevel.fpa_get_ebits(self)
     end

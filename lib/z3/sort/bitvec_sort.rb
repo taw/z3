@@ -30,7 +30,7 @@ module Z3
 
     def >(other)
       raise ArgumentError unless other.is_a?(Sort)
-      return true if other.is_a?(IntSort)
+      return true if other.is_a?(IntSort) # This is nasty...
       return true if other.is_a?(BitvecSort) and size > other.size
       false
     end

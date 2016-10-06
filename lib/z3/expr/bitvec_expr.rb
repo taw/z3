@@ -44,6 +44,14 @@ module Z3
       Expr.Mul(self, other)
     end
 
+    def /(other)
+      raise "Use signed_div or unsigned_div"
+    end
+
+    def %(other)
+      raise "Use signed_mod or signed_rem or unsigned_rem"
+    end
+
     def rotate_left(num)
       sort.new(LowLevel.mk_rotate_left(num, self))
     end
