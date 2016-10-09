@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-
 require "pathname"
 require_relative "../lib/z3"
 

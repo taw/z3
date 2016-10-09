@@ -2,8 +2,8 @@ require "pathname"
 
 Gem::Specification.new do |s|
   s.name         = "z3"
-  s.version      = "0.0.20160427"
-  s.date         = "2016-04-27"
+  s.version      = "0.0.20161008"
+  s.date         = "2016-10-08"
   s.summary      = "Z3 Constraint Solver"
   s.description  = "Ruby bindings for Z3 Constraint Solver"
   s.authors      = ["Tomasz Wegrzanowski"]
