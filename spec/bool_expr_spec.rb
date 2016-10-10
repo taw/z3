@@ -57,11 +57,18 @@ module Z3
     it "~" do
       expect([a ==  true, b == ~a]).to have_solution(b => false)
       expect([a == false, b == ~a]).to have_solution(b =>  true)
-     end
+    end
 
-     it "if then else" do
-       expect([a ==  true, x == a.ite(2, 3)]).to have_solution(x => 2)
-       expect([a == false, x == a.ite(2, 3)]).to have_solution(x => 3)
-     end
+    it "if then else" do
+      expect([a ==  true, x == a.ite(2, 3)]).to have_solution(x => 2)
+      expect([a == false, x == a.ite(2, 3)]).to have_solution(x => 3)
+    end
+
+    it "to_b" do
+      expect{Z3.Bool("a").to_b}.to raise_error(Z3::Exception)
+      expect(Z3.Const(true).to_b).to eq(true)
+      expect(Z3.Const(false).to_b).to eq(false)
+      expect((Z3.Const(true) & Z3.Const(false)).to_b).to eq(false)
+    end
   end
 end

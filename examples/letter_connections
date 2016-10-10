@@ -170,9 +170,9 @@ class LetterConnections
   def print_answer!
     (0...@ysize).each do |y|
       (0...@xsize).each do |x|
-        li = @model[@line[[x,y]]].to_s.to_i
+        li = @model[@line[[x,y]]].to_i
         l = @rletters[li]
-        d = @model[@dir[[x,y]]].to_s.to_i
+        d = @model[@dir[[x,y]]].to_i
         if [x,y] == @starts[l]
           print("\u2190\u2191\u2192\u2193"[d]+l+" ")
         elsif [x,y] == @ends[l]

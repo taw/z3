@@ -58,7 +58,7 @@ class Kakuro
         cell = @data[[x,y]]
         if cell == nil
           if @model and @cells.has_key?([x,y])
-            a = @model[@cells[[x,y]]].to_s
+            a = @model[@cells[[x,y]]]
             print(" [#{a}] ")
           else
             print("  _  ")

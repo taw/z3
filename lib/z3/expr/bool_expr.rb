@@ -28,6 +28,21 @@ module Z3
       BoolExpr.IfThenElse(self, a, b)
     end
 
+    def to_b
+      s = to_s
+      if ast_kind == :app and (s == "true" or s == "false")
+        s == "true"
+      else
+        obj = simplify
+        s = obj.to_s
+        if ast_kind == :app and (s == "true" or s == "false")
+          s == "true"
+        else
+          raise Z3::Exception, "Can't convert expression #{to_s} to Boolean"
+        end
+      end
+    end
+
     public_class_method :new
 
     class << self

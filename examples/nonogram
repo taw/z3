@@ -15,7 +15,7 @@ class Nonogram
     @ysize.times do |y|
       @xsize.times do |x|
         v = @model[@cells[y][x]]
-        if v.to_s == "true"
+        if v.to_b
           print "\u2588"
         else
           print "\u00b7"

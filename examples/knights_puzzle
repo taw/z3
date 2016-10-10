@@ -29,11 +29,11 @@ class KnightsPuzzle
 
   def print_board(t)
     puts "State #{t}:"
-    puts @boards[t].transpose.map{|row| row.map{|c| ".wbx"[@model[c].to_s.to_i]}.join }.join("\n")
+    puts @boards[t].transpose.map{|row| row.map{|c| ".wbx"[@model[c].to_i]}.join }.join("\n")
   end
 
   def print_move(t)
-    move = Hash[@moves[t].map{|k,v| [k,@model[v].to_s.to_i]}]
+    move = Hash[@moves[t].map{|k,v| [k,@model[v].to_i]}]
     figure = " wbx"[move[:figure]]
     puts "#{figure}: #{move[:start_x]},#{move[:start_y]} -> #{move[:end_x]},#{move[:end_y]}"
     puts ""

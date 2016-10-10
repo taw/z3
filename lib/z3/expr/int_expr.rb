@@ -8,6 +8,19 @@ module Z3
       IntExpr.Rem(self, other)
     end
 
+    def to_i
+      if ast_kind == :numeral
+        LowLevel.get_numeral_string(self).to_i
+      else
+        obj = simplify
+        if obj.ast_kind == :numeral
+          LowLevel.get_numeral_string(obj).to_i
+        else
+          raise Z3::Exception, "Can't convert expression #{to_s} to Integer"
+        end
+      end
+    end
+
     public_class_method :new
     class << self
       def coerce_to_same_int_sort(*args)

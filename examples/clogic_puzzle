@@ -91,7 +91,7 @@ class CLogicPuzzleSolver
       model.each do |k,v|
         v = v.to_s.sub(/\A#x/, "").to_i(16)
         model_vars[k] = v
-        puts "#{k.to_s}=#{v.to_s}"
+        puts "#{k}=#{v}"
       end
       result = key.map do |ab|
         a,b = ab.chars

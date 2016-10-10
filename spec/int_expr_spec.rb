@@ -87,5 +87,11 @@ module Z3
       expect((a+b).inspect).to eq("Int<5 + 3>")
       expect((a+b).simplify.inspect).to eq("Int<8>")
     end
+
+    it "to_i" do
+      expect{Z3.Int("a").to_i}.to raise_error(Z3::Exception)
+      expect(Z3.Const(2).to_i).to eq(2)
+      expect((Z3.Const(2) + Z3.Const(40)).to_i).to eq(42)
+    end
   end
 end

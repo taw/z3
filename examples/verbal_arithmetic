@@ -39,7 +39,7 @@ class VerbalArithmetic
 
   def print_answer!
     [@a,@b,@c].each do |word|
-      p word.map{|v| [v.to_s, @model[v].to_s.to_i]}
+      p word.map{|v| [v.to_s, @model[v].to_i]}
     end
   end
 end

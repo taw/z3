@@ -195,7 +195,7 @@ class SelfRefPuzzleSolver
     if @solver.satisfiable?
       model = @solver.model
       (1..20).each do |i|
-        a = model[q[i]].to_s.to_i
+        a = model[q[i]].to_i
         puts "Q%2d: %s" % [i, " ABCDE"[a]]
       end
     else

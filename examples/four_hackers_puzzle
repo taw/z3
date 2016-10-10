@@ -64,7 +64,7 @@ class LogicPuzzle
       @solver.model.each do |k,v|
         k = k.to_s.gsub("|", "")
         i, name = k.split("-", 2)
-        puts "#{k} = #{@dict[name][v.to_s.to_i]}"
+        puts "#{k} = #{@dict[name][v.to_i]}"
       end
     else
       puts "Puzzle has no solutions"

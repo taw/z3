@@ -76,7 +76,7 @@ class LightUp
       (0...@xsize).each do |x|
         if @data[[x,y]] != "."
           print(@data[[x,y]])
-        elsif @model[@lamps[[x,y]]].to_s == "1"
+        elsif @model[@lamps[[x,y]]].to_i == 1
           print("*")
         else
           print(" ")

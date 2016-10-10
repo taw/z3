@@ -82,8 +82,8 @@ class Bridges
 
     @data.each do |(x,y),v|
       if v == nil
-        u = @model[@vars[[x,y,"u"]]].to_s.to_i
-        l = @model[@vars[[x,y,"l"]]].to_s.to_i
+        u = @model[@vars[[x,y,"u"]]].to_i
+        l = @model[@vars[[x,y,"l"]]].to_i
         if u > 0
           picture[y*3+1][x*3+1] = " |\u2016"[u]
         elsif l > 0
@@ -97,10 +97,10 @@ class Bridges
     end
 
     @data.each do |(x,y),_|
-      u = @model[@vars[[x,y,"u"]]].to_s.to_i
-      d = @model[@vars[[x,y,"d"]]].to_s.to_i
-      l = @model[@vars[[x,y,"l"]]].to_s.to_i
-      r = @model[@vars[[x,y,"r"]]].to_s.to_i
+      u = @model[@vars[[x,y,"u"]]].to_i
+      d = @model[@vars[[x,y,"d"]]].to_i
+      l = @model[@vars[[x,y,"l"]]].to_i
+      r = @model[@vars[[x,y,"r"]]].to_i
 
       picture[y*3+1][x*3  ] = " -="[l]
       picture[y*3+1][x*3+2] = " -="[r]
