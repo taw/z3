@@ -7,18 +7,18 @@ module Z3
 
     it "basic functionality" do
       solver.assert(a == b)
-      expect(solver.check).to eq(:sat)
+      expect(solver).to be_satisfiable
       solver.assert(a != b)
-      expect(solver.check).to eq(:unsat)
+      expect(solver).to be_unsatisfiable
     end
 
     it "push/pop" do
       solver.assert(a == b)
       solver.push
       solver.assert(a != b)
-      expect(solver.check).to eq(:unsat)
+      expect(solver).to be_unsatisfiable
       solver.pop
-      expect(solver.check).to eq(:sat)
+      expect(solver).to be_satisfiable
     end
 
     it "#assertions" do

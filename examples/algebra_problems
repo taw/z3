@@ -10,7 +10,7 @@ class AlgebraProblem
 
   def print_solution!(number)
     puts("Solution to problem %s:" % number)
-    if @solver.check() == :sat
+    if @solver.satisfiable?
       @solver.model.each do |n,v|
         puts "* #{n} = #{v}"
       end

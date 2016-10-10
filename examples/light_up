@@ -39,7 +39,7 @@ class LightUp
       end
     end
 
-    if @solver.check == :sat
+    if @solver.satisfiable?
       @model = @solver.model
       print_answer!
     else

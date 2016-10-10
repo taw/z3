@@ -4,32 +4,50 @@ module Z3
     def initialize
       @_solver = LowLevel.mk_solver
       LowLevel.solver_inc_ref(self)
+      reset_model!
     end
 
     def push
+      reset_model!
       LowLevel.solver_push(self)
     end
 
     def pop(n=1)
+      reset_model!
       LowLevel.solver_pop(self, n)
     end
 
     def reset
+      reset_model!
       LowLevel.solver_reset(self)
     end
 
     def assert(ast)
+      reset_model!
       LowLevel.solver_assert(self, ast)
     end
 
     def check
-      check_sat_results(LowLevel.solver_check(self))
+      reset_model!
+      result = check_sat_results(LowLevel.solver_check(self))
+      @has_model = true if result == :sat
+      result
+    end
+
+    def satisfiable?
+      check == :sat
+    end
+
+    def unsatisfiable?
+      check == :unsat
     end
 
     def model
-      Z3::Model.new(
-        LowLevel.solver_get_model(self)
-      )
+      if @has_model
+        @model ||= Z3::Model.new(LowLevel.solver_get_model(self))
+      else
+        raise Z3::Exception, "You need to check that it's satisfiable before asking for the model"
+      end
     end
 
     def assertions
@@ -43,6 +61,7 @@ module Z3
     end
 
     def prove!(ast)
+      @has_model = false
       push
       assert(~ast)
       case check
@@ -63,6 +82,11 @@ module Z3
     end
 
     private
+
+    def reset_model!
+      @has_model = false
+      @model = nil
+    end
 
     def check_sat_results(r)
       {

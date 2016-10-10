@@ -192,7 +192,7 @@ class SelfRefPuzzleSolver
     assert q[20] == 5
 
     # Print solutions
-    if @solver.check == :sat
+    if @solver.satisfiable?
       model = @solver.model
       (1..20).each do |i|
         a = model[q[i]].to_s.to_i

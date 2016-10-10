@@ -40,7 +40,7 @@ class KnightsPuzzle
   end
 
   def solve!
-    if @solver.check == :sat
+    if @solver.satisfiable?
       @model = @solver.model
       puts "Solved"
       @num_moves.times do |t|

@@ -26,7 +26,7 @@ class Nonogram
   end
 
   def print_all_answers!
-    if @solver.check == :sat
+    if @solver.satisfiable?
       @model = @solver.model
       print_answer!
       current_solution = []
@@ -36,7 +36,7 @@ class Nonogram
       #   current_solution << (@model[var] != val)
       # end
       # @solver.assert Z3.Or(*current_solution)
-      # if @solver.check == :sat
+      # if @solver.satisfiable?
       #   puts "solution is not unique"
       #   print_answer!
       # else

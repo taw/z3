@@ -71,7 +71,7 @@ class CircuitProblem
   private
 
   def with_solved_model
-    if @solver.check == :sat
+    if @solver.satisfiable?
       yield @solver.model
     else
       puts "Can't solve the problem"

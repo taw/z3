@@ -23,7 +23,7 @@ class VerbalArithmetic
     @solver.assert word_value(@a) + word_value(@b) == word_value(@c)
     @solver.assert Z3.Distinct(*@vars.values)
 
-    if @solver.check == :sat
+    if @solver.satisfiable?
       @model = @solver.model
       print_answer!
     else

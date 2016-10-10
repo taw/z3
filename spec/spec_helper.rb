@@ -74,12 +74,12 @@ end
 RSpec::Matchers.define :have_solution do |expected|
   match do |asts|
     solver = setup_solver(asts)
-    solver.check == :sat and expected.all?{|var,val| solver.model[var].to_s == val.to_s}
+    solver.satisfiable? and expected.all?{|var,val| solver.model[var].to_s == val.to_s}
   end
 
   failure_message do |asts|
     solver = setup_solver(asts)
-    if solver.check == :sat
+    if solver.satisfiable?
       "expected #{asts.inspect} to have solution #{expected.inspect}, instead got #{solver.model}"
     else
       "expected #{asts.inspect} to have solution #{expected.inspect}, instead not solvable"
@@ -112,7 +112,7 @@ RSpec::Matchers.define :have_solutions do |expected|
     vars = vars[0]
     solver = setup_solver(asts)
     solutions = []
-    while solver.check == :sat
+    while solver.satisfiable?
       model = solver.model
       solution = Hash[vars.map{|v| [v, model.model_eval(v, true)] }]
       solutions << solution
