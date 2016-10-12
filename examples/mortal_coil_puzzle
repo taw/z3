@@ -40,7 +40,7 @@ class MortalCoilSolver
     (0...@size_y).each do |y|
       (0...@size_x).each do |x|
         v = @vars[[x,y]]
-        neighbours = [[x-1,y], [x+1,y], [x,y-1], [x,y+1]].map{|u,v| @vars[[u,v]]}.compact
+        neighbours = [[x-1,y], [x+1,y], [x,y-1], [x,y+1]].map{|a,b| @vars[[a,b]]}.compact
         @solver.assert Z3.Or(v == -1, v == @empty_count, *neighbours.map{|n| n == v+1})
         @solver.assert Z3.Or(v == -1, v == 1, *neighbours.map{|n| n == v-1})
       end
