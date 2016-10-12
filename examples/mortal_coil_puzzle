@@ -1,0 +1,105 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/z3"
+require "pathname"
+
+# From hacker.org
+class MortalCoilSolver
+  def initialize(path)
+    data = Pathname(path).read
+    data = data.strip.split("\n").map do |line|
+      line.chars.map{|c| c == "x" ? true : false}
+    end
+    @data = data
+    @solver = Z3::Solver.new
+    @size_y = @data.size
+    @size_x = @data[0].size
+    @empty_count = @data.flatten.count{|x| !x}
+  end
+
+  def setup_vars!
+    empty_cell_vars = []
+    @vars = {}
+    (0...@size_x).each do |x|
+      (0...@size_y).each do |y|
+        v = Z3.Int("c#{x},#{y}")
+        if @data[y][x]
+          @solver.assert v == -1
+        else
+          @solver.assert v >= 1
+          @solver.assert v <= @empty_count
+          empty_cell_vars << v
+        end
+        @vars[[x,y]] = v
+      end
+    end
+    @solver.assert Z3.Distinct(*empty_cell_vars)
+  end
+
+  def line_continuity!
+    (0...@size_y).each do |y|
+      (0...@size_x).each do |x|
+        v = @vars[[x,y]]
+        neighbours = [[x-1,y], [x+1,y], [x,y-1], [x,y+1]].map{|u,v| @vars[[u,v]]}.compact
+        @solver.assert Z3.Or(v == -1, v == @empty_count, *neighbours.map{|n| n == v+1})
+        @solver.assert Z3.Or(v == -1, v == 1, *neighbours.map{|n| n == v-1})
+      end
+    end
+  end
+
+  def keep_going!(a,b,c)
+    # If line goes from a to b (b == a+1), then it must:
+    # * hit a wall (c == nil)
+    # * hit a filled block (c == -1)
+    # * continue (c == b+1)
+    # * hit earlier line (c < b)
+    return unless a and c
+    @solver.assert (b == a+1).implies(Z3.Or(
+        c == -1,
+        c == b+1,
+        c < b,
+      )
+    )
+  end
+
+  def line_goes_until_it_hits_something!
+    (0...@size_y).each do |y|
+      (0...@size_x).each do |x|
+        v = @vars[[x,y]]
+        left  = @vars[[x-1,y]]
+        right = @vars[[x+1,y]]
+        up    = @vars[[x,y-1]]
+        down  = @vars[[x,y+1]]
+        keep_going! left, v, right
+        keep_going! right, v, left
+        keep_going! up, v, down
+        keep_going! down, v, up
+      end
+    end
+  end
+
+  def solve!
+    setup_vars!
+    line_continuity!
+    line_goes_until_it_hits_something!
+
+    if @solver.satisfiable?
+      model = @solver.model
+      (0...@size_y).each do |y|
+        puts (0...@size_x).map{|x|
+          v = model[@vars[[x,y]]].to_i
+          if v == -1
+            "###"
+          else
+            "% 3d" % v
+          end
+        }.join(" ")
+      end
+    else
+      puts "Puzzle has no solution"
+    end
+  end
+end
+
+path = ARGV[0] || Pathname(__dir__) + "mortal_coil_puzzle-9.txt"
+MortalCoilSolver.new(path).solve!
