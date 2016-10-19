@@ -1,0 +1,5 @@
+[^SPEAK]+
+EP|IP|EF
+
+HE|LL|O+
+[PLEASE]+

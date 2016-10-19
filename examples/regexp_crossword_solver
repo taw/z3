@@ -22,7 +22,7 @@ class RegexpParser
       parts[0]
     else
       while parts.size > 1
-        parts << [:seq, parts.pop, parts.pop]
+        parts.unshift [:seq, parts.shift, parts.shift]
       end
       parts[0]
     end
@@ -36,32 +36,29 @@ class RegexpParser
       parts[0]
     else
       while parts.size > 1
-        parts << [:alt, parts.pop, parts.pop]
+        parts.unshift [:alt, parts.shift, parts.shift]
       end
       parts[0]
     end
   end
 
+  # Saves us time to reuse ruby regexp engine for 1 character case
+  def character_type(char_rx)
+    char_rx = Regexp.new(char_rx)
+    codes = (0..127).select{|c| c.chr =~ char_rx}
+    [:set, codes]
+  end
+
   def character_set(negated, members)
-    codes = []
-    members.each do |m|
-      if m.size == 1
-        codes << m.ord
-      elsif m.size == 3 and m[1] == "-"
-        binding.pry
-      else
-        raise "Can't parse #{m} in character set"
-      end
-    end
     if negated
-      [:neg_set, codes]
+      character_type "[^#{members.join}]"
     else
-      [:set, codes]
+      character_type "[#{members.join}]"
     end
   end
 
   def literal(chars)
-    sequence(*chars.map{|c| character_set(false, [c])})
+    sequence(*chars.map{|c| character_type(c)})
   end
 
   def star(part)
@@ -84,6 +81,8 @@ class RegexpParser
       character_set(node.negative?, node.members)
     when Regexp::Expression::Literal
       literal(node.text.chars)
+    when Regexp::Expression::CharacterType::Base
+      character_type(node.text)
     else
       binding.pry
     end
@@ -125,7 +124,7 @@ class RegexpCrosswordSolver
 
   # @subexprs just prevents loops for self-referential regexps
   def regexp_match(rx, str)
-    var = Z3.Bool("#{rx} =~ #{str}".hash.abs.to_s)
+    var = Z3.Bool("#{rx} =~ #{str}")
     return var if @subexprs.include?(var)
     @subexprs << var
     case rx[0]
@@ -141,12 +140,6 @@ class RegexpCrosswordSolver
     when :set
       if str.size == 1
         @solver.assert var == Z3.Or(*rx[1].map{|c| str[0] == c })
-      else
-        @solver.assert var == false
-      end
-    when :neg_set
-      if str.size == 1
-        @solver.assert var == ~Z3.Or(*rx[1].map{|c| str[0] == c })
       else
         @solver.assert var == false
       end
@@ -168,8 +161,10 @@ class RegexpCrosswordSolver
         end
         @solver.assert var == Z3.Or(*possibilities)
       end
+    when :empty
+      @solver.assert var == (str.size == 0)
     else
-      binding.pry
+      raise "Unknown regexp type #{rx[0]}"
     end
     var
   end
