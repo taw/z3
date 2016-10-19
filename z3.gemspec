@@ -7,16 +7,17 @@ Gem::Specification.new do |s|
   s.summary      = "Z3 Constraint Solver"
   s.description  = "Ruby bindings for Z3 Constraint Solver"
   s.authors      = ["Tomasz Wegrzanowski"]
-  s.email        = 'Tomasz.Wegrzanowski@gmail.com'
+  s.email        = "Tomasz.Wegrzanowski@gmail.com"
   s.files        = %W[Rakefile .rspec examples lib spec README.md].map{|x| Pathname(x).find.to_a.select(&:file?)}.flatten.map(&:to_s)
   s.homepage     = "https://github.com/taw/z3"
   s.license      = "MIT"
   s.requirements = "z3 library"
   # development
-  s.add_development_dependency 'pry'
+  s.add_development_dependency "pry"
   # tests
-  s.add_development_dependency 'rake'
-  s.add_development_dependency 'rspec'
-  s.add_development_dependency 'simplecov'
-  s.add_runtime_dependency 'ffi'
+  s.add_development_dependency "rake"
+  s.add_development_dependency "rspec"
+  s.add_development_dependency "simplecov"
+  s.add_development_dependency "regexp_parser"
+  s.add_runtime_dependency "ffi"
 end
