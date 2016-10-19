@@ -2,7 +2,6 @@
 
 require_relative "../lib/z3"
 require "pathname"
-require "regexp_parser"
 require "set"
 require "pry"
 require_relative "simple_regexp_parser"
