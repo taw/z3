@@ -41,7 +41,12 @@ class SimpleRegexpParser
   def character_type(char_rx)
     char_rx = Regexp.new(char_rx)
     codes = (0..127).select{|c| c.chr =~ char_rx}
-    [:set, codes]
+    # This is mostly here to make debugging easier
+    if codes.size > 127-codes.size
+      [:neg_set, (0..127).to_a - codes]
+    else
+      [:set, codes]
+    end
   end
 
   def character_set(negated, members)

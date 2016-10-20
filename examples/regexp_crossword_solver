@@ -56,6 +56,12 @@ class RegexpCrosswordSolver
       else
         @solver.assert var == false
       end
+    when :neg_set
+      if str.size == 1
+        @solver.assert var == ~Z3.Or(*rx[1].map{|c| str[0] == c })
+      else
+        @solver.assert var == false
+      end
     when :alt
       rx_a, rx_b = rx[1], rx[2]
       a_ok = regexp_match(rx_a, str, context)
@@ -91,7 +97,7 @@ class RegexpCrosswordSolver
   def setup_regexp(rx,str)
     @subexprs = Set[]
     rx = SimpleRegexpParser.new(rx).parse
-    @solver.assert regexp_match(rx, str, str.to_s)
+    @solver.assert regexp_match(rx, str, "#{str[0]}..#{str[-1]}")
   end
 
   def solve!
