@@ -94,18 +94,20 @@ class RegexpCrosswordSolver
     var
   end
 
-  def setup_regexp(rx, str, context)
-    @subexprs = Set[]
-    rx = SimpleRegexpParser.new(rx, context).parse
-    @solver.assert regexp_match(rx, str)
-  end
-
-  def column(x)
+  def col_str(x)
     (0...@ysize).map{|y| @crossword[[x,y]]}
   end
 
-  def row(y)
+  def row_str(y)
     (0...@xsize).map{|x| @crossword[[x,y]]}
+  end
+
+  def col_rx(x)
+    SimpleRegexpParser.new(@cols[x], "col-#{x}").parse
+  end
+
+  def row_rx(y)
+    SimpleRegexpParser.new(@rows[y], "row-#{y}").parse
   end
 
   def solve!
@@ -116,11 +118,12 @@ class RegexpCrosswordSolver
       end
     end
 
+    @subexprs = Set[]
     @xsize.times do |x|
-      setup_regexp @cols[x], column(x), "col-#{x}"
+      @solver.assert regexp_match(col_rx(x), col_str(x))
     end
     @ysize.times do |y|
-      setup_regexp @rows[y], row(y), "row-#{y}"
+      @solver.assert regexp_match(row_rx(y), row_str(y))
     end
 
     print_answer
@@ -135,7 +138,7 @@ class RegexpCrosswordSolver
         }.join.inspect[1...-1]
       end
     else
-      binding.pry
+      raise
       print "Crossword has no solution"
     end
   end

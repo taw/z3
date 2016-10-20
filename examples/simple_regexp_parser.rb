@@ -72,7 +72,7 @@ class SimpleRegexpParser
   end
 
   def backref(num)
-    [:backref, num]
+    [:backref, "#{@context}-#{num}"]
   end
 
   def group(number, part)
