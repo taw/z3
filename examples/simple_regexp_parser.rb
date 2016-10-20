@@ -5,6 +5,7 @@ require "regexp_parser"
 class SimpleRegexpParser
   def initialize(str)
     @tree = Regexp::Parser.parse(str)
+    @group_number = 0
   end
 
   def sequence(*parts)
@@ -59,6 +60,14 @@ class SimpleRegexpParser
     [:star, part]
   end
 
+  def backref(num)
+    [:backref, num]
+  end
+
+  def group(number, part)
+    [:group, number, part]
+  end
+
   # Try to express regexps with minimum number of primitives:
   # * seq  - ab
   # * alt  - a|b
@@ -67,6 +76,10 @@ class SimpleRegexpParser
   # * empty
   def parse(node=@tree)
     result = case node
+    when Regexp::Expression::Group::Capture
+      # Assumes it's going to be parsed in right order
+      @group_number += 1
+      group(@group_number, sequence(*node.expressions.map{|n| parse(n)}))
     when Regexp::Expression::Alternation
       alternative(*node.expressions.map{|n| parse(n)})
     when Regexp::Expression::Subexpression
@@ -77,6 +90,9 @@ class SimpleRegexpParser
       literal(node.text.chars)
     when Regexp::Expression::CharacterType::Base
       character_type(node.text)
+    when Regexp::Expression::Backreference::Number
+      num = node.text[%r[\A\\(\d+)\z], 1] or raise "Parse error"
+      backref(num.to_i)
     else
       binding.pry
     end
@@ -90,6 +106,7 @@ class SimpleRegexpParser
         result = sequence(*([result]*min), *([maybe_result] * (max-min)))
       end
     end
+
     result
   end
 end

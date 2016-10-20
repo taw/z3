@@ -28,8 +28,15 @@ class RegexpCrosswordSolver
     v
   end
 
+  def group_equal(n, str, context)
+    Z3.And(
+      Z3.Int("group-#{context}-#{n}-size") == str.size,
+      *str.each_with_index.map{|s,i| Z3.Int("group-#{context}-#{n}-character[#{i}]") == s }
+    )
+  end
+
   # @subexprs just prevents loops for self-referential regexps
-  def regexp_match(rx, str)
+  def regexp_match(rx, str, context)
     var = Z3.Bool("#{rx} =~ #{str}")
     return var if @subexprs.include?(var)
     @subexprs << var
@@ -38,8 +45,8 @@ class RegexpCrosswordSolver
       rx_a, rx_b = rx[1], rx[2]
       possibilities = (0..str.size).map do |i|
         a, b = str[0...i], str[i..-1]
-        a_ok = regexp_match(rx_a, a)
-        b_ok = regexp_match(rx_b, b)
+        a_ok = regexp_match(rx_a, a, context)
+        b_ok = regexp_match(rx_b, b, context)
         a_ok & b_ok
       end
       @solver.assert var == Z3.Or(*possibilities)
@@ -51,8 +58,8 @@ class RegexpCrosswordSolver
       end
     when :alt
       rx_a, rx_b = rx[1], rx[2]
-      a_ok = regexp_match(rx_a, str)
-      b_ok = regexp_match(rx_b, str)
+      a_ok = regexp_match(rx_a, str, context)
+      b_ok = regexp_match(rx_b, str, context)
       @solver.assert var == (a_ok | b_ok)
     when :star
       if str.size == 0
@@ -61,12 +68,18 @@ class RegexpCrosswordSolver
         r = rx[1]
         possibilities = (1..str.size).map do |i|
           a, b = str[0...i], str[i..-1]
-          a_ok = regexp_match(r, a)
-          b_ok = regexp_match(rx, b)
+          a_ok = regexp_match(r, a, context)
+          b_ok = regexp_match(rx, b, context)
           a_ok & b_ok
         end
         @solver.assert var == Z3.Or(*possibilities)
       end
+    when :group
+      n = rx[1]
+      rx_a = rx[2]
+      @solver.assert var == (regexp_match(rx_a, str, context) & group_equal(n, str, context))
+    when :backref
+      @solver.assert var == group_equal(rx[1], str, context)
     when :empty
       @solver.assert var == (str.size == 0)
     else
@@ -78,7 +91,7 @@ class RegexpCrosswordSolver
   def setup_regexp(rx,str)
     @subexprs = Set[]
     rx = SimpleRegexpParser.new(rx).parse
-    @solver.assert regexp_match(rx, str)
+    @solver.assert regexp_match(rx, str, str.to_s)
   end
 
   def solve!
