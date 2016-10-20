@@ -139,6 +139,8 @@ class SimpleRegexpParser
       literal(node.text.chars)
     when Regexp::Expression::CharacterType::Base
       character_type(node.text)
+    when Regexp::Expression::EscapeSequence::Literal
+      character_type(node.text)
     when Regexp::Expression::Backreference::Number
       num = node.text[%r[\A\\(\d+)\z], 1] or raise "Parse error"
       backref(num.to_i)
