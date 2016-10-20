@@ -28,15 +28,15 @@ class RegexpCrosswordSolver
     v
   end
 
-  def group_equal(n, str, context)
+  def group_equal(group_identifier, str)
     Z3.And(
-      Z3.Int("group-#{context}-#{n}-size") == str.size,
-      *str.each_with_index.map{|s,i| Z3.Int("group-#{context}-#{n}-character[#{i}]") == s }
+      Z3.Int("group-#{group_identifier}-size") == str.size,
+      *str.each_with_index.map{|s,i| Z3.Int("group-#{group_identifier}-char[#{i}]") == s }
     )
   end
 
   # @subexprs just prevents loops for self-referential regexps
-  def regexp_match(rx, str, context)
+  def regexp_match(rx, str)
     var = Z3.Bool("#{rx} =~ #{str}")
     return var if @subexprs.include?(var)
     @subexprs << var
@@ -45,8 +45,8 @@ class RegexpCrosswordSolver
       rx_a, rx_b = rx[1], rx[2]
       possibilities = (0..str.size).map do |i|
         a, b = str[0...i], str[i..-1]
-        a_ok = regexp_match(rx_a, a, context)
-        b_ok = regexp_match(rx_b, b, context)
+        a_ok = regexp_match(rx_a, a)
+        b_ok = regexp_match(rx_b, b)
         a_ok & b_ok
       end
       @solver.assert var == Z3.Or(*possibilities)
@@ -64,8 +64,8 @@ class RegexpCrosswordSolver
       end
     when :alt
       rx_a, rx_b = rx[1], rx[2]
-      a_ok = regexp_match(rx_a, str, context)
-      b_ok = regexp_match(rx_b, str, context)
+      a_ok = regexp_match(rx_a, str)
+      b_ok = regexp_match(rx_b, str)
       @solver.assert var == (a_ok | b_ok)
     when :star
       if str.size == 0
@@ -74,8 +74,8 @@ class RegexpCrosswordSolver
         r = rx[1]
         possibilities = (1..str.size).map do |i|
           a, b = str[0...i], str[i..-1]
-          a_ok = regexp_match(r, a, context)
-          b_ok = regexp_match(rx, b, context)
+          a_ok = regexp_match(r, a)
+          b_ok = regexp_match(rx, b)
           a_ok & b_ok
         end
         @solver.assert var == Z3.Or(*possibilities)
@@ -83,9 +83,9 @@ class RegexpCrosswordSolver
     when :group
       n = rx[1]
       rx_a = rx[2]
-      @solver.assert var == (regexp_match(rx_a, str, context) & group_equal(n, str, context))
+      @solver.assert var == (regexp_match(rx_a, str) & group_equal(n, str))
     when :backref
-      @solver.assert var == group_equal(rx[1], str, context)
+      @solver.assert var == group_equal(rx[1], str)
     when :empty
       @solver.assert var == (str.size == 0)
     else
@@ -94,10 +94,10 @@ class RegexpCrosswordSolver
     var
   end
 
-  def setup_regexp(rx,str)
+  def setup_regexp(rx, str, context)
     @subexprs = Set[]
-    rx = SimpleRegexpParser.new(rx).parse
-    @solver.assert regexp_match(rx, str, "#{str[0]}..#{str[-1]}")
+    rx = SimpleRegexpParser.new(rx, context).parse
+    @solver.assert regexp_match(rx, str)
   end
 
   def column(x)
@@ -117,10 +117,10 @@ class RegexpCrosswordSolver
     end
 
     @xsize.times do |x|
-      setup_regexp @cols[x], column(x)
+      setup_regexp @cols[x], column(x), "col-#{x}"
     end
     @ysize.times do |y|
-      setup_regexp @rows[y], row(y)
+      setup_regexp @rows[y], row(y), "row-#{y}"
     end
 
     print_answer
@@ -132,7 +132,7 @@ class RegexpCrosswordSolver
       @ysize.times do |y|
         puts @xsize.times.map{|x|
           @model[@crossword[[x,y]]].to_i.chr
-        }.join
+        }.join.inspect[1...-1]
       end
     else
       binding.pry
