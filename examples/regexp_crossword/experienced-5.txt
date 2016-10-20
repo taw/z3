@@ -1,0 +1,11 @@
+[RUTH]*(OE|EO)[RB]*
+(BG|ON|KK)+[RIF]+
+(MN|BO|FI)[EU]{2,}
+(KT|AL|ET)+G
+[OH](PR|AX|TR)+
+
+[IT](O)*(BE|AD)*\1
+[NORMAL]+T{2}
+.*(XA|BE).*
+(EG|UL){2}[ALF]*
+[REQ]*(G|P)(.)+

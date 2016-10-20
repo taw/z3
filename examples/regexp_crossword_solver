@@ -100,6 +100,14 @@ class RegexpCrosswordSolver
     @solver.assert regexp_match(rx, str, "#{str[0]}..#{str[-1]}")
   end
 
+  def column(x)
+    (0...@ysize).map{|y| @crossword[[x,y]]}
+  end
+
+  def row(y)
+    (0...@xsize).map{|x| @crossword[[x,y]]}
+  end
+
   def solve!
     @crossword = {}
     @xsize.times do |x|
@@ -109,10 +117,10 @@ class RegexpCrosswordSolver
     end
 
     @xsize.times do |x|
-      setup_regexp @cols[x], (0...@ysize).map{|y| @crossword[[x,y]]}
+      setup_regexp @cols[x], column(x)
     end
     @ysize.times do |y|
-      setup_regexp @rows[y], (0...@xsize).map{|x| @crossword[[x,y]]}
+      setup_regexp @rows[y], row(y)
     end
 
     print_answer

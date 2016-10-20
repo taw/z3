@@ -73,6 +73,10 @@ class SimpleRegexpParser
     [:group, number, part]
   end
 
+  def empty
+    [:empty]
+  end
+
   def repeat(part, min, max)
     if max == -1
       sequence(star(part), *([part]*min))
@@ -88,17 +92,23 @@ class SimpleRegexpParser
     maybe_part = alternative([:empty], part)
     base = part[2]
     if max == -1
-      if min == 0 # (a)* -> a*(a)?
-        sequence(repeat(base, min, max), maybe_part)
+      if min == 0 # (a)* -> |a*(a)
+        alternative(
+          empty,
+          sequence(repeat(base, min, max), part)
+        )
       else # (a){2,} -> a{1,}(a)
-        sequence(repeat(base, min, max), part)
+        sequence(repeat(base, min-1, max), part)
       end
     elsif max == 0 # a{0} -> empty, not really a thing
       :empty
     else
       if min == 0
-        # (a){2,3} -> a{1,2}(a)?
-        sequence(repeat(base, min, max-1), maybe_part)
+        # (a){2,3} -> |a{1,2}(a)
+        alternative(
+          empty,
+          sequence(repeat(base, min, max-1), part)
+        )
       else # (a){2,3} -> a{1,2}(a)
         sequence(repeat(base, min-1, max-1), part)
       end
