@@ -68,12 +68,46 @@ class SimpleRegexpParser
     [:group, number, part]
   end
 
+  def repeat(part, min, max)
+    if max == -1
+      sequence(star(part), *([part]*min))
+    else
+      maybe_part = alternative([:empty], part)
+      sequence(*([part]*min), *([maybe_part] * (max-min)))
+    end
+  end
+
+  # Groups and qualifiers interact in weird ways, (a){3} is actually aa(a)
+  # We need to do extensive rewriting to make it work
+  def repeat_group(part, min, max)
+    maybe_part = alternative([:empty], part)
+    base = part[2]
+    if max == -1
+      if min == 0 # (a)* -> a*(a)?
+        sequence(repeat(base, min, max), maybe_part)
+      else # (a){2,} -> a{1,}(a)
+        sequence(repeat(base, min, max), part)
+      end
+    elsif max == 0 # a{0} -> empty, not really a thing
+      :empty
+    else
+      if min == 0
+        # (a){2,3} -> a{1,2}(a)?
+        sequence(repeat(base, min, max-1), maybe_part)
+      else # (a){2,3} -> a{1,2}(a)
+        sequence(repeat(base, min-1, max-1), part)
+      end
+    end
+  end
+
   # Try to express regexps with minimum number of primitives:
   # * seq  - ab
   # * alt  - a|b
   # * star - a*
   # * set  - a [a-z] [^a-z]
   # * empty
+  # * backref - \1
+  # * group - (a)
   def parse(node=@tree)
     result = case node
     when Regexp::Expression::Group::Capture
@@ -94,16 +128,15 @@ class SimpleRegexpParser
       num = node.text[%r[\A\\(\d+)\z], 1] or raise "Parse error"
       backref(num.to_i)
     else
-      binding.pry
+      raise "Unknown expression"
     end
     if node.quantified?
       min = node.quantifier.min
       max = node.quantifier.max
-      if max == -1
-        result = sequence(*([result]*min), star(result))
+      result = if result[0] == :group
+        repeat_group(result, min, max)
       else
-        maybe_result = alternative([:empty], result)
-        result = sequence(*([result]*min), *([maybe_result] * (max-min)))
+        repeat(result, min, max)
       end
     end
 

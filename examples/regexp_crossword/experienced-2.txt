@@ -1,0 +1,11 @@
+[ARK]*O.*
+(.).*\1N\1
+(SOD|DO|GE)*
+[FAXUS]*
+[LOPITY]*
+
+[UGLER]*
+[CAST]*REX[PEA]*
+[SIRES]*
+(L|OFT|ON)*
+H*(AY|ED)*
