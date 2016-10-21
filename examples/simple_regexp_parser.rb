@@ -95,7 +95,6 @@ class SimpleRegexpParser
   # Groups and qualifiers interact in weird ways, (a){3} is actually aa(a)
   # We need to do extensive rewriting to make it work
   def repeat_group(part, min, max)
-    maybe_part = alternative([:empty], part)
     base = part[2]
     if max == -1
       if min == 0 # (a)* -> |a*(a)
@@ -137,6 +136,11 @@ class SimpleRegexpParser
     when Regexp::Expression::Alternation
       alternative(*node.expressions.map{|n| parse(n)})
     when Regexp::Expression::Subexpression
+      # It's annoyingly subtypes a lot
+      raise unless node.class == Regexp::Expression::Subexpression or
+                   node.class == Regexp::Expression::Group::Passive or
+                   node.class == Regexp::Expression::Root or
+                   node.class == Regexp::Expression::Alternative
       sequence(*node.expressions.map{|n| parse(n)})
     when Regexp::Expression::CharacterSet
       character_set(node.negative?, node.members)
@@ -149,6 +153,22 @@ class SimpleRegexpParser
     when Regexp::Expression::Backreference::Number
       num = node.text[%r[\A\\(\d+)\z], 1] or raise "Parse error"
       backref(num.to_i)
+    when Regexp::Expression::Anchor::BeginningOfString
+      [:anchor, :bos]
+    when Regexp::Expression::Anchor::EndOfString
+      [:anchor, :eos]
+    when Regexp::Expression::Anchor::BeginningOfLine
+      [:anchor, :bol]
+    when Regexp::Expression::Anchor::EndOfLine
+      [:anchor, :eol]
+    when Regexp::Expression::Assertion::Lookahead
+      binding.pry
+    when Regexp::Expression::Assertion::NegativeLookahead
+      binding.pry
+    when Regexp::Expression::Assertion::Lookbehind
+      binding.pry
+    when Regexp::Expression::Assertion::NegativeLookbehind
+      binding.pry
     else
       raise "Unknown expression"
     end

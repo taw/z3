@@ -1,0 +1,44 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/z3"
+require_relative "simple_regexp_parser"
+require_relative "regexp_string_matcher"
+
+class RegexpSolver
+  def initialize(length, rx)
+    @length = length
+    @rx = SimpleRegexpParser.new(rx, "").parse
+    @solver = Z3::Solver.new
+  end
+
+  def solve!
+    @str = (0...@length).map do |i|
+      v = Z3.Int("char[#{i}]")
+      @solver.assert v >= 0
+      @solver.assert v <= 127
+      v
+    end
+
+    RegexpStringMatcher.new(@solver, @rx, @str).run!
+    print_answer
+  end
+
+  def print_answer
+    if @solver.satisfiable?
+      @model = @solver.model
+      puts @str.map{|c| @model[c].to_i.chr }.join.inspect[1...-1]
+    else
+      raise
+      print "Crossword has no solution"
+    end
+  end
+end
+
+unless ARGV.size == 2
+  STDERR.puts "Usage: #{$0} <length> <regexp>"
+  exit 1
+end
+
+length = ARGV[0].to_i
+regexp = ARGV[1]
+RegexpSolver.new(length, regexp).solve!
