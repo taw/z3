@@ -52,10 +52,10 @@ class RegexpCrosswordSolver
     end
 
     @xsize.times do |x|
-      RegexpStringMatcher.new(@solver, col_rx(x), col_str(x)).run!
+      RegexpStringMatcher.new(@solver, col_rx(x), col_str(x), "col-#{x}").run!
     end
     @ysize.times do |y|
-      RegexpStringMatcher.new(@solver, row_rx(y), row_str(y)).run!
+      RegexpStringMatcher.new(@solver, row_rx(y), row_str(y), "row-#{y}").run!
     end
 
     print_answer

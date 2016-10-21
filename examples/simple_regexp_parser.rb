@@ -135,6 +135,14 @@ class SimpleRegexpParser
       group(new_group, sequence(*node.expressions.map{|n| parse(n)}))
     when Regexp::Expression::Alternation
       alternative(*node.expressions.map{|n| parse(n)})
+    when Regexp::Expression::Assertion::Lookahead
+      [:anchor, :lookahead, sequence(*node.expressions.map{|n| parse(n)})]
+    when Regexp::Expression::Assertion::NegativeLookahead
+      [:anchor, :negative_lookahead, sequence(*node.expressions.map{|n| parse(n)})]
+    when Regexp::Expression::Assertion::Lookbehind
+      [:anchor, :lookbehind, sequence(*node.expressions.map{|n| parse(n)})]
+    when Regexp::Expression::Assertion::NegativeLookbehind
+      [:anchor, :negative_lookbehind, sequence(*node.expressions.map{|n| parse(n)})]
     when Regexp::Expression::Subexpression
       # It's annoyingly subtypes a lot
       raise unless node.class == Regexp::Expression::Subexpression or
@@ -148,7 +156,7 @@ class SimpleRegexpParser
       literal(node.text.chars)
     when Regexp::Expression::CharacterType::Base
       character_type(node.text)
-    when Regexp::Expression::EscapeSequence::Literal
+    when Regexp::Expression::EscapeSequence::Base
       character_type(node.text)
     when Regexp::Expression::Backreference::Number
       num = node.text[%r[\A\\(\d+)\z], 1] or raise "Parse error"
@@ -161,14 +169,6 @@ class SimpleRegexpParser
       [:anchor, :bol]
     when Regexp::Expression::Anchor::EndOfLine
       [:anchor, :eol]
-    when Regexp::Expression::Assertion::Lookahead
-      binding.pry
-    when Regexp::Expression::Assertion::NegativeLookahead
-      binding.pry
-    when Regexp::Expression::Assertion::Lookbehind
-      binding.pry
-    when Regexp::Expression::Assertion::NegativeLookbehind
-      binding.pry
     else
       raise "Unknown expression"
     end

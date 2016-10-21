@@ -19,7 +19,7 @@ class RegexpSolver
       v
     end
 
-    RegexpStringMatcher.new(@solver, @rx, @str).run!
+    RegexpStringMatcher.new(@solver, @rx, @str, "").run!
     print_answer
   end
 
