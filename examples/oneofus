@@ -1,0 +1,102 @@
+#!/usr/bin/env ruby
+
+require "z3"
+require "pry"
+
+class OneofusSolver
+  def initialize
+    @x_size = 3
+    @y_size = 3
+    @board_str = "CbBbCbAaCbCaCbAbCb"
+    @solver = Z3::Solver.new
+
+    @board = (0...@x_size).map{|x|
+      (0...@y_size).map{|y| @board_str[(y * @x_size+x) * 2, 2]  }
+    }.transpose
+  end
+
+  def print_board
+    3.times do |y|
+      puts 3.times.map{|x|
+        cell = @board[y][x]
+        shape = {"C" => "Triangle", "B" => "Circle", "A" => "Square"}[cell[0]]
+        color = {"b" => "grey", "a"=> "purple"}[cell[1]]
+        "#{color} #{shape}"
+      }.join(" ")
+    end
+  end
+
+  def shape_number(x,y)
+    cell = @board[y][x]
+    {"C" => 2, "B" => 1, "A" => 0}[cell[0]]
+  end
+
+  def color_number(x,y)
+    cell = @board[y][x]
+    {"b" => 1, "a"=> 0}[cell[1]]
+  end
+
+  def run!
+    print_board
+    puts ""
+
+    9.times do |i|
+      cx = Z3.Int("click_#{i}_x")
+      cy = Z3.Int("click_#{i}_y")
+      cc = Z3.Int("click_#{i}_color")
+      cs = Z3.Int("click_#{i}_shape")
+      @solver.assert (cx >= 0) & (cx <= 2)
+      @solver.assert (cy >= 0) & (cy <= 2)
+      cn = Z3.Int("click_#{i}_n")
+      @solver.assert cn == (3 * cx + cy)
+    end
+    @solver.assert Z3.Distinct(
+      *9.times.map{|i|
+        Z3.Int("click_#{i}_n")
+      }
+    )
+    8.times do |i|
+      cx = Z3.Int("click_#{i}_x")
+      cy = Z3.Int("click_#{i}_y")
+      cc = Z3.Int("click_#{i}_color")
+      cs = Z3.Int("click_#{i}_shape")
+      cx_next = Z3.Int("click_#{i+1}_x")
+      cy_next = Z3.Int("click_#{i+1}_y")
+      cc_next = Z3.Int("click_#{i+1}_color")
+      cs_next = Z3.Int("click_#{i+1}_shape")
+      @solver.assert (cx == cx_next) | (cy == cy_next)
+      @solver.assert (cc == cc_next) | (cs == cs_next)
+    end
+    9.times do |i|
+      3.times do |y|
+        3.times do |x|
+          cx = Z3.Int("click_#{i}_x")
+          cy = Z3.Int("click_#{i}_y")
+          cc = Z3.Int("click_#{i}_color")
+          cs = Z3.Int("click_#{i}_shape")
+          @solver.assert (
+            (cx == x)  & (cy == y)
+          ).implies(
+            (cs == shape_number(x,y)) & (cc == color_number(x,y))
+          )
+        end
+      end
+    end
+
+    print_solution
+  end
+
+  def print_solution
+    raise "FAIL" unless @solver.satisfiable?
+    model = @solver.model
+    9.times do |i|
+      cx = model[Z3.Int("click_#{i}_x")].to_i
+      cy = model[Z3.Int("click_#{i}_y")].to_i
+      cc = ["purple", "grey"][model[Z3.Int("click_#{i}_color")].to_i]
+      cs = ["Square", "Circle", "Triangle"][model[Z3.Int("click_#{i}_shape")].to_i]
+      puts "Click #{i}: #{cx},#{cy} - #{cc} #{cs}"
+    end
+  end
+end
+
+OneofusSolver.new.run!
