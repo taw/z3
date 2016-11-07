@@ -1,18 +1,16 @@
 This is Ruby interface for Z3 [ https://github.com/Z3Prover/z3 ].
 
-It's in extremely early stages of development. Pull requests always welcome.
+It's in very early stages of development. Pull requests always welcome.
 
 ### Interface
 
-`Z3::VeryLowLever` / `Z3::LowLevel` are low level FFI interface, and they shouldn't be used directly.
+The public interface is various methods in `Z3` module, and on objects created by it. `examples/` directory is probably the best place to start.
 
-The rest of `Z3` is high level API, but the interface is extremely unstable at this point, and it's pretty much guaranteed to  change many times. Check specs or `examples/` directory for usage.
+You can use most Ruby operators to construct Z3 expressions, but use `| &` instead of `|| &&` for boolean operators. They unfortunately have wrong operator precedence so you'll need to use some extra parentheses.
 
-You can use most Ruby operators to construct Z3 expressions, but use `~ | &` instead of `! || &&` for boolean operators. They unfortunately have wrong operator precedence so you'll need to use some extra parentheses.
+The interface is potentially unstable, and can change in the future.
 
-As for API internals, attributes starting with `_` are FFI internals you shouldn't touch, other attributes are generally legitimate Ruby objects.
-
-Bit vectors are treated as signed by default. [well, mostly, more systematic treatment of this is on TODO list]
+`Z3::VeryLowLever` and `Z3::LowLevel` are FFI interface for internal use, and they shouldn't be used directly. Also don't use any method starting with `_`. Doing this is likely to lead to segmentation faults unless extreme care is taken.
 
 ### Requirements
 
@@ -22,12 +20,12 @@ To use it, you'll need to install `z3`. On OSX that would be:
 
 On other systems use appropriate package manager.
 
-### Known Bugs
+### Known Issues
 
-Ruby API tries to catch the most common mistakes, but if you use API in a weird way you can get C crash instead of nice Ruby exception.
+As Z3 is a C library, doing anything weird with it will segfault your process. Ruby API tries its best to prevent such problems and turn them into exceptions instead, but if you do anything weird (especially touch any method prefixed with `_` or `Z3::LowLevel` interface), crashes are possible. If you have reproducible crash on reasonable looking code, definitely submit it as a bug, and I'll try to come up with a workaround.
 
-Memory will leak a good deal. Generally avoid in long running processes.
+As Z3 mixes aggressively interning ASTs and reference counting, it's not very compatible with Ruby style memory management, so memory will leak a good deal. It's usually not much worse than the usual Symbol memory leak, but you might want to avoid Z3 in a long running processes exposed to public input.
 
-### Python versions
+### Python examples
 
-Most of example solvers have Python versions available from https://github.com/taw/puzzle-solvers
+Some of example solvers also have Python versions available from https://github.com/taw/puzzle-solvers
