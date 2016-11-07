@@ -63,8 +63,9 @@ module Z3
       expect([a == 50, b == -a]).to have_solution(b => 206)
     end
 
-    it "~" do
+    it "~ and !" do
       expect([a == 50, b == ~a]).to have_solution(b => 205)
+      expect([a == 50, b == !a]).to have_solution(b => 205)
     end
 
     it ">> (sign-dependent)" do

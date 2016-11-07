@@ -54,9 +54,11 @@ module Z3
       expect([a == false, b == false, c == (a == b)]).to have_solution(c =>  true)
     end
 
-    it "~" do
+    it "~ and !" do
       expect([a ==  true, b == ~a]).to have_solution(b => false)
       expect([a == false, b == ~a]).to have_solution(b =>  true)
+      expect([a ==  true, b == !a]).to have_solution(b => false)
+      expect([a == false, b == !a]).to have_solution(b =>  true)
     end
 
     it "if then else" do

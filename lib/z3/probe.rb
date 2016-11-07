@@ -20,6 +20,10 @@ module Z3
       Probe.new LowLevel.probe_not(self)
     end
 
+    def !
+      Probe.new LowLevel.probe_not(self)
+    end
+
     def ==(other)
       raise Z3::Exception, "Probe required" unless other.is_a?(Probe)
       Probe.new LowLevel.probe_eq(self, other)

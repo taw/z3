@@ -4,6 +4,10 @@ module Z3
       sort.new(LowLevel.mk_bvnot(self))
     end
 
+    def !
+      sort.new(LowLevel.mk_bvnot(self))
+    end
+
     def -@
       sort.new(LowLevel.mk_bvneg(self))
     end

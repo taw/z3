@@ -4,6 +4,10 @@ module Z3
       sort.new(LowLevel.mk_not(self))
     end
 
+    def !
+      sort.new(LowLevel.mk_not(self))
+    end
+
     def &(other)
       Expr.And(self, other)
     end
