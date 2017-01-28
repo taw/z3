@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require "z3"
+require_relative "../lib/z3"
 
 class CrossFlipSolver
   def initialize(board)
