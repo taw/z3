@@ -80,7 +80,11 @@ RSpec::Matchers.define :have_solution do |expected|
   failure_message do |asts|
     solver = setup_solver(asts)
     if solver.satisfiable?
-      "expected #{asts.inspect} to have solution #{expected.inspect}, instead got #{solver.model}"
+      "expected #{asts.inspect} to have solution:\n#{
+        expected.map{|var,val| "#{var}=#{val}\n"}.join
+      }instead got:\n#{
+        solver.model.map{|var,val| "#{var}=#{solver.model[var]}\n"}.join
+      }"
     else
       "expected #{asts.inspect} to have solution #{expected.inspect}, instead not solvable"
     end

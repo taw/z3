@@ -15,47 +15,49 @@ module Z3
       )
     end
 
-    # FIXME: This is not even real spec at this point, just a no-crash-spec
-    it "union" do
-      expect([
-        a.include?(1),
-        a.include?(2),
-        b.include?(2),
-        b.include?(3),
-        c == a.union(b),
-      ]).to have_solution(
-        a => "(declare-fun k! (Int) Bool)",
-        b => "(declare-fun k! (Int) Bool)",
-        c => "(declare-fun k! (Int) Bool)",
-      )
-    end
+    if Z3.version >= "4.5"
+      # Only works in z3 4.5, 4.4 (like on Ubuntu) returns bad stuff
+      it "union" do
+        expect([
+          a.include?(1),
+          a.include?(2),
+          b.include?(2),
+          b.include?(3),
+          c == a.union(b),
+        ]).to have_solution(
+          a => "store(store(const(false), 1, true), 2, true)",
+          b => "store(store(const(false), 3, true), 2, true)",
+          c => "store(store(store(const(false), 1, true), 3, true), 2, true)",
+        )
+      end
 
-    it "difference" do
-      expect([
-        a.include?(1),
-        a.include?(2),
-        b.include?(2),
-        b.include?(3),
-        c == a.difference(b),
-      ]).to have_solution(
-        a => "(declare-fun k! (Int) Bool)",
-        b => "(declare-fun k! (Int) Bool)",
-        c => "(declare-fun k! (Int) Bool)",
-      )
-    end
+      it "difference" do
+        expect([
+          a.include?(1),
+          a.include?(2),
+          b.include?(2),
+          b.include?(3),
+          c == a.difference(b),
+        ]).to have_solution(
+          a => "store(store(const(false), 1, true), 2, true)",
+          b => "store(const(true), 1, false)",
+          c => "store(const(false), 1, true)",
+        )
+      end
 
-    it "intersection" do
-      expect([
-        a.include?(1),
-        a.include?(2),
-        b.include?(2),
-        b.include?(3),
-        c == a.intersection(b),
-      ]).to have_solution(
-        a => "(declare-fun k! (Int) Bool)",
-        b => "(declare-fun k! (Int) Bool)",
-        c => "(declare-fun k! (Int) Bool)",
-      )
+      it "intersection" do
+        expect([
+          a.include?(1),
+          a.include?(2),
+          b.include?(2),
+          b.include?(3),
+          c == a.intersection(b),
+        ]).to have_solution(
+          a => "store(store(const(false), 1, true), 2, true)",
+          b => "store(store(const(false), 3, true), 2, true)",
+          c => "store(store(store(const(false), 1, true), 3, true), 2, true)",
+        )
+      end
     end
   end
 end
