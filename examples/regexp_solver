@@ -24,12 +24,11 @@ class RegexpSolver
   end
 
   def print_answer
-    if @solver.satisfiable?
+    while @solver.satisfiable?
       @model = @solver.model
       puts @str.map{|c| @model[c].to_i.chr }.join.inspect[1...-1]
-    else
-      raise
-      print "Crossword has no solution"
+      break # If you want more solutions...
+      @solver.assert Z3.Or(*@str.map{|v| @model[v] != v})
     end
   end
 end

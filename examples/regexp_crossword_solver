@@ -62,16 +62,16 @@ class RegexpCrosswordSolver
   end
 
   def print_answer
-    if @solver.satisfiable?
+    while @solver.satisfiable?
       @model = @solver.model
       @ysize.times do |y|
         puts @xsize.times.map{|x|
           @model[@crossword[[x,y]]].to_i.chr
         }.join.inspect[1...-1]
       end
-    else
-      raise
-      print "Crossword has no solution"
+      break # If you want more solutions...
+      puts ""
+      @solver.assert Z3.Or(*@crossword.values.map{|v| @model[v] != v})
     end
   end
 end

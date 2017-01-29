@@ -95,11 +95,13 @@ class SimpleRegexpParser
   # Groups and qualifiers interact in weird ways, (a){3} is actually aa(a)
   # We need to do extensive rewriting to make it work
   def repeat_group(part, min, max)
-    base = part[2]
+    _, group, base = part
     if max == -1
-      if min == 0 # (a)* -> |a*(a)
+      # (a)* -> ()|a*(a)
+      # with same group id for both ()s
+      if min == 0
         alternative(
-          empty,
+          [:group, group, empty],
           sequence(repeat(base, min, max), part)
         )
       else # (a){2,} -> a{1,}(a)
@@ -109,9 +111,10 @@ class SimpleRegexpParser
       :empty
     else
       if min == 0
-        # (a){2,3} -> |a{1,2}(a)
+        # (a){2,3} -> ()|a{1,2}(a)
+        # with same group id for both ()s
         alternative(
-          empty,
+          [:group, group, empty],
           sequence(repeat(base, min, max-1), part)
         )
       else # (a){2,3} -> a{1,2}(a)
