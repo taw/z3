@@ -42,5 +42,12 @@ module Z3
       expect(model.to_s).to eq("Z3::Model<a=2, b=4>")
       expect(model.inspect).to eq("Z3::Model<a=2, b=4>")
     end
+
+    it "#!" do
+      solver.assert(a == 2)
+      solver.assert(b == a+2)
+      expect(solver).to be_satisfiable
+      expect(!model).to be_same_as((a != 2) | (b != 4))
+    end
   end
 end

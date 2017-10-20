@@ -49,5 +49,11 @@ module Z3
         )
       end
     end
+
+    def !
+      Z3.Or(
+        *map{|v| v != self[v]}
+      )
+    end
   end
 end
