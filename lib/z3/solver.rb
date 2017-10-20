@@ -35,11 +35,25 @@ module Z3
     end
 
     def satisfiable?
-      check == :sat
+      case check
+      when :sat
+        true
+      when :unsat
+        false
+      else
+        raise Z3::Exception, "Satisfiability unknown"
+      end
     end
 
     def unsatisfiable?
-      check == :unsat
+      case check
+      when :unsat
+        true
+      when :sat
+        false
+      else
+        raise Z3::Exception, "Satisfiability unknown"
+      end
     end
 
     def model

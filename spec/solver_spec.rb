@@ -39,5 +39,14 @@ module Z3
       stats = solver.statistics
       expect(stats.keys).to match_array(["rlimit count", "max memory", "memory", "num allocs"])
     end
+
+    # This is a very simple example of unknown satisfiablity
+    # so we might need more complex one in the future
+    it "third way" do
+      solver.assert a**3 == a
+      expect(solver.check).to eq(:unknown)
+      expect{solver.satisfiable?}.to raise_error("Satisfiability unknown")
+      expect{solver.unsatisfiable?}.to raise_error("Satisfiability unknown")
+    end
   end
 end
