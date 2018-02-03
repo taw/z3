@@ -1,3 +1,5 @@
+# There are multiple solutions, so this test is nondeterministic
+# Changing it to one returned by z3 4.6.0, but perhaps it needs some serious fixing
 describe "Knights Swap Puzzle" do
   it do
     expect("knights_puzzle").to have_output <<EOF
@@ -7,84 +9,84 @@ bbb.
 xbxw
 ..ww
 x.xw
-b: 1,1 -> 3,0
+b: 0,0 -> 1,2
 
 State 1:
-bbbb
+.bb.
+xbxw
+.bww
 x.xw
-..ww
-x.xw
-w: 3,2 -> 1,1
+w: 2,2 -> 3,0
 
 State 2:
-bbbb
-xwxw
-..w.
+.bbw
+xbxw
+.b.w
 x.xw
-b: 2,0 -> 3,2
+b: 1,0 -> 2,2
 
 State 3:
-bb.b
-xwxw
-..wb
+..bw
+xbxw
+.bbw
+x.xw
+w: 3,1 -> 1,0
+
+State 4:
+.wbw
+xbx.
+.bbw
+x.xw
+b: 1,2 -> 3,1
+
+State 5:
+.wbw
+xbxb
+..bw
 x.xw
 w: 3,3 -> 1,2
 
-State 4:
-bb.b
-xwxw
-.wwb
-x.x.
-w: 1,2 -> 2,0
-
-State 5:
-bbwb
-xwxw
-..wb
-x.x.
-b: 0,0 -> 1,2
-
 State 6:
-.bwb
-xwxw
-.bwb
+.wbw
+xbxb
+.wbw
+x.x.
+w: 1,2 -> 0,0
+
+State 7:
+wwbw
+xbxb
+..bw
+x.x.
+b: 2,0 -> 1,2
+
+State 8:
+ww.w
+xbxb
+.bbw
+x.x.
+w: 3,2 -> 2,0
+
+State 9:
+wwww
+xbxb
+.bb.
+x.x.
+b: 1,1 -> 3,2
+
+State 10:
+wwww
+x.xb
+.bbb
 x.x.
 b: 1,2 -> 3,3
 
-State 7:
-.bwb
-xwxw
-..wb
-x.xb
-w: 3,1 -> 1,2
-
-State 8:
-.bwb
-xwx.
-.wwb
-x.xb
-b: 1,0 -> 3,1
-
-State 9:
-..wb
-xwxb
-.wwb
-x.xb
-w: 2,2 -> 1,0
-
-State 10:
-.wwb
-xwxb
-.w.b
-x.xb
-b: 3,0 -> 2,2
-
 State 11:
-.ww.
-xwxb
-.wbb
+wwww
 x.xb
-w: 1,2 -> 0,0
+..bb
+x.xb
+w: 3,0 -> 1,1
 
 State 12:
 www.

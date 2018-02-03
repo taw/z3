@@ -35,6 +35,8 @@ module Z3
         expect([
           a.include?(1),
           a.include?(2),
+          !a.include?(3),
+          !b.include?(1),
           b.include?(2),
           b.include?(3),
           c == a.difference(b),

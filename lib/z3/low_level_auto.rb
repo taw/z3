@@ -581,42 +581,6 @@ module Z3
         VeryLowLevel.Z3_get_relation_column(_ctx_pointer, sort._ast, num)
       end
 
-      def get_smtlib_assumption(num) #=> :ast_pointer
-        VeryLowLevel.Z3_get_smtlib_assumption(_ctx_pointer, num)
-      end
-
-      def get_smtlib_decl(num) #=> :func_decl_pointer
-        VeryLowLevel.Z3_get_smtlib_decl(_ctx_pointer, num)
-      end
-
-      def get_smtlib_error #=> :string
-        VeryLowLevel.Z3_get_smtlib_error(_ctx_pointer)
-      end
-
-      def get_smtlib_formula(num) #=> :ast_pointer
-        VeryLowLevel.Z3_get_smtlib_formula(_ctx_pointer, num)
-      end
-
-      def get_smtlib_num_assumptions #=> :uint
-        VeryLowLevel.Z3_get_smtlib_num_assumptions(_ctx_pointer)
-      end
-
-      def get_smtlib_num_decls #=> :uint
-        VeryLowLevel.Z3_get_smtlib_num_decls(_ctx_pointer)
-      end
-
-      def get_smtlib_num_formulas #=> :uint
-        VeryLowLevel.Z3_get_smtlib_num_formulas(_ctx_pointer)
-      end
-
-      def get_smtlib_num_sorts #=> :uint
-        VeryLowLevel.Z3_get_smtlib_num_sorts(_ctx_pointer)
-      end
-
-      def get_smtlib_sort(num) #=> :sort_pointer
-        VeryLowLevel.Z3_get_smtlib_sort(_ctx_pointer, num)
-      end
-
       def get_sort(ast) #=> :sort_pointer
         VeryLowLevel.Z3_get_sort(_ctx_pointer, ast._ast)
       end

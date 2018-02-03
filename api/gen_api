@@ -97,6 +97,17 @@ class GenerateAPI
         "mk_fpa_rtn",
         "mk_fpa_rtp",
         "mk_fpa_rtz",
+
+        # Removed in 4.6.0
+        "get_smtlib_assumption",
+        "get_smtlib_decl",
+        "get_smtlib_error",
+        "get_smtlib_formula",
+        "get_smtlib_num_assumptions",
+        "get_smtlib_num_decls",
+        "get_smtlib_num_formulas",
+        "get_smtlib_num_sorts",
+        "get_smtlib_sort",
       ] + (Pathname(__dir__) + "../lib/z3/low_level.rb").read.scan(/^\s+def \K\w+/)
     end.to_set
   end

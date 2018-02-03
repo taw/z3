@@ -145,15 +145,6 @@ module Z3
     attach_function :Z3_get_range, [:ctx_pointer, :func_decl_pointer], :sort_pointer
     attach_function :Z3_get_relation_arity, [:ctx_pointer, :sort_pointer], :uint
     attach_function :Z3_get_relation_column, [:ctx_pointer, :sort_pointer, :uint], :sort_pointer
-    attach_function :Z3_get_smtlib_assumption, [:ctx_pointer, :uint], :ast_pointer
-    attach_function :Z3_get_smtlib_decl, [:ctx_pointer, :uint], :func_decl_pointer
-    attach_function :Z3_get_smtlib_error, [:ctx_pointer], :string
-    attach_function :Z3_get_smtlib_formula, [:ctx_pointer, :uint], :ast_pointer
-    attach_function :Z3_get_smtlib_num_assumptions, [:ctx_pointer], :uint
-    attach_function :Z3_get_smtlib_num_decls, [:ctx_pointer], :uint
-    attach_function :Z3_get_smtlib_num_formulas, [:ctx_pointer], :uint
-    attach_function :Z3_get_smtlib_num_sorts, [:ctx_pointer], :uint
-    attach_function :Z3_get_smtlib_sort, [:ctx_pointer, :uint], :sort_pointer
     attach_function :Z3_get_sort, [:ctx_pointer, :ast_pointer], :sort_pointer
     attach_function :Z3_get_sort_id, [:ctx_pointer, :sort_pointer], :uint
     attach_function :Z3_get_sort_kind, [:ctx_pointer, :sort_pointer], :uint

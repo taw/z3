@@ -37,13 +37,31 @@ module Z3
       solver.assert b >= 2
       solver.assert Z3.Or(a == 2, a == -2)
       stats = solver.statistics
-      expect(stats.keys).to match_array(["rlimit count", "max memory", "memory", "num allocs"])
+      # "mk bool var" added in 4.6.0
+      expect(stats.keys).to match_array(["rlimit count", "max memory", "memory", "num allocs", "mk bool var"])
     end
 
     # This is a very simple example of unknown satisfiablity
     # so we might need more complex one in the future
+    # This is now satisfiable in 4.6.0
+    if Z3.version >= "4.6"
+      it "third way (until 4.6 fix)" do
+        solver.assert a**3 == a
+        expect(solver.check).to eq(:sat)
+        expect(solver).to be_satisfiable
+        expect(solver).to_not be_unsatisfiable
+      end
+    else
+      it "third way (until 4.6 fix)" do
+        solver.assert a**3 == a
+        expect(solver.check).to eq(:unknown)
+        expect{solver.satisfiable?}.to raise_error("Satisfiability unknown")
+        expect{solver.unsatisfiable?}.to raise_error("Satisfiability unknown")
+      end
+    end
+
     it "third way" do
-      solver.assert a**3 == a
+      solver.assert a**a == a
       expect(solver.check).to eq(:unknown)
       expect{solver.satisfiable?}.to raise_error("Satisfiability unknown")
       expect{solver.unsatisfiable?}.to raise_error("Satisfiability unknown")
