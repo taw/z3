@@ -113,15 +113,16 @@ module Z3
 
       it "casts to correct type if possible" do
         expect((a == 42).sexpr).to eq "(= a 42)"
-        expect((42 == a).sexpr).to eq "(= a 42)"
+        # https://bugs.ruby-lang.org/issues/14437
+        #expect((42 == a).sexpr).to eq "(= a 42)"
         expect((a == e).sexpr).to eq "(= (to_real a) e)"
         expect((e == a).sexpr).to eq "(= e (to_real a))"
         expect((c == true).sexpr).to eq "(= c true)"
         expect((c == false).sexpr).to eq "(= c false)"
         expect((a == 42.5).sexpr).to eq "(= (to_real a) (/ 85.0 2.0))"
-        expect((42.5 == a).sexpr).to eq "(= (to_real a) (/ 85.0 2.0))"
+        # expect((42.5 == a).sexpr).to eq "(= (to_real a) (/ 85.0 2.0))"
         expect((e == 42.5).sexpr).to eq "(= e (/ 85.0 2.0))"
-        expect((42.5 == e).sexpr).to eq "(= e (/ 85.0 2.0))"
+        # expect((42.5 == e).sexpr).to eq "(= e (/ 85.0 2.0))"
         # expect((true == c).sexpr).to eq "(= true c)"
         # expect((false == c).sexpr).to eq "(= false c)"
       end
@@ -149,6 +150,7 @@ module Z3
 
       it "casts to correct type if possible" do
         expect((a != 42).sexpr).to eq "(distinct a 42)"
+        # https://bugs.ruby-lang.org/issues/14437
         # expect((42 != a).sexpr).to eq "(distinct a 42)"
         expect((a != e).sexpr).to eq "(distinct (to_real a) e)"
         expect((e != a).sexpr).to eq "(distinct e (to_real a))"
