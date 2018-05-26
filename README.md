@@ -12,13 +12,16 @@ The interface is potentially unstable, and can change in the future.
 
 `Z3::VeryLowLever` and `Z3::LowLevel` are FFI interface for internal use, and they shouldn't be used directly. Also don't use any method starting with `_`. Doing this is likely to lead to segmentation faults unless extreme care is taken.
 
-### Requirements
+A utility at `api/gen_api` will loop through a .h file and generate Ruby definitions. This will update the API when upstream changes `z3_api.h`
 
-To use it, you'll need to install `z3`. On OSX that would be:
+## Building
 
-    brew install z3
-
-On other systems use appropriate package manager.
+```
+brew install z3
+rake gem:build
+bundle install
+rake spec
+```
 
 *NB: On Linux, since FFI will look for `libz3.so`, you might need to install `libz3-dev`using your usual package manager.*
 
