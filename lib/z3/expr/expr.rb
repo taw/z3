@@ -34,7 +34,7 @@ module Z3
           BoolSort.new
         when Integer
           IntSort.new
-        when Float
+        when Float, Rational
           RealSort.new
         else
           raise Z3::Exception, "No idea how to autoconvert `#{a.class}': `#{a.inspect}'"

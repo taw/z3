@@ -9,7 +9,7 @@ module Z3
     end
 
     def from_const(val)
-      if val.is_a?(Integer) or (val.is_a?(Float) and val.finite?)
+      if val.is_a?(Integer) or (val.is_a?(Float) and val.finite?) or val.is_a?(Rational)
         new LowLevel.mk_numeral(val.to_s, self)
       else
         raise Z3::Exception, "Cannot convert #{val.class} to #{self.class}"

@@ -9,6 +9,8 @@ module Z3
       expect(subject.from_const(-0.0).inspect).to eq("Real<0>")
       expect(subject.from_const(3.14).inspect).to eq("Real<157/50>")
       expect(subject.from_const(-3.14).inspect).to eq("Real<-157/50>")
+      expect(subject.from_const(Rational(22,7)).inspect).to eq("Real<22/7>")
+      expect(subject.from_const(Rational(-22,7)).inspect).to eq("Real<-22/7>")
     end
 
     it "raises exception when trying to convert constants of wrong type" do

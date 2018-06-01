@@ -7,6 +7,7 @@ module Z3
 
     it "+" do
       expect([a == 2, b == 4, c == a + b]).to have_solution(c => 6)
+      expect([a == Rational(1,3), b == Rational(3,2), c == a + b]).to have_solution(c => "11/6")
     end
 
     it "-" do
@@ -67,6 +68,7 @@ module Z3
       expect([a == 3, b == -a]).to have_solution(b => -3)
       expect([a == 0, b == -a]).to have_solution(b => 0)
       expect([a == 3.5, b == -a]).to have_solution(b => "-7/2")
+      expect([a == Rational(4,3), b == -a]).to have_solution(b => "-4/3")
     end
   end
 end
