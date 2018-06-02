@@ -1,6 +1,7 @@
 module Z3
   describe FloatExpr do
     let(:mode) { RoundingModeSort.new }
+    let(:float_single) { FloatSort.new(:single) }
     let(:float_double) { FloatSort.new(:double) }
     let(:a) { float_double.var("a") }
     let(:b) { float_double.var("b") }
@@ -104,6 +105,15 @@ module Z3
       # Denormals changed
       if Z3.version >= '4.5'
         expect(float_double.from_const(1234 * 0.5**1040).to_s).to eq("0.00470733642578125B-1022")
+        expect(float_single.from_const(1234 * 0.5**136).to_s).to eq("1.205078125B-126")
+        # This is what we get, all of these are wrong, by a lot:
+        # expect(float_single.from_const(1234 * 0.5**137).to_s).to eq("0.205078125B-126")
+        # expect(float_single.from_const(1234 * 0.5**138).to_s).to eq("0.205078125B-126")
+        # expect(float_single.from_const(1234 * 0.5**139).to_s).to eq("0.205078125B-126")
+        #
+        # It's not even a bug in printer Z3_mk_fpa_numeral_double is broken for denormals
+        #
+        # Probably best revisit it in 4.7+
       else
         expect(float_double.from_const(1234 * 0.5**1040).to_s).to eq("1.205078125B-1030")
       end

@@ -45,8 +45,20 @@ module Z3
         PrintedExpr.new(decl.sexpr.gsub(/k!\d+/, "k!"))
       elsif a.func_decl.name == "fp.numeral" and a.sort.is_a?(FloatSort)
         s = a.significand_string
-        e = a.exponent_string
-        e = "+#{e}" if e[0] != "-"
+        # Z3 4.6 changed how #exponent_string it works, it returns it unbiased
+        # Before it was biased
+        bias = a.sort.from_const(1).exponent_string.to_i
+        if bias == 0
+          e = a.exponent_string.to_i
+        else
+          e = a.exponent_string.to_i
+          if e == 0
+            e -= bias - 1
+          else
+            e -= bias
+          end
+        end
+        e = "%+d" % e
         PrintedExpr.new("#{s}B#{e}")
       else
         decl = a.func_decl
