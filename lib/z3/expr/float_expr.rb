@@ -169,12 +169,12 @@ module Z3
         a.sort.new(LowLevel.mk_fpa_rem(a, b))
       end
 
-      # Weirdly this dies when trying to calll Z3_get_ast_kind, while min works on same call
-      #
-      # def Max(a, b)
-      #   a, b = coerce_to_same_float_sort(a, b)
-      #   a.sort.new(LowLevel.mk_fpa_max(a, b))
-      # end
+      # In older versons, this dies when trying to calll Z3_get_ast_kind, min works on same call
+      # Works in 4.6
+      def Max(a, b)
+        a, b = coerce_to_same_float_sort(a, b)
+        a.sort.new(LowLevel.mk_fpa_max(a, b))
+      end
 
       def Min(a, b)
         a, b = coerce_to_same_float_sort(a, b)

@@ -62,12 +62,12 @@ module Z3
       )
     end
 
-    # Broken in z3
-    # it "max" do
-    #   expect([a == 2.0, b == 3.0, c == a.max(b)]).to have_solution(
-    #     c => float_double.from_const(3.0),
-    #   )
-    # end
+    # Broken in z3 before 4.6
+    it "max" do
+      expect([a == 2.0, b == 3.0, c == a.max(b)]).to have_solution(
+        c => float_double.from_const(3.0),
+      )
+    end
 
     it "min" do
       expect([a == 2.0, b == 3.0, c == a.min(b)]).to have_solution(
