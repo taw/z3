@@ -63,10 +63,6 @@ module Z3
         Z3::VeryLowLevel.Z3_mk_set_intersect(_ctx_pointer, asts.size, asts_vector(asts))
       end
 
-      def optimize_get_assertions(optimize)
-        Z3::VeryLowLevel.Z3_optimize_get_assertions(_ctx_pointer, optimize._optimize)
-      end
-
       # Should be private
 
       def unpack_ast_vector(_ast_vector)

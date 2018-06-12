@@ -1493,6 +1493,10 @@ module Z3
         VeryLowLevel.Z3_optimize_dec_ref(_ctx_pointer, optimize._optimize)
       end
 
+      def optimize_get_assertions(optimize)
+        Z3::VeryLowLevel.Z3_optimize_get_assertions(_ctx_pointer, optimize._optimize)
+      end
+
       def optimize_get_help(optimize) #=> :string
         VeryLowLevel.Z3_optimize_get_help(_ctx_pointer, optimize._optimize)
       end
