@@ -1,6 +1,14 @@
 module Z3
   module LowLevel
     class << self
+      def add_const_interp(model, func_decl, ast) #=> :void
+        VeryLowLevel.Z3_add_const_interp(_ctx_pointer, model._model, func_decl._ast, ast._ast)
+      end
+
+      def add_func_interp(model, func_decl, ast) #=> :func_interp_pointer
+        VeryLowLevel.Z3_add_func_interp(_ctx_pointer, model._model, func_decl._ast, ast._ast)
+      end
+
       def algebraic_add(ast1, ast2) #=> :ast_pointer
         VeryLowLevel.Z3_algebraic_add(_ctx_pointer, ast1._ast, ast2._ast)
       end
@@ -213,6 +221,10 @@ module Z3
         VeryLowLevel.Z3_fixedpoint_add_cover(_ctx_pointer, fixedpoint._fixedpoint, num, func_decl._ast, ast._ast)
       end
 
+      def fixedpoint_add_invariant(fixedpoint, func_decl, ast) #=> :void
+        VeryLowLevel.Z3_fixedpoint_add_invariant(_ctx_pointer, fixedpoint._fixedpoint, func_decl._ast, ast._ast)
+      end
+
       def fixedpoint_add_rule(fixedpoint, ast, sym) #=> :void
         VeryLowLevel.Z3_fixedpoint_add_rule(_ctx_pointer, fixedpoint._fixedpoint, ast._ast, sym)
       end
@@ -245,6 +257,10 @@ module Z3
         VeryLowLevel.Z3_fixedpoint_get_cover_delta(_ctx_pointer, fixedpoint._fixedpoint, num, func_decl._ast)
       end
 
+      def fixedpoint_get_ground_sat_answer(fixedpoint) #=> :ast_pointer
+        VeryLowLevel.Z3_fixedpoint_get_ground_sat_answer(_ctx_pointer, fixedpoint._fixedpoint)
+      end
+
       def fixedpoint_get_help(fixedpoint) #=> :string
         VeryLowLevel.Z3_fixedpoint_get_help(_ctx_pointer, fixedpoint._fixedpoint)
       end
@@ -257,12 +273,24 @@ module Z3
         VeryLowLevel.Z3_fixedpoint_get_param_descrs(_ctx_pointer, fixedpoint._fixedpoint)
       end
 
+      def fixedpoint_get_reachable(fixedpoint, func_decl) #=> :ast_pointer
+        VeryLowLevel.Z3_fixedpoint_get_reachable(_ctx_pointer, fixedpoint._fixedpoint, func_decl._ast)
+      end
+
       def fixedpoint_get_reason_unknown(fixedpoint) #=> :string
         VeryLowLevel.Z3_fixedpoint_get_reason_unknown(_ctx_pointer, fixedpoint._fixedpoint)
       end
 
+      def fixedpoint_get_rule_names_along_trace(fixedpoint) #=> :symbol_pointer
+        VeryLowLevel.Z3_fixedpoint_get_rule_names_along_trace(_ctx_pointer, fixedpoint._fixedpoint)
+      end
+
       def fixedpoint_get_rules(fixedpoint) #=> :ast_vector_pointer
         VeryLowLevel.Z3_fixedpoint_get_rules(_ctx_pointer, fixedpoint._fixedpoint)
+      end
+
+      def fixedpoint_get_rules_along_trace(fixedpoint) #=> :ast_vector_pointer
+        VeryLowLevel.Z3_fixedpoint_get_rules_along_trace(_ctx_pointer, fixedpoint._fixedpoint)
       end
 
       def fixedpoint_get_statistics(fixedpoint) #=> :stats_pointer
@@ -285,6 +313,10 @@ module Z3
         VeryLowLevel.Z3_fixedpoint_query(_ctx_pointer, fixedpoint._fixedpoint, ast._ast)
       end
 
+      def fixedpoint_query_from_lvl(fixedpoint, ast, num) #=> :int
+        VeryLowLevel.Z3_fixedpoint_query_from_lvl(_ctx_pointer, fixedpoint._fixedpoint, ast._ast, num)
+      end
+
       def fixedpoint_register_relation(fixedpoint, func_decl) #=> :void
         VeryLowLevel.Z3_fixedpoint_register_relation(_ctx_pointer, fixedpoint._fixedpoint, func_decl._ast)
       end
@@ -301,8 +333,20 @@ module Z3
         VeryLowLevel.Z3_fpa_get_ebits(_ctx_pointer, sort._ast)
       end
 
-      def fpa_get_numeral_exponent_string(ast) #=> :string
-        VeryLowLevel.Z3_fpa_get_numeral_exponent_string(_ctx_pointer, ast._ast)
+      def fpa_get_numeral_exponent_bv(ast, bool) #=> :ast_pointer
+        VeryLowLevel.Z3_fpa_get_numeral_exponent_bv(_ctx_pointer, ast._ast, bool)
+      end
+
+      def fpa_get_numeral_exponent_string(ast, bool) #=> :string
+        VeryLowLevel.Z3_fpa_get_numeral_exponent_string(_ctx_pointer, ast._ast, bool)
+      end
+
+      def fpa_get_numeral_sign_bv(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_fpa_get_numeral_sign_bv(_ctx_pointer, ast._ast)
+      end
+
+      def fpa_get_numeral_significand_bv(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_fpa_get_numeral_significand_bv(_ctx_pointer, ast._ast)
       end
 
       def fpa_get_numeral_significand_string(ast) #=> :string
@@ -311,6 +355,34 @@ module Z3
 
       def fpa_get_sbits(sort) #=> :uint
         VeryLowLevel.Z3_fpa_get_sbits(_ctx_pointer, sort._ast)
+      end
+
+      def fpa_is_numeral_inf(ast) #=> :bool
+        VeryLowLevel.Z3_fpa_is_numeral_inf(_ctx_pointer, ast._ast)
+      end
+
+      def fpa_is_numeral_nan(ast) #=> :bool
+        VeryLowLevel.Z3_fpa_is_numeral_nan(_ctx_pointer, ast._ast)
+      end
+
+      def fpa_is_numeral_negative(ast) #=> :bool
+        VeryLowLevel.Z3_fpa_is_numeral_negative(_ctx_pointer, ast._ast)
+      end
+
+      def fpa_is_numeral_normal(ast) #=> :bool
+        VeryLowLevel.Z3_fpa_is_numeral_normal(_ctx_pointer, ast._ast)
+      end
+
+      def fpa_is_numeral_positive(ast) #=> :bool
+        VeryLowLevel.Z3_fpa_is_numeral_positive(_ctx_pointer, ast._ast)
+      end
+
+      def fpa_is_numeral_subnormal(ast) #=> :bool
+        VeryLowLevel.Z3_fpa_is_numeral_subnormal(_ctx_pointer, ast._ast)
+      end
+
+      def fpa_is_numeral_zero(ast) #=> :bool
+        VeryLowLevel.Z3_fpa_is_numeral_zero(_ctx_pointer, ast._ast)
       end
 
       def func_entry_dec_ref(func_entry) #=> :void
@@ -331,6 +403,10 @@ module Z3
 
       def func_entry_inc_ref(func_entry) #=> :void
         VeryLowLevel.Z3_func_entry_inc_ref(_ctx_pointer, func_entry._func_entry)
+      end
+
+      def func_interp_add_entry(func_interp, ast_vector, ast) #=> :void
+        VeryLowLevel.Z3_func_interp_add_entry(_ctx_pointer, func_interp._func_interp, ast_vector, ast._ast)
       end
 
       def func_interp_dec_ref(func_interp) #=> :void
@@ -355,6 +431,10 @@ module Z3
 
       def func_interp_inc_ref(func_interp) #=> :void
         VeryLowLevel.Z3_func_interp_inc_ref(_ctx_pointer, func_interp._func_interp)
+      end
+
+      def func_interp_set_else(func_interp, ast) #=> :void
+        VeryLowLevel.Z3_func_interp_set_else(_ctx_pointer, func_interp._func_interp, ast._ast)
       end
 
       def get_algebraic_number_lower(ast, num) #=> :ast_pointer
@@ -489,6 +569,10 @@ module Z3
         VeryLowLevel.Z3_get_error_code(_ctx_pointer)
       end
 
+      def get_full_version #=> :string
+        VeryLowLevel.Z3_get_full_version()
+      end
+
       def get_func_decl_id(func_decl) #=> :uint
         VeryLowLevel.Z3_get_func_decl_id(_ctx_pointer, func_decl._ast)
       end
@@ -519,6 +603,10 @@ module Z3
 
       def get_numerator(ast) #=> :ast_pointer
         VeryLowLevel.Z3_get_numerator(_ctx_pointer, ast._ast)
+      end
+
+      def get_parser_error #=> :string
+        VeryLowLevel.Z3_get_parser_error(_ctx_pointer)
       end
 
       def get_pattern(pattern, num) #=> :ast_pointer
@@ -743,6 +831,10 @@ module Z3
 
       def mk_array_sort(sort1, sort2) #=> :sort_pointer
         VeryLowLevel.Z3_mk_array_sort(_ctx_pointer, sort1._ast, sort2._ast)
+      end
+
+      def mk_as_array(func_decl) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_as_array(_ctx_pointer, func_decl._ast)
       end
 
       def mk_ast_map #=> :ast_map_pointer
@@ -1253,6 +1345,10 @@ module Z3
         VeryLowLevel.Z3_mk_int_symbol(_ctx_pointer, num)
       end
 
+      def mk_int_to_str(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_int_to_str(_ctx_pointer, ast._ast)
+      end
+
       def mk_interpolant(ast) #=> :ast_pointer
         VeryLowLevel.Z3_mk_interpolant(_ctx_pointer, ast._ast)
       end
@@ -1281,6 +1377,10 @@ module Z3
         VeryLowLevel.Z3_mk_mod(_ctx_pointer, ast1._ast, ast2._ast)
       end
 
+      def mk_model #=> :model_pointer
+        VeryLowLevel.Z3_mk_model(_ctx_pointer)
+      end
+
       def mk_not(ast) #=> :ast_pointer
         VeryLowLevel.Z3_mk_not(_ctx_pointer, ast._ast)
       end
@@ -1303,6 +1403,26 @@ module Z3
 
       def mk_probe(str) #=> :probe_pointer
         VeryLowLevel.Z3_mk_probe(_ctx_pointer, str)
+      end
+
+      def mk_re_complement(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_re_complement(_ctx_pointer, ast._ast)
+      end
+
+      def mk_re_empty(sort) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_re_empty(_ctx_pointer, sort._ast)
+      end
+
+      def mk_re_full(sort) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_re_full(_ctx_pointer, sort._ast)
+      end
+
+      def mk_re_loop(ast, num1, num2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_re_loop(_ctx_pointer, ast._ast, num1, num2)
+      end
+
+      def mk_re_range(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_re_range(_ctx_pointer, ast1._ast, ast2._ast)
       end
 
       def mk_real(num1, num2) #=> :ast_pointer
@@ -1389,6 +1509,10 @@ module Z3
         VeryLowLevel.Z3_mk_store(_ctx_pointer, ast1._ast, ast2._ast, ast3._ast)
       end
 
+      def mk_str_to_int(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_str_to_int(_ctx_pointer, ast._ast)
+      end
+
       def mk_string_symbol(str) #=> :symbol_pointer
         VeryLowLevel.Z3_mk_string_symbol(_ctx_pointer, str)
       end
@@ -1427,6 +1551,10 @@ module Z3
 
       def model_dec_ref(model) #=> :void
         VeryLowLevel.Z3_model_dec_ref(_ctx_pointer, model._model)
+      end
+
+      def model_extrapolate(model, ast) #=> :ast_pointer
+        VeryLowLevel.Z3_model_extrapolate(_ctx_pointer, model._model, ast._ast)
       end
 
       def model_get_const_decl(model, num) #=> :func_decl_pointer
@@ -1493,6 +1621,18 @@ module Z3
         VeryLowLevel.Z3_optimize_dec_ref(_ctx_pointer, optimize._optimize)
       end
 
+      def optimize_from_file(optimize, str) #=> :void
+        VeryLowLevel.Z3_optimize_from_file(_ctx_pointer, optimize._optimize, str)
+      end
+
+      def optimize_from_string(optimize, str) #=> :void
+        VeryLowLevel.Z3_optimize_from_string(_ctx_pointer, optimize._optimize, str)
+      end
+
+      def optimize_get_assertions(optimize) #=> :ast_vector_pointer
+        VeryLowLevel.Z3_optimize_get_assertions(_ctx_pointer, optimize._optimize)
+      end
+
       def optimize_get_help(optimize) #=> :string
         VeryLowLevel.Z3_optimize_get_help(_ctx_pointer, optimize._optimize)
       end
@@ -1501,8 +1641,16 @@ module Z3
         VeryLowLevel.Z3_optimize_get_lower(_ctx_pointer, optimize._optimize, num)
       end
 
+      def optimize_get_lower_as_vector(optimize, num) #=> :ast_vector_pointer
+        VeryLowLevel.Z3_optimize_get_lower_as_vector(_ctx_pointer, optimize._optimize, num)
+      end
+
       def optimize_get_model(optimize) #=> :model_pointer
         VeryLowLevel.Z3_optimize_get_model(_ctx_pointer, optimize._optimize)
+      end
+
+      def optimize_get_objectives(optimize) #=> :ast_vector_pointer
+        VeryLowLevel.Z3_optimize_get_objectives(_ctx_pointer, optimize._optimize)
       end
 
       def optimize_get_param_descrs(optimize) #=> :param_descrs_pointer
@@ -1517,12 +1665,12 @@ module Z3
         VeryLowLevel.Z3_optimize_get_statistics(_ctx_pointer, optimize._optimize)
       end
 
-      def optimize_get_assertions(optimize) #=> :stats_pointer
-        VeryLowLevel.Z3_optimize_get_assertions(_ctx_pointer, optimize._optimize)
-      end
-
       def optimize_get_upper(optimize, num) #=> :ast_pointer
         VeryLowLevel.Z3_optimize_get_upper(_ctx_pointer, optimize._optimize, num)
+      end
+
+      def optimize_get_upper_as_vector(optimize, num) #=> :ast_vector_pointer
+        VeryLowLevel.Z3_optimize_get_upper_as_vector(_ctx_pointer, optimize._optimize, num)
       end
 
       def optimize_inc_ref(optimize) #=> :void
@@ -1669,6 +1817,10 @@ module Z3
         VeryLowLevel.Z3_probe_or(_ctx_pointer, probe1._probe, probe2._probe)
       end
 
+      def qe_lite(ast_vector, ast) #=> :ast_pointer
+        VeryLowLevel.Z3_qe_lite(_ctx_pointer, ast_vector, ast._ast)
+      end
+
       def rcf_add(num1, num2) #=> :rcf_num_pointer
         VeryLowLevel.Z3_rcf_add(_ctx_pointer, num1._rcf_num, num2._rcf_num)
       end
@@ -1793,8 +1945,20 @@ module Z3
         VeryLowLevel.Z3_solver_dec_ref(_ctx_pointer, solver._solver)
       end
 
+      def solver_from_file(solver, str) #=> :void
+        VeryLowLevel.Z3_solver_from_file(_ctx_pointer, solver._solver, str)
+      end
+
+      def solver_from_string(solver, str) #=> :void
+        VeryLowLevel.Z3_solver_from_string(_ctx_pointer, solver._solver, str)
+      end
+
       def solver_get_assertions(solver) #=> :ast_vector_pointer
         VeryLowLevel.Z3_solver_get_assertions(_ctx_pointer, solver._solver)
+      end
+
+      def solver_get_consequences(solver, ast_vector1, ast_vector2, ast_vector3) #=> :int
+        VeryLowLevel.Z3_solver_get_consequences(_ctx_pointer, solver._solver, ast_vector1, ast_vector2, ast_vector3)
       end
 
       def solver_get_help(solver) #=> :string

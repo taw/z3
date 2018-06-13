@@ -89,8 +89,8 @@ module Z3
       FloatExpr.Min(self, other)
     end
 
-    def exponent_string
-      LowLevel.fpa_get_numeral_exponent_string(self)
+    def exponent_string(biased)
+      LowLevel.fpa_get_numeral_exponent_string(self, biased)
     end
 
     def significand_string

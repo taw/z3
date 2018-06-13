@@ -1,5 +1,7 @@
 This is Ruby interface for Z3 [ https://github.com/Z3Prover/z3 ].
 
+Minimum required version is Z3 4.6.
+
 It's in very early stages of development. Pull requests always welcome.
 
 ### Interface
