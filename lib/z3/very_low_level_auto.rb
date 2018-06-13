@@ -379,6 +379,7 @@ module Z3
     attach_function :Z3_optimize_get_param_descrs, [:ctx_pointer, :optimize_pointer], :param_descrs_pointer
     attach_function :Z3_optimize_get_reason_unknown, [:ctx_pointer, :optimize_pointer], :string
     attach_function :Z3_optimize_get_statistics, [:ctx_pointer, :optimize_pointer], :stats_pointer
+    attach_function :Z3_optimize_get_assertions, [:ctx_pointer, :optimize_pointer], :stats_pointer
     attach_function :Z3_optimize_get_upper, [:ctx_pointer, :optimize_pointer, :uint], :ast_pointer
     attach_function :Z3_optimize_inc_ref, [:ctx_pointer, :optimize_pointer], :void
     attach_function :Z3_optimize_maximize, [:ctx_pointer, :optimize_pointer, :ast_pointer], :uint
