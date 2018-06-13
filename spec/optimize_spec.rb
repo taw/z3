@@ -56,5 +56,21 @@ module Z3
       expect{optimize.satisfiable?}.to raise_error("Satisfiability unknown")
       expect{optimize.unsatisfiable?}.to raise_error("Satisfiability unknown")
     end
+
+    it "maximize" do
+      optimize.assert a > 0
+      optimize.assert a < 10
+      optimize.maximize a
+      expect(optimize).to be_satisfiable
+      expect(optimize.model[a].to_i).to eq 9
+    end
+
+    it "maximize" do
+      optimize.assert a > 0
+      optimize.assert a < 10
+      optimize.minimize a
+      expect(optimize).to be_satisfiable
+      expect(optimize.model[a].to_i).to eq 1
+    end
   end
 end
