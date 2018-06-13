@@ -1517,6 +1517,10 @@ module Z3
         VeryLowLevel.Z3_optimize_get_statistics(_ctx_pointer, optimize._optimize)
       end
 
+      def optimize_get_assertions(optimize) #=> :stats_pointer
+        VeryLowLevel.Z3_optimize_get_assertions(_ctx_pointer, optimize._optimize)
+      end
+
       def optimize_get_upper(optimize, num) #=> :ast_pointer
         VeryLowLevel.Z3_optimize_get_upper(_ctx_pointer, optimize._optimize, num)
       end
