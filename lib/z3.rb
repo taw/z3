@@ -49,3 +49,6 @@ require_relative "z3/interface"
 
 # Printer
 require_relative "z3/printer"
+
+# Hacks
+require_relative "z3/hacks"
