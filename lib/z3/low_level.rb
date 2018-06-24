@@ -23,7 +23,7 @@ module Z3
 
       def model_eval(model, ast, model_completion)
         rv_ptr = FFI::MemoryPointer.new(:pointer)
-        result = Z3::VeryLowLevel.Z3_model_eval(_ctx_pointer, model._model, ast._ast, !!model_completion, rv_ptr)
+        result = Z3::VeryLowLevel.Z3_model_eval(_ctx_pointer, model._model, ast._ast, !!model_completion, rv_ptr) & 0xFF
         if result == 1
           rv_ptr.get_pointer(0)
         else

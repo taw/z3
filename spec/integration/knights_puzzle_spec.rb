@@ -1,5 +1,5 @@
 # There are multiple solutions, so this test is nondeterministic
-# Changing it to one returned by z3 4.6.0, but perhaps it needs some serious fixing
+# Changing it to one returned by z3 4.7.1, but perhaps it needs some serious fixing
 describe "Knights Swap Puzzle" do
   it do
     expect("knights_puzzle").to have_output <<EOF
