@@ -32,5 +32,9 @@ module Z3
       expect(Z3.Bitvec("a", 8).inspect).to eq("Bitvec(8)<a>")
       expect(Z3.Bitvec("a", 32).inspect).to eq("Bitvec(32)<a>")
     end
+
+    it "number of bits must be positive" do
+      expect{ Z3.Bitvec("a", 0) }.to raise_error(Z3::Exception)
+    end
   end
 end
