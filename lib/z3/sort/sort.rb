@@ -57,12 +57,16 @@ module Z3
     end
 
     def var(name)
-      new(
-        LowLevel.mk_const(
-          LowLevel.mk_string_symbol(name),
-          self,
+      if name.is_a?(Enumerable)
+        name.map{|v| var(v)}
+      else
+        new(
+          LowLevel.mk_const(
+            LowLevel.mk_string_symbol(name),
+            self,
+          )
         )
-      )
+      end
     end
 
     # We pretend to be a class, sort of
