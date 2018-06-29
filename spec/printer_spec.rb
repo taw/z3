@@ -49,5 +49,34 @@ module Z3
         expect((-a) + (-b)).to stringify("(-a) + (-b)")
       end
     end
+
+    describe "bitvector operations" do
+      let(:a) { Z3.Bitvec("a", 32) }
+      let(:b) { Z3.Bitvec("b", 32) }
+
+      it "unary operators" do
+        expect(~a).to stringify("~a")
+        expect(-a).to stringify("-a")
+      end
+
+      it "binary operators" do
+        expect(a + b).to stringify("a + b")
+        expect(a - b).to stringify("a - b")
+        expect(a & b).to stringify("a & b")
+        expect(a ^ b).to stringify("a ^ b")
+        expect(a | b).to stringify("a | b")
+      end
+
+      it "special operators" do
+        expect(a.rotate_left(3)).to stringify("rotate_left(a, 3)")
+        expect(a.rotate_right(4)).to stringify("rotate_right(a, 4)")
+        expect(a.unsigned_lshift(5)).to stringify("bvshl(a, 5)")
+        expect(a.signed_rshift(6)).to stringify("bvashr(a, 6)")
+        expect(a.unsigned_lshift(7)).to stringify("bvshl(a, 7)")
+        expect(a.extract(20, 5)).to stringify("extract(a, 20, 5)")
+        expect(a.zero_ext(4)).to stringify("zero_extend(a, 4)")
+        expect(a.sign_ext(4)).to stringify("sign_extend(a, 4)")
+      end
+    end
   end
 end

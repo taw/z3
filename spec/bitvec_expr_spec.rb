@@ -4,6 +4,7 @@ module Z3
     let(:b) { Z3.Bitvec("b", 8) }
     let(:c) { Z3.Bitvec("c", 8) }
     let(:d) { Z3.Bitvec("d", 12) }
+    let(:e) { Z3.Bitvec("e", 4) }
     let(:x) { Z3.Bool("x") }
 
     it "==" do
@@ -168,28 +169,28 @@ module Z3
       expect([a ==   127, b ==  1, x == a.signed_div_no_overflow?(b)]).to have_solution(x => true)
     end
 
-    ## This API is broken, z3 returns unevaluated bvsmul_noovfl(10, 10) instead of actual answer
+    it "signed_mul_no_overflow?" do
+      expect([a ==   10, b ==   10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => true)
+      expect([a ==   20, b ==   10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => false)
+      expect([a ==   20, b ==   20, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => false)
+      expect([a ==   10, b ==  -10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => false)
+      expect([a ==  -10, b ==   10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => false)
+      expect([a ==  -10, b ==  -10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => false)
+    end
 
-    # it "signed_mul_no_overflow?" do
-    #   expect([a ==   10, b ==   10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => true)
-    #   expect([a ==   20, b ==   10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => false)
-    #   expect([a ==   20, b ==   20, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => false)
-    #   expect([a ==  -10, b ==  -10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => true)
-    # end
-    #
-    # it "unsigned_mul_no_overflow?" do
-    #   expect([a ==   10, b ==   10, x == a.unsigned_mul_no_overflow?(b)]).to have_solution(x => true)
-    #   expect([a ==   20, b ==   10, x == a.unsigned_mul_no_overflow?(b)]).to have_solution(x => true)
-    #   expect([a ==   20, b ==   20, x == a.unsigned_mul_no_overflow?(b)]).to have_solution(x => false)
-    #   expect([a ==  -10, b ==  -10, x == a.unsigned_mul_no_overflow?(b)]).to have_solution(x => false)
-    # end
-    #
+    it "unsigned_mul_no_overflow?" do
+      expect([a ==   10, b ==   10, x == a.unsigned_mul_no_overflow?(b)]).to have_solution(x => true)
+      expect([a ==   20, b ==   10, x == a.unsigned_mul_no_overflow?(b)]).to have_solution(x => true)
+      expect([a ==   20, b ==   20, x == a.unsigned_mul_no_overflow?(b)]).to have_solution(x => false)
+      expect([a ==  -10, b ==  -10, x == a.unsigned_mul_no_overflow?(b)]).to have_solution(x => false)
+    end
+
     # # Inherently signed, unsigned can't underflow
-    # it "signed_mul_no_underflow?" do
-    #   expect([a ==  -10, b ==  -10, x == a.signed_mul_no_underflow?(b)]).to have_solution(x => true)
-    #   expect([a ==  -20, b ==  -20, x == a.signed_mul_no_underflow?(b)]).to have_solution(x => true)
-    #   expect([a ==  -20, b ==   20, x == a.signed_mul_no_underflow?(b)]).to have_solution(x => false)
-    # end
+    it "signed_mul_no_underflow?" do
+      expect([a ==  -10, b ==  -10, x == a.signed_mul_no_underflow?(b)]).to have_solution(x => true)
+      expect([a ==  -20, b ==  -20, x == a.signed_mul_no_underflow?(b)]).to have_solution(x => true)
+      expect([a ==  -20, b ==   20, x == a.signed_mul_no_underflow?(b)]).to have_solution(x => false)
+    end
 
     it "zero_ext / sign_ext" do
       expect([a ==  100, d ==  a.zero_ext(4)]).to have_solution(d => 100)
@@ -203,6 +204,14 @@ module Z3
       expect([a == 0b0101_0110, b == a.rotate_left(4)]).to have_solution(b => 0b0110_0101)
       expect([a == 0b0101_0110, b == a.rotate_right(1)]).to have_solution(b => 0b0_0101_011)
       expect([a == 0b0101_0110, b == a.rotate_right(4)]).to have_solution(b => 0b0110_0101)
+    end
+
+    it "extract" do
+      expect([a == 0b0101_0110, e == a.extract(3, 0)]).to have_solution(e => 0b0110)
+      expect([a == 0b0101_0110, e == a.extract(7, 4)]).to have_solution(e => 0b0101)
+      expect{ a.extract(8, 4) }.to raise_error(Z3::Exception)
+      expect{ a.extract(2, 3) }.to raise_error(Z3::Exception)
+      expect{ a.extract(2, -1) }.to raise_error(Z3::Exception)
     end
   end
 end

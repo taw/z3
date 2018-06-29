@@ -53,7 +53,35 @@ module Z3
         name = decl.name
         args = a.arguments.map{|x| format_ast(x)}
         return PrintedExpr.new(name, false) if args.size == 0
-        # All operators
+
+        # Special case common Bitvec operators
+        case name
+        when "rotate_left", "rotate_right", "zero_extend", "sign_extend"
+          if args.size == 1
+            n = Z3::LowLevel.get_decl_int_parameter(a.func_decl, 0)
+            return PrintedExpr.new("#{name}(#{args[0]}, #{n})", true)
+          end
+        when "bvxor", "bvand", "bvor", "bvadd", "bvsub"
+          if args.size == 2
+            pretty_name = {"bvxor" => "^", "bvand" => "&", "bvor" => "|", "bvadd" => "+", "bvsub" => "-"}[name]
+            return PrintedExpr.new("#{args[0].enforce_parentheses} #{pretty_name} #{args[1].enforce_parentheses}", true)
+          end
+        when "bvnot"
+          if args.size == 1
+            return PrintedExpr.new("~#{args[0].enforce_parentheses}")
+          end
+        when "bvneg"
+          if args.size == 1
+            return PrintedExpr.new("-#{args[0].enforce_parentheses}")
+          end
+        when "extract"
+          if args.size == 1
+            u = Z3::LowLevel.get_decl_int_parameter(a.func_decl, 0)
+            v = Z3::LowLevel.get_decl_int_parameter(a.func_decl, 1)
+            return PrintedExpr.new("#{name}(#{args[0]}, #{u}, #{v})", true)
+          end
+        end
+
         if name !~ /[a-z0-9]/
           if args.size == 2
             return PrintedExpr.new("#{args[0].enforce_parentheses} #{name} #{args[1].enforce_parentheses}", true)

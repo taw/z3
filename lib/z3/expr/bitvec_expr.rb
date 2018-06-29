@@ -64,6 +64,11 @@ module Z3
       sort.new(LowLevel.mk_rotate_right(num, self))
     end
 
+    def extract(hi, lo)
+      raise Z3::Exception, "Trying to extract bits out of range" unless sort.size > hi and hi >= lo and lo >= 0
+      BitvecSort.new(hi - lo + 1).new(LowLevel.mk_extract(hi, lo, self))
+    end
+
     def zero_ext(size)
       BitvecSort.new(sort.size + size).new(LowLevel.mk_zero_ext(size, self))
     end
