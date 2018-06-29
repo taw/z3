@@ -69,6 +69,11 @@ module Z3
       BitvecSort.new(hi - lo + 1).new(LowLevel.mk_extract(hi, lo, self))
     end
 
+    def concat(other)
+      raise Z3::Exception, "Can only concatenate another Bitvec" unless other.is_a?(BitvecExpr)
+      BitvecSort.new(sort.size + other.sort.size).new(LowLevel.mk_concat(self, other))
+    end
+
     def zero_ext(size)
       BitvecSort.new(sort.size + size).new(LowLevel.mk_zero_ext(size, self))
     end

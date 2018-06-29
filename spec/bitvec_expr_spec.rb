@@ -213,5 +213,10 @@ module Z3
       expect{ a.extract(2, 3) }.to raise_error(Z3::Exception)
       expect{ a.extract(2, -1) }.to raise_error(Z3::Exception)
     end
+
+    it "concat" do
+      expect([a == 0b0101_0110, e == 0b1101, d == a.concat(e)]).to have_solution(d => 0b0101_0110_1101)
+      expect([a == 0b0101_0110, e == 0b1101, d == e.concat(a)]).to have_solution(d => 0b1101_0101_0110)
+    end
   end
 end

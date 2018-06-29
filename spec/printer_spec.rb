@@ -76,6 +76,7 @@ module Z3
         expect(a.extract(20, 5)).to stringify("extract(a, 20, 5)")
         expect(a.zero_ext(4)).to stringify("zero_extend(a, 4)")
         expect(a.sign_ext(4)).to stringify("sign_extend(a, 4)")
+        expect(a.concat(b)).to stringify("concat(a, b)")
       end
     end
   end
