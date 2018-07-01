@@ -7,43 +7,43 @@ task "test:unit" => "spec:unit"
 
 desc "Regenerate API"
 task "api" do
-  system "./api/gen_api api/definitions.h"
+  sh "./api/gen_api api/definitions.h"
 end
 
 desc "Clean up"
 task "clean" do
-  system "trash z3-*.gem coverage"
+  sh "trash z3-*.gem coverage"
 end
 
 desc "Run tests"
 task "spec" do
-  system "rspec"
+  sh "rspec"
 end
 
 desc "Run unit tests"
 task "spec:unit" do
-  system "rspec spec/*_spec.rb"
+  sh "rspec spec/*_spec.rb"
 end
 
 desc "Run integration tests"
 task "spec:integration" do
-  system "rspec spec/integration/*_spec.rb"
+  sh "rspec spec/integration/*_spec.rb"
 end
 
 desc "Build gem"
 task "gem:build" do
-  system "gem build z3.gemspec"
+  sh "gem build z3.gemspec"
 end
 
 desc "Upload gem"
 task "gem:push" => "gem:build" do
   gem_file = Dir["z3-*.gem"][-1] or raise "No gem found"
-  system "gem", "push", gem_file
+  sh "gem", "push", gem_file
 end
 
 desc "Report missing APIs"
 task "coverage:missing" do
-  system "COVERAGE=1 rake test"
+  sh "COVERAGE=1 rake test"
   data = JSON.load(open("coverage/.resultset.json"))["RSpec"]["coverage"]
   lla_path = data.keys.find{|k| k.end_with?("lib/z3/low_level_auto.rb")}
   coverage = data[lla_path].zip(File.readlines(lla_path).map(&:strip))
