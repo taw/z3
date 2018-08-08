@@ -45,14 +45,14 @@ module Z3
     # so we might need more complex one in the future
     # This is now satisfiable in 4.6.0
     if Z3.version >= "4.6"
-      it "third way (until 4.6 fix)" do
+      it "unknown satisfiability (until 4.6 fix)" do
         solver.assert a**3 == a
         expect(solver.check).to eq(:sat)
         expect(solver).to be_satisfiable
         expect(solver).to_not be_unsatisfiable
       end
     else
-      it "third way (until 4.6 fix)" do
+      it "unknown satisfiability (until 4.6 fix)" do
         solver.assert a**3 == a
         expect(solver.check).to eq(:unknown)
         expect{solver.satisfiable?}.to raise_error("Satisfiability unknown")
@@ -60,7 +60,7 @@ module Z3
       end
     end
 
-    it "third way" do
+    it "unknown satisfiability" do
       solver.assert a**a == a
       expect(solver.check).to eq(:unknown)
       expect{solver.satisfiable?}.to raise_error("Satisfiability unknown")

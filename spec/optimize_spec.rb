@@ -43,14 +43,14 @@ module Z3
     # This is a very simple example of unknown satisfiablity
     # so we might need more complex one in the future
     # Unlike Z3::Solver, this is unknown even 4.6.0
-    it "third way" do
+    it "unknown satisfiability" do
       optimize.assert a**3 == a
       expect(optimize.check).to eq(:unknown)
       expect{optimize.satisfiable?}.to raise_error("Satisfiability unknown")
       expect{optimize.unsatisfiable?}.to raise_error("Satisfiability unknown")
     end
 
-    it "third way" do
+    it "unknown satisfiability" do
       optimize.assert a**a == a
       expect(optimize.check).to eq(:unknown)
       expect{optimize.satisfiable?}.to raise_error("Satisfiability unknown")
@@ -65,7 +65,7 @@ module Z3
       expect(optimize.model[a].to_i).to eq 9
     end
 
-    it "maximize" do
+    it "minimize" do
       optimize.assert a > 0
       optimize.assert a < 10
       optimize.minimize a
