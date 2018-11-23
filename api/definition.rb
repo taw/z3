@@ -183,6 +183,7 @@ class Definition
     raise "Parse error: `#{definition_str}'" unless definition_str =~ /
       \A
       def_API
+      \s*
       \(
       '
       (\w+)
