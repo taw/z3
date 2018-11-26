@@ -1,5 +1,5 @@
 # This puzzle is ambiguous
-# This is solutionn from most recent z3 tested
+# This is solution from z3 4.8.3
 
 describe "OneOfUs" do
   it do
