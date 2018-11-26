@@ -1,10 +1,11 @@
 module Z3
   class Expr < AST
     attr_reader :sort
+
     def initialize(_ast, sort)
       super(_ast)
       @sort = sort
-      raise Z3::Exception, "Values must have AST kind numeral or app" unless [:numeral, :app].include?(ast_kind)
+      raise Z3::Exception, "Values must have AST kind numeral, app, or quantifier" unless [:numeral, :app, :quantifier].include?(ast_kind)
     end
 
     def inspect
@@ -22,7 +23,7 @@ module Z3
     class << self
       def coerce_to_same_sort(*args)
         # This will raise exception unless one of the sorts is highest
-        max_sort = args.map{|a| a.is_a?(Expr) ? a.sort : Expr.sort_for_const(a)}.max
+        max_sort = args.map { |a| a.is_a?(Expr) ? a.sort : Expr.sort_for_const(a) }.max
         args.map do |a|
           max_sort.cast(a)
         end
@@ -110,7 +111,7 @@ module Z3
         when BoolExpr
           BoolSort.new.new(Z3::LowLevel.mk_and(args))
         when BitvecExpr
-          args.inject do |a,b|
+          args.inject do |a, b|
             a.sort.new(Z3::LowLevel.mk_bvand(a, b))
           end
         else
@@ -124,7 +125,7 @@ module Z3
         when BoolExpr
           BoolSort.new.new(Z3::LowLevel.mk_or(args))
         when BitvecExpr
-          args.inject do |a,b|
+          args.inject do |a, b|
             a.sort.new(Z3::LowLevel.mk_bvor(a, b))
           end
         else
@@ -136,11 +137,11 @@ module Z3
         args = coerce_to_same_sort(*args)
         case args[0]
         when BoolExpr
-          args.inject do |a,b|
+          args.inject do |a, b|
             BoolSort.new.new(Z3::LowLevel.mk_xor(a, b))
           end
         when BitvecExpr
-          args.inject do |a,b|
+          args.inject do |a, b|
             a.sort.new(Z3::LowLevel.mk_bvxor(a, b))
           end
         else
@@ -155,8 +156,8 @@ module Z3
         when ArithExpr
           args[0].sort.new(LowLevel.mk_add(args))
         when BitvecExpr
-          args.inject do |a,b|
-            a.sort.new(LowLevel.mk_bvadd(a,b))
+          args.inject do |a, b|
+            a.sort.new(LowLevel.mk_bvadd(a, b))
           end
         else
           raise Z3::Exception, "Can't perform logic operations on #{args[0].sort} exprs, only Int/Real/Bitvec"
@@ -169,8 +170,8 @@ module Z3
         when ArithExpr
           args[0].sort.new(LowLevel.mk_sub(args))
         when BitvecExpr
-          args.inject do |a,b|
-            a.sort.new(LowLevel.mk_bvsub(a,b))
+          args.inject do |a, b|
+            a.sort.new(LowLevel.mk_bvsub(a, b))
           end
         else
           raise Z3::Exception, "Can't perform logic operations on #{args[0].sort} values, only Int/Real/Bitvec"
@@ -183,8 +184,8 @@ module Z3
         when ArithExpr
           args[0].sort.new(LowLevel.mk_mul(args))
         when BitvecExpr
-          args.inject do |a,b|
-            a.sort.new(LowLevel.mk_bvmul(a,b))
+          args.inject do |a, b|
+            a.sort.new(LowLevel.mk_bvmul(a, b))
           end
         else
           raise Z3::Exception, "Can't perform logic operations on #{args[0].sort} values, only Int/Real/Bitvec"

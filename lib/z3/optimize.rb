@@ -1,6 +1,7 @@
 module Z3
   class Optimize
     attr_reader :_optimize
+
     def initialize
       @_optimize = LowLevel.mk_optimize
       LowLevel.optimize_inc_ref(self)
@@ -27,9 +28,9 @@ module Z3
       LowLevel.optimize_assert_soft(self, ast)
     end
 
-    def check
+    def check(*args)
       reset_model!
-      result = check_sat_results(LowLevel.optimize_check(self))
+      result = check_sat_results(LowLevel.optimize_check(self, args))
       @has_model = true if result == :sat
       result
     end
@@ -81,7 +82,7 @@ module Z3
       case check
       when :sat
         puts "Counterexample exists"
-        model.each do |n,v|
+        model.each do |n, v|
           puts "* #{n} = #{v}"
         end
       when :unknown
@@ -94,7 +95,6 @@ module Z3
     ensure
       pop
     end
-
 
     def reason_unknown
       LowLevel.optimize_get_reason_unknown(self)

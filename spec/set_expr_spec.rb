@@ -25,9 +25,9 @@ module Z3
           b.include?(3),
           c == a.union(b),
         ]).to have_solution(
-          a => "store(store(const(false), 1, true), 2, true)",
-          b => "store(store(const(false), 3, true), 2, true)",
-          c => "store(store(store(const(false), 1, true), 3, true), 2, true)",
+          a => "(lambda ((x!1 Int)) (or (= x!1 1) (= x!1 2)))",
+          b => "(lambda ((x!1 Int)) (or (= x!1 3) (= x!1 2)))",
+          c => "(lambda ((x!1 Int)) (or (= x!1 1) (= x!1 3) (= x!1 2)))",
         )
       end
 
@@ -41,9 +41,9 @@ module Z3
           b.include?(3),
           c == a.difference(b),
         ]).to have_solution(
-          a => "store(store(const(false), 1, true), 2, true)",
-          b => "store(const(true), 1, false)",
-          c => "store(const(false), 1, true)",
+          a => "(lambda ((x!1 Int)) (or (= x!1 1) (= x!1 2)))",
+          b => "(lambda ((x!1 Int)) (not (= x!1 1)))",
+          c => "(lambda ((x!1 Int)) (= x!1 1))",
         )
       end
 
@@ -55,9 +55,9 @@ module Z3
           b.include?(3),
           c == a.intersection(b),
         ]).to have_solution(
-          a => "store(store(const(false), 1, true), 2, true)",
-          b => "store(store(const(false), 3, true), 2, true)",
-          c => "store(store(store(const(false), 1, true), 3, true), 2, true)",
+          a => "(lambda ((x!1 Int)) (or (= x!1 1) (= x!1 2)))",
+          b => "(lambda ((x!1 Int)) (or (= x!1 3) (= x!1 2)))",
+          c => "(lambda ((x!1 Int)) (or (= x!1 1) (= x!1 3) (= x!1 2)))",
         )
       end
     end

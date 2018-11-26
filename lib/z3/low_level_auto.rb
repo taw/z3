@@ -77,10 +77,6 @@ module Z3
         VeryLowLevel.Z3_algebraic_sub(_ctx_pointer, ast1._ast, ast2._ast)
       end
 
-      def apply_result_convert_model(apply_result, num, model) #=> :model_pointer
-        VeryLowLevel.Z3_apply_result_convert_model(_ctx_pointer, apply_result._apply_result, num, model._model)
-      end
-
       def apply_result_dec_ref(apply_result) #=> :void
         VeryLowLevel.Z3_apply_result_dec_ref(_ctx_pointer, apply_result._apply_result)
       end
@@ -211,6 +207,10 @@ module Z3
 
       def enable_trace(str) #=> :void
         VeryLowLevel.Z3_enable_trace(str)
+      end
+
+      def eval_smtlib2_string(str) #=> :string
+        VeryLowLevel.Z3_eval_smtlib2_string(_ctx_pointer, str)
       end
 
       def finalize_memory #=> :void
@@ -581,10 +581,6 @@ module Z3
         VeryLowLevel.Z3_get_index_value(_ctx_pointer, ast._ast)
       end
 
-      def get_interpolant(ast1, ast2, params) #=> :ast_vector_pointer
-        VeryLowLevel.Z3_get_interpolant(_ctx_pointer, ast1._ast, ast2._ast, params._params)
-      end
-
       def get_num_probes #=> :uint
         VeryLowLevel.Z3_get_num_probes(_ctx_pointer)
       end
@@ -603,10 +599,6 @@ module Z3
 
       def get_numerator(ast) #=> :ast_pointer
         VeryLowLevel.Z3_get_numerator(_ctx_pointer, ast._ast)
-      end
-
-      def get_parser_error #=> :string
-        VeryLowLevel.Z3_get_parser_error(_ctx_pointer)
       end
 
       def get_pattern(pattern, num) #=> :ast_pointer
@@ -725,6 +717,10 @@ module Z3
         VeryLowLevel.Z3_goal_assert(_ctx_pointer, goal._goal, ast._ast)
       end
 
+      def goal_convert_model(goal, model) #=> :model_pointer
+        VeryLowLevel.Z3_goal_convert_model(_ctx_pointer, goal._goal, model._model)
+      end
+
       def goal_dec_ref(goal) #=> :void
         VeryLowLevel.Z3_goal_dec_ref(_ctx_pointer, goal._goal)
       end
@@ -769,6 +765,10 @@ module Z3
         VeryLowLevel.Z3_goal_size(_ctx_pointer, goal._goal)
       end
 
+      def goal_to_dimacs_string(goal) #=> :string
+        VeryLowLevel.Z3_goal_to_dimacs_string(_ctx_pointer, goal._goal)
+      end
+
       def goal_to_string(goal) #=> :string
         VeryLowLevel.Z3_goal_to_string(_ctx_pointer, goal._goal)
       end
@@ -779,10 +779,6 @@ module Z3
 
       def inc_ref(ast) #=> :void
         VeryLowLevel.Z3_inc_ref(_ctx_pointer, ast._ast)
-      end
-
-      def interpolation_profile #=> :string
-        VeryLowLevel.Z3_interpolation_profile(_ctx_pointer)
       end
 
       def interrupt #=> :void
@@ -813,8 +809,16 @@ module Z3
         VeryLowLevel.Z3_is_eq_sort(_ctx_pointer, sort1._ast, sort2._ast)
       end
 
+      def is_lambda(ast) #=> :bool
+        VeryLowLevel.Z3_is_lambda(_ctx_pointer, ast._ast)
+      end
+
       def is_numeral_ast(ast) #=> :bool
         VeryLowLevel.Z3_is_numeral_ast(_ctx_pointer, ast._ast)
+      end
+
+      def is_quantifier_exists(ast) #=> :bool
+        VeryLowLevel.Z3_is_quantifier_exists(_ctx_pointer, ast._ast)
       end
 
       def is_quantifier_forall(ast) #=> :bool
@@ -1349,14 +1353,6 @@ module Z3
         VeryLowLevel.Z3_mk_int_to_str(_ctx_pointer, ast._ast)
       end
 
-      def mk_interpolant(ast) #=> :ast_pointer
-        VeryLowLevel.Z3_mk_interpolant(_ctx_pointer, ast._ast)
-      end
-
-      def mk_interpolation_context(config) #=> :ctx_pointer
-        VeryLowLevel.Z3_mk_interpolation_context(config._config)
-      end
-
       def mk_is_int(ast) #=> :ast_pointer
         VeryLowLevel.Z3_mk_is_int(_ctx_pointer, ast._ast)
       end
@@ -1605,16 +1601,16 @@ module Z3
         VeryLowLevel.Z3_model_to_string(_ctx_pointer, model._model)
       end
 
+      def model_translate(model, context) #=> :model_pointer
+        VeryLowLevel.Z3_model_translate(_ctx_pointer, model._model, context._context)
+      end
+
       def optimize_assert(optimize, ast) #=> :void
         VeryLowLevel.Z3_optimize_assert(_ctx_pointer, optimize._optimize, ast._ast)
       end
 
       def optimize_assert_soft(optimize, ast, str, sym) #=> :uint
         VeryLowLevel.Z3_optimize_assert_soft(_ctx_pointer, optimize._optimize, ast._ast, str, sym)
-      end
-
-      def optimize_check(optimize) #=> :int
-        VeryLowLevel.Z3_optimize_check(_ctx_pointer, optimize._optimize)
       end
 
       def optimize_dec_ref(optimize) #=> :void
@@ -1663,6 +1659,10 @@ module Z3
 
       def optimize_get_statistics(optimize) #=> :stats_pointer
         VeryLowLevel.Z3_optimize_get_statistics(_ctx_pointer, optimize._optimize)
+      end
+
+      def optimize_get_unsat_core(optimize) #=> :ast_vector_pointer
+        VeryLowLevel.Z3_optimize_get_unsat_core(_ctx_pointer, optimize._optimize)
       end
 
       def optimize_get_upper(optimize, num) #=> :ast_pointer
@@ -1941,6 +1941,10 @@ module Z3
         VeryLowLevel.Z3_solver_check(_ctx_pointer, solver._solver)
       end
 
+      def solver_cube(solver, ast_vector, num) #=> :ast_vector_pointer
+        VeryLowLevel.Z3_solver_cube(_ctx_pointer, solver._solver, ast_vector, num)
+      end
+
       def solver_dec_ref(solver) #=> :void
         VeryLowLevel.Z3_solver_dec_ref(_ctx_pointer, solver._solver)
       end
@@ -1969,6 +1973,10 @@ module Z3
         VeryLowLevel.Z3_solver_get_model(_ctx_pointer, solver._solver)
       end
 
+      def solver_get_non_units(solver) #=> :ast_vector_pointer
+        VeryLowLevel.Z3_solver_get_non_units(_ctx_pointer, solver._solver)
+      end
+
       def solver_get_num_scopes(solver) #=> :uint
         VeryLowLevel.Z3_solver_get_num_scopes(_ctx_pointer, solver._solver)
       end
@@ -1989,8 +1997,16 @@ module Z3
         VeryLowLevel.Z3_solver_get_statistics(_ctx_pointer, solver._solver)
       end
 
+      def solver_get_units(solver) #=> :ast_vector_pointer
+        VeryLowLevel.Z3_solver_get_units(_ctx_pointer, solver._solver)
+      end
+
       def solver_get_unsat_core(solver) #=> :ast_vector_pointer
         VeryLowLevel.Z3_solver_get_unsat_core(_ctx_pointer, solver._solver)
+      end
+
+      def solver_import_model_converter(solver1, solver2) #=> :void
+        VeryLowLevel.Z3_solver_import_model_converter(_ctx_pointer, solver1._solver, solver2._solver)
       end
 
       def solver_inc_ref(solver) #=> :void

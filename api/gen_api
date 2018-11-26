@@ -14,21 +14,21 @@ class GenerateAPI
 
   def run!
     (Pathname(__dir__) + "../lib/z3/very_low_level_auto.rb").open("w") do |fh|
-      fh.puts 'module Z3'
-      fh.puts '  module VeryLowLevel'
+      fh.puts "module Z3"
+      fh.puts "  module VeryLowLevel"
       fh.puts supported_definitions.map(&:ffi).join("\n")
-      fh.puts '  end'
-      fh.puts 'end'
+      fh.puts "  end"
+      fh.puts "end"
     end
 
     (Pathname(__dir__) + "../lib/z3/low_level_auto.rb").open("w") do |fh|
-      fh.puts 'module Z3'
-      fh.puts '  module LowLevel'
-      fh.puts '    class << self'
+      fh.puts "module Z3"
+      fh.puts "  module LowLevel"
+      fh.puts "    class << self"
       fh.puts supported_definitions.map(&:api).join("\n")
-      fh.puts '    end'
-      fh.puts '  end'
-      fh.puts 'end'
+      fh.puts "    end"
+      fh.puts "  end"
+      fh.puts "end"
     end
   end
 
@@ -108,6 +108,17 @@ class GenerateAPI
         "get_smtlib_num_formulas",
         "get_smtlib_num_sorts",
         "get_smtlib_sort",
+
+        # Hand-coded
+        "mk_add",
+        "mk_and",
+        "mk_distinct",
+        "mk_mul",
+        "mk_or",
+        "mk_set_intersect",
+        "mk_set_union",
+        "mk_sub",
+        "get_version",
       ] + (Pathname(__dir__) + "../lib/z3/low_level.rb").read.scan(/^\s+def \K\w+/)
     end.to_set
   end
@@ -115,8 +126,9 @@ class GenerateAPI
   def supported_definitions
     @supported_definitions ||= begin
       @definitions
-        .reject{|d| definitions_to_skip.include?(d.name)}
+        .reject { |d| definitions_to_skip.include?(d.name) }
         .select(&:supported?)
+        .sort
     end
   end
 

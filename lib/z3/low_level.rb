@@ -9,7 +9,7 @@ module Z3
         b = FFI::MemoryPointer.new(:int)
         c = FFI::MemoryPointer.new(:int)
         d = FFI::MemoryPointer.new(:int)
-        Z3::VeryLowLevel.Z3_get_version(a,b,c,d)
+        Z3::VeryLowLevel.Z3_get_version(a, b, c, d)
         [a.get_uint(0), b.get_uint(0), c.get_uint(0), d.get_uint(0)]
       end
 
@@ -63,6 +63,10 @@ module Z3
         Z3::VeryLowLevel.Z3_mk_set_intersect(_ctx_pointer, asts.size, asts_vector(asts))
       end
 
+      def optimize_check(optimize, asts)
+        Z3::VeryLowLevel.Z3_optimize_check(_ctx_pointer, optimize._optimize, asts.size, asts_vector(asts))
+      end
+
       # Should be private
 
       def unpack_ast_vector(_ast_vector)
@@ -96,7 +100,7 @@ module Z3
       private
 
       def asts_vector(args)
-        raise if args.empty?
+        # raise if args.empty?
         c_args = FFI::MemoryPointer.new(:pointer, args.size)
         c_args.write_array_of_pointer args.map(&:_ast)
         c_args

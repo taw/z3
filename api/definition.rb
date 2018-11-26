@@ -4,6 +4,10 @@ class Definition
     parse_definition!(str)
   end
 
+  def <=>(other)
+    name <=> other.name
+  end
+
   def supported?
     begin
       ffi

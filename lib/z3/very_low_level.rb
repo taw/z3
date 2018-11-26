@@ -1,6 +1,5 @@
 # Seriously do not use this directly in your code
-
-require 'ffi'
+require "ffi"
 
 module Z3
   module VeryLowLevel
@@ -10,8 +9,7 @@ module Z3
     class << self
       # Aliases defined just to make APIs below look nicer
       def attach_function(name, arg_types, return_type)
-
-        arg_types = arg_types.map{|t| map_type(t)}
+        arg_types = arg_types.map { |t| map_type(t) }
         return_type = map_type(return_type)
         super(name, arg_types, return_type)
       end
@@ -40,5 +38,6 @@ module Z3
     attach_function :Z3_mk_set_union, [:ctx_pointer, :int, :pointer], :ast_pointer
     attach_function :Z3_mk_set_intersect, [:ctx_pointer, :int, :pointer], :ast_pointer
     attach_function :Z3_mk_distinct, [:ctx_pointer, :int, :pointer], :ast_pointer
+    attach_function :Z3_optimize_check, [:ctx_pointer, :optimize_pointer, :int, :pointer], :int
   end
 end
