@@ -12,7 +12,7 @@ You can use most Ruby operators to construct Z3 expressions, but use `| &` inste
 
 The interface is potentially unstable, and can change in the future.
 
-`Z3::VeryLowLever` and `Z3::LowLevel` are FFI interface for internal use, and they shouldn't be used directly. Also don't use any method starting with `_`. Doing this is likely to lead to segmentation faults unless extreme care is taken.
+`Z3::VeryLowLevel` and `Z3::LowLevel` are FFI interfaces for internal use, and they shouldn't be used directly. Also don't use any method starting with `_`. Doing this is likely to lead to segmentation faults unless extreme care is taken.
 
 A utility at `api/gen_api` will loop through a .h file and generate Ruby definitions. This will update the API when upstream changes `z3_api.h`
 
