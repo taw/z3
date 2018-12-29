@@ -46,6 +46,14 @@ module Z3
       sort.new(LowLevel.simplify(self))
     end
 
+    def eql?(other)
+      self.class == other.class and self._ast == other._ast
+    end
+
+    def hash
+      _ast.address
+    end
+
     private_class_method :new
   end
 end

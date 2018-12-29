@@ -183,4 +183,66 @@ module Z3
       end
     end
   end
+
+  describe "#hash / #eql?" do
+    let(:x1) { Z3.Int("x") }
+    let(:x2) { Z3.Int("x") }
+    let(:y1) { Z3.Int("y") }
+    let(:y2) { Z3.Int("y") }
+    let(:e1) { x1 + y1 }
+    let(:e2) { x2 + y2 }
+    let(:f1) { y1 + x1 }
+    let(:f2) { y2 + x2 }
+    let(:samples) { [x1, x2, y1, y2, e1, e2, f1, f2] }
+
+    it "object is eql? to itself" do
+      expect(x1.eql?(x1)).to be true
+      expect(y1.eql?(y1)).to be true
+      expect(e1.eql?(e1)).to be true
+
+      expect(x1.eql?(y1)).to be false
+      expect(x1.eql?(e1)).to be false
+    end
+
+    it "object is eql? to structurally identical object" do
+      expect(x1.eql?(x2)).to be true
+      expect(y1.eql?(y2)).to be true
+      expect(e1.eql?(e2)).to be true
+      expect(f1.eql?(f2)).to be true
+    end
+
+    it "object is not eql? to semantically identical object" do
+      expect(e1.eql?(f1)).to be false
+    end
+
+    it "#hash aligns with #eql?" do
+      samples.each do |a|
+        samples.each do |b|
+          if a.eql?(b)
+            expect(a.hash).to eq(b.hash)
+          else
+            expect(a.hash).to_not eq(b.hash)
+          end
+        end
+      end
+    end
+
+    it "works when used as Hash keys" do
+      ht = {}
+      ht[x1] = 1
+      ht[y1] = 2
+      ht[e1] = 3
+      ht[e2] = 4
+
+      expect(ht.size).to eq(3)
+      expect(ht[x1]).to eq(1)
+      expect(ht[x2]).to eq(1)
+      expect(ht[y1]).to eq(2)
+      expect(ht[y2]).to eq(2)
+      expect(ht[e1]).to eq(4)
+      expect(ht[e2]).to eq(4)
+      expect(ht[f1]).to eq(nil)
+      expect(ht[f2]).to eq(nil)
+    end
+  end
 end
