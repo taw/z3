@@ -4,7 +4,7 @@ require "ffi"
 module Z3
   module VeryLowLevel
     extend FFI::Library
-    ffi_lib "z3"
+    ffi_lib ["z3", "libz3.so.4.8"]
 
     class << self
       # Aliases defined just to make APIs below look nicer
