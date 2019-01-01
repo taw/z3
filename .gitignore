@@ -2,3 +2,4 @@
 /*.gem
 Gemfile.lock
 /missing_apis.txt
+.ruby-*
