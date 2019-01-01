@@ -25,8 +25,6 @@ bundle install
 rake spec
 ```
 
-*NB: On Linux, since FFI will look for `libz3.so`, you might need to install `libz3-dev`using your usual package manager.*
-
 ### Known Issues
 
 As Z3 is a C library, doing anything weird with it will segfault your process. Ruby API tries its best to prevent such problems and turn them into exceptions instead, but if you do anything weird (especially touch any method prefixed with `_` or `Z3::LowLevel` interface), crashes are possible. If you have reproducible crash on reasonable looking code, definitely submit it as a bug, and I'll try to come up with a workaround.
