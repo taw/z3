@@ -1,3 +1,4 @@
+# This test is really bad, all of these have multiple solutions.
 module Z3
   describe SetExpr do
     let(:sort) { SetSort.new(IntSort.new) }
@@ -21,13 +22,15 @@ module Z3
         expect([
           a.include?(1),
           a.include?(2),
+          !a.include?(3),
+          !b.include?(1),
           b.include?(2),
           b.include?(3),
           c == a.union(b),
         ]).to have_solution(
-          a => "(lambda ((x!1 Int)) (or (= x!1 1) (= x!1 2)))",
-          b => "(lambda ((x!1 Int)) (or (= x!1 3) (= x!1 2)))",
-          c => "(lambda ((x!1 Int)) (or (= x!1 1) (= x!1 3) (= x!1 2)))",
+          a => "store(const(true), 3, false)",
+          b => "store(const(true), 1, false)",
+          c => "(lambda ((x!1 Int)) (or (not (= x!1 3)) (not (= x!1 1))))",
         )
       end
 
@@ -41,9 +44,9 @@ module Z3
           b.include?(3),
           c == a.difference(b),
         ]).to have_solution(
-          a => "(lambda ((x!1 Int)) (or (= x!1 1) (= x!1 2)))",
-          b => "(lambda ((x!1 Int)) (not (= x!1 1)))",
-          c => "(lambda ((x!1 Int)) (= x!1 1))",
+          a => "store(const(true), 3, false)",
+          b => "store(const(true), 1, false)",
+          c => "(lambda ((x!1 Int)) (and (not (= x!1 3)) (= x!1 1)))",
         )
       end
 
@@ -51,13 +54,15 @@ module Z3
         expect([
           a.include?(1),
           a.include?(2),
+          !a.include?(3),
+          !b.include?(1),
           b.include?(2),
           b.include?(3),
           c == a.intersection(b),
         ]).to have_solution(
-          a => "(lambda ((x!1 Int)) (or (= x!1 1) (= x!1 2)))",
-          b => "(lambda ((x!1 Int)) (or (= x!1 3) (= x!1 2)))",
-          c => "(lambda ((x!1 Int)) (or (= x!1 1) (= x!1 3) (= x!1 2)))",
+          a => "store(const(true), 3, false)",
+          b => "store(const(true), 1, false)",
+          c => "(lambda ((x!1 Int)) (or (not (= x!1 3)) (not (= x!1 1))))",
         )
       end
     end
