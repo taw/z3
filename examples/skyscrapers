@@ -1,0 +1,118 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+require_relative "../lib/z3"
+
+class SkyscrapersSolver
+  def initialize(path)
+    parse_data(Pathname(path).read)
+    @solver = Z3::Solver.new
+  end
+
+  def call
+    setup_grid_vars
+    setup_constraints
+
+    if @solver.satisfiable?
+      @model = @solver.model
+      print_answer
+    else
+      puts "No solution"
+    end
+  end
+
+  private
+
+  def setup_grid_vars
+    @gridvars = @size.times.map do |y|
+      @size.times.map do |x|
+        v = Z3.Int("g#{x},#{y}")
+        if @grid[y][x]
+          @solver.assert v == @grid[y][x]
+        else
+          @solver.assert v >= 1
+          @solver.assert v <= @size
+        end
+        v
+      end
+    end
+    [*@gridvars, *@gridvars.transpose].each do |row|
+      @solver.assert Z3.Distinct(*row)
+    end
+  end
+
+  def setup_constraints
+    @size.times do |i|
+      setup_visibility "L#{i}", @left[i], @gridvars[i]
+      setup_visibility "R#{i}", @right[i], @gridvars[i].reverse
+      setup_visibility "T#{i}", @top[i], @gridvars.map{|row| row[i] }
+      setup_visibility "B#{i}", @bottom[i], @gridvars.map{|row| row[i] }.reverse
+    end
+  end
+
+  def setup_visibility(label, expected, vars)
+    return unless expected
+    # Variables between cells:
+    # - count seen
+    # - max seen
+
+    count_vars = (0..@size).map{|i| Z3.Int("#{label}-c#{i}") }
+    max_vars = (0..@size).map{|i| Z3.Int("#{label}-m#{i}") }
+
+    @solver.assert count_vars.first == expected
+    @solver.assert max_vars.first == 0
+
+    @size.times do |i|
+      count_near = count_vars[i]
+      count_far = count_vars[i+1]
+      max_near = max_vars[i]
+      max_far = max_vars[i+1]
+      current = vars[i]
+      visible = Z3.Bool("#{label}-v#{i}")
+      @solver.assert visible == (current > max_near)
+      @solver.assert count_near == Z3.IfThenElse(visible, count_far+1, count_far)
+      @solver.assert max_far == Z3.IfThenElse(visible, current, max_near)
+    end
+
+    @solver.assert count_vars.last == 0
+    # This is redundant:
+    @solver.assert max_vars.last == @size
+  end
+
+  def print_answer
+    @size.times do |y|
+      @size.times do |x|
+        v = @model[@gridvars[y][x]]
+        print "#{v} "
+      end
+      print "\n"
+    end
+  end
+
+  def parse_data(data)
+    data = data.lines.map do |line|
+      line.split.map do |x|
+        if x =~ /\d+/
+          x.to_i
+        elsif x == "." or x == "-"
+          nil
+        else
+          raise "Unrecognized symbol #{x.inspect} in input"
+        end
+      end
+    end
+
+    @top = data.shift
+    @bottom = data.pop
+    @left = data.map(&:shift)
+    @right = data.map(&:pop)
+    @size = @top.size
+    raise "Grid must be square" unless [@top.size, @bottom.size, @left.size, @right.size, *data.map(&:size)].uniq.size == 1
+    @grid = data
+  end
+
+end
+
+path = ARGV[0] || Pathname(__dir__) + "skyscrapers-1.txt"
+SkyscrapersSolver.new(path).call
+
