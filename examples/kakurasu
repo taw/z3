@@ -1,0 +1,73 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+require_relative "../lib/z3"
+
+class Kakurasu
+  def initialize(path)
+    data = Pathname(path).readlines.grep(/\S/)
+    raise "Data needs to have two lines (cols, rows)" unless data.size == 2
+    @col_sums = data[0].split.map(&:to_i)
+    @row_sums = data[1].split.map(&:to_i)
+
+    @xsize = @col_sums.size
+    @ysize = @row_sums.size
+    @solver = Z3::Solver.new
+  end
+
+  def call
+    # setup
+    @bvars = {}
+    @cvars = {}
+    @rvars = {}
+    @ysize.times do |y|
+      @ysize.times do |x|
+        b = Z3.Bool("b#{x},#{y}")
+        r = Z3.Int("r#{x},#{y}")
+        c = Z3.Int("c#{x},#{y}")
+        @solver.assert (!b).implies(r == 0)
+        @solver.assert (!b).implies(c == 0)
+        @solver.assert b.implies(r == (x+1))
+        @solver.assert b.implies(c == (y+1))
+        @bvars[[x,y]] = b
+        @cvars[x] ||= []
+        @cvars[x][y] = c
+        @rvars[y] ||= []
+        @rvars[y][x] = r
+      end
+    end
+
+    @xsize.times do |x|
+      @solver.assert Z3.Add(*@rvars[x]) == @row_sums[x]
+    end
+
+    @ysize.times do |y|
+      @solver.assert Z3.Add(*@cvars[y]) == @col_sums[y]
+    end
+
+    if @solver.satisfiable?
+      @model = @solver.model
+      print_board!
+    else
+      puts "failed to solve"
+    end
+  end
+
+  private
+
+  def print_board!
+    @ysize.times do |y|
+      @ysize.times do |x|
+        if @model[@bvars[[x,y]]].to_b
+          print "[X]"
+        else
+          print "[ ]"
+        end
+      end
+      print "\n"
+    end
+  end
+end
+
+path = ARGV[0] || Pathname(__dir__) + "kakurasu-1.txt"
+Kakurasu.new(path).call
