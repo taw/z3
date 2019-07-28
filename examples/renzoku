@@ -1,0 +1,124 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+require_relative "../lib/z3"
+
+class Renzoku
+  # This needs to be very exactly formatted
+  def initialize(path)
+    @data = Pathname(path).readlines.map(&:chomp)
+    @size = (@data.size+1)/2
+    @solver = Z3::Solver.new
+  end
+
+  def cell_value(x, y)
+    v = @data[y*2][x*2]
+    if v == "#"
+      nil
+    elsif v =~ /\d/
+      v.to_i
+    else
+      raise "Bad cell value"
+    end
+  end
+
+  def dot_right?(x, y)
+    v = @data[y*2][x*2 + 1]
+    if v == "."
+      true
+    elsif v == " "
+      false
+    else
+      raise "Bad dot value"
+    end
+  end
+
+  def dot_bottom?(x, y)
+    v = @data[y*2 + 1][x*2]
+    if v == "."
+      true
+    elsif v == " " or v == nil
+      false
+    else
+      raise "Bad dot value"
+    end
+  end
+
+  def call
+    @vars = {}
+    @size.times do |y|
+      @size.times do |x|
+        v = Z3.Int("v#{x},#{y}")
+        @vars[[x,y]] = v
+        cv = cell_value(x, y)
+        if cv
+          @solver.assert (v == cv)
+        else
+          @solver.assert (v >= 1) & (v <= @size)
+        end
+      end
+    end
+
+    @size.times do |x|
+      line = @size.times.map{|y| @vars[[x,y]] }
+      @solver.assert Z3.Distinct(*line)
+    end
+
+    @size.times do |y|
+      line = @size.times.map{|x| @vars[[x,y]] }
+      @solver.assert Z3.Distinct(*line)
+    end
+
+    # Dots right
+    (0..@size-1).each do |y|
+      (0..@size-2).each do |x|
+        lv = @vars[[x,y]]
+        rv = @vars[[x+1,y]]
+        if dot_right?(x,y)
+          @solver.assert (lv == (rv + 1)) | (lv == (rv - 1))
+        else
+          @solver.assert lv != (rv + 1)
+          @solver.assert lv != (rv - 1)
+        end
+      end
+    end
+
+    # Dots bottom
+    (0..@size-2).each do |y|
+      (0..@size-1).each do |x|
+        tv = @vars[[x,y]]
+        bv = @vars[[x,y+1]]
+        if dot_bottom?(x,y)
+          @solver.assert (tv == (bv + 1)) | (tv == (bv - 1))
+        else
+          @solver.assert tv != (bv + 1)
+          @solver.assert tv != (bv - 1)
+        end
+      end
+    end
+
+    if @solver.satisfiable?
+      @model = @solver.model
+      print_answer!
+    else
+      puts "failed to solve"
+    end
+  end
+
+  private
+
+  def print_answer!
+    output = @data.map(&:dup)
+    @size.times do |y|
+      @size.times do |x|
+        v = @model[@vars[[x,y]]]
+        output[2*y][2*x] = "#{v}"
+      end
+    end
+
+    puts output
+  end
+end
+
+path = ARGV[0] || Pathname(__dir__) + "renzoku-1.txt"
+Renzoku.new(path).call
