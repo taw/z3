@@ -1,0 +1,128 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+require_relative "../lib/z3"
+
+class Futoshiki
+  # This needs to be very exactly formatted
+  def initialize(path)
+    @data = Pathname(path).readlines.map(&:chomp)
+    @size = (@data.size+1)/2
+    @solver = Z3::Solver.new
+  end
+
+  def cell_value(x, y)
+    v = @data[y*2][x*2]
+    if v == "#"
+      nil
+    elsif v =~ /\d/
+      v.to_i
+    else
+      raise "Bad cell value"
+    end
+  end
+
+  def cmp_right(x, y)
+    v = @data[y*2][x*2 + 1]
+    if v == ">"
+      ">"
+    elsif v == "<"
+      "<"
+    elsif v == " "
+      nil
+    else
+      raise "Bad dot value"
+    end
+  end
+
+  def cmp_bottom(x, y)
+    v = @data[y*2 + 1][x*2]
+    if v == "_"
+      ">"
+    elsif v == "^"
+      "<"
+    elsif v == " " or v == nil
+      false
+    else
+      raise "Bad dot value"
+    end
+  end
+
+  def call
+    @vars = {}
+    @size.times do |y|
+      @size.times do |x|
+        v = Z3.Int("v#{x},#{y}")
+        @vars[[x,y]] = v
+        cv = cell_value(x, y)
+        if cv
+          @solver.assert (v == cv)
+        else
+          @solver.assert (v >= 1) & (v <= @size)
+        end
+      end
+    end
+
+    @size.times do |x|
+      line = @size.times.map{|y| @vars[[x,y]] }
+      @solver.assert Z3.Distinct(*line)
+    end
+
+    @size.times do |y|
+      line = @size.times.map{|x| @vars[[x,y]] }
+      @solver.assert Z3.Distinct(*line)
+    end
+
+    # Compare right
+    (0..@size-1).each do |y|
+      (0..@size-2).each do |x|
+        lv = @vars[[x,y]]
+        rv = @vars[[x+1,y]]
+        cmp = cmp_right(x,y)
+        if cmp == ">"
+          @solver.assert lv > rv
+        elsif cmp == "<"
+          @solver.assert lv < rv
+        end
+      end
+    end
+
+    # Compare bottom
+    (0..@size-2).each do |y|
+      (0..@size-1).each do |x|
+        tv = @vars[[x,y]]
+        bv = @vars[[x,y+1]]
+        cmp = cmp_bottom(x,y)
+        if cmp == ">"
+          @solver.assert tv > bv
+        elsif cmp == "<"
+          @solver.assert tv < bv
+        end
+      end
+    end
+
+    if @solver.satisfiable?
+      @model = @solver.model
+      print_answer!
+    else
+      puts "failed to solve"
+    end
+  end
+
+  private
+
+  def print_answer!
+    output = @data.map(&:dup)
+    @size.times do |y|
+      @size.times do |x|
+        v = @model[@vars[[x,y]]]
+        output[2*y][2*x] = "#{v}"
+      end
+    end
+
+    puts output
+  end
+end
+
+path = ARGV[0] || Pathname(__dir__) + "futoshiki-1.txt"
+Futoshiki.new(path).call
