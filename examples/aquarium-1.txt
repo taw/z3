@@ -1,0 +1,11 @@
+  9 6 4 2 2 4 8 6 6 7
+9 b b c c c c c d d e
+6 b j n n n n c c d e
+7 b j n i i h h g g f
+4 b j n t t o o g g f
+1 b t t t t o o p p p
+5 b t s t t m o p q q
+4 b t s s s m o r q q
+7 b t t s s m r r r q
+3 a s s s s m r l k k
+8 a a a s s m m l k k

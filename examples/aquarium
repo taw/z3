@@ -1,0 +1,91 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+require_relative "../lib/z3"
+
+class Aquarium
+  def initialize(path)
+    data = Pathname(path).readlines.map(&:chomp).map(&:split)
+    @cols = data.shift.map(&:to_i)
+    @rows = data.map(&:shift).map(&:to_i)
+    @xsize =  @cols.size
+    @ysize = @rows.size
+    raise unless data.all?{|row| row.size == @xsize}
+    @data = data
+    @solver = Z3::Solver.new
+  end
+
+  def call
+    # setup vars
+    # setup constraints
+
+    if @solver.satisfiable?
+      @model = @solver.model
+      print_answer
+    else
+      puts "failed to solve"
+    end
+  end
+
+  private
+
+  def container_at(x, y)
+    return nil unless (0...@xsize).include?(x)
+    return nil unless (0...@ysize).include?(y)
+    @data[y][x]
+  end
+
+  def print_corner(x, y)
+    if [
+        container_at(x, y),
+        container_at(x, y-1),
+        container_at(x-1, y),
+        container_at(x-1, y-1),
+      ].uniq.size == 1
+      print " "
+    else
+      print "+"
+    end
+  end
+
+  def print_vertical(x, y)
+    if x == 0 or container_at(x, y) != container_at(x-1, y)
+      print "|"
+    else
+      print " "
+    end
+  end
+
+  def print_horizontal(x, y)
+    if y == 0 or container_at(x, y) != container_at(x, y-1)
+      print "-"
+    else
+      print " "
+    end
+  end
+
+  def print_cell(x, y)
+    print " "
+  end
+
+  def print_answer
+    (0..@ysize).each do |y|
+      (0..@xsize).each do |x|
+        print_corner x, y
+        next if x == @xsize
+        print_horizontal x, y
+      end
+      print "\n"
+
+      next if y == @ysize
+      (0..@xsize).each do |x|
+        print_vertical x, y
+        print_cell x, y
+      end
+      print "\n"
+    end
+  end
+end
+
+path = ARGV[0] || Pathname(__dir__) + "aquarium-1.txt"
+Aquarium.new(path).call
