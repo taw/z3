@@ -1,3 +1,4 @@
+# There are multiple solutions, so this test is nondeterministic
 describe "Mortal Coil Puzzle" do
   it do
     expect("mortal_coil_puzzle").to have_output <<EOF
