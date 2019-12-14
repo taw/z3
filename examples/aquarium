@@ -16,8 +16,32 @@ class Aquarium
   end
 
   def call
-    # setup vars
-    # setup constraints
+    # How cells relate to containers
+    @ysize.times do |y|
+      @xsize.times do |x|
+        @solver.assert cell_var(x, y) == container_var(container_at(x, y), y)
+      end
+    end
+
+    # Row sums
+    @ysize.times do |y|
+      sum = Z3.Add(*@xsize.times.map{|x| cell_var(x, y).ite(1, 0) })
+      @solver.assert sum == @rows[y]
+    end
+
+    # Col sums
+    @xsize.times do |x|
+      sum = Z3.Add(*@ysize.times.map{|y| cell_var(x, y).ite(1, 0) })
+      @solver.assert sum == @cols[x]
+    end
+
+
+    # Container water flow
+    containers.each do |name|
+      (0...@ysize).each do |y|
+        @solver.assert container_var(name, y).implies container_var(name, y+1)
+      end
+    end
 
     if @solver.satisfiable?
       @model = @solver.model
@@ -28,6 +52,20 @@ class Aquarium
   end
 
   private
+
+  def containers
+    @containers ||= @data.flatten.uniq.sort
+  end
+
+  def container_var(name, level)
+    Z3.Bool("b#{name},#{level}")
+  end
+
+  def cell_var(x, y)
+    return nil unless (0...@xsize).include?(x)
+    return nil unless (0...@ysize).include?(y)
+    Z3.Bool("c#{x},#{y}")
+  end
 
   def container_at(x, y)
     return nil unless (0...@xsize).include?(x)
@@ -65,7 +103,11 @@ class Aquarium
   end
 
   def print_cell(x, y)
-    print " "
+    if @model[cell_var(x, y)].to_b
+      print "#"
+    else
+      print " "
+    end
   end
 
   def print_answer
@@ -80,6 +122,7 @@ class Aquarium
       next if y == @ysize
       (0..@xsize).each do |x|
         print_vertical x, y
+        next if x == @xsize
         print_cell x, y
       end
       print "\n"
