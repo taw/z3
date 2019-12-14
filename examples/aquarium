@@ -35,7 +35,6 @@ class Aquarium
       @solver.assert sum == @cols[x]
     end
 
-
     # Container water flow
     containers.each do |name|
       (0...@ysize).each do |y|
