@@ -15,7 +15,7 @@ describe "Regexp Crossword Solver" do
       let(:rows) { example.last(row_number) }
 
       it "matches output" do
-        output_rows = `#{binary} #{example_path}`.split("\n").map(&:chomp)
+        output_rows = `#{binary} #{example_path}`.split("\n").map(&:chomp).map{|x| x.gsub("\\r", "\r")}
         output_cols = output_rows.map(&:chars).transpose.map(&:join)
         expect(output_rows.size).to eq(rows.size)
         expect(output_cols.size).to eq(cols.size)
