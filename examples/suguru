@@ -14,16 +14,23 @@ class Suguru
   end
 
   def call
+    @connections = calculate_connections
+    @containers = calculate_containers
+
     @ysize.times do |y|
       @ysize.times do |x|
         v = cell_data(x, y)
         if v
           @solver.assert cell(x, y) == v
-        else
-          # TODO: N-sized container has cells 1 to N
-          @solver.assert cell(x, y) >= 0
-          @solver.assert cell(x, y) <= 9
         end
+      end
+    end
+
+    @containers.each do |name, cells|
+      @solver.assert Z3.Distinct(*cells)
+      cells.each do |c|
+        @solver.assert c >= 1
+        @solver.assert c <= cells.size
       end
     end
 
@@ -45,6 +52,61 @@ class Suguru
   end
 
   private
+
+  def calculate_containers
+    cells = @xsize.times.flat_map{|x| @ysize.times.map{|y| [x,y]}}
+
+    containers = {}
+    cell_assignments = {}
+    cells.each do |c|
+      ct = c.join(",")
+      containers[ct] = [c]
+      cell_assignments[c] = ct
+    end
+
+    @connections.each do |c1, c2|
+      # Already in same container
+      ct1 = cell_assignments[c1]
+      ct2 = cell_assignments[c2]
+      next if ct1 == ct2
+      containers.delete(ct2).each do |c3|
+        cell_assignments[c3] = ct1
+        containers[ct1] << c3
+      end
+    end
+
+    containers.transform_values{|cells| cells.map{|x,y| cell(x,y)}}
+  end
+
+  def calculate_connections
+    result = []
+
+    @ysize.times do |y|
+      (0..@xsize-2).each do |x|
+        if cell_open_right?(x, y)
+          result << [[x,y], [x+1,y]]
+        end
+      end
+    end
+
+    @xsize.times do |x|
+      (0..@ysize-2).each do |y|
+        if cell_open_down?(x, y)
+          result << [[x,y], [x,y+1]]
+        end
+      end
+    end
+
+    result
+  end
+
+  def cell_open_right?(x, y)
+    @data[2*y+1][2*x+2] == " "
+  end
+
+  def cell_open_down?(x, y)
+    @data[2*y+2][2*x+1] == " "
+  end
 
   def cell_data(x, y)
     v = @data[2*y+1][2*x+1]
