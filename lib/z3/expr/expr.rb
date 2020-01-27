@@ -115,7 +115,7 @@ module Z3
             a.sort.new(Z3::LowLevel.mk_bvand(a, b))
           end
         else
-          raise Z3::Exception, "Can't perform logic operations on #{a.sort} exprs, only Bool and Bitvec"
+          raise Z3::Exception, "Can't perform logic operations on #{args[0].sort} exprs, only Bool and Bitvec"
         end
       end
 
@@ -129,7 +129,7 @@ module Z3
             a.sort.new(Z3::LowLevel.mk_bvor(a, b))
           end
         else
-          raise Z3::Exception, "Can't perform logic operations on #{a.sort} exprs, only Bool and Bitvec"
+          raise Z3::Exception, "Can't perform logic operations on #{args[0].sort} exprs, only Bool and Bitvec"
         end
       end
 
@@ -145,7 +145,7 @@ module Z3
             a.sort.new(Z3::LowLevel.mk_bvxor(a, b))
           end
         else
-          raise Z3::Exception, "Can't perform logic operations on #{a.sort} exprs, only Bool and Bitvec"
+          raise Z3::Exception, "Can't perform logic operations on #{args[0].sort} exprs, only Bool and Bitvec"
         end
       end
 
