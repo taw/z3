@@ -1,0 +1,150 @@
+#!/usr/bin/env ruby
+
+# Inspired by Hungry Cat Picross app
+
+require "pathname"
+require "paint"
+require_relative "../lib/z3"
+
+# With pluses, it means continuous
+# Without pluses, it is not continuous
+
+class ColorNonogram
+  def initialize(path)
+    data = Pathname(path).readlines.map(&:chomp)
+    @colors = data.shift.split
+    @csize = @colors.size
+    raise unless data.shift.empty?
+    @cols = []
+    @rows = []
+    target = @cols
+    while row = data.shift
+      if row.empty?
+        target = @rows
+        next
+      end
+      target << parse_row(row)
+    end
+    @xsize = @cols.size
+    @ysize = @rows.size
+    @board = {}
+    @solver = Z3::Solver.new
+  end
+
+  def call
+    sanity_checks
+    setup_board_vars
+    constraint_lines
+
+    if @solver.satisfiable?
+      @model = @solver.model
+      print_board!
+    else
+      puts "There is no solution"
+    end
+  end
+
+  private
+
+  def constraint_lines
+    @ysize.times do |y|
+      constraint_line @rows[y], row_vars(y)
+    end
+    @xsize.times do |x|
+      constraint_line @cols[x], col_vars(x)
+    end
+  end
+
+  def constraint_line(color_constraints, line_vars)
+    color_constraints.each_with_index do |(expected_total, expected_continuity), color_index|
+      correct_color = line_vars.map{|vi| (vi == color_index) }
+      total = Z3.Add(*correct_color.map{|cc| cc.ite(1, 0)})
+      @solver.assert total == expected_total
+      # For 0 / 1 this is all
+      if expected_total >= 2
+        continuity = continuity_somewhere(correct_color, expected_total)
+        @solver.assert continuity == expected_continuity
+      end
+    end
+  end
+
+  def continuity_somewhere(correct, total)
+    Z3.Or(*correct.size.times.map{|start_i|
+      continuity_at(correct, total, start_i)
+    })
+  end
+
+  def continuity_at(correct, total, start_index)
+    end_index = start_index + total - 1
+    return Z3.False unless correct[end_index]
+    Z3.And(*correct[start_index, total])
+  end
+
+
+  def row_vars(y)
+    @xsize.times.map{|x| @board[[x,y]] }
+  end
+
+  def col_vars(x)
+    @ysize.times.map{|y| @board[[x,y]] }
+  end
+
+  def print_board!
+    # Add colors please
+    @ysize.times do |y|
+      @xsize.times do |x|
+        v = @model[@board[[x,y]]].to_i
+        print Paint[v, @colors[v]], " "
+      end
+      print "\n"
+    end
+  end
+
+  def setup_board_vars
+    @xsize.times do |x|
+      @ysize.times do |y|
+        v = Z3.Int("c#{x},#{y}")
+        @solver.assert v >= 0
+        @solver.assert v < @csize
+        @board[[x,y]] = v
+      end
+    end
+  end
+
+  # Z3 will return can't solve, but we might as well get better errors
+  def sanity_checks
+    @rows.each do |row|
+      e = row.map(&:first).sum
+      raise "Wrong row count" unless e == @xsize
+    end
+
+    @cols.each do |col|
+      e = col.map(&:first).sum
+      raise "Wrong col count" unless e == @ysize
+    end
+  end
+
+  def parse_row(row)
+    parts = row.split.map{|x| parse_part(x)}
+    unless parts.size == @csize
+      raise "Incorrect row size, expected #{@csize}: #{row.inspect}"
+    end
+    parts
+  end
+
+  def parse_part(x)
+    case x
+    when "."
+      [0, false]
+    when /\A(\d+)\z/
+      [$1.to_i, false]
+    when /\A(\d+)\+\z/
+      [$1.to_i, true]
+    else
+      raise "Incorrect part #{x.inspect}"
+    end
+  end
+end
+
+path = ARGV[0] || Pathname(__dir__) + "color_nonogram-1.txt"
+ColorNonogram.new(path).call
