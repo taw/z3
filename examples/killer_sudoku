@@ -1,0 +1,87 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+require_relative "../lib/z3"
+
+class KillerSudokuSolver
+  def initialize(path)
+    data = Pathname(path).read
+    knowns, cages, cage_counts = data.split(/\n{2,}/)
+    @knowns = knowns.strip.split("\n").map do |line|
+      line.split.map{|c| c == "." ? nil : c.to_i}
+    end
+    @cages = cages.strip.split("\n").map do |line|
+      line.split
+    end
+    @size = @knowns.size
+    raise "Bad size" unless @knowns.all?{|line| line.size == @size}
+    raise "Bad size" unless @cages.size == @size
+    raise "Bad size" unless @cages.all?{|line| line.size == @size}
+    @cage_counts =  cage_counts.split("\n").to_h(&:split).transform_values(&:to_i)
+    @solver = Z3::Solver.new
+    if @size == 9
+      @boxsize = 3
+    elsif @size == 4
+      @boxsize = 2
+    else
+      raise "Bad size"
+    end
+  end
+
+  def solve!
+    @cells = (0...@size).map do |j|
+      (0...@size).map do |i|
+        cell_var(@knowns[j][i], i, j)
+      end
+    end
+
+    @cells.each do |row|
+      @solver.assert Z3.Distinct(*row)
+    end
+    @cells.transpose.each do |column|
+      @solver.assert Z3.Distinct(*column)
+    end
+    @cells.each_slice(@boxsize) do |rows|
+      rows.transpose.each_slice(@boxsize) do |square|
+        @solver.assert Z3.Distinct(*square.flatten)
+      end
+    end
+
+    by_cage = {}
+    (0...@size).each do |j|
+      (0...@size).each do |i|
+        c = @cages[j][i]
+        by_cage[c] ||= []
+        by_cage[c] << @cells[j][i]
+      end
+    end
+
+    by_cage.each do |cage_name, cells|
+      @solver.assert Z3.Add(*cells) == @cage_counts.fetch(cage_name)
+    end
+
+    if @solver.satisfiable?
+      @model = @solver.model
+      print_answer!
+    else
+      puts "failed to solve"
+    end
+  end
+
+  def cell_var(cell, i, j)
+    v = Z3.Int("cell[#{i+1},#{j+1}]")
+    @solver.assert v >= 1
+    @solver.assert v <= @size
+    @solver.assert v == cell if cell != nil
+    v
+  end
+
+  def print_answer!
+    @cells.each do |row|
+      puts row.map{|v| @model[v]}.join(" ")
+    end
+  end
+end
+
+path = ARGV[0] || Pathname(__dir__) + "killer-sudoku-1.txt"
+KillerSudokuSolver.new(path).solve!

@@ -1,0 +1,53 @@
+. . . . . . . . .
+. . . . . . . . .
+. . . . . . . . .
+. . . . . . . . .
+. . . . . . . . .
+. . . . . . . . .
+. . . . . . . . .
+. . . . . . . . .
+. . . . . . . . .
+
+a a b c d d d e e
+f g b c v v x y z
+f g g u u w x y z
+f s s t t w A A B
+h h C C C D D A B
+i i G G F E E r q
+j j m G F n o r q
+k m m F F n o p q
+k l l n n n p p p
+
+a 9
+b 8
+c 14
+d 13
+e 15
+f 15
+g 18
+h 8
+i 9
+j 12
+k 10
+l 8
+m 15
+n 26
+o 13
+p 19
+q 12
+r 12
+s 10
+t 10
+u 11
+v 13
+w 11
+x 10
+y 5
+z 7
+A 12
+B 11
+C 13
+D 12
+E 9
+F 17
+G 18
