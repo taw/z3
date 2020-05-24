@@ -1,0 +1,78 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+require_relative "../lib/z3"
+require "paint"
+
+class StitchesSolver
+  def initialize(path)
+    data = Pathname(path).read
+    data = data.strip.split("\n").map do |line|
+      line.split
+    end
+    @col_counts = data.shift.map(&:to_i)
+    @row_counts = data.map(&:shift).map(&:to_i)
+    @xsize = @col_counts.size
+    @ysize = @row_counts.size
+    @data = data
+    raise unless data.size == @ysize
+    raise unless data.all?{|r| r.size == @ysize}
+    raise unless @col_counts.sum == @row_counts.sum
+    @solver = Z3::Solver.new
+    @groups = @data.flatten.uniq
+  end
+
+  def solve!
+    assign_colors!
+
+    # TODO
+
+    if @solver.satisfiable?
+      @model = @solver.model
+      print_answer!
+    else
+      puts "failed to solve"
+    end
+  end
+
+  def assign_colors!
+    @fg = @groups.to_h{|g| [g, [rand(256),rand(256),rand(256)]] }
+    @bg = @groups.to_h{|g| [g, [rand(256),rand(256),rand(256)]] }
+  end
+
+  def group_at(x,y)
+    return nil if x < 0 or y < 0
+    return nil if x >= @xsize or y >= @ysize
+    @data[y][x]
+  end
+
+  def paint_for(s,x1,y1,x2=x1,y2=y1)
+    g1 = group_at(x1,y1)
+    g2 = group_at(x2,y2)
+    if g1 == g2
+      Paint[s, @fg[g1], @bg[g1]]
+    else
+      s
+    end
+  end
+
+  def print_answer!
+    @ysize.times do |y|
+      @xsize.times do |x|
+        print paint_for(" ", x, y)
+        print paint_for(" ", x, y, x+1, y)
+      end
+      print "\n"
+      @xsize.times do |x|
+        print paint_for(" ", x, y, x,   y+1)
+        print paint_for(" ", x, y, x+1, y+1)
+      end
+      print "\n"
+    end
+  end
+end
+
+
+
+path = ARGV[0] || Pathname(__dir__) + "stitches-1.txt"
+StitchesSolver.new(path).solve!

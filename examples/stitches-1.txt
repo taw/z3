@@ -1,0 +1,11 @@
+  6 8 6 9 2 5 4 8 2 2
+3 a a a a a a a b b b
+6 a a c c c a a b c b
+4 a f f c c b b b c b
+6 f f f f c c c c c b
+8 h h h f c h c b b b
+4 g h h h h h c c b b
+6 g g e e e h h h e b
+8 g g g g e h h e e e
+5 d d e e e e e e e e
+2 d d d d e e e e e e
