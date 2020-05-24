@@ -58,6 +58,7 @@ class KillerSudokuSolver
 
     by_cage.each do |cage_name, cells|
       @solver.assert Z3.Add(*cells) == @cage_counts.fetch(cage_name)
+      @solver.assert Z3.Distinct(*cells)
     end
 
     if @solver.satisfiable?
@@ -83,5 +84,5 @@ class KillerSudokuSolver
   end
 end
 
-path = ARGV[0] || Pathname(__dir__) + "killer-sudoku-1.txt"
+path = ARGV[0] || Pathname(__dir__) + "killer_sudoku-1.txt"
 KillerSudokuSolver.new(path).solve!
