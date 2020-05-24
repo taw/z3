@@ -115,7 +115,21 @@ class StitchesSolver
   end
 
   def setup_cell_stitch_assertions!
-    # TODO
+    @xsize.times do |x|
+      @ysize.times do |y|
+        vars = [
+          @hstitch[[x,y]],
+          @hstitch[[x-1,y]],
+          @vstitch[[x,y]],
+          @vstitch[[x,y-1]],
+        ].compact.map{|v| v.ite(1,0)}
+        if vars.empty?
+          @solver.assert !@cell_vars[[x,y]]
+        else
+          @solver.assert @cell_vars[[x,y]].ite(1,0) == Z3.Add(*vars)
+        end
+      end
+    end
   end
 
   def group_at(x,y)
