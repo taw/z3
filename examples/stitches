@@ -25,12 +25,11 @@ class StitchesSolver
   def solve!
     assign_colors!
     setup_cell_vars!
-    setup_stich_vars!
-    # How many stiches
+    setup_stitch_vars!
 
     setup_cell_assertions!
-
-    # TODO
+    setup_stitch_assertions!
+    setup_cell_stitch_assertions!
 
     if @solver.satisfiable?
       @model = @solver.model
@@ -73,8 +72,49 @@ class StitchesSolver
     end
   end
 
-  def setup_stich_vars!
-    @stich_vars = {}
+  def setup_stitch_vars!
+    @hstitch = {}
+    @vstitch = {}
+    @stitch_groups = {}
+
+    (@xsize-1).times do |x|
+      @ysize.times do |y|
+        v = Z3.Bool("h#{x},#{y}")
+        g1 = @data[y][x]
+        g2 = @data[y][x+1]
+        pair = [g1,g2].sort.uniq
+        next if pair.size == 1
+        @stitch_groups[pair] ||= []
+        @stitch_groups[pair] << v
+        @hstitch[[x,y]] = v
+      end
+    end
+
+    @xsize.times do |x|
+      (@ysize-1).times do |y|
+        v = Z3.Bool("v#{x},#{y}")
+        g1 = @data[y][x]
+        g2 = @data[y+1][x]
+        pair = [g1,g2].sort.uniq
+        next if pair.size == 1
+        @stitch_groups[pair] ||= []
+        @stitch_groups[pair] << v
+        @vstitch[[x,y]] = v
+      end
+    end
+
+    group_count = (2 * @stitch_groups.keys.size)
+    raise unless @col_counts.sum % group_count == 0
+    @stitch_count = @col_counts.sum / group_count
+  end
+
+  def setup_stitch_assertions!
+    @stitch_groups.each do |g, vars|
+      @solver.assert Z3.Add(*vars.map{|v| v.ite(1,0)}) == @stitch_count
+    end
+  end
+
+  def setup_cell_stitch_assertions!
     # TODO
   end
 
@@ -99,11 +139,22 @@ class StitchesSolver
       @xsize.times do |x|
         s = @model[@cell_vars[[x,y]]].to_b ? "*" : " "
         print paint_for(s, x, y)
-        print paint_for(" ", x, y, x+1, y)
+        if @hstitch[[x,y]]
+          hs = @model[@hstitch[[x,y]]].to_b ? "-" : " "
+        else
+          hs = " "
+        end
+        print paint_for(hs, x, y, x+1, y)
       end
       print "\n"
+      next if y == @ysize - 1
       @xsize.times do |x|
-        print paint_for(" ", x, y, x,   y+1)
+        if @vstitch[[x,y]]
+          vs = @model[@vstitch[[x,y]]].to_b ? "|" : " "
+        else
+          vs = " "
+        end
+        print paint_for(vs, x, y, x,   y+1)
         print paint_for(" ", x, y, x+1, y+1)
       end
       print "\n"
