@@ -24,6 +24,11 @@ class StitchesSolver
 
   def solve!
     assign_colors!
+    setup_cell_vars!
+    setup_stich_vars!
+    # How many stiches
+
+    setup_cell_assertions!
 
     # TODO
 
@@ -38,6 +43,39 @@ class StitchesSolver
   def assign_colors!
     @fg = @groups.to_h{|g| [g, [rand(256),rand(256),rand(256)]] }
     @bg = @groups.to_h{|g| [g, [rand(256),rand(256),rand(256)]] }
+  end
+
+  def setup_cell_vars!
+    @cell_vars = {}
+    @xsize.times do |x|
+      @ysize.times do |y|
+        v = Z3.Bool("c#{x},#{y}")
+        @cell_vars[[x,y]] = v
+      end
+    end
+  end
+
+  def row_of_cell_vars(y)
+    @xsize.times.map{|x| @cell_vars[[x,y]].ite(1,0) }
+  end
+
+  def col_of_cell_vars(x)
+    @ysize.times.map{|y| @cell_vars[[x,y]].ite(1,0) }
+  end
+
+  def setup_cell_assertions!
+    @xsize.times do |x|
+      @solver.assert Z3.Add(*col_of_cell_vars(x)) == @col_counts[x]
+    end
+
+    @ysize.times do |y|
+      @solver.assert Z3.Add(*row_of_cell_vars(y)) == @row_counts[y]
+    end
+  end
+
+  def setup_stich_vars!
+    @stich_vars = {}
+    # TODO
   end
 
   def group_at(x,y)
@@ -59,7 +97,8 @@ class StitchesSolver
   def print_answer!
     @ysize.times do |y|
       @xsize.times do |x|
-        print paint_for(" ", x, y)
+        s = @model[@cell_vars[[x,y]]].to_b ? "*" : " "
+        print paint_for(s, x, y)
         print paint_for(" ", x, y, x+1, y)
       end
       print "\n"
