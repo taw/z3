@@ -32,6 +32,15 @@ RSpec::Matchers.define :have_output do |expected|
   end
 end
 
+RSpec::Matchers.define :have_output_no_color do |expected|
+  match do |file_name|
+    executable_path = "#{__dir__}/../examples/#{file_name}"
+    actual = IO.popen("ruby -r./spec/coverage_helper #{executable_path}").read
+    actual = actual.gsub(/\e\[.*?m/, "")
+    actual.gsub(/ *$/, "") == expected.gsub(/ *$/, "")
+  end
+end
+
 RSpec::Matchers.define :be_same_as do |expected|
   match do |file_name|
     [actual.class, actual.inspect] == [expected.class, expected.inspect]
