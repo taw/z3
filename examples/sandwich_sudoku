@@ -1,0 +1,101 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+require_relative "../lib/z3"
+require "paint"
+
+class SandwichSudokuSolver
+  def initialize(path)
+    data = Pathname(path).read
+    data = data.strip.split("\n").map do |line|
+      line.split.map{|c| c =~ /\A\d+\z/ ? c.to_i : nil}
+    end
+    @col_counts = data.shift
+    @row_counts = data.map(&:shift)
+    @xsize = @col_counts.size
+    @ysize = @row_counts.size
+    @data = data
+    raise unless data.size == @ysize
+    raise unless data.all?{|r| r.size == @ysize}
+    @solver = Z3::Solver.new
+  end
+
+  def solve!
+    @cells = (0..8).map do |y|
+      (0..8).map do |x|
+        cell_var(@data[y][x], x, y)
+      end
+    end
+
+    @cells.each do |row|
+      @solver.assert Z3.Distinct(*row)
+    end
+    @cells.transpose.each do |column|
+      @solver.assert Z3.Distinct(*column)
+    end
+    @cells.each_slice(3) do |rows|
+      rows.transpose.each_slice(3) do |square|
+        @solver.assert Z3.Distinct(*square.flatten)
+      end
+    end
+
+    9.times do |x|
+      assert_sandwich "c#{x+1}", @col_counts[x], col_vars(x)
+    end
+
+    9.times do |y|
+      assert_sandwich "s#{y+1}", @row_counts[y], row_vars(y)
+    end
+
+    # TODO: SANDWICHES
+
+    if @solver.satisfiable?
+      @model = @solver.model
+      print_answer!
+    else
+      puts "failed to solve"
+    end
+  end
+
+  def assert_sandwich(name, count, vars)
+    ss = Z3.Int("#{name}-ss")
+    se = Z3.Int("#{name}-se")
+    @solver.assert ss >= 0
+    @solver.assert ss <= 8
+    @solver.assert se >= 0
+    @solver.assert se <= 8
+    @solver.assert ss < se
+    9.times do |i|
+      @solver.assert ((vars[i] == 1) | (vars[i] == 9)) == ((ss == i) | (se == i))
+    end
+    e = 9.times.map{|i|
+      Z3.And(i > ss, i < se).ite(vars[i], 0)
+    }
+    @solver.assert Z3.Add(*e) == count
+  end
+
+  def row_vars(y)
+    @cells[y]
+  end
+
+  def col_vars(x)
+    @cells.map{|line| line[x]}
+  end
+
+  def cell_var(cell, x, y)
+    v = Z3.Int("cell[#{x+1},#{y+1}]")
+    @solver.assert v >= 1
+    @solver.assert v <= 9
+    @solver.assert v == cell if cell != nil
+    v
+  end
+
+  def print_answer!
+    @cells.each do |row|
+      puts row.map{|v| @model[v]}.join(" ")
+    end
+  end
+end
+
+path = ARGV[0] || Pathname(__dir__) + "sandwich_sudoku-1.txt"
+SandwichSudokuSolver.new(path).solve!

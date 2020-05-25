@@ -176,7 +176,5 @@ class StitchesSolver
   end
 end
 
-
-
 path = ARGV[0] || Pathname(__dir__) + "stitches-1.txt"
 StitchesSolver.new(path).solve!
