@@ -1,0 +1,99 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+require "set"
+require_relative "../lib/z3"
+
+# https://www.janko.at/Raetsel/Eulero/index.htm
+
+class Eulero
+  def initialize(path)
+    @data = Pathname(path).readlines.map(&:chomp).map(&:split)
+    @size = @data.size
+    raise unless @data.all?{|row| row.size == @size}
+    raise unless @data.flatten.all?{|c| c =~ /\A[A-Z\.][1-9\.]\z/ }
+    @solver = Z3::Solver.new
+  end
+
+  def lvar(x,y)
+    Z3.Int("l[#{x},#{y}]")
+  end
+
+  def nvar(x,y)
+    Z3.Int("n[#{x},#{y}]")
+  end
+
+  def xvar(x,y)
+    Z3.Int("x[#{x},#{y}]")
+  end
+
+  def assert_vars
+    @size.times do |y|
+      @size.times do |x|
+        @solver.assert lvar(x,y) >= 1
+        @solver.assert lvar(x,y) <= @size
+        @solver.assert nvar(x,y) >= 1
+        @solver.assert nvar(x,y) <= @size
+        @solver.assert xvar(x,y) == @size * lvar(x,y) + nvar(x,y)
+
+        dl = @data[y][x][0]
+        dn = @data[y][x][1]
+        if dl =~ /[A-Z]/
+          @solver.assert lvar(x,y) == (dl.ord - "A".ord + 1)
+        end
+        if dn =~ /[1-9]/
+          @solver.assert nvar(x,y) == (dn.ord - "1".ord + 1)
+        end
+      end
+    end
+  end
+
+  def assert_cols
+    @size.times do |x|
+      @solver.assert Z3.Distinct(*@size.times.map{|y| lvar(x,y)})
+      @solver.assert Z3.Distinct(*@size.times.map{|y| nvar(x,y)})
+    end
+  end
+
+  def assert_rows
+    @size.times do |y|
+      @solver.assert Z3.Distinct(*@size.times.map{|x| lvar(x,y)})
+      @solver.assert Z3.Distinct(*@size.times.map{|x| nvar(x,y)})
+    end
+  end
+
+  def assert_distinct
+    xvars = @size.times.map{|x| @size.times.map{|y| xvar(x,y) }}.flatten
+    @solver.assert Z3.Distinct(*xvars)
+  end
+
+  def call
+    assert_vars
+    assert_cols
+    assert_rows
+    assert_distinct
+
+    if @solver.satisfiable?
+      @model = @solver.model
+      print_solution
+    else
+      puts "There is no solution"
+    end
+  end
+
+  def print_solution
+    @size.times do |y|
+      @size.times do |x|
+        l = @model[lvar(x,y)].to_i
+        n = @model[nvar(x,y)].to_i
+        print ("A".ord + l - 1).chr
+        print ("1".ord + n - 1).chr
+        print " "
+      end
+      print "\n"
+    end
+  end
+end
+
+path = ARGV[0] || Pathname(__dir__) + "eulero-1.txt"
+Eulero.new(path).call
