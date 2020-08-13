@@ -1,0 +1,106 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+require_relative "../lib/z3"
+
+class Dominion
+  def initialize(path)
+    @data = Pathname(path).readlines.map(&:chomp)
+    @ysize = @data.size
+    @xsize = @data[0].size
+    raise unless @data.all?{|line| line.size == @xsize}
+    @vars = (@data.flat_map(&:chars).uniq - ["."]).sort.map.with_index{|v,c| [v,c+1]}.to_h
+    @areas_count = @vars.size
+    @solver = Z3::Solver.new
+  end
+
+  def given(x,y)
+    return nil if x < 0 or y < 0 or x >= @xsize or y >= @ysize
+    @vars[@data[y][x]] || nil
+  end
+
+  def var(x,y)
+    return nil if x < 0 or y < 0 or x >= @xsize or y >= @ysize
+    Z3.Int("c[#{x},#{y}]")
+  end
+
+  def neighbours(x,y)
+    [
+      var(x-1,y),
+      var(x+1,y),
+      var(x,y-1),
+      var(x,y+1),
+    ].compact
+  end
+
+  def count_neighbour_dominoes(x,y)
+    Z3.Add(*neighbours(x,y).map{|n| (n == 0).ite(1,0) })
+  end
+
+  def assert_cells_are_assigned_to_areas
+    @ysize.times do |y|
+      @ysize.times do |x|
+        @solver.assert var(x,y) >= 0
+        @solver.assert var(x,y) <= @areas_count
+        g = given(x,y)
+        if g
+          @solver.assert var(x,y) == g
+        end
+      end
+    end
+  end
+
+  def assert_dominos
+    @ysize.times do |y|
+      @ysize.times do |x|
+        @solver.assert (
+          var(x,y) == 0
+        ).implies(
+          count_neighbour_dominoes(x,y) == 1
+        )
+      end
+    end
+  end
+
+  def assert_areas_separated
+    @ysize.times do |y|
+      @ysize.times do |x|
+        v = var(x,y)
+        neighbours(x,y).each do |n|
+          @solver.assert Z3.Or(n == 0, v == 0, n == v)
+        end
+      end
+    end
+  end
+
+  def assert_each_area_connected
+    # TODO
+  end
+
+  def call
+    assert_cells_are_assigned_to_areas
+    assert_dominos
+    assert_areas_separated
+    assert_each_area_connected
+
+    if @solver.satisfiable?
+      @model = @solver.model
+      print_solution
+    else
+      puts "There is no solution"
+    end
+  end
+
+  def print_solution
+    @ysize.times do |y|
+      @ysize.times do |x|
+        c = @model[var(x,y)].to_i
+        print @vars.invert[c] || "*"
+      end
+      print "\n"
+    end
+  end
+end
+
+path = ARGV[0] || Pathname(__dir__) + "dominion-1.txt"
+Dominion.new(path).call
