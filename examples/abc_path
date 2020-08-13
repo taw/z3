@@ -1,0 +1,187 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+require "set"
+require_relative "../lib/z3"
+
+# https://www.janko.at/Raetsel/Abc-Pfad/index.htm
+
+class ABCPath
+  def initialize(path)
+    @data = Pathname(path).readlines.map(&:chomp).map{|line| line.split.map{|c| c == "." ? nil : c}}
+    raise unless @data.size == 7
+    raise unless @data.all?{|line| line.size == 7}
+    @solver = Z3::Solver.new
+  end
+
+  def var(x,y)
+    return unless on_board?(x,y)
+    Z3.Int("c#{x},#{y}")
+  end
+
+  def each_xy
+    5.times do |y|
+      5.times do |x|
+        yield(x,y)
+      end
+    end
+  end
+
+  def on_board?(x,y)
+    x >= 0 and y >= 0 and x <= 4 and y <= 4
+  end
+
+  def neighbours(x,y)
+    [
+      [x-1, y-1],
+      [x  , y-1],
+      [x+1, y-1],
+      [x-1, y  ],
+      [x+1, y  ],
+      [x-1, y+1],
+      [x  , y+1],
+      [x+1, y+1],
+    ].select{|nx,ny| on_board?(nx,ny)}
+  end
+
+  def col_vars(x)
+    (0..4).map{|y| var(x,y)}
+  end
+
+  def row_vars(y)
+    (0..4).map{|x| var(x,y)}
+  end
+
+  def diag_vars
+    (0..4).map{|x| var(x,x)}
+  end
+
+  def counter_diag_vars
+    (0..4).map{|x| var(x,4-x)}
+  end
+
+  def assert_letters
+    each_xy do |x,y|
+      @solver.assert var(x,y) >= 0
+      @solver.assert var(x,y) <= 24
+    end
+    @solver.assert Z3.Distinct(*enum_for(:each_xy).map{|x,y| var(x,y)})
+  end
+
+  def assert_path
+    each_xy do |x,y|
+      @solver.assert Z3.Or((var(x,y) == 0), *neighbours(x,y).map{|nx,ny| var(x,y) == var(nx,ny) + 1 })
+    end
+  end
+
+  def assert_has_letter(vars, letter)
+    u = letter.ord - 65
+    @solver.assert Z3.Or(*vars.map{|v| v == u})
+  end
+
+  def assert_cols
+    5.times do |x|
+      assert_has_letter col_vars(x), @data[0][x+1]
+      assert_has_letter col_vars(x), @data[6][x+1]
+    end
+  end
+
+  def assert_rows
+    5.times do |y|
+      assert_has_letter row_vars(y), @data[y+1][0]
+      assert_has_letter row_vars(y), @data[y+1][6]
+    end
+  end
+
+  def assert_diagonals
+    assert_has_letter diag_vars, @data[0][0]
+    assert_has_letter diag_vars, @data[6][6]
+    assert_has_letter counter_diag_vars, @data[0][6]
+    assert_has_letter counter_diag_vars, @data[6][0]
+  end
+
+  def call
+    assert_letters
+    assert_path
+    assert_cols
+    assert_rows
+    assert_diagonals
+
+    if @solver.satisfiable?
+      @model = @solver.model
+      print_solution
+    else
+      puts "There is no solution"
+    end
+  end
+
+  def connected?(x1,y1,x2,y2)
+    v1 = var(x1,y1)
+    v2 = var(x2,y2)
+    return false unless v1 and v2
+    c1 = @model[v1].to_i
+    c2 = @model[v2].to_i
+    (c1-c2).abs == 1
+  end
+
+  def print_cell(x,y)
+    if on_board?(x,y)
+      c = @model[var(x,y)].to_i
+      print (65+32+c).chr
+    elsif x == -1 or y == -1 or x == 5 or y == 5
+      print @data[y+1][x+1]
+    else
+      print " "
+    end
+  end
+
+  def print_hcon(x,y)
+    if connected?(x,y,x+1,y)
+      print "-"
+    else
+      print " "
+    end
+  end
+
+  def print_vcon(x,y)
+    if connected?(x,y,x,y+1)
+      print "|"
+    else
+      print " "
+    end
+  end
+
+  def print_xcon(x,y)
+    d = connected?(x,y,x+1,y+1)
+    cd = connected?(x,y+1,x+1,y)
+    if d and cd
+      print "x"
+    elsif d
+      print "\\"
+    elsif cd
+      print "/"
+    else
+      print " "
+    end
+  end
+
+  def print_solution
+    (-1..5).each do |y|
+      (-1..5).each do |x|
+        print_cell(x,y)
+        print_hcon(x,y)
+      end
+      print "\n"
+
+      break if y == 5
+      (-1..5).each do |x|
+        print_vcon(x,y)
+        print_xcon(x,y)
+      end
+      print "\n"
+    end
+  end
+end
+
+path = ARGV[0] || Pathname(__dir__) + "abc_path-1.txt"
+ABCPath.new(path).call
