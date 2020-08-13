@@ -1,7 +1,10 @@
 #!/usr/bin/env ruby
 
 require "pathname"
+require "set"
 require_relative "../lib/z3"
+
+# https://www.janko.at/Raetsel/Dominion/index.htm
 
 class Dominion
   def initialize(path)
@@ -14,73 +17,117 @@ class Dominion
     @solver = Z3::Solver.new
   end
 
+  def on_board?(x,y)
+    x >= 0 and y >= 0 and x < @xsize and y < @ysize
+  end
+
   def given(x,y)
-    return nil if x < 0 or y < 0 or x >= @xsize or y >= @ysize
+    return unless on_board?(x,y)
     @vars[@data[y][x]] || nil
   end
 
   def var(x,y)
-    return nil if x < 0 or y < 0 or x >= @xsize or y >= @ysize
+    return unless on_board?(x,y)
     Z3.Int("c[#{x},#{y}]")
+  end
+
+  def dvar(x,y)
+    return unless on_board?(x,y)
+    Z3.Int("d[#{x},#{y}]")
+  end
+
+  def domino?(x,y)
+    var(x,y) == 0
   end
 
   def neighbours(x,y)
     [
-      var(x-1,y),
-      var(x+1,y),
-      var(x,y-1),
-      var(x,y+1),
-    ].compact
+      [x-1,y],
+      [x+1,y],
+      [x,y-1],
+      [x,y+1],
+    ].select{|nx,ny| on_board?(nx,ny)}
   end
 
   def count_neighbour_dominoes(x,y)
-    Z3.Add(*neighbours(x,y).map{|n| (n == 0).ite(1,0) })
+    Z3.Add(*neighbours(x,y).map{|x,y| domino?(x,y).ite(1,0) })
+  end
+
+  def assign_primary
+    seen = Set[]
+    @primary = Set[]
+    each_xy do |x,y|
+      g = given(x,y)
+      next unless g
+      next if seen.include?(g)
+      @primary << [x,y]
+      seen << g
+    end
+  end
+
+  def primary?(x,y)
+    @primary.include?([x,y])
+  end
+
+  def each_xy
+    @ysize.times do |y|
+      @ysize.times do |x|
+        yield(x,y)
+      end
+    end
   end
 
   def assert_cells_are_assigned_to_areas
-    @ysize.times do |y|
-      @ysize.times do |x|
-        @solver.assert var(x,y) >= 0
-        @solver.assert var(x,y) <= @areas_count
-        g = given(x,y)
-        if g
-          @solver.assert var(x,y) == g
-        end
+    each_xy do |x,y|
+      @solver.assert var(x,y) >= 0
+      @solver.assert var(x,y) <= @areas_count
+      g = given(x,y)
+      if g
+        @solver.assert var(x,y) == g
       end
     end
   end
 
   def assert_dominos
-    @ysize.times do |y|
-      @ysize.times do |x|
-        @solver.assert (
-          var(x,y) == 0
-        ).implies(
-          count_neighbour_dominoes(x,y) == 1
-        )
-      end
+    each_xy do |x,y|
+      @solver.assert(
+        domino?(x,y).implies(count_neighbour_dominoes(x,y) == 1)
+      )
     end
   end
 
   def assert_areas_separated
-    @ysize.times do |y|
-      @ysize.times do |x|
-        v = var(x,y)
-        neighbours(x,y).each do |n|
-          @solver.assert Z3.Or(n == 0, v == 0, n == v)
-        end
+    each_xy do |x,y|
+      v = var(x,y)
+      neighbours(x,y).each do |nx,ny|
+        n = var(nx,ny)
+        @solver.assert Z3.Or(n == 0, v == 0, n == v)
       end
     end
   end
 
   def assert_each_area_connected
-    # TODO
+    # Just some bogus big value
+    max_value = @xsize * @ysize + 10
+    each_xy do |x,y|
+      @solver.assert dvar(x,y) >= 0
+      @solver.assert dvar(x,y) < max_value
+
+      next_ds_same_area = neighbours(x,y).map{|nx,ny| (var(nx,ny) == var(x,y)).ite(dvar(nx,ny) + 1, max_value) }
+      next_d = next_ds_same_area.reduce{|a,b| (a <= b).ite(a, b) }
+      @solver.assert(
+        dvar(x,y) == Z3.Or(primary?(x,y), domino?(x,y)).ite(0, next_d)
+      )
+    end
   end
 
   def call
+    assign_primary
+
     assert_cells_are_assigned_to_areas
     assert_dominos
     assert_areas_separated
+
     assert_each_area_connected
 
     if @solver.satisfiable?
