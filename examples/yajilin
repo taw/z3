@@ -94,8 +94,45 @@ class Yajilin
     end
   end
 
+  def stripe_left(x0,y)
+    (0...x0).map{|x| cvar(x,y) unless hint_cell?(x,y) }.compact
+  end
+
+  def stripe_right(x0,y)
+    (x0+1...@xsize).map{|x| cvar(x,y) unless hint_cell?(x,y) }.compact
+  end
+
+  def stripe_up(x,y0)
+    (0...y0).map{|y| cvar(x,y) unless hint_cell?(x,y) }.compact
+  end
+
+  def stripe_down(x,y0)
+    (y0+1...@ysize).map{|y| cvar(x,y) unless hint_cell?(x,y) }.compact
+  end
+
   def assert_arrows
-    # TODO
+    @ysize.times do |y|
+      @xsize.times do |x|
+        if hint_cell?(x, y)
+          count = @data[y][x][0].to_i
+          dir = @data[y][x][1]
+          case dir
+          when "<"
+            stripe = stripe_left(x,y)
+          when ">"
+            stripe = stripe_right(x,y)
+          when "^"
+            stripe = stripe_up(x,y)
+          when "_"
+            stripe = stripe_down(x,y)
+          else
+            raise
+          end
+
+          @solver.assert Z3.Add(*stripe.map{|c| c.ite(0,1)}) == count
+        end
+      end
+    end
   end
 
   def assert_single_loop
@@ -105,7 +142,7 @@ class Yajilin
   def call
     assert_connections
     assert_no_black_multiples
-    # assert_arrows
+    assert_arrows
     # assert_single_loop
 
     if @solver.satisfiable?
