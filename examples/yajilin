@@ -1,0 +1,49 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+require_relative "../lib/z3"
+
+class Yajilin
+  def initialize(path)
+    @data = Pathname(path)
+      .readlines
+      .map{|line|
+        line
+          .chomp
+          .split
+          .map{|x| x == "." ? nil : x}
+      }
+    @xsize = @data.size
+    @ysize = @data[0].size
+    raise unless @data.all?{|row| row.size == @xsize}
+    @solver = Z3::Solver.new
+  end
+
+  def call
+    if @solver.satisfiable?
+      @model = @solver.model
+      print_answer
+    else
+      puts "failed to solve"
+    end
+  end
+
+  def print_answer
+    @ysize.times do |y|
+      @xsize.times do |x|
+        if @data[y][x]
+          print @data[y][x]
+          print " "
+        else
+          print "##"
+          print " "
+        end
+      end
+      print "\n"
+      print "\n" unless y == @ysize-1
+    end
+  end
+end
+
+path = ARGV[0] || Pathname(__dir__) + "yajilin-1.txt"
+Yajilin.new(path).call
