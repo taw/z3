@@ -19,7 +19,70 @@ class Yajilin
     @solver = Z3::Solver.new
   end
 
+  def on_board?(x,y)
+    x >= 0 and y >= 0 and x < @xsize and y < @ysize
+  end
+
+  # true = white
+  # false = black
+  def var(x,y)
+    return unless on_board?(x,y)
+    Z3.Bool("c[#{x},#{y}]")
+  end
+
+  def hint_cell?(x,y)
+    !!@data[y][x]
+  end
+
+  def neighbours(x,y)
+    [
+      [x+1, y  ],
+      [x-1, y  ],
+      [x,   y+1],
+      [x,   y-1],
+    ].select{|nx,ny|
+      on_board?(nx, ny) and !hint_cell?(nx,ny)
+    }.map{|nx,ny| var(nx, ny)}
+  end
+
+  def count_white_neighbours(x,y)
+    Z3.Add(*neighbours(x,y).map{|n| n.ite(1,0)})
+  end
+
+  def assert_no_black_multiples
+    @ysize.times do |y|
+      @xsize.times do |x|
+        next if hint_cell?(x, y)
+        @solver.assert (~var(x,y)).implies(Z3.And(*neighbours(x,y)))
+      end
+    end
+  end
+
+  def assert_continuous_white_loop
+    @ysize.times do |y|
+      @xsize.times do |x|
+        next if hint_cell?(x, y)
+        @solver.assert var(x,y).implies(
+          count_white_neighbours(x,y) == 2
+        )
+      end
+    end
+  end
+
+  def assert_arrows
+    # TODO
+  end
+
+  def assert_single_loop
+    # TODO
+  end
+
   def call
+    assert_no_black_multiples
+    assert_continuous_white_loop
+    # assert_arrows
+    # assert_single_loop
+
     if @solver.satisfiable?
       @model = @solver.model
       print_answer
@@ -29,15 +92,21 @@ class Yajilin
   end
 
   def print_answer
+    # TODO
+
     @ysize.times do |y|
       @xsize.times do |x|
-        if @data[y][x]
+        if hint_cell?(x,y)
           print @data[y][x]
-          print " "
         else
-          print "##"
-          print " "
+          c = @model[var(x,y)].to_b
+          if c
+            print ".."
+          else
+            print "##"
+          end
         end
+        print " "
       end
       print "\n"
       print "\n" unless y == @ysize-1
