@@ -28,7 +28,13 @@ RSpec::Matchers.define :have_output do |expected|
   match do |file_name|
     executable_path = "#{__dir__}/../examples/#{file_name}"
     actual = IO.popen("ruby -r./spec/coverage_helper #{executable_path}").read
-    actual.gsub(/ *$/, "") == expected.gsub(/ *$/, "")
+    @expected = expected.gsub(/ *$/, "")
+    @actual = actual.gsub(/ *$/, "")
+    @actual == @expected
+  end
+
+  failure_message_for_should do |actual|
+    "Expected:\n#{@expected.chomp}\nBut got:\n#{@actual}"
   end
 end
 
