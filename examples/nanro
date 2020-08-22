@@ -3,6 +3,8 @@
 require_relative "../lib/z3"
 require "pathname"
 
+# https://www.gmpuzzles.com/blog/nanro-rules-and-info/
+
 class Nanro
   def initialize(path)
     data = Pathname(path)
@@ -53,7 +55,7 @@ class Nanro
 
   def assert_no_numbered_squares
     each_xy do |x,y|
-      return unless on_board?(x+1,y+1)
+      next unless on_board?(x+1,y+1)
       @solver.assert Z3.Or(
         cvar(x,y) == 0,
         cvar(x+1,y) == 0,
@@ -63,11 +65,45 @@ class Nanro
     end
   end
 
+  def assert_no_same_number_between_regions
+    each_xy do |x,y|
+      neighbours(x,y).each do |nx,ny|
+        next if region_at(x,y) == region_at(nx,ny)
+        @solver.assert (cvar(x,y) != 0).implies(cvar(x,y) != cvar(nx,ny))
+      end
+    end
+  end
+
+  def assert_numbered_cells_all_connected
+    max_value = @xsize * @ysize + 10
+
+    each_xy do |x,y|
+      @solver.assert nvar(x,y) >= 0
+      @solver.assert (cvar(x,y) == 0).implies(nvar(x,y) == max_value)
+      @solver.assert (cvar(x,y) != 0).implies(nvar(x,y) < max_value)
+
+      nval = neighbours(x,y)
+        .map{|nx,ny|
+          (cvar(nx,ny) == 0).ite(max_value, nvar(nx,ny) + 1)
+        }
+        .reduce{|a,b| (a <= b).ite(a, b) }
+
+      @solver.assert (cvar(x,y) != 0).implies(Z3.Or(nvar(x,y) == 0, nvar(x,y) == nval))
+    end
+
+    @solver.assert Z3.Add(
+      *enum_for(:each_xy).map{|x,y|
+        (nvar(x,y) == 0).ite(1,0)
+      }) == 1
+  end
+
   def call
     assert_hints_obeyed
     assert_no_numbered_squares
     assert_each_cell_is_0_or_rvar
     assert_rvar_equals_number_of_numbered_cells_in_region
+    assert_no_same_number_between_regions
+    assert_numbered_cells_all_connected
 
     if @solver.satisfiable?
       @model = @solver.model
@@ -79,6 +115,15 @@ class Nanro
 
   private
 
+  def neighbours(x,y)
+    [
+      [x+1,y],
+      [x-1,y],
+      [x,y+1],
+      [x,y-1],
+    ].select{|nx,ny| on_board?(nx,ny)}
+  end
+
   def cells_by_region
     @cells_by_region ||= enum_for(:each_xy).group_by{|x,y| region_at(x,y)}
   end
@@ -89,6 +134,10 @@ class Nanro
 
   def cvar(x,y)
     Z3.Int("c[#{x},#{y}]")
+  end
+
+  def nvar(x,y)
+    Z3.Int("n[#{x},#{y}]")
   end
 
   def each_xy
