@@ -30,7 +30,7 @@ class SelfRefPuzzleSolver
     Z3.Or(*ary.map{|i| cons_answers == i})
   end
 
-  def solve!
+  def call
     @a_answers = Z3.Add(*(1..20).map{|i| @a[i][1]})
     @b_answers = Z3.Add(*(1..20).map{|i| @a[i][2]})
     @c_answers = Z3.Add(*(1..20).map{|i| @a[i][3]})
@@ -205,7 +205,7 @@ class SelfRefPuzzleSolver
 end
 
 
-SelfRefPuzzleSolver.new.solve!
+SelfRefPuzzleSolver.new.call
 
 __END__
 http://faculty.uml.edu/jpropp/srat-Q.txt

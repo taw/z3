@@ -13,7 +13,7 @@ class MiniSudokuSolver
     @solver = Z3::Solver.new
   end
 
-  def solve!
+  def call
     @cells = (0..5).map do |j|
       (0..5).map do |i|
         cell_var(@data[j][i], i, j)
@@ -58,4 +58,4 @@ class MiniSudokuSolver
 end
 
 path = ARGV[0] || Pathname(__dir__) + "minisudoku-1.txt"
-MiniSudokuSolver.new(path).solve!
+MiniSudokuSolver.new(path).call

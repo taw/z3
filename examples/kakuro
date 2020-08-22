@@ -25,7 +25,7 @@ class Kakuro
     @solver = Z3::Solver.new
   end
 
-  def solve!
+  def call
     @cells = map_coordinates{|x,y| cell_var(x,y) if @data[[x,y]] == nil}.compact
 
     (0...@ysize).each do |y|
@@ -111,4 +111,4 @@ class Kakuro
 end
 
 path = ARGV[0] || Pathname(__dir__) + "kakuro-1.txt"
-Kakuro.new(path).solve!
+Kakuro.new(path).call

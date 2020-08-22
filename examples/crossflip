@@ -46,7 +46,7 @@ class CrossFlipSolver
     result
   end
 
-  def solve!
+  def call
     @solver = Z3::Solver.new
 
     @ysize.times do |y|
@@ -76,7 +76,5 @@ class CrossFlipSolver
   end
 end
 
-
-
 board = "1021,1000"
-CrossFlipSolver.new(board).solve!
+CrossFlipSolver.new(board).call

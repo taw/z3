@@ -20,7 +20,7 @@ class SandwichSudokuSolver
     @solver = Z3::Solver.new
   end
 
-  def solve!
+  def call
     @cells = (0..8).map do |y|
       (0..8).map do |x|
         cell_var(@data[y][x], x, y)
@@ -98,4 +98,4 @@ class SandwichSudokuSolver
 end
 
 path = ARGV[0] || Pathname(__dir__) + "sandwich_sudoku-1.txt"
-SandwichSudokuSolver.new(path).solve!
+SandwichSudokuSolver.new(path).call

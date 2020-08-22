@@ -13,7 +13,7 @@ class SudokuSolver
     @solver = Z3::Solver.new
   end
 
-  def solve!
+  def call
     @cells = (0..8).map do |j|
       (0..8).map do |i|
         cell_var(@data[j][i], i, j)
@@ -58,4 +58,4 @@ class SudokuSolver
 end
 
 path = ARGV[0] || Pathname(__dir__) + "sudoku-1.txt"
-SudokuSolver.new(path).solve!
+SudokuSolver.new(path).call

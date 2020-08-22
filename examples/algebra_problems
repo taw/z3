@@ -21,7 +21,7 @@ class AlgebraProblem
 end
 
 class AlgebraProblem01 < AlgebraProblem
-  def solve!
+  def call
     x = Z3.Real("x")
     solver.assert 5*(-3*x - 2) - (x - 3) == -4*(4*x + 5) + 13
     print_solution! "01"
@@ -37,7 +37,7 @@ class AlgebraProblem03 < AlgebraProblem
     )
   end
 
-  def solve!
+  def call
     x = Z3.Real("x")
     xm2abs = Z3.Real("|x-2|")
     declare_abs(xm2abs, x-2)
@@ -55,7 +55,7 @@ class AlgebraProblem04 < AlgebraProblem
     solver.assert a_b**2 == (ax-bx)**2 + (ay-by)**2
   end
 
-  def solve!
+  def call
     ax = Z3.Real("ax")
     ay = Z3.Real("ay")
     bx = Z3.Real("bx")
@@ -71,7 +71,7 @@ class AlgebraProblem04 < AlgebraProblem
 end
 
 class AlgebraProblem05 < AlgebraProblem
-  def solve!
+  def call
     x = Z3.Real("x")
     y = Z3.Real("y")
     solver.assert 2*x - 4*y == 9
@@ -85,7 +85,7 @@ class AlgebraProblem06 < AlgebraProblem
     solver.assert y == 6*x + 1
   end
 
-  def solve!
+  def call
     x1 = Z3.Real("x1")
     y1 = Z3.Real("y1")
     x2 = Z3.Real("x2")
@@ -108,7 +108,7 @@ class AlgebraProblem10 < AlgebraProblem
     )
   end
 
-  def solve!
+  def call
     x = Z3.Real("x")
     y = Z3.Real("|-2x + 2|")
     declare_abs(y, -2*x + 2)
@@ -117,12 +117,12 @@ class AlgebraProblem10 < AlgebraProblem
   end
 end
 
-AlgebraProblem01.new.solve!
-AlgebraProblem03.new.solve!
-AlgebraProblem04.new.solve!
-AlgebraProblem05.new.solve!
-AlgebraProblem06.new.solve!
-AlgebraProblem10.new.solve!
+AlgebraProblem01.new.call
+AlgebraProblem03.new.call
+AlgebraProblem04.new.call
+AlgebraProblem05.new.call
+AlgebraProblem06.new.call
+AlgebraProblem10.new.call
 
 """
 http://www.analyzemath.com/Algebra1/Algebra1.html

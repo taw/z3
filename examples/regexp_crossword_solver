@@ -43,7 +43,7 @@ class RegexpCrosswordSolver
     SimpleRegexpParser.new(@rows[y], "row-#{y}").parse
   end
 
-  def solve!
+  def call
     @crossword = {}
     @xsize.times do |x|
       @ysize.times do |y|
@@ -77,4 +77,4 @@ class RegexpCrosswordSolver
 end
 
 path = ARGV[0] || Pathname(__dir__) + "regexp_crossword/tutorial-1.txt"
-RegexpCrosswordSolver.new(path).solve!
+RegexpCrosswordSolver.new(path).call

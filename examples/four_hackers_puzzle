@@ -58,7 +58,7 @@ class LogicPuzzle
     @vars[key][idx] == val_idx
   end
 
-  def solve!
+  def call
     add_assertions!
     if @solver.satisfiable?
       @solver.model.each do |k,v|
@@ -152,7 +152,7 @@ class FourHackersPuzzle < LogicPuzzle
   end
 end
 
-FourHackersPuzzle.new.solve!
+FourHackersPuzzle.new.call
 
 """
 There is little we can do but wait, so we may as well take another job.

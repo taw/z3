@@ -78,7 +78,7 @@ class MortalCoilSolver
     end
   end
 
-  def solve!
+  def call
     setup_vars!
     line_continuity!
     line_goes_until_it_hits_something!
@@ -102,4 +102,4 @@ class MortalCoilSolver
 end
 
 path = ARGV[0] || Pathname(__dir__) + "mortal_coil_puzzle-9.txt"
-MortalCoilSolver.new(path).solve!
+MortalCoilSolver.new(path).call

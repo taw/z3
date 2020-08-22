@@ -65,7 +65,7 @@ class CLogicPuzzleSolver
     v
   end
 
-  def solve!
+  def call
     # Everyone occurs twice, this is not quite that
     solver.assert Z3.Add(*@digit_vars.values) == 90
 
@@ -106,7 +106,7 @@ class CLogicPuzzleSolver
   end
 end
 
-CLogicPuzzleSolver.new.solve!
+CLogicPuzzleSolver.new.call
 
 # The puzzle:
 """

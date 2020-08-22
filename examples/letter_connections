@@ -61,7 +61,7 @@ class LetterConnections
     @solver = Z3::Solver.new
   end
 
-  def solve!
+  def call
     @line = map_coordinates{|x,y| line_var(x,y) }
     @dir  = map_coordinates{|x,y| dir_var(x,y) }
 
@@ -187,4 +187,4 @@ class LetterConnections
 end
 
 path = ARGV[0] || Pathname(__dir__) + "letter_connections-1.txt"
-LetterConnections.new(path).solve!
+LetterConnections.new(path).call

@@ -13,7 +13,7 @@ class LightUp
     @solver = Z3::Solver.new
   end
 
-  def solve!
+  def call
     @lamps = map_coordinates{|x,y| int01(x,y)}
 
     # No lamps on walls
@@ -95,4 +95,4 @@ class LightUp
 end
 
 path = ARGV[0] || Pathname(__dir__) + "light_up-1.txt"
-LightUp.new(path).solve!
+LightUp.new(path).call

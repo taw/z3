@@ -15,7 +15,7 @@ class Bridges
     @solver = Z3::Solver.new
   end
 
-  def solve!
+  def call
     @vars = {}
     (0...@xsize).each do |x|
       (0...@ysize).each do |y|
@@ -122,4 +122,4 @@ class Bridges
 end
 
 path = ARGV[0] || Pathname(__dir__) + "bridges-1.txt"
-Bridges.new(path).solve!
+Bridges.new(path).call

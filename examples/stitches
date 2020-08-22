@@ -22,7 +22,7 @@ class StitchesSolver
     @groups = @data.flatten.uniq
   end
 
-  def solve!
+  def call
     assign_colors!
     setup_cell_vars!
     setup_stitch_vars!
@@ -177,4 +177,4 @@ class StitchesSolver
 end
 
 path = ARGV[0] || Pathname(__dir__) + "stitches-1.txt"
-StitchesSolver.new(path).solve!
+StitchesSolver.new(path).call

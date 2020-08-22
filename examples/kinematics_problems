@@ -31,7 +31,7 @@ class KinematicsProblem01 < KinematicsProblem
   An airplane accelerates down a runway at 3.20 m/s2 for 32.8 s until is finally lifts off the ground.
   Determine the distance traveled before takeoff.
   """
-  def solve!
+  def call
     a = Z3.Real("a")
     t = Z3.Real("t")
     d = Z3.Real("d")
@@ -46,7 +46,7 @@ class KinematicsProblem02 < KinematicsProblem
   """
   A car starts from rest and accelerates uniformly over a time of 5.21 seconds for a distance of 110 m. Determine the acceleration of the car.
   """
-  def solve!
+  def call
     a = Z3.Real("a")
     t = Z3.Real("t")
     d = Z3.Real("d")
@@ -62,7 +62,7 @@ class KinematicsProblem03 < KinematicsProblem
   Upton Chuck is riding the Giant Drop at Great America.
   If Upton free falls for 2.60 seconds, what will be his final velocity and how far will he fall?
   """
-  def solve!
+  def call
     a = Z3.Real("a")
     t = Z3.Real("t")
     v = Z3.Real("v")
@@ -79,7 +79,7 @@ class KinematicsProblem04 < KinematicsProblem
   """
   A race car accelerates uniformly from 18.5 m/s to 46.1 m/s in 2.47 seconds. Determine the acceleration of the car and the distance traveled.
   """
-  def solve!
+  def call
     a = Z3.Real("a")
     t = Z3.Real("t")
     vs= Z3.Real("vs")
@@ -100,7 +100,7 @@ class KinematicsProblem05 < KinematicsProblem
   The acceleration of gravity on the moon is 1.67 m/s2.
   Determine the time for the feather to fall to the surface of the moon.
   """
-  def solve!
+  def call
     a = Z3.Real("a")
     t = Z3.Real("t")
     d = Z3.Real("d")
@@ -118,7 +118,7 @@ class KinematicsProblem06 < KinematicsProblem
   If a rocket-powered sled is accelerated to a speed of 444 m/s in 1.83 seconds,
   then what is the acceleration and what is the distance that the sled travels?
   """
-  def solve!
+  def call
     a = Z3.Real("a")
     t = Z3.Real("t")
     d = Z3.Real("d")
@@ -136,7 +136,7 @@ class KinematicsProblem07 < KinematicsProblem
   A bike accelerates uniformly from rest to a speed of 7.10 m/s over a distance of 35.4 m.
   Determine the acceleration of the bike.
   """
-  def solve!
+  def call
     a = Z3.Real("a")
     t = Z3.Real("t")
     d = Z3.Real("d")
@@ -156,7 +156,7 @@ class KinematicsProblem08 < KinematicsProblem
   The takeoff speed for this plane will be 65 m/s.
   Assuming this minimum acceleration, what is the minimum allowed length for the runway?
   """
-  def solve!
+  def call
     a = Z3.Real("a")
     t = Z3.Real("t")
     d = Z3.Real("d")
@@ -174,7 +174,7 @@ class KinematicsProblem09 < KinematicsProblem
   A car traveling at 22.4 m/s skids to a stop in 2.55 s.
   Determine the skidding distance of the car (assume uniform acceleration).
   """
-  def solve!
+  def call
     t = Z3.Real("t")
     d = Z3.Real("d")
     v = Z3.Real("v")
@@ -190,7 +190,7 @@ class KinematicsProblem10 < KinematicsProblem
   A kangaroo is capable of jumping to a height of 2.62 m.
   Determine the takeoff speed of the kangaroo.
   """
-  def solve!
+  def call
     a = Z3.Real("a")
     t = Z3.Real("t")
     d = Z3.Real("d")
@@ -207,13 +207,13 @@ end
 # This is actually param for Python Z3 printer, can't work until we get that
 # Z3.set_param("rational_to_decimal", true)
 
-KinematicsProblem01.new.solve!
-KinematicsProblem02.new.solve!
-KinematicsProblem03.new.solve!
-KinematicsProblem04.new.solve!
-KinematicsProblem05.new.solve!
-KinematicsProblem06.new.solve!
-KinematicsProblem07.new.solve!
-KinematicsProblem08.new.solve!
-KinematicsProblem09.new.solve!
-KinematicsProblem10.new.solve!
+KinematicsProblem01.new.call
+KinematicsProblem02.new.call
+KinematicsProblem03.new.call
+KinematicsProblem04.new.call
+KinematicsProblem05.new.call
+KinematicsProblem06.new.call
+KinematicsProblem07.new.call
+KinematicsProblem08.new.call
+KinematicsProblem09.new.call
+KinematicsProblem10.new.call

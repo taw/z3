@@ -76,7 +76,7 @@ class Nonogram
     end
   end
 
-  def solve!
+  def call
     @cells = (0...@ysize).map{|y|
       (0...@xsize).map{|x|
         Z3.Bool("cell[#{x+1},#{y+1}]")
@@ -149,4 +149,4 @@ nonogram = Nonogram.new(
   ]
 )
 
-nonogram.solve!
+nonogram.call

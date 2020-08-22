@@ -27,7 +27,7 @@ class PyramidNonogram
     end
   end
 
-  def solve!
+  def call
     if @solver.satisfiable?
       @model = @solver.model
       print_answer!
@@ -163,4 +163,4 @@ pyramid_nonogram.left_to_bottom(
   [_],
   [_],
 )
-pyramid_nonogram.solve!
+pyramid_nonogram.call

@@ -28,7 +28,7 @@ class KillerSudokuSolver
     end
   end
 
-  def solve!
+  def call
     @cells = (0...@size).map do |j|
       (0...@size).map do |i|
         cell_var(@knowns[j][i], i, j)
@@ -85,4 +85,4 @@ class KillerSudokuSolver
 end
 
 path = ARGV[0] || Pathname(__dir__) + "killer_sudoku-1.txt"
-KillerSudokuSolver.new(path).solve!
+KillerSudokuSolver.new(path).call

@@ -39,7 +39,7 @@ class KnightsPuzzle
     puts ""
   end
 
-  def solve!
+  def call
     if @solver.satisfiable?
       @model = @solver.model
       puts "Solved"
@@ -119,4 +119,4 @@ class KnightsPuzzle
   end
 end
 
-KnightsPuzzle.new.solve!
+KnightsPuzzle.new.call

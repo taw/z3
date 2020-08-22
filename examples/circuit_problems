@@ -45,7 +45,7 @@ class CircuitProblem
     @solver.assert @pins[a][:voltage] == @pins[b][:voltage]
   end
 
-  def solve!(*vars)
+  def call(*vars)
     setup_flow_rules!
     with_solved_model do |model|
       model.each do |n,v|
@@ -115,7 +115,7 @@ def problem_1!
   problem.connect "R1b", "R2a"
   problem.connect "R2b", "R3a"
   problem.connect "R3b", "V+"
-  problem.solve! "I V"
+  problem.call "I V"
 end
 
 def problem_2!
@@ -131,7 +131,7 @@ def problem_2!
   problem.connect "V+", "R1b"
   problem.connect "V+", "R2b"
   problem.connect "V+", "R3b"
-  problem.solve! "I V"
+  problem.call "I V"
 end
 
 def problem_3!
@@ -156,7 +156,7 @@ def problem_3!
     problem.connect "D3+", "V+"
     problem.connect "D4-",      "Lb"
     problem.connect "D4+", "V-"
-    problem.solve! "I V", "I L"
+    problem.call "I V", "I L"
   end
 end
 

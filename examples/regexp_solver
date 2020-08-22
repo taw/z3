@@ -11,7 +11,7 @@ class RegexpSolver
     @solver = Z3::Solver.new
   end
 
-  def solve!
+  def call
     @str = (0...@length).map do |i|
       v = Z3.Int("char[#{i}]")
       @solver.assert v >= 0
@@ -40,4 +40,4 @@ end
 
 length = ARGV[0].to_i
 regexp = ARGV[1]
-RegexpSolver.new(length, regexp).solve!
+RegexpSolver.new(length, regexp).call

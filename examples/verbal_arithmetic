@@ -16,7 +16,7 @@ class VerbalArithmetic
     @c = c.chars.map{|v| @vars[v]}
   end
 
-  def solve!
+  def call
     @solver.assert @a[0] != 0
     @solver.assert @b[0] != 0
     @solver.assert @c[0] != 0
@@ -44,4 +44,4 @@ class VerbalArithmetic
   end
 end
 
-VerbalArithmetic.new("SEND", "MORE", "MONEY").solve!
+VerbalArithmetic.new("SEND", "MORE", "MONEY").call
