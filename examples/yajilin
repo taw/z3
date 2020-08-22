@@ -122,13 +122,13 @@ class Yajilin
         count = @data[y][x][0].to_i
         dir = @data[y][x][1]
         case dir
-        when "<"
+        when "<", "←"
           stripe = stripe_left(x,y)
-        when ">"
+        when ">", "→"
           stripe = stripe_right(x,y)
-        when "^"
+        when "^", "↑"
           stripe = stripe_up(x,y)
-        when "_"
+        when "_", "↓"
           stripe = stripe_down(x,y)
         else
           raise
@@ -181,6 +181,20 @@ class Yajilin
       end
     end
 
+    # TEMPORARY
+    @solver.assert nvar(0,0) == 0
+    @solver.assert vvar(0,4)
+    @solver.assert hvar(4,5)
+    @solver.assert hvar(4,2)
+    @solver.assert hvar(2,5)
+    @solver.assert hvar(3,5)
+    @solver.assert hvar(1,9)
+
+    # each_xy do |x,y|
+    #   next unless x == 0 and y == 0
+    #   @solver.assert nvar(x,y) != 0
+    # end
+
     # @solver.assert Z3.Distinct(
     #   *enum_for(:each_xy).map{|x,y| nvar(x,y)}
     # )
@@ -202,13 +216,14 @@ class Yajilin
 
   def hint_data(x,y)
     u = @data[y][x]
-    u[0] +
-    {
+    n = u[0]
+    a = {
       "<" => "←",
       ">" => "→",
       "_" => "↓",
       "^" => "↑",
-    }[u[1]]
+    }[u[1]] || u[1]
+    n + a
   end
 
   # TODO: make it nicer
