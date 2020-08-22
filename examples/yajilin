@@ -181,23 +181,11 @@ class Yajilin
       end
     end
 
-    # TEMPORARY
-    @solver.assert nvar(0,0) == 0
-    @solver.assert vvar(0,4)
-    @solver.assert hvar(4,5)
-    @solver.assert hvar(4,2)
-    @solver.assert hvar(2,5)
-    @solver.assert hvar(3,5)
-    @solver.assert hvar(1,9)
-
-    # each_xy do |x,y|
-    #   next unless x == 0 and y == 0
-    #   @solver.assert nvar(x,y) != 0
-    # end
-
-    # @solver.assert Z3.Distinct(
-    #   *enum_for(:each_xy).map{|x,y| nvar(x,y)}
-    # )
+    # only one loop start
+    @solver.assert Z3.Add(
+      *enum_for(:each_xy).map{|x,y|
+        (nvar(x,y) == 0).ite(1,0)
+      }) == 1
   end
 
   def call
@@ -262,7 +250,9 @@ class Yajilin
 
       print "\n"
     end
+  end
 
+  def print_debug_loop_info
     print "\n"
     @ysize.times do |y|
       @xsize.times do |x|

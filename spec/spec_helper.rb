@@ -33,7 +33,7 @@ RSpec::Matchers.define :have_output do |expected|
     @actual == @expected
   end
 
-  failure_message_for_should do |actual|
+  failure_message do |actual|
     "Expected:\n#{@expected.chomp}\nBut got:\n#{@actual}"
   end
 end
