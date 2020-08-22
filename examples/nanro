@@ -1,0 +1,196 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/z3"
+require "pathname"
+
+class Nanro
+  def initialize(path)
+    data = Pathname(path)
+      .readlines
+      .map{|row| row.chomp.split}
+    @ysize = data.size
+    @xsize = data[0].size
+    raise unless data.all?{|row| row.size == @ysize}
+    @regions = data
+      .map{|row|
+        row.map{|cell|
+          cell.gsub(/\d|\./, "")
+        }
+      }
+    @hints = data
+      .map{|row|
+        row.map{|cell|
+          cell[1] =~ /(\d+)/ ? $1.to_i : nil
+        }
+      }
+    @solver = Z3::Solver.new
+  end
+
+  def assert_each_cell_is_0_or_rvar
+    each_xy do |x,y|
+      @solver.assert Z3.Or(
+        cvar(x,y) == 0,
+        cvar(x,y) == rvar(region_at(x,y))
+      )
+    end
+  end
+
+  def assert_rvar_equals_number_of_numbered_cells_in_region
+    cells_by_region.each do |r, xys|
+      nonzeroes = xys.map{|x,y| (cvar(x,y) == 0).ite(0,1)}
+      @solver.assert rvar(r) == Z3.Add(*nonzeroes)
+      @solver.assert rvar(r) >= 1
+    end
+  end
+
+  def assert_hints_obeyed
+    each_xy do |x,y|
+      if hint_at(x,y)
+        @solver.assert cvar(x,y) == hint_at(x,y)
+      end
+    end
+  end
+
+  def assert_no_numbered_squares
+    each_xy do |x,y|
+      return unless on_board?(x+1,y+1)
+      @solver.assert Z3.Or(
+        cvar(x,y) == 0,
+        cvar(x+1,y) == 0,
+        cvar(x,y+1) == 0,
+        cvar(x+1,y+1) == 0,
+      )
+    end
+  end
+
+  def call
+    assert_hints_obeyed
+    assert_no_numbered_squares
+    assert_each_cell_is_0_or_rvar
+    assert_rvar_equals_number_of_numbered_cells_in_region
+
+    if @solver.satisfiable?
+      @model = @solver.model
+      print_answer!
+    else
+      puts "failed to solve"
+    end
+  end
+
+  private
+
+  def cells_by_region
+    @cells_by_region ||= enum_for(:each_xy).group_by{|x,y| region_at(x,y)}
+  end
+
+  def rvar(r)
+    Z3.Int("r[#{r}]")
+  end
+
+  def cvar(x,y)
+    Z3.Int("c[#{x},#{y}]")
+  end
+
+  def each_xy
+    @ysize.times do |y|
+      @xsize.times do |x|
+        yield(x,y)
+      end
+    end
+  end
+
+  def on_board?(x,y)
+    x >= 0 and y >= 0 and x < @xsize and y < @ysize
+  end
+
+  def region_at(x,y)
+    return nil unless on_board?(x,y)
+    @regions[y][x]
+  end
+
+  def hint_at(x,y)
+    return nil unless on_board?(x,y)
+    @hints[y][x]
+  end
+
+  def print_corner?(x, y)
+    [
+      region_at(x,y),
+      region_at(x-1,y),
+      region_at(x,y-1),
+      region_at(x-1,y-1),
+    ].uniq.size > 1
+  end
+
+  def print_edge?(x1, y1, x2, y2)
+    region_at(x1,y1) != region_at(x2,y2)
+  end
+
+  def corner_output(x,y)
+    if print_corner?(x, y)
+      "*"
+    else
+      " "
+    end
+  end
+
+  def vedge_output(x,y)
+    if print_edge?(x, y, x, y-1)
+      "---"
+    else
+      "   "
+    end
+  end
+
+  def hedge_output(x,y)
+    if print_edge?(x, y, x-1, y)
+      "|"
+    else
+      " "
+    end
+  end
+
+  def print_answer!
+    (0..@ysize).each do |y|
+      (0..@xsize).each do |x|
+        print corner_output(x,y)
+        next if x == @xsize
+        print vedge_output(x,y)
+      end
+      print "\n"
+
+      next if y == @ysize
+
+      (0..@xsize).each do |x|
+        print hedge_output(x,y)
+        next if x == @xsize
+        print "   "
+      end
+      print "\n"
+
+      (0..@xsize).each do |x|
+        print hedge_output(x,y)
+        next if x == @xsize
+        print " "
+        c = @model[cvar(x,y)].to_i
+        if c == 0
+          print " "
+        else
+          print c
+        end
+        print " "
+      end
+      print "\n"
+
+      (0..@xsize).each do |x|
+        print hedge_output(x,y)
+        next if x == @xsize
+        print "   "
+      end
+      print "\n"
+    end
+  end
+end
+
+path = ARGV[0] || Pathname(__dir__) + "nanro-1.txt"
+Nanro.new(path).call
