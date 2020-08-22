@@ -44,6 +44,11 @@ class Yajilin
     Z3.Bool("v[#{x},#{y}]")
   end
 
+  # Every cell has a number that shows its position within the loop
+  def nvar(x,y)
+    Z3.Int("n[#{x},#{y}]")
+  end
+
   def hint_cell?(x,y)
     !!@data[y][x]
   end
@@ -56,7 +61,12 @@ class Yajilin
       [x,   y-1],
     ].select{|nx,ny|
       on_board?(nx, ny) and !hint_cell?(nx,ny)
-    }.map{|nx,ny| cvar(nx, ny)}
+    }
+  end
+
+  def neighbour_cvars(x,y)
+    neighbours(x,y)
+      .map{|nx,ny| cvar(nx, ny)}
   end
 
   def connections_at(x,y)
@@ -73,24 +83,20 @@ class Yajilin
   end
 
   def assert_connections
-    @ysize.times do |y|
-      @xsize.times do |x|
-        if hint_cell?(x, y)
-          @solver.assert count_loops_at(x,y) == 0
-        else
-          @solver.assert cvar(x,y).implies(count_loops_at(x,y) == 2)
-          @solver.assert (~cvar(x,y)).implies(count_loops_at(x,y) == 0)
-        end
+    each_xy do |x,y|
+      if hint_cell?(x, y)
+        @solver.assert count_loops_at(x,y) == 0
+      else
+        @solver.assert cvar(x,y).implies(count_loops_at(x,y) == 2)
+        @solver.assert (~cvar(x,y)).implies(count_loops_at(x,y) == 0)
       end
     end
   end
 
   def assert_no_black_multiples
-    @ysize.times do |y|
-      @xsize.times do |x|
-        next if hint_cell?(x, y)
-        @solver.assert (~cvar(x,y)).implies(Z3.And(*neighbours(x,y)))
-      end
+    each_xy do |x,y|
+      next if hint_cell?(x, y)
+      @solver.assert (~cvar(x,y)).implies(Z3.And(*neighbour_cvars(x,y)))
     end
   end
 
@@ -111,39 +117,80 @@ class Yajilin
   end
 
   def assert_arrows
-    @ysize.times do |y|
-      @xsize.times do |x|
-        if hint_cell?(x, y)
-          count = @data[y][x][0].to_i
-          dir = @data[y][x][1]
-          case dir
-          when "<"
-            stripe = stripe_left(x,y)
-          when ">"
-            stripe = stripe_right(x,y)
-          when "^"
-            stripe = stripe_up(x,y)
-          when "_"
-            stripe = stripe_down(x,y)
-          else
-            raise
-          end
-
-          @solver.assert Z3.Add(*stripe.map{|c| c.ite(0,1)}) == count
+    each_xy do |x,y|
+      if hint_cell?(x, y)
+        count = @data[y][x][0].to_i
+        dir = @data[y][x][1]
+        case dir
+        when "<"
+          stripe = stripe_left(x,y)
+        when ">"
+          stripe = stripe_right(x,y)
+        when "^"
+          stripe = stripe_up(x,y)
+        when "_"
+          stripe = stripe_down(x,y)
+        else
+          raise
         end
+
+        @solver.assert Z3.Add(*stripe.map{|c| c.ite(0,1)}) == count
       end
     end
   end
 
+  def each_xy
+    @ysize.times do |y|
+      @xsize.times do |x|
+        yield(x,y)
+      end
+    end
+  end
+
+  def connections_and_nvars(x,y)
+    [
+      [x+1, y, hvar(x, y)],
+      [x-1, y, hvar(x-1, y)],
+      [x, y+1, vvar(x, y)],
+      [x, y-1, vvar(x, y-1)],
+    ].select{|nx,ny,convar|
+      on_board?(nx, ny) and !hint_cell?(nx,ny)
+    }.map{|nx,ny,convar| [nvar(nx,ny), convar] }
+  end
+
+  # Loop will have Ns of 0+, all distinct and consecutive
+  # Non-loop will have Ns of MAX + cell_number
   def assert_single_loop
-    # TODO
+    # max_value = @xsize * @ysize + 10
+    max_value = 1000
+
+    each_xy do |x,y|
+      cell_idx = x + y * @xsize
+      @solver.assert nvar(x,y) >= 0
+      if hint_cell?(x,y)
+        @solver.assert nvar(x,y) == max_value + cell_idx
+      else
+        @solver.assert (~cvar(x,y)).implies( nvar(x,y) == max_value + cell_idx )
+
+        nval = connections_and_nvars(x,y)
+          .map{|n,c| c.ite(n+1, max_value) }
+          .reduce{|a,b| (a <= b).ite(a, b) }
+
+        @solver.assert cvar(x,y).implies((nvar(x,y) == 0) | (nvar(x,y) == nval) )
+        @solver.assert cvar(x,y).implies(nvar(x,y) < max_value)
+      end
+    end
+
+    # @solver.assert Z3.Distinct(
+    #   *enum_for(:each_xy).map{|x,y| nvar(x,y)}
+    # )
   end
 
   def call
     assert_connections
     assert_no_black_multiples
     assert_arrows
-    # assert_single_loop
+    assert_single_loop
 
     if @solver.satisfiable?
       @model = @solver.model
@@ -153,17 +200,28 @@ class Yajilin
     end
   end
 
+  def hint_data(x,y)
+    u = @data[y][x]
+    u[0] +
+    {
+      "<" => "←",
+      ">" => "→",
+      "_" => "↓",
+      "^" => "↑",
+    }[u[1]]
+  end
+
   # TODO: make it nicer
   def print_answer
     @ysize.times do |y|
       @xsize.times do |x|
         if hint_cell?(x,y)
-          # print @data[y][x]
-          print "O "
+          print hint_data(x,y)
+          # print "O "
         else
           c = @model[cvar(x,y)].to_b
           if c
-            print ". "
+            print "* "
           else
             print "# "
           end
@@ -187,6 +245,15 @@ class Yajilin
         end
       end
 
+      print "\n"
+    end
+
+    print "\n"
+    @ysize.times do |y|
+      @xsize.times do |x|
+        n = @model[nvar(x,y)].to_i
+        print "%8d" % n
+      end
       print "\n"
     end
   end
