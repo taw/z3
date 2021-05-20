@@ -1,0 +1,32 @@
+ .......
+ .......
+........
+........
+........
+........
+.......
+  .....
+
+aaaaa
+aaaaa
+
+bbb
+bbbb
+bbbb
+
+ ccc
+cccc
+
+ddd
+ddd
+ddd
+
+eee
+ e
+
+ffff
+f
+
+gggg
+gggg
+gggg

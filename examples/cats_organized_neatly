@@ -1,0 +1,133 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+require_relative "../lib/z3"
+
+class CatsOrganizedNeatly
+  def initialize(path)
+    data = Pathname(path).read
+
+    @board, *@cats = data.split("\n\n").map{|n| n.lines.map(&:chomp)}
+
+    raise "Board and cats mismatch" unless @board.join.scan(/\S/).count == @cats.join.scan(/\S/).count
+
+    @ysize = @board.size
+    @xsize = @board.map(&:size).max
+
+    # Up to user to make them unique
+    @cat_labels = @cats.map{|c| c.join[/\S/]}
+
+    @solver = Z3::Solver.new
+  end
+
+  def setup_board_vars
+    @bvars = {}
+    @ysize.times do |y|
+      @xsize.times do |x|
+        next unless @board[y][x] == "."
+        @bvars[[x,y]] = Z3.Int("b#{x},#{y}")
+        @solver.assert @bvars[[x,y]] >= 0
+        @solver.assert @bvars[[x,y]] < @cats.size
+      end
+    end
+  end
+
+  def setup_cats_vars
+    @cx = []
+    @cy = []
+    @co = []
+    @cats.each_with_index do |cat, i|
+      @cx[i] = Z3.Int("cx#{i}")
+      @cy[i] = Z3.Int("cy#{i}")
+      @co[i] = Z3.Int("co#{i}")
+      @solver.assert @cx[i] >= 0
+      @solver.assert @cx[i] <= (@xsize-1)
+      @solver.assert @cy[i] >= 0
+      @solver.assert @cy[i] <= (@ysize-1)
+      @solver.assert @co[i] >= 0
+      @solver.assert @co[i] <= 3
+    end
+  end
+
+  def cat_to_shifts(cat)
+    result = []
+    cat.each_with_index do |line, y|
+      line.chars.each_with_index do |c, x|
+        next if c == " "
+        result << [x,y]
+      end
+    end
+    result
+  end
+
+  def cat_at(shifts, x, y, i)
+    Z3.And(*shifts.map{|sx, sy|
+      v = @bvars[[sx+x,sy+y]]
+      return false unless v
+      v == i
+    })
+  end
+
+  def setup_cat_board_var(shifts0, i)
+    cx = @cx[i]
+    cy = @cy[i]
+    co = @co[i]
+
+    shiftss = [
+      shifts0,
+      shifts0.map{|x,y| [y,-x]},
+      shifts0.map{|x,y| [-x,-y]},
+      shifts0.map{|x,y| [-y,x]},
+    ]
+
+    shiftss.each_with_index do |shifts, o|
+      @ysize.times do |y|
+        @ysize.times do |x|
+          @solver.assert(
+            Z3.And(cx == x, cy == y, co == o).implies(cat_at(shifts, x, y, i))
+          )
+        end
+      end
+    end
+  end
+
+  def setup_cats_board_vars
+    @cats.each_with_index do |cat, i|
+      shifts = cat_to_shifts(cat)
+      setup_cat_board_var(shifts, i)
+    end
+  end
+
+  def call
+    # Each cell is just one of the cats
+    setup_board_vars
+    setup_cats_vars
+    setup_cats_board_vars
+
+    if @solver.satisfiable?
+      @model = @solver.model
+      print_answer!
+    else
+      binding.pry
+      puts "failed to solve"
+    end
+  end
+
+  def print_answer!
+    @ysize.times do |y|
+      @xsize.times do |x|
+        if @bvars[[x,y]]
+          cat_number = @model[@bvars[[x,y]]].to_i
+          print @cat_labels[cat_number]
+        else
+          print "."
+        end
+      end
+      print "\n"
+    end
+  end
+end
+
+
+path = ARGV[0] || Pathname(__dir__) + "cats_organized_neatly-48.txt"
+CatsOrganizedNeatly.new(path).call
