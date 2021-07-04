@@ -1,0 +1,106 @@
+#!/usr/bin/env ruby
+# From Tested on Humans Escape Room game
+
+require_relative "../lib/z3"
+
+class NineClocks
+  def initialize
+    @solver = Z3::Solver.new
+
+    @inputs = {}
+    @outputs = {}
+
+    # Setup
+    each_xy do |x,y|
+      @inputs[[x,y]] = Z3.Bitvec("i#{x},#{y}", 2)
+      @outputs[[x,y]] = Z3.Bitvec("o#{x},#{y}", 2)
+    end
+
+    # Rules
+    neighbours = {}
+    each_xy do |x,y|
+      out = @outputs[[x,y]]
+      neighbours[out] = []
+      each_xy do |xx, yy|
+        if (xx-x).abs + (yy-y).abs <= 1
+          neighbours[out] << @inputs[[xx,yy]]
+        end
+      end
+
+      neighbours.each do |ovar, ivars|
+        @solver.assert ovar == Z3.Add(*ivars)
+      end
+    end
+  end
+
+  def each_xy
+    3.times do |x|
+      3.times do |y|
+        yield(x,y)
+      end
+    end
+  end
+
+  def target_corner
+    each_xy do |x,y|
+      if x == 0 and y == 0
+        @solver.assert @outputs[[x,y]] == 1
+      else
+        @solver.assert @outputs[[x,y]] == 0
+      end
+    end
+    self
+  end
+
+  def target_edge
+    each_xy do |x,y|
+      if x == 0 and y == 1
+        @solver.assert @outputs[[x,y]] == 1
+      else
+        @solver.assert @outputs[[x,y]] == 0
+      end
+    end
+    self
+  end
+
+  def target_center
+    each_xy do |x,y|
+      if x == 1 and y == 1
+        @solver.assert @outputs[[x,y]] == 1
+      else
+        @solver.assert @outputs[[x,y]] == 0
+      end
+    end
+    self
+  end
+
+  def solve
+    if @solver.satisfiable?
+      model = @solver.model
+
+      puts "IN:"
+      3.times do |x|
+        3.times do |y|
+          ivar = model[@inputs[[x,y]]]
+          print ivar, " "
+        end
+        print "\n"
+      end
+
+      puts "OUT:"
+      3.times do |x|
+        3.times do |y|
+          ivar = model[@outputs[[x,y]]]
+          print ivar, " "
+        end
+        print "\n"
+      end
+    else
+      puts "Not satisfiable"
+    end
+  end
+end
+
+NineClocks.new.target_corner.solve
+NineClocks.new.target_edge.solve
+NineClocks.new.target_center.solve
