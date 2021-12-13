@@ -1,4 +1,5 @@
 # This test is really bad, all of these have multiple solutions.
+# And it changes between Z3 versions
 module Z3
   describe SetExpr do
     let(:sort) { SetSort.new(IntSort.new) }
@@ -30,7 +31,7 @@ module Z3
         ]).to have_solution(
           a => "store(const(true), 3, false)",
           b => "store(const(true), 1, false)",
-          c => "(lambda ((x!1 Int)) (or (not (= x!1 3)) (not (= x!1 1))))",
+          c => "map(store(const(true), 3, false), store(const(true), 1, false))",
         )
       end
 
@@ -46,7 +47,7 @@ module Z3
         ]).to have_solution(
           a => "store(const(true), 3, false)",
           b => "store(const(true), 1, false)",
-          c => "(lambda ((x!1 Int)) (and (not (= x!1 3)) (= x!1 1)))",
+          c => "map(store(const(true), 3, false), store(const(false), 1, true))",
         )
       end
 
@@ -62,7 +63,7 @@ module Z3
         ]).to have_solution(
           a => "store(const(true), 3, false)",
           b => "store(const(true), 1, false)",
-          c => "(lambda ((x!1 Int)) (or (not (= x!1 3)) (not (= x!1 1))))",
+          c => "map(store(const(true), 3, false), store(const(true), 1, false))",
         )
       end
     end

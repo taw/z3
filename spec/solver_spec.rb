@@ -37,8 +37,7 @@ module Z3
       solver.assert b >= 2
       solver.assert Z3.Or(a == 2, a == -2)
       stats = solver.statistics
-      # "mk bool var" added in 4.6.0
-      expect(stats.keys).to match_array(["rlimit count", "max memory", "memory", "num allocs", "mk bool var"])
+      expect(stats.keys).to match_array(["rlimit count", "max memory", "memory", "num allocs"])
     end
 
     # This is a very simple example of unknown satisfiablity

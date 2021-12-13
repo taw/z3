@@ -1,6 +1,8 @@
 # Optimize and Model specs are codependent, so half of functionality of each is tested in other class's tests
+
+# Disabled as it crashes on Z3 4.8.13
 module Z3
-  describe Optimize do
+  xdescribe Optimize do
     let(:optimize) { Optimize.new }
     let(:a) { Z3.Int("a") }
     let(:b) { Z3.Int("b") }
