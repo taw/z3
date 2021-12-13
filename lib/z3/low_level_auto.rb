@@ -25,6 +25,14 @@ module Z3
         VeryLowLevel.Z3_algebraic_ge(_ctx_pointer, ast1._ast, ast2._ast)
       end
 
+      def algebraic_get_i(ast) #=> :uint
+        VeryLowLevel.Z3_algebraic_get_i(_ctx_pointer, ast._ast)
+      end
+
+      def algebraic_get_poly(ast) #=> :ast_vector_pointer
+        VeryLowLevel.Z3_algebraic_get_poly(_ctx_pointer, ast._ast)
+      end
+
       def algebraic_gt(ast1, ast2) #=> :bool
         VeryLowLevel.Z3_algebraic_gt(_ctx_pointer, ast1._ast, ast2._ast)
       end
@@ -581,6 +589,10 @@ module Z3
         VeryLowLevel.Z3_get_num_tactics(_ctx_pointer)
       end
 
+      def get_numeral_binary_string(ast) #=> :string
+        VeryLowLevel.Z3_get_numeral_binary_string(_ctx_pointer, ast._ast)
+      end
+
       def get_numeral_decimal_string(ast, num) #=> :string
         VeryLowLevel.Z3_get_numeral_decimal_string(_ctx_pointer, ast._ast, num)
       end
@@ -681,6 +693,10 @@ module Z3
         VeryLowLevel.Z3_get_sort_name(_ctx_pointer, sort._ast)
       end
 
+      def get_string_length(ast) #=> :uint
+        VeryLowLevel.Z3_get_string_length(_ctx_pointer, ast._ast)
+      end
+
       def get_symbol_int(sym) #=> :int
         VeryLowLevel.Z3_get_symbol_int(_ctx_pointer, sym)
       end
@@ -769,8 +785,8 @@ module Z3
         VeryLowLevel.Z3_goal_size(_ctx_pointer, goal._goal)
       end
 
-      def goal_to_dimacs_string(goal) #=> :string
-        VeryLowLevel.Z3_goal_to_dimacs_string(_ctx_pointer, goal._goal)
+      def goal_to_dimacs_string(goal, bool) #=> :string
+        VeryLowLevel.Z3_goal_to_dimacs_string(_ctx_pointer, goal._goal, bool)
       end
 
       def goal_to_string(goal) #=> :string
@@ -799,6 +815,10 @@ module Z3
 
       def is_as_array(ast) #=> :bool
         VeryLowLevel.Z3_is_as_array(_ctx_pointer, ast._ast)
+      end
+
+      def is_char_sort(sort) #=> :bool
+        VeryLowLevel.Z3_is_char_sort(_ctx_pointer, sort._ast)
       end
 
       def is_eq_ast(ast1, ast2) #=> :bool
@@ -1017,6 +1037,30 @@ module Z3
         VeryLowLevel.Z3_mk_bvxor(_ctx_pointer, ast1._ast, ast2._ast)
       end
 
+      def mk_char_from_bv(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_char_from_bv(_ctx_pointer, ast._ast)
+      end
+
+      def mk_char_is_digit(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_char_is_digit(_ctx_pointer, ast._ast)
+      end
+
+      def mk_char_le(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_char_le(_ctx_pointer, ast1._ast, ast2._ast)
+      end
+
+      def mk_char_sort #=> :sort_pointer
+        VeryLowLevel.Z3_mk_char_sort(_ctx_pointer)
+      end
+
+      def mk_char_to_bv(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_char_to_bv(_ctx_pointer, ast._ast)
+      end
+
+      def mk_char_to_int(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_char_to_int(_ctx_pointer, ast._ast)
+      end
+
       def mk_concat(ast1, ast2) #=> :ast_pointer
         VeryLowLevel.Z3_mk_concat(_ctx_pointer, ast1._ast, ast2._ast)
       end
@@ -1039,6 +1083,10 @@ module Z3
 
       def mk_div(ast1, ast2) #=> :ast_pointer
         VeryLowLevel.Z3_mk_div(_ctx_pointer, ast1._ast, ast2._ast)
+      end
+
+      def mk_divides(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_divides(_ctx_pointer, ast1._ast, ast2._ast)
       end
 
       def mk_empty_set(sort) #=> :ast_pointer
@@ -1421,6 +1469,10 @@ module Z3
         VeryLowLevel.Z3_mk_probe(_ctx_pointer, str)
       end
 
+      def mk_re_allchar(sort) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_re_allchar(_ctx_pointer, sort._ast)
+      end
+
       def mk_re_complement(ast) #=> :ast_pointer
         VeryLowLevel.Z3_mk_re_complement(_ctx_pointer, ast._ast)
       end
@@ -1467,6 +1519,10 @@ module Z3
 
       def mk_rotate_right(num, ast) #=> :ast_pointer
         VeryLowLevel.Z3_mk_rotate_right(_ctx_pointer, num, ast._ast)
+      end
+
+      def mk_sbv_to_str(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_sbv_to_str(_ctx_pointer, ast._ast)
       end
 
       def mk_select(ast1, ast2) #=> :ast_pointer
@@ -1537,6 +1593,14 @@ module Z3
         VeryLowLevel.Z3_mk_store(_ctx_pointer, ast1._ast, ast2._ast, ast3._ast)
       end
 
+      def mk_str_le(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_str_le(_ctx_pointer, ast1._ast, ast2._ast)
+      end
+
+      def mk_str_lt(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_str_lt(_ctx_pointer, ast1._ast, ast2._ast)
+      end
+
       def mk_str_to_int(ast) #=> :ast_pointer
         VeryLowLevel.Z3_mk_str_to_int(_ctx_pointer, ast._ast)
       end
@@ -1559,6 +1623,10 @@ module Z3
 
       def mk_true #=> :ast_pointer
         VeryLowLevel.Z3_mk_true(_ctx_pointer)
+      end
+
+      def mk_ubv_to_str(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_ubv_to_str(_ctx_pointer, ast._ast)
       end
 
       def mk_unary_minus(ast) #=> :ast_pointer
@@ -2061,8 +2129,16 @@ module Z3
         VeryLowLevel.Z3_solver_inc_ref(_ctx_pointer, solver._solver)
       end
 
+      def solver_interrupt(solver) #=> :void
+        VeryLowLevel.Z3_solver_interrupt(_ctx_pointer, solver._solver)
+      end
+
       def solver_pop(solver, num) #=> :void
         VeryLowLevel.Z3_solver_pop(_ctx_pointer, solver._solver, num)
+      end
+
+      def solver_propagate_register(solver, ast) #=> :uint
+        VeryLowLevel.Z3_solver_propagate_register(_ctx_pointer, solver._solver, ast._ast)
       end
 
       def solver_push(solver) #=> :void
@@ -2077,8 +2153,8 @@ module Z3
         VeryLowLevel.Z3_solver_set_params(_ctx_pointer, solver._solver, params._params)
       end
 
-      def solver_to_dimacs_string(solver) #=> :string
-        VeryLowLevel.Z3_solver_to_dimacs_string(_ctx_pointer, solver._solver)
+      def solver_to_dimacs_string(solver, bool) #=> :string
+        VeryLowLevel.Z3_solver_to_dimacs_string(_ctx_pointer, solver._solver, bool)
       end
 
       def solver_to_string(solver) #=> :string

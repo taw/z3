@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+
+if ARGV.empty?
+  STDERR.puts "Usage: #{$0} file1.h file2.h ..."
+  exit 1
+end
+
+def_lines = ARGV.flat_map{|path| Pathname(path).readlines}.map(&:strip).grep(/def_API/)
+
+output =  def_lines.map{|line| line.gsub(/def_API\s+/, "def_API")+"\n"}.sort.join
+
+Pathname("#{__dir__}/definitions.h").write(output)

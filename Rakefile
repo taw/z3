@@ -5,6 +5,13 @@ task "test" => "spec"
 task "test:integration" => "spec:integration"
 task "test:unit" => "spec:unit"
 
+desc "Regenerate api/definitions.h"
+task "definitions" do
+  headers = `brew list -v z3`.split("\n").grep(/\.h\z/)
+  # Need to bump it to latest version
+  sh "./api/gen_definitions", *headers
+end
+
 desc "Regenerate API"
 task "api" do
   sh "./api/gen_api api/definitions.h"
