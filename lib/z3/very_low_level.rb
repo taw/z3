@@ -4,7 +4,7 @@ require "ffi"
 module Z3
   module VeryLowLevel
     extend FFI::Library
-    ffi_lib ["z3", "libz3.so.4.8"]
+    ffi_lib ["libz3.so.4.8", "libz3.so", "z3"]
 
     class << self
       # Aliases defined just to make APIs below look nicer
@@ -12,6 +12,10 @@ module Z3
         arg_types = arg_types.map { |t| map_type(t) }
         return_type = map_type(return_type)
         super(name, arg_types, return_type)
+      rescue FFI::NotFoundError
+        define_singleton_method(name) do |*args|
+          raise Z3::Exception, "Could not find #{name} in the Z3 library. It is likely that the Z3 library has wrong version."
+        end
       end
 
       def map_type(t)
