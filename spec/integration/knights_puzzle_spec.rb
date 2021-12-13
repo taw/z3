@@ -1,5 +1,5 @@
 # There are multiple solutions, so this test is nondeterministic
-# Changing it to one returned by z3 4.7.1, but perhaps it needs some serious fixing
+# This is what Z3 4.8.13 returns
 describe "Knights Swap Puzzle" do
   it do
     expect("knights_puzzle").to have_output <<EOF
@@ -9,28 +9,28 @@ bbb.
 xbxw
 ..ww
 x.xw
-b: 0,0 -> 1,2
-
-State 1:
-.bb.
-xbxw
-.bww
-x.xw
 w: 2,2 -> 3,0
 
-State 2:
-.bbw
+State 1:
+bbbw
 xbxw
-.b.w
+...w
 x.xw
 b: 1,0 -> 2,2
 
-State 3:
-..bw
+State 2:
+b.bw
 xbxw
-.bbw
+..bw
 x.xw
 w: 3,1 -> 1,0
+
+State 3:
+bwbw
+xbx.
+..bw
+x.xw
+b: 0,0 -> 1,2
 
 State 4:
 .wbw
