@@ -3,7 +3,6 @@ module Z3
     attr_reader :_optimize
 
     def initialize
-      raise Z3::Exception, "This is known to crash in Z3 4.8.13"
       @_optimize = LowLevel.mk_optimize
       LowLevel.optimize_inc_ref(self)
       reset_model!
@@ -24,9 +23,9 @@ module Z3
       LowLevel.optimize_assert(self, ast)
     end
 
-    def assert_soft(ast)
+    def assert_soft(ast, weight = "1", id = nil)
       reset_model!
-      LowLevel.optimize_assert_soft(self, ast)
+      LowLevel.optimize_assert_soft(self, ast, weight, id)
     end
 
     def check(*args)
