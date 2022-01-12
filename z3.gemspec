@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.requirements = "z3 library (4.8+)"
   # development
   s.add_development_dependency "pry"
+  s.metadata['msys2_mingw_dependencies'] = 'z3'
   # tests
   s.add_development_dependency "rake", ">= 12"
   s.add_development_dependency "rspec", "~> 3.8"
