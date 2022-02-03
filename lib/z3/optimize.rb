@@ -3,7 +3,6 @@ module Z3
     attr_reader :_optimize
 
     def initialize
-      raise Z3::Exception, "This is known to crash in Z3 4.8.13"
       @_optimize = LowLevel.mk_optimize
       LowLevel.optimize_inc_ref(self)
       reset_model!
