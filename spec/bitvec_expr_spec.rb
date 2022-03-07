@@ -36,6 +36,19 @@ module Z3
       expect([a == 30, b == 42, c == (a * b)]).to have_solution(c => 236)
     end
 
+    it "/" do
+      expect{ a / b }.to raise_error(Z3::Exception)
+      expect([a == 200, b == 20, c == a.unsigned_div(b)]).to have_solution(c => 10)
+      expect([a == 200, b == 20, c == a.signed_div(b)]).to have_solution(c => 254)
+    end
+
+    it "%" do
+      expect{ a % b }.to raise_error(Z3::Exception)
+      expect([a == 200, b == 20, c == a.signed_mod(b)]).to have_solution(c => 4)
+      expect([a == 200, b == 20, c == a.signed_rem(b)]).to have_solution(c => 240)
+      expect([a == 200, b == 20, c == a.unsigned_rem(b)]).to have_solution(c => 0)
+    end
+
     it "&" do
       expect([a == 50, b == 27, c == (a & b)]).to have_solution(c => 18)
     end

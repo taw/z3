@@ -49,11 +49,31 @@ module Z3
     end
 
     def /(other)
-      raise "Use signed_div or unsigned_div"
+      raise Z3::Exception, "Use signed_div or unsigned_div"
+    end
+
+    def signed_div(other)
+      BitvecExpr.SignedDiv(self, other)
+    end
+
+    def unsigned_div(other)
+      BitvecExpr.UnsignedDiv(self, other)
     end
 
     def %(other)
-      raise "Use signed_mod or signed_rem or unsigned_rem"
+      raise Z3::Exception, "Use signed_mod or signed_rem or unsigned_rem"
+    end
+
+    def signed_mod(other)
+      BitvecExpr.SignedMod(self, other)
+    end
+
+    def signed_rem(other)
+      BitvecExpr.SignedRem(self, other)
+    end
+
+    def unsigned_rem(other)
+      BitvecExpr.UnsignedRem(self, other)
     end
 
     def rotate_left(num)
@@ -255,6 +275,31 @@ module Z3
       def LShift(a, b)
         a, b = coerce_to_same_bv_sort(a, b)
         a.sort.new(LowLevel.mk_bvshl(a, b))
+      end
+
+      def SignedDiv(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        a.sort.new(LowLevel.mk_bvsdiv(a, b))
+      end
+
+      def UnsignedDiv(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        a.sort.new(LowLevel.mk_bvudiv(a, b))
+      end
+
+      def SignedMod(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        a.sort.new(LowLevel.mk_bvsmod(a, b))
+      end
+
+      def SignedRem(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        a.sort.new(LowLevel.mk_bvsrem(a, b))
+      end
+
+      def UnsignedRem(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        a.sort.new(LowLevel.mk_bvurem(a, b))
       end
 
       def Xnor(*args)
