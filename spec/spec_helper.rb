@@ -38,6 +38,20 @@ RSpec::Matchers.define :have_output do |expected|
   end
 end
 
+RSpec::Matchers.define :have_output_matching_saved_example do
+  match do |file_name|
+    executable_path = "#{__dir__}/../examples/#{file_name}"
+    actual = IO.popen("ruby -r./spec/coverage_helper #{executable_path}").read
+    @actual = actual.gsub(/ *$/, "")
+    @expected = Pathname("spec/integration/examples").glob("#{file_name}-*.txt").map(&:read).map{|o| o.gsub(/ *$/, "")}
+    @expected.include?(@actual)
+  end
+
+  failure_message do |actual|
+    "Expected one of saved examples, but got:\n#{@actual}"
+  end
+end
+
 RSpec::Matchers.define :have_output_no_color do |expected|
   match do |file_name|
     executable_path = "#{__dir__}/../examples/#{file_name}"
