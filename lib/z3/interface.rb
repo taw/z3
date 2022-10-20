@@ -72,6 +72,10 @@ module Z3
     LowLevel.get_version.join(".")
   end
 
+  def version_at_least?(a, b=0, c=0, d=0)
+    (LowLevel.get_version <=> [a, b, c, d]) >= 0
+  end
+
   def set_param(k,v)
     LowLevel.global_param_set(k,v)
   end

@@ -17,8 +17,7 @@ module Z3
       )
     end
 
-    # Z3.version >= 4.5 but we don't have Version object, and it doesn't work on strings
-    if (Z3.version.split(".").map(&:to_i) <=> [4,5,0,0]) == 1
+    if Z3.version_at_least?(4, 5)
       # Only works in z3 4.5, 4.4 (like on Ubuntu) returns bad stuff
       it "union" do
         expect([

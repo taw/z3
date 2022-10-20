@@ -43,9 +43,7 @@ module Z3
     # This is a very simple example of unknown satisfiablity
     # so we might need more complex one in the future
     # This is now satisfiable in 4.6.0
-    #
-    # Z3.version >= 4.6 but we don't have Version object, and it doesn't work on strings
-    if (Z3.version.split(".").map(&:to_i) <=> [4,6,0,0]) == 1
+    if Z3.version_at_least?(4, 6)
       it "unknown satisfiability (until 4.6 fix)" do
         solver.assert a**3 == a
         expect(solver.check).to eq(:sat)
