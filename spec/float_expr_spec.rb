@@ -102,8 +102,10 @@ module Z3
       expect(positive_infinity.to_s).to eq("+oo")
       expect(negative_infinity.to_s).to eq("-oo")
       expect(nan.to_s).to eq("NaN")
+
       # Denormals changed
-      if Z3.version >= '4.5'
+      # Z3.version >= 4.6 but we don't have Version object, and it doesn't work on strings
+      if (Z3.version.split(".").map(&:to_i) <=> [4,5,0,0]) == 1
         expect(float_double.from_const(1234 * 0.5**1040).to_s).to eq("0.00470733642578125B-1022")
         expect(float_single.from_const(1234 * 0.5**136).to_s).to eq("1.205078125B-126")
         # This is what we get, all of these are wrong, by a lot:
