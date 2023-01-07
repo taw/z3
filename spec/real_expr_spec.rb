@@ -64,6 +64,12 @@ module Z3
       expect([a == 81, b == 0.25, c == (a ** b)]).to have_solution(c => 3)
     end
 
+    it "abs" do
+      expect([a == 3, b == 2, c == (a - b).abs]).to have_solution(c => 1)
+      expect([a == 2, b == 3, c == (a - b).abs]).to have_solution(c => 1)
+      expect([a == 2, b == 2, c == (a - b).abs]).to have_solution(c => 0)
+    end
+
     it "unary -" do
       expect([a == 3, b == -a]).to have_solution(b => -3)
       expect([a == 0, b == -a]).to have_solution(b => 0)
