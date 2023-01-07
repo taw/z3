@@ -40,6 +40,10 @@ module Z3
       sort.new(LowLevel.mk_unary_minus(self))
     end
 
+    def abs
+      (self < 0).ite(-self, self)
+    end
+
     # Recast so 1 + x:Float
     # is:  (+ 1.0 x)
     # not: (+ (to_real 1) x)

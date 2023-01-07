@@ -81,6 +81,12 @@ module Z3
       expect([a == 3, b == -a]).to have_solution(b => -3)
     end
 
+    it "abs" do
+      expect([a == 3, b == 2, c == (a - b).abs]).to have_solution(c => 1)
+      expect([a == 2, b == 3, c == (a - b).abs]).to have_solution(c => 1)
+      expect([a == 2, b == 2, c == (a - b).abs]).to have_solution(c => 0)
+    end
+
     it "simplify" do
       a = Z3.Const(5)
       b = Z3.Const(3)
