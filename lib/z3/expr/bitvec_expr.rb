@@ -246,6 +246,26 @@ module Z3
       BitvecExpr.UnsignedLe(self, other)
     end
 
+    def zero?
+      self == 0
+    end
+
+    def nonzero?
+      self != 0
+    end
+
+    def positive?
+      self.signed_gt 0
+    end
+
+    def negative?
+      self.signed_lt 0
+    end
+
+    def abs
+      self.negative?.ite(-self, self)
+    end
+
     def coerce(other)
       other_sort = Expr.sort_for_const(other)
       max_sort = [sort, other_sort].max

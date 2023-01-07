@@ -129,6 +129,17 @@ module Z3
       expect([x == nan.zero?]).to have_solution(x => false)
     end
 
+    # Same as positive or negative
+    # +0, -0, and NaN are all false
+    it "nonzero?" do
+      expect([x == positive_zero.nonzero?]).to have_solution(x => false)
+      expect([x == negative_zero.nonzero?]).to have_solution(x => false)
+      expect([x == positive_infinity.nonzero?]).to have_solution(x => true)
+      expect([x == negative_infinity.nonzero?]).to have_solution(x => true)
+      expect([x == float_double.from_const(1.5).nonzero?]).to have_solution(x => true)
+      expect([x == nan.nonzero?]).to have_solution(x => false)
+    end
+
     it "infinite?" do
       expect([x == positive_zero.infinite?]).to have_solution(x => false)
       expect([x == positive_infinity.infinite?]).to have_solution(x => true)
@@ -178,6 +189,29 @@ module Z3
       expect([x == float_double.from_const(1.5).negative?]).to have_solution(x => false)
       expect([x == float_double.from_const(-1.5).negative?]).to have_solution(x => true)
       expect([x == nan.negative?]).to have_solution(x => false)
+    end
+
+    # We can't simply do have_solution(b => positive_zero)
+    # as positive_zero == negative_zero
+    it "abs" do
+      expect([a == positive_zero, b == a.abs]).to have_solution(a.abs => positive_zero)
+      expect([a == negative_zero, b == a.abs]).to have_solution(a.abs => positive_zero)
+      expect([a == positive_infinity, b == a.abs]).to have_solution(b => positive_infinity)
+      expect([a == negative_infinity, b == a.abs]).to have_solution(b => positive_infinity)
+      expect([a == float_double.from_const(1.5), b == a.abs]).to have_solution(b => float_double.from_const(1.5))
+      expect([a == float_double.from_const(-1.5), b == a.abs]).to have_solution(b => float_double.from_const(1.5))
+      expect([a == nan, b == a.abs]).to have_no_solution
+    end
+
+    # This means you need to be extra careful when using Z3::Float
+    # as == means something else on them than mathematical ==
+    #
+    # Also have_solutions helper doesn't work as it relies on ==
+    it "zeroes" do
+      expect([a == positive_zero, b == a, b.positive?]).to have_solution(b => positive_zero)
+      expect([a == negative_zero, b == a, b.negative?]).to have_solution(b => negative_zero)
+      expect([a == positive_zero, b == a, b.positive?]).to have_solution(b => positive_zero)
+      expect([a == negative_zero, b == a, b.negative?]).to have_solution(b => negative_zero)
     end
   end
 end

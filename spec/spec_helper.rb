@@ -155,3 +155,22 @@ RSpec::Matchers.define :have_solutions do |expected|
     end
   end
 end
+
+RSpec::Matchers.define :have_no_solution do
+  match do |asts|
+    solver = setup_solver(asts)
+    !solver.satisfiable?
+  end
+
+  failure_message do |asts|
+    "expected #{asts.inspect} to have no solutions, but solution found"
+  end
+
+  def setup_solver(asts)
+    Z3::Solver.new.tap do |solver|
+      asts.each do |ast|
+        solver.assert ast
+      end
+    end
+  end
+end

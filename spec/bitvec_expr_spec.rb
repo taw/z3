@@ -231,5 +231,38 @@ module Z3
       expect([a == 0b0101_0110, e == 0b1101, d == a.concat(e)]).to have_solution(d => 0b0101_0110_1101)
       expect([a == 0b0101_0110, e == 0b1101, d == e.concat(a)]).to have_solution(d => 0b1101_0101_0110)
     end
+
+    it "zero?" do
+      expect([a == 0, x == a.zero?]).to have_solution(x => true)
+      expect([a == 100, x == a.zero?]).to have_solution(x => false)
+      expect([a == 200, x == a.zero?]).to have_solution(x => false)
+    end
+
+    it "nonzero?" do
+      expect([a == 0, x == a.nonzero?]).to have_solution(x => false)
+      expect([a == 100, x == a.nonzero?]).to have_solution(x => true)
+      expect([a == 200, x == a.nonzero?]).to have_solution(x => true)
+    end
+
+    # Inherently signed
+    it "positive?" do
+      expect([a == 0, x == a.positive?]).to have_solution(x => false)
+      expect([a == 100, x == a.positive?]).to have_solution(x => true)
+      expect([a == 200, x == a.positive?]).to have_solution(x => false)
+    end
+
+    # Inherently signed
+    it "negative?" do
+      expect([a == 0, x == a.negative?]).to have_solution(x => false)
+      expect([a == 100, x == a.negative?]).to have_solution(x => false)
+      expect([a == 200, x == a.negative?]).to have_solution(x => true)
+    end
+
+    # Inherently signed
+    it "abs" do
+      expect([a == 0, b == a.abs]).to have_solution(b => 0)
+      expect([a == 100, b == a.abs]).to have_solution(b => 100)
+      expect([a == 200, b == a.abs]).to have_solution(b => 56)
+    end
   end
 end

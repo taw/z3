@@ -81,6 +81,10 @@ module Z3
       BoolSort.new.new LowLevel.mk_fpa_is_zero(self)
     end
 
+    def nonzero?
+      Z3.And(~zero?, ~nan?)
+    end
+
     def max(other)
       FloatExpr.Max(self, other)
     end

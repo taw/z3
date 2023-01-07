@@ -40,6 +40,22 @@ module Z3
       sort.new(LowLevel.mk_unary_minus(self))
     end
 
+    def zero?
+      self == 0
+    end
+
+    def nonzero?
+      self != 0
+    end
+
+    def positive?
+      self > 0
+    end
+
+    def negative?
+      self < 0
+    end
+
     def abs
       (self < 0).ite(-self, self)
     end
