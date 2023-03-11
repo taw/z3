@@ -39,6 +39,15 @@ module Z3
       expect([a == -10, b == -3, c == a.mod(b)]).to have_solution(c => 2)
     end
 
+    # It doesn't match Ruby on negative right side, but nobody does modulo a negative anyway
+    # Python Z3 API does the same thing
+    it "%" do
+      expect([a ==  10, b ==  3, c == a % b]).to have_solution(c => 1)
+      expect([a ==  10, b == -3, c == a % b]).to have_solution(c => 1)
+      expect([a == -10, b ==  3, c == a % b]).to have_solution(c => 2)
+      expect([a == -10, b == -3, c == a % b]).to have_solution(c => 2)
+    end
+
     it "==" do
       expect([a == 2, b == 2, x == (a == b)]).to have_solution(x => true)
       expect([a == 2, b == 3, x == (a == b)]).to have_solution(x => false)

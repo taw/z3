@@ -4,6 +4,10 @@ module Z3
       IntExpr.Mod(self, other)
     end
 
+    def %(other)
+      IntExpr.Mod(self, other)
+    end
+
     def rem(other)
       IntExpr.Rem(self, other)
     end
