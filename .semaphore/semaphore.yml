@@ -1,0 +1,17 @@
+version: v1.0
+name: Ruby
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu2004
+blocks:
+  - name: bundle exec rspec
+    task:
+      jobs:
+        - name: bundle install
+          commands:
+            - sudo apt install -y z3
+            - checkout
+            - sem-version ruby 3.2.2
+            - bundle install --path vendor/bundle
+            - bundle exec rspec
