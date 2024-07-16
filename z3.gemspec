@@ -16,10 +16,10 @@ Gem::Specification.new do |s|
   s.add_development_dependency "pry"
   s.metadata['msys2_mingw_dependencies'] = 'z3'
   # tests
-  s.add_development_dependency "rake", ">= 12"
-  s.add_development_dependency "rspec", "~> 3.8"
-  s.add_development_dependency "simplecov", "~> 0.16"
-  s.add_development_dependency "regexp_parser", "~> 1.3"
-  s.add_development_dependency "paint", ">= 2.1.0"
-  s.add_runtime_dependency "ffi", "~> 1.9"
+  s.add_development_dependency "rake", ">= 13"
+  s.add_development_dependency "rspec", "~> 3.13"
+  s.add_development_dependency "simplecov", "~> 0.22"
+  s.add_development_dependency "regexp_parser", "~> 1.8"
+  s.add_development_dependency "paint", ">= 2.3.0"
+  s.add_runtime_dependency "ffi", "~> 1.17"
 end
