@@ -185,6 +185,10 @@ module Z3
         VeryLowLevel.Z3_ast_vector_translate(_ctx_pointer, ast_vector, context._context)
       end
 
+      def constructor_num_fields(constructor) #=> :uint
+        VeryLowLevel.Z3_constructor_num_fields(_ctx_pointer, constructor._constructor)
+      end
+
       def datatype_update_field(func_decl, ast1, ast2) #=> :ast_pointer
         VeryLowLevel.Z3_datatype_update_field(_ctx_pointer, func_decl._ast, ast1._ast, ast2._ast)
       end
@@ -211,6 +215,10 @@ module Z3
 
       def disable_trace(str) #=> :void
         VeryLowLevel.Z3_disable_trace(str)
+      end
+
+      def enable_concurrent_dec_ref #=> :void
+        VeryLowLevel.Z3_enable_concurrent_dec_ref(_ctx_pointer)
       end
 
       def enable_trace(str) #=> :void
@@ -461,8 +469,16 @@ module Z3
         VeryLowLevel.Z3_get_arity(_ctx_pointer, func_decl._ast)
       end
 
+      def get_array_arity(sort) #=> :uint
+        VeryLowLevel.Z3_get_array_arity(_ctx_pointer, sort._ast)
+      end
+
       def get_array_sort_domain(sort) #=> :sort_pointer
         VeryLowLevel.Z3_get_array_sort_domain(_ctx_pointer, sort._ast)
+      end
+
+      def get_array_sort_domain_n(sort, num) #=> :sort_pointer
+        VeryLowLevel.Z3_get_array_sort_domain_n(_ctx_pointer, sort._ast, num)
       end
 
       def get_array_sort_range(sort) #=> :sort_pointer
@@ -557,6 +573,10 @@ module Z3
         VeryLowLevel.Z3_get_denominator(_ctx_pointer, ast._ast)
       end
 
+      def get_depth(ast) #=> :uint
+        VeryLowLevel.Z3_get_depth(_ctx_pointer, ast._ast)
+      end
+
       def get_domain(func_decl, num) #=> :sort_pointer
         VeryLowLevel.Z3_get_domain(_ctx_pointer, func_decl._ast, num)
       end
@@ -577,12 +597,20 @@ module Z3
         VeryLowLevel.Z3_get_func_decl_id(_ctx_pointer, func_decl._ast)
       end
 
+      def get_global_param_descrs #=> :param_descrs_pointer
+        VeryLowLevel.Z3_get_global_param_descrs(_ctx_pointer)
+      end
+
       def get_index_value(ast) #=> :uint
         VeryLowLevel.Z3_get_index_value(_ctx_pointer, ast._ast)
       end
 
       def get_num_probes #=> :uint
         VeryLowLevel.Z3_get_num_probes(_ctx_pointer)
+      end
+
+      def get_num_simplifiers #=> :uint
+        VeryLowLevel.Z3_get_num_simplifiers(_ctx_pointer)
       end
 
       def get_num_tactics #=> :uint
@@ -633,6 +661,10 @@ module Z3
         VeryLowLevel.Z3_get_quantifier_bound_sort(_ctx_pointer, ast._ast, num)
       end
 
+      def get_quantifier_id(ast) #=> :symbol_pointer
+        VeryLowLevel.Z3_get_quantifier_id(_ctx_pointer, ast._ast)
+      end
+
       def get_quantifier_no_pattern_ast(ast, num) #=> :ast_pointer
         VeryLowLevel.Z3_get_quantifier_no_pattern_ast(_ctx_pointer, ast._ast, num)
       end
@@ -651,6 +683,10 @@ module Z3
 
       def get_quantifier_pattern_ast(ast, num) #=> :pattern_pointer
         VeryLowLevel.Z3_get_quantifier_pattern_ast(_ctx_pointer, ast._ast, num)
+      end
+
+      def get_quantifier_skolem_id(ast) #=> :symbol_pointer
+        VeryLowLevel.Z3_get_quantifier_skolem_id(_ctx_pointer, ast._ast)
       end
 
       def get_quantifier_weight(ast) #=> :uint
@@ -675,6 +711,10 @@ module Z3
 
       def get_seq_sort_basis(sort) #=> :sort_pointer
         VeryLowLevel.Z3_get_seq_sort_basis(_ctx_pointer, sort._ast)
+      end
+
+      def get_simplifier_name(num) #=> :string
+        VeryLowLevel.Z3_get_simplifier_name(_ctx_pointer, num)
       end
 
       def get_sort(ast) #=> :sort_pointer
@@ -833,6 +873,10 @@ module Z3
         VeryLowLevel.Z3_is_eq_sort(_ctx_pointer, sort1._ast, sort2._ast)
       end
 
+      def is_ground(ast) #=> :bool
+        VeryLowLevel.Z3_is_ground(_ctx_pointer, ast._ast)
+      end
+
       def is_lambda(ast) #=> :bool
         VeryLowLevel.Z3_is_lambda(_ctx_pointer, ast._ast)
       end
@@ -849,8 +893,16 @@ module Z3
         VeryLowLevel.Z3_is_quantifier_forall(_ctx_pointer, ast._ast)
       end
 
+      def is_recursive_datatype_sort(sort) #=> :bool
+        VeryLowLevel.Z3_is_recursive_datatype_sort(_ctx_pointer, sort._ast)
+      end
+
       def is_well_sorted(ast) #=> :bool
         VeryLowLevel.Z3_is_well_sorted(_ctx_pointer, ast._ast)
+      end
+
+      def mk_abs(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_abs(_ctx_pointer, ast._ast)
       end
 
       def mk_array_default(ast) #=> :ast_pointer
@@ -871,6 +923,10 @@ module Z3
 
       def mk_ast_vector #=> :ast_vector_pointer
         VeryLowLevel.Z3_mk_ast_vector(_ctx_pointer)
+      end
+
+      def mk_bit2bool(num, ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_bit2bool(_ctx_pointer, num, ast._ast)
       end
 
       def mk_bool_sort #=> :sort_pointer
@@ -1037,6 +1093,10 @@ module Z3
         VeryLowLevel.Z3_mk_bvxor(_ctx_pointer, ast1._ast, ast2._ast)
       end
 
+      def mk_char(num) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_char(_ctx_pointer, num)
+      end
+
       def mk_char_from_bv(ast) #=> :ast_pointer
         VeryLowLevel.Z3_mk_char_from_bv(_ctx_pointer, ast._ast)
       end
@@ -1079,6 +1139,10 @@ module Z3
 
       def mk_context_rc(config) #=> :ctx_pointer
         VeryLowLevel.Z3_mk_context_rc(config._config)
+      end
+
+      def mk_datatype_sort(sym) #=> :sort_pointer
+        VeryLowLevel.Z3_mk_datatype_sort(_ctx_pointer, sym)
       end
 
       def mk_div(ast1, ast2) #=> :ast_pointer
@@ -1477,6 +1541,10 @@ module Z3
         VeryLowLevel.Z3_mk_re_complement(_ctx_pointer, ast._ast)
       end
 
+      def mk_re_diff(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_re_diff(_ctx_pointer, ast1._ast, ast2._ast)
+      end
+
       def mk_re_empty(sort) #=> :ast_pointer
         VeryLowLevel.Z3_mk_re_empty(_ctx_pointer, sort._ast)
       end
@@ -1489,6 +1557,10 @@ module Z3
         VeryLowLevel.Z3_mk_re_loop(_ctx_pointer, ast._ast, num1, num2)
       end
 
+      def mk_re_power(ast, num) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_re_power(_ctx_pointer, ast._ast, num)
+      end
+
       def mk_re_range(ast1, ast2) #=> :ast_pointer
         VeryLowLevel.Z3_mk_re_range(_ctx_pointer, ast1._ast, ast2._ast)
       end
@@ -1499,6 +1571,10 @@ module Z3
 
       def mk_real2int(ast) #=> :ast_pointer
         VeryLowLevel.Z3_mk_real2int(_ctx_pointer, ast._ast)
+      end
+
+      def mk_real_int64(num1, num2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_real_int64(_ctx_pointer, num1, num2)
       end
 
       def mk_real_sort #=> :sort_pointer
@@ -1529,8 +1605,24 @@ module Z3
         VeryLowLevel.Z3_mk_select(_ctx_pointer, ast1._ast, ast2._ast)
       end
 
+      def mk_seq_foldl(ast1, ast2, ast3) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_seq_foldl(_ctx_pointer, ast1._ast, ast2._ast, ast3._ast)
+      end
+
+      def mk_seq_foldli(ast1, ast2, ast3, ast4) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_seq_foldli(_ctx_pointer, ast1._ast, ast2._ast, ast3._ast, ast4._ast)
+      end
+
       def mk_seq_last_index(ast1, ast2) #=> :ast_pointer
         VeryLowLevel.Z3_mk_seq_last_index(_ctx_pointer, ast1._ast, ast2._ast)
+      end
+
+      def mk_seq_map(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_seq_map(_ctx_pointer, ast1._ast, ast2._ast)
+      end
+
+      def mk_seq_mapi(ast1, ast2, ast3) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_seq_mapi(_ctx_pointer, ast1._ast, ast2._ast, ast3._ast)
       end
 
       def mk_seq_nth(ast1, ast2) #=> :ast_pointer
@@ -1605,8 +1697,16 @@ module Z3
         VeryLowLevel.Z3_mk_str_to_int(_ctx_pointer, ast._ast)
       end
 
+      def mk_string_from_code(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_string_from_code(_ctx_pointer, ast._ast)
+      end
+
       def mk_string_symbol(str) #=> :symbol_pointer
         VeryLowLevel.Z3_mk_string_symbol(_ctx_pointer, str)
+      end
+
+      def mk_string_to_code(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_string_to_code(_ctx_pointer, ast._ast)
       end
 
       def mk_tactic(str) #=> :tactic_pointer
@@ -1623,6 +1723,10 @@ module Z3
 
       def mk_true #=> :ast_pointer
         VeryLowLevel.Z3_mk_true(_ctx_pointer)
+      end
+
+      def mk_type_variable(sym) #=> :sort_pointer
+        VeryLowLevel.Z3_mk_type_variable(_ctx_pointer, sym)
       end
 
       def mk_ubv_to_str(ast) #=> :ast_pointer
@@ -1805,6 +1909,10 @@ module Z3
         VeryLowLevel.Z3_optimize_push(_ctx_pointer, optimize._optimize)
       end
 
+      def optimize_set_initial_value(optimize, ast1, ast2) #=> :void
+        VeryLowLevel.Z3_optimize_set_initial_value(_ctx_pointer, optimize._optimize, ast1._ast, ast2._ast)
+      end
+
       def optimize_set_params(optimize, params) #=> :void
         VeryLowLevel.Z3_optimize_set_params(_ctx_pointer, optimize._optimize, params._params)
       end
@@ -1937,6 +2045,10 @@ module Z3
         VeryLowLevel.Z3_rcf_add(_ctx_pointer, num1._rcf_num, num2._rcf_num)
       end
 
+      def rcf_coefficient(num1, num2) #=> :rcf_num_pointer
+        VeryLowLevel.Z3_rcf_coefficient(_ctx_pointer, num1._rcf_num, num2)
+      end
+
       def rcf_del(num) #=> :void
         VeryLowLevel.Z3_rcf_del(_ctx_pointer, num._rcf_num)
       end
@@ -1949,6 +2061,10 @@ module Z3
         VeryLowLevel.Z3_rcf_eq(_ctx_pointer, num1._rcf_num, num2._rcf_num)
       end
 
+      def rcf_extension_index(num) #=> :uint
+        VeryLowLevel.Z3_rcf_extension_index(_ctx_pointer, num._rcf_num)
+      end
+
       def rcf_ge(num1, num2) #=> :bool
         VeryLowLevel.Z3_rcf_ge(_ctx_pointer, num1._rcf_num, num2._rcf_num)
       end
@@ -1957,8 +2073,28 @@ module Z3
         VeryLowLevel.Z3_rcf_gt(_ctx_pointer, num1._rcf_num, num2._rcf_num)
       end
 
+      def rcf_infinitesimal_name(num) #=> :symbol_pointer
+        VeryLowLevel.Z3_rcf_infinitesimal_name(_ctx_pointer, num._rcf_num)
+      end
+
       def rcf_inv(num) #=> :rcf_num_pointer
         VeryLowLevel.Z3_rcf_inv(_ctx_pointer, num._rcf_num)
+      end
+
+      def rcf_is_algebraic(num) #=> :bool
+        VeryLowLevel.Z3_rcf_is_algebraic(_ctx_pointer, num._rcf_num)
+      end
+
+      def rcf_is_infinitesimal(num) #=> :bool
+        VeryLowLevel.Z3_rcf_is_infinitesimal(_ctx_pointer, num._rcf_num)
+      end
+
+      def rcf_is_rational(num) #=> :bool
+        VeryLowLevel.Z3_rcf_is_rational(_ctx_pointer, num._rcf_num)
+      end
+
+      def rcf_is_transcendental(num) #=> :bool
+        VeryLowLevel.Z3_rcf_is_transcendental(_ctx_pointer, num._rcf_num)
       end
 
       def rcf_le(num1, num2) #=> :bool
@@ -2001,6 +2137,18 @@ module Z3
         VeryLowLevel.Z3_rcf_neq(_ctx_pointer, num1._rcf_num, num2._rcf_num)
       end
 
+      def rcf_num_coefficients(num) #=> :uint
+        VeryLowLevel.Z3_rcf_num_coefficients(_ctx_pointer, num._rcf_num)
+      end
+
+      def rcf_num_sign_condition_coefficients(num1, num2) #=> :uint
+        VeryLowLevel.Z3_rcf_num_sign_condition_coefficients(_ctx_pointer, num1._rcf_num, num2)
+      end
+
+      def rcf_num_sign_conditions(num) #=> :uint
+        VeryLowLevel.Z3_rcf_num_sign_conditions(_ctx_pointer, num._rcf_num)
+      end
+
       def rcf_num_to_decimal_string(num1, num2) #=> :string
         VeryLowLevel.Z3_rcf_num_to_decimal_string(_ctx_pointer, num1._rcf_num, num2)
       end
@@ -2013,8 +2161,20 @@ module Z3
         VeryLowLevel.Z3_rcf_power(_ctx_pointer, num1._rcf_num, num2)
       end
 
+      def rcf_sign_condition_coefficient(num1, num2, num3) #=> :rcf_num_pointer
+        VeryLowLevel.Z3_rcf_sign_condition_coefficient(_ctx_pointer, num1._rcf_num, num2, num3)
+      end
+
+      def rcf_sign_condition_sign(num1, num2) #=> :int
+        VeryLowLevel.Z3_rcf_sign_condition_sign(_ctx_pointer, num1._rcf_num, num2)
+      end
+
       def rcf_sub(num1, num2) #=> :rcf_num_pointer
         VeryLowLevel.Z3_rcf_sub(_ctx_pointer, num1._rcf_num, num2._rcf_num)
+      end
+
+      def rcf_transcendental_name(num) #=> :symbol_pointer
+        VeryLowLevel.Z3_rcf_transcendental_name(_ctx_pointer, num._rcf_num)
       end
 
       def reset_memory #=> :void
@@ -2023,6 +2183,10 @@ module Z3
 
       def set_param_value(config, str1, str2) #=> :void
         VeryLowLevel.Z3_set_param_value(config._config, str1, str2)
+      end
+
+      def simplifier_get_descr(str) #=> :string
+        VeryLowLevel.Z3_simplifier_get_descr(_ctx_pointer, str)
       end
 
       def simplify(ast) #=> :ast_pointer
@@ -2051,6 +2215,18 @@ module Z3
 
       def solver_check(solver) #=> :int
         VeryLowLevel.Z3_solver_check(_ctx_pointer, solver._solver)
+      end
+
+      def solver_congruence_explain(solver, ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_solver_congruence_explain(_ctx_pointer, solver._solver, ast1._ast, ast2._ast)
+      end
+
+      def solver_congruence_next(solver, ast) #=> :ast_pointer
+        VeryLowLevel.Z3_solver_congruence_next(_ctx_pointer, solver._solver, ast._ast)
+      end
+
+      def solver_congruence_root(solver, ast) #=> :ast_pointer
+        VeryLowLevel.Z3_solver_congruence_root(_ctx_pointer, solver._solver, ast._ast)
       end
 
       def solver_cube(solver, ast_vector, num) #=> :ast_vector_pointer
@@ -2137,8 +2313,12 @@ module Z3
         VeryLowLevel.Z3_solver_pop(_ctx_pointer, solver._solver, num)
       end
 
-      def solver_propagate_register(solver, ast) #=> :uint
+      def solver_propagate_register(solver, ast) #=> :void
         VeryLowLevel.Z3_solver_propagate_register(_ctx_pointer, solver._solver, ast._ast)
+      end
+
+      def solver_push(solver) #=> :void
+        VeryLowLevel.Z3_solver_push(_ctx_pointer, solver._solver)
       end
 
       def solver_push(solver) #=> :void
@@ -2149,8 +2329,16 @@ module Z3
         VeryLowLevel.Z3_solver_reset(_ctx_pointer, solver._solver)
       end
 
+      def solver_set_initial_value(solver, ast1, ast2) #=> :void
+        VeryLowLevel.Z3_solver_set_initial_value(_ctx_pointer, solver._solver, ast1._ast, ast2._ast)
+      end
+
       def solver_set_params(solver, params) #=> :void
         VeryLowLevel.Z3_solver_set_params(_ctx_pointer, solver._solver, params._params)
+      end
+
+      def solver_solve_for(solver, ast_vector1, ast_vector2, ast_vector3) #=> :void
+        VeryLowLevel.Z3_solver_solve_for(_ctx_pointer, solver._solver, ast_vector1, ast_vector2, ast_vector3)
       end
 
       def solver_to_dimacs_string(solver, bool) #=> :string

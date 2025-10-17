@@ -135,7 +135,12 @@ class GenerateAPI
   private
 
   def add_definition!(definition)
-    @definitions << Definition.new(definition)
+    begin
+      @definitions << Definition.new(definition)
+    rescue
+      # skip, it's some new API
+      warn "#{$!}"
+    end
   end
 
   def add_file!(path)

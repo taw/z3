@@ -22,7 +22,7 @@ class Definition
 
   def type_to_api_argument_name(t)
     case t
-    when "INT", "UINT", "RCF_NUM", "INT64", "UINT64"
+    when "INT", "UINT", "RCF_NUM", "INT64", "UINT64", "LBOOL"
       "num"
     when "BOOL"
       "bool"
@@ -87,7 +87,7 @@ class Definition
       when "SYMBOL"
         # FFI but not wrapped
         n
-      when "INT", "UINT", "STRING", "BOOL", "INT64", "UINT64", "DOUBLE", "FLOAT"
+      when "INT", "UINT", "STRING", "BOOL", "INT64", "UINT64", "DOUBLE", "FLOAT", "LBOOL"
         n
       else
         raise "Unknown API/FFI argument #{t}"
@@ -116,7 +116,7 @@ class Definition
       ":string"
     when "UINT"
       ":uint"
-    when "INT"
+    when "INT", "LBOOL"
       ":int"
     when "INT64"
       ":int64"
@@ -223,7 +223,7 @@ class Definition
       elsif argument_str.sub!(/\A[,\s]+/, "")
         # OK
       else
-        require 'pry'; binding.pry
+        raise "Failed to parse definition: #{definition_str}"
       end
     end
     if name =~ /\AZ3_/
