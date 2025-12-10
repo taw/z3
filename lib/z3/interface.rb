@@ -1,5 +1,7 @@
 module Z3
+  #--
   # Variables
+  #++
   def Int(v)
     IntSort.new.var(v)
   end
@@ -16,7 +18,9 @@ module Z3
     BitvecSort.new(n).var(v)
   end
 
+  #--
   # Constants
+  #++
   def True
     BoolSort.new.True
   end
@@ -29,7 +33,9 @@ module Z3
     Expr.sort_for_const(v).from_const(v)
   end
 
+  #--
   # Multiargument constructors
+  #++
   def Distinct(*args)
     Expr.Distinct(*args)
   end
@@ -66,7 +72,9 @@ module Z3
     BoolExpr.IfThenElse(a,b,c)
   end
 
+  #--
   # Global functions
+  #++
   def version
     LowLevel.get_version.join(".")
   end
