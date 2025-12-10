@@ -1,4 +1,6 @@
-This is Ruby interface for Z3 [ https://github.com/Z3Prover/z3 ].
+# Ruby interface for Z3
+
+This is a Ruby interface for [Z3](https://github.com/Z3Prover/z3).
 
 Minimum required version is Z3 4.8.
 
@@ -6,7 +8,9 @@ It's in very early stages of development. Pull requests always welcome.
 
 ### Interface
 
-The public interface is various methods in `Z3` module, and on objects created by it. `examples/` directory is probably the best place to start.
+The public interface is various methods in `Z3` module, and on objects created by it. 
+
+The [`examples/`](https://github.com/themichaelyang/z3-ruby/tree/master/examples) directory is probably the best place to start.
 
 You can use most Ruby operators to construct Z3 expressions, but use `| &` instead of `|| &&` for boolean operators. They unfortunately have wrong operator precedence so you'll need to use some extra parentheses.
 
