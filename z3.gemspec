@@ -21,5 +21,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "simplecov", "~> 0.22"
   s.add_development_dependency "regexp_parser", "~> 1.8"
   s.add_development_dependency "paint", ">= 2.3.0"
+  s.add_development_dependency "rdoc", ">= 2.3.0"
   s.add_runtime_dependency "ffi", "~> 1.17"
 end

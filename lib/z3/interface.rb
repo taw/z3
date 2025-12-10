@@ -1,4 +1,3 @@
-# Everything here might go away
 module Z3
   # Variables
   def Int(v)
