@@ -1,4 +1,5 @@
 require "json"
+require "rdoc/task"
 
 task "default" => "spec"
 task "test" => "spec"
@@ -60,4 +61,14 @@ task "coverage:missing" do
   open("missing_apis.txt", "w") do |file|
     file.puts missing
   end
+end
+
+RDoc::Task.new do |rdoc|
+  rdoc.main = "README.md"
+  rdoc.rdoc_dir = "docs"
+  rdoc.rdoc_files.include("README.md", "lib/**/*.rb")
+  rdoc.rdoc_files.exclude("lib/z3/hacks.rb")
+  rdoc.rdoc_files.exclude("lib/z3/low_level.rb")
+  rdoc.rdoc_files.exclude("lib/z3/very_low_level.rb")
+  rdoc.rdoc_files.exclude("lib/z3/very_low_level_auto.rb")
 end

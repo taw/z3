@@ -1,7 +1,6 @@
-# Seriously do not use this directly in your code
-# They unwrap inputs, but don't wrap returns yet
-
 module Z3
+  # Seriously do not use this directly in your code
+  # They unwrap inputs, but don't wrap returns yet
   module LowLevel
     class << self
       def get_version

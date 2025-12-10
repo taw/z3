@@ -1,12 +1,52 @@
-This is Ruby interface for Z3 [ https://github.com/Z3Prover/z3 ].
+# Ruby bindings for Z3
 
-Minimum required version is Z3 4.8.
+This is a Ruby interface for [Z3](https://github.com/Z3Prover/z3).
+
+Minimum required [Z3](https://github.com/Z3Prover/z3) version is 4.8. Make sure you have it first (e.g. `brew install z3` on MacOS).
 
 It's in very early stages of development. Pull requests always welcome.
 
-### Interface
+```sh
+gem install z3
+```
 
-The public interface is various methods in `Z3` module, and on objects created by it. `examples/` directory is probably the best place to start.
+## Basic usage
+
+Variables are initialized with `Z3.Bool`, `Z3.Int`, `Z3.Real`, `Z3.Bitvec`.
+
+Constrain and solve with `Z3::Solver` and `Z3::Optimize`.
+
+```ruby
+require 'z3'
+
+# make z3 variables
+a, b = Z3.Int('a'), Z3.Int('b')
+
+# add constraints with expressions
+solver = Z3::Solver.new
+solver.assert(a > 1)
+solver.assert(b > 0)
+solver.assert(a + b == 3)
+
+# check sat, find model
+if solver.satisfiable?
+  model = solver.model
+  
+  # convert z3 model to ruby types
+  hash = model.to_h do |zvar, zvalue| 
+    [zvar.to_s, zvalue.to_i] 
+  end
+  
+  p hash
+  # {"a" => 2, "b" => 1}
+end
+```
+
+## Interface
+
+The public interface is various methods in `Z3` module, and on objects created by it.
+
+The [`examples/`](https://github.com/taw/z3/blob/master/examples) directory is probably the best place to start.
 
 You can use most Ruby operators to construct Z3 expressions, but use `| &` instead of `|| &&` for boolean operators. They unfortunately have wrong operator precedence so you'll need to use some extra parentheses.
 
