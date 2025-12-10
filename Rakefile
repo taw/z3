@@ -65,7 +65,7 @@ end
 
 RDoc::Task.new do |rdoc|
   rdoc.main = "README.md"
-  rdoc.rdoc_dir = "_site"
+  rdoc.rdoc_dir = "docs"
   rdoc.rdoc_files.include("README.md", "lib/**/*.rb")
   rdoc.rdoc_files.exclude("lib/z3/hacks.rb")
   rdoc.rdoc_files.exclude("lib/z3/low_level.rb")

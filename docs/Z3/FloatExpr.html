@@ -1,0 +1,2087 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>class Z3::FloatExpr - RDoc Documentation</title>
+
+
+  <meta name="keywords" content="ruby,class,Z3::FloatExpr">
+
+
+    <meta name="description" content="Documentation for the Z3::FloatExpr class">
+
+
+
+
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+  var index_rel_prefix = "../";
+</script>
+
+<script src="../js/navigation.js" defer></script>
+<script src="../js/search.js" defer></script>
+<script src="../js/search_index.js" defer></script>
+<script src="../js/searcher.js" defer></script>
+<script src="../js/darkfish.js" defer></script>
+
+<link href="../css/fonts.css" rel="stylesheet">
+<link href="../css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="class">
+<div id="navigation-toggle" role="button" tabindex="0" aria-label="Toggle sidebar" aria-expanded="true" aria-controls="navigation">
+  <span aria-hidden="true">&#9776;</span>
+</div>
+
+
+<nav id="navigation" role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search (/) for a class, method, ..." spellcheck="false"
+             autocomplete="off"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  
+
+  
+<div id="parent-class-section" class="nav-section">
+  <h3>Ancestors</h3>
+  <ul><li><a href="Expr.html">Z3::Expr</a><ul><li><a href="AST.html">Z3::AST</a><ul><li>Object</li></ul></li></ul></li></ul>
+</div>
+
+
+  
+
+  
+
+  
+  <div class="nav-section">
+    <h3>Class Methods</h3>
+    <ul class="link-list" role="directory">
+
+      <li ><a href="#method-c-Add">Add</a></li>
+
+      <li ><a href="#method-c-Div">Div</a></li>
+
+      <li ><a href="#method-c-Eq">Eq</a></li>
+
+      <li ><a href="#method-c-Ge">Ge</a></li>
+
+      <li ><a href="#method-c-Gt">Gt</a></li>
+
+      <li ><a href="#method-c-Le">Le</a></li>
+
+      <li ><a href="#method-c-Lt">Lt</a></li>
+
+      <li ><a href="#method-c-Max">Max</a></li>
+
+      <li ><a href="#method-c-Min">Min</a></li>
+
+      <li ><a href="#method-c-Mul">Mul</a></li>
+
+      <li ><a href="#method-c-Ne">Ne</a></li>
+
+      <li ><a href="#method-c-Rem">Rem</a></li>
+
+      <li ><a href="#method-c-Sub">Sub</a></li>
+
+      <li ><a href="#method-c-coerce_to_mode_sort">coerce_to_mode_sort</a></li>
+
+      <li ><a href="#method-c-coerce_to_same_float_sort">coerce_to_same_float_sort</a></li>
+
+      <li class="calls-super" ><a href="#method-c-new">new</a></li>
+
+    </ul>
+  </div>
+
+
+
+  <div class="nav-section">
+    <h3>Instance Methods</h3>
+    <ul class="link-list" role="directory">
+
+      <li ><a href="#method-i-21-3D">!=</a></li>
+
+      <li ><a href="#method-i-2D-40">-@</a></li>
+
+      <li ><a href="#method-i-3C">&lt;</a></li>
+
+      <li ><a href="#method-i-3C-3D">&lt;=</a></li>
+
+      <li ><a href="#method-i-3D-3D">==</a></li>
+
+      <li ><a href="#method-i-3E">&gt;</a></li>
+
+      <li ><a href="#method-i-3E-3D">&gt;=</a></li>
+
+      <li ><a href="#method-i-abs">abs</a></li>
+
+      <li ><a href="#method-i-add">add</a></li>
+
+      <li ><a href="#method-i-div">div</a></li>
+
+      <li ><a href="#method-i-exponent_string">exponent_string</a></li>
+
+      <li ><a href="#method-i-infinite-3F">infinite?</a></li>
+
+      <li ><a href="#method-i-max">max</a></li>
+
+      <li ><a href="#method-i-min">min</a></li>
+
+      <li ><a href="#method-i-mul">mul</a></li>
+
+      <li ><a href="#method-i-nan-3F">nan?</a></li>
+
+      <li ><a href="#method-i-negative-3F">negative?</a></li>
+
+      <li ><a href="#method-i-nonzero-3F">nonzero?</a></li>
+
+      <li ><a href="#method-i-normal-3F">normal?</a></li>
+
+      <li ><a href="#method-i-positive-3F">positive?</a></li>
+
+      <li ><a href="#method-i-rem">rem</a></li>
+
+      <li ><a href="#method-i-significand_string">significand_string</a></li>
+
+      <li ><a href="#method-i-sub">sub</a></li>
+
+      <li ><a href="#method-i-subnormal-3F">subnormal?</a></li>
+
+      <li ><a href="#method-i-zero-3F">zero?</a></li>
+
+    </ul>
+  </div>
+
+
+
+  <footer id="validator-badges" role="contentinfo">
+  <p><a href="https://validator.w3.org/check/referer">Validate</a></p>
+  <p>Generated by <a href="https://ruby.github.io/rdoc/">RDoc</a> 6.17.0.</p>
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.</p>
+</footer>
+
+</nav>
+
+<main role="main" aria-labelledby="class-Z3::FloatExpr">
+  
+  
+    <ol role="navigation" aria-label="Breadcrumb navigation" class="breadcrumb">
+      
+      <li>
+        
+        <a href="../Z3.html">Z3</a><span>::</span>
+        
+      </li>
+      
+      <li>
+        
+        <span>FloatExpr</span>
+        
+      </li>
+      
+    </ol>
+  
+
+  <h1 id="class-Z3::FloatExpr" class="anchor-link class">
+    class Z3::FloatExpr
+  </h1>
+
+  <section class="description">
+    
+  </section>
+
+
+  <section id="5Buntitled-5D" class="documentation-section anchor-link">
+
+
+
+
+
+
+
+
+
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section anchor-link">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+
+      <div id="method-c-Add" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-Add" title="Link to this method">
+                <span class="method-name">Add</span>
+                <span class="method-args">(a, b, m)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="Add-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 147</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">Add</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-identifier">m</span>)
+  <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-identifier">m</span> = <span class="ruby-identifier">coerce_to_mode_sort</span>(<span class="ruby-identifier">m</span>)
+  <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_add</span>(<span class="ruby-identifier">m</span>, <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-Div" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-Div" title="Link to this method">
+                <span class="method-name">Div</span>
+                <span class="method-args">(a, b, m)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="Div-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 165</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">Div</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-identifier">m</span>)
+  <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-identifier">m</span> = <span class="ruby-identifier">coerce_to_mode_sort</span>(<span class="ruby-identifier">m</span>)
+  <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_div</span>(<span class="ruby-identifier">m</span>, <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-Eq" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-Eq" title="Link to this method">
+                <span class="method-name">Eq</span>
+                <span class="method-args">(a, b)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="Eq-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 118</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">Eq</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_eq</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-Ge" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-Ge" title="Link to this method">
+                <span class="method-name">Ge</span>
+                <span class="method-args">(a, b)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="Ge-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 137</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">Ge</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_geq</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-Gt" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-Gt" title="Link to this method">
+                <span class="method-name">Gt</span>
+                <span class="method-args">(a, b)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="Gt-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 127</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">Gt</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_gt</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-Le" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-Le" title="Link to this method">
+                <span class="method-name">Le</span>
+                <span class="method-args">(a, b)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="Le-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 142</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">Le</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_leq</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-Lt" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-Lt" title="Link to this method">
+                <span class="method-name">Lt</span>
+                <span class="method-args">(a, b)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="Lt-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 132</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">Lt</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_lt</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-Max" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-Max" title="Link to this method">
+                <span class="method-name">Max</span>
+                <span class="method-args">(a, b)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="Max-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 178</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">Max</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_max</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          <p>In older versons, this dies when trying to calll Z3_get_ast_kind, min works on same call Works in 4.6</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-Min" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-Min" title="Link to this method">
+                <span class="method-name">Min</span>
+                <span class="method-args">(a, b)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="Min-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 183</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">Min</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_min</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-Mul" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-Mul" title="Link to this method">
+                <span class="method-name">Mul</span>
+                <span class="method-args">(a, b, m)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="Mul-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 159</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">Mul</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-identifier">m</span>)
+  <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-identifier">m</span> = <span class="ruby-identifier">coerce_to_mode_sort</span>(<span class="ruby-identifier">m</span>)
+  <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_mul</span>(<span class="ruby-identifier">m</span>, <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-Ne" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-Ne" title="Link to this method">
+                <span class="method-name">Ne</span>
+                <span class="method-args">(a, b)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="Ne-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 123</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">Ne</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-operator">~</span><span class="ruby-constant">Eq</span>(<span class="ruby-identifier">a</span>,<span class="ruby-identifier">b</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-Rem" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-Rem" title="Link to this method">
+                <span class="method-name">Rem</span>
+                <span class="method-args">(a, b)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="Rem-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 171</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">Rem</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_rem</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-Sub" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-Sub" title="Link to this method">
+                <span class="method-name">Sub</span>
+                <span class="method-args">(a, b, m)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="Sub-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 153</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">Sub</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-identifier">m</span>)
+  <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-identifier">m</span> = <span class="ruby-identifier">coerce_to_mode_sort</span>(<span class="ruby-identifier">m</span>)
+  <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_sub</span>(<span class="ruby-identifier">m</span>, <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-coerce_to_mode_sort" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-coerce_to_mode_sort" title="Link to this method">
+                <span class="method-name">coerce_to_mode_sort</span>
+                <span class="method-args">(m)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="coerce_to_mode_sort-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 113</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">coerce_to_mode_sort</span>(<span class="ruby-identifier">m</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Mode expected&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">RoundingModeExpr</span>)
+  <span class="ruby-identifier">m</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-coerce_to_same_float_sort" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-coerce_to_same_float_sort" title="Link to this method">
+                <span class="method-name">coerce_to_same_float_sort</span>
+                <span class="method-args">(*args)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="coerce_to_same_float_sort-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 107</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">coerce_to_same_float_sort</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+  <span class="ruby-identifier">args</span> = <span class="ruby-identifier">coerce_to_same_sort</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Float value with same sizes expected&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">FloatExpr</span>)
+  <span class="ruby-identifier">args</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-new" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-new" title="Link to this method">
+                <span class="method-name">new</span>
+                <span class="method-args">(_ast, sort)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/expr.rb, line 5</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">_ast</span>, <span class="ruby-identifier">sort</span>)
+  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">_ast</span>)
+  <span class="ruby-ivar">@sort</span> = <span class="ruby-identifier">sort</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Values must have AST kind numeral, app, or quantifier&quot;</span> <span class="ruby-keyword">unless</span> [<span class="ruby-value">:numeral</span>, <span class="ruby-value">:app</span>, <span class="ruby-value">:quantifier</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">ast_kind</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+            <div class="method-calls-super">
+              Calls superclass method
+              <a href="Expr.html#method-c-new"><code>Z3::Expr::new</code></a>
+            </div>
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+    </section>
+
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section anchor-link">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+
+      <div id="method-i-21-3D" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-21-3D" title="Link to this method">
+                <span class="method-name">!=</span>
+                <span class="method-args">(other)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="21-3D-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 8</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">!=</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-constant">FloatExpr</span>.<span class="ruby-constant">Ne</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-2D-40" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-2D-40" title="Link to this method">
+                <span class="method-name">-@</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="2D-40-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 52</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">-@</span>
+  <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_neg</span>(<span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-3C" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-3C" title="Link to this method">
+                <span class="method-name">&lt;</span>
+                <span class="method-args">(other)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="3C-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 12</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&lt;</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-constant">FloatExpr</span>.<span class="ruby-constant">Lt</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-3C-3D" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-3C-3D" title="Link to this method">
+                <span class="method-name">&lt;=</span>
+                <span class="method-args">(other)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="3C-3D-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 16</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&lt;=</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-constant">FloatExpr</span>.<span class="ruby-constant">Le</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-3D-3D" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-3D-3D" title="Link to this method">
+                <span class="method-name">==</span>
+                <span class="method-args">(other)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="3D-3D-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 4</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">==</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-constant">FloatExpr</span>.<span class="ruby-constant">Eq</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-3E" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-3E" title="Link to this method">
+                <span class="method-name">&gt;</span>
+                <span class="method-args">(other)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="3E-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 20</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&gt;</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-constant">FloatExpr</span>.<span class="ruby-constant">Gt</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-3E-3D" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-3E-3D" title="Link to this method">
+                <span class="method-name">&gt;=</span>
+                <span class="method-args">(other)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="3E-3D-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 24</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&gt;=</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-constant">FloatExpr</span>.<span class="ruby-constant">Ge</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-abs" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-abs" title="Link to this method">
+                <span class="method-name">abs</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="abs-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 48</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">abs</span>
+  <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_abs</span>(<span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-add" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-add" title="Link to this method">
+                <span class="method-name">add</span>
+                <span class="method-args">(other, mode)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="add-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 28</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">add</span>(<span class="ruby-identifier">other</span>, <span class="ruby-identifier">mode</span>)
+  <span class="ruby-constant">FloatExpr</span>.<span class="ruby-constant">Add</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>, <span class="ruby-identifier">mode</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-div" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-div" title="Link to this method">
+                <span class="method-name">div</span>
+                <span class="method-args">(other, mode)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="div-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 40</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">div</span>(<span class="ruby-identifier">other</span>, <span class="ruby-identifier">mode</span>)
+  <span class="ruby-constant">FloatExpr</span>.<span class="ruby-constant">Div</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>, <span class="ruby-identifier">mode</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-exponent_string" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-exponent_string" title="Link to this method">
+                <span class="method-name">exponent_string</span>
+                <span class="method-args">(biased)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="exponent_string-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 96</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">exponent_string</span>(<span class="ruby-identifier">biased</span>)
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">fpa_get_numeral_exponent_string</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">biased</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-infinite-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-infinite-3F" title="Link to this method">
+                <span class="method-name">infinite?</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="infinite-3F-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 56</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">infinite?</span>
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_is_infinite</span>(<span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-max" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-max" title="Link to this method">
+                <span class="method-name">max</span>
+                <span class="method-args">(other)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="max-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 88</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">max</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-constant">FloatExpr</span>.<span class="ruby-constant">Max</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-min" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-min" title="Link to this method">
+                <span class="method-name">min</span>
+                <span class="method-args">(other)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="min-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 92</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">min</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-constant">FloatExpr</span>.<span class="ruby-constant">Min</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-mul" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-mul" title="Link to this method">
+                <span class="method-name">mul</span>
+                <span class="method-args">(other, mode)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="mul-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 36</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">mul</span>(<span class="ruby-identifier">other</span>, <span class="ruby-identifier">mode</span>)
+  <span class="ruby-constant">FloatExpr</span>.<span class="ruby-constant">Mul</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>, <span class="ruby-identifier">mode</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-nan-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-nan-3F" title="Link to this method">
+                <span class="method-name">nan?</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="nan-3F-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 60</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">nan?</span>
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_is_nan</span>(<span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-negative-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-negative-3F" title="Link to this method">
+                <span class="method-name">negative?</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="negative-3F-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 64</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">negative?</span>
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_is_negative</span>(<span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-nonzero-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-nonzero-3F" title="Link to this method">
+                <span class="method-name">nonzero?</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="nonzero-3F-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 84</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">nonzero?</span>
+  <span class="ruby-constant">Z3</span>.<span class="ruby-constant">And</span>(<span class="ruby-operator">~</span><span class="ruby-identifier">zero?</span>, <span class="ruby-operator">~</span><span class="ruby-identifier">nan?</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-normal-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-normal-3F" title="Link to this method">
+                <span class="method-name">normal?</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="normal-3F-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 68</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">normal?</span>
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_is_normal</span>(<span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-positive-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-positive-3F" title="Link to this method">
+                <span class="method-name">positive?</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="positive-3F-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 72</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">positive?</span>
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_is_positive</span>(<span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-rem" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-rem" title="Link to this method">
+                <span class="method-name">rem</span>
+                <span class="method-args">(other)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="rem-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 44</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">rem</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-constant">FloatExpr</span>.<span class="ruby-constant">Rem</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-significand_string" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-significand_string" title="Link to this method">
+                <span class="method-name">significand_string</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="significand_string-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 100</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">significand_string</span>
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">fpa_get_numeral_significand_string</span>(<span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-sub" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-sub" title="Link to this method">
+                <span class="method-name">sub</span>
+                <span class="method-args">(other, mode)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="sub-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 32</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">sub</span>(<span class="ruby-identifier">other</span>, <span class="ruby-identifier">mode</span>)
+  <span class="ruby-constant">FloatExpr</span>.<span class="ruby-constant">Sub</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>, <span class="ruby-identifier">mode</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-subnormal-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-subnormal-3F" title="Link to this method">
+                <span class="method-name">subnormal?</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="subnormal-3F-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 76</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">subnormal?</span>
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_is_subnormal</span>(<span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-zero-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-zero-3F" title="Link to this method">
+                <span class="method-name">zero?</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+
+
+
+        <div class="method-description">
+
+          <div class="method-source-code" id="zero-3F-source">
+            <pre><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 80</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">zero?</span>
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_is_zero</span>(<span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+    </section>
+
+  </section>
+
+</main>
+</body>
+
