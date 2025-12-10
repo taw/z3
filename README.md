@@ -32,6 +32,7 @@ solver.assert(a + b == 3)
 if solver.satisfiable?
   model = solver.model
   
+  # convert z3 model to ruby types
   hash = model.to_h do |zvar, zvalue| 
     [zvar.to_s, zvalue.to_i] 
   end
