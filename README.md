@@ -10,6 +10,8 @@ It's in very early stages of development. Pull requests always welcome.
 gem install z3
 ```
 
+[API documentation is here](https://taw.github.io/z3/).
+
 ## Basic usage
 
 Variables are initialized with `Z3.Bool`, `Z3.Int`, `Z3.Real`, `Z3.Bitvec`.
@@ -31,12 +33,12 @@ solver.assert(a + b == 3)
 # check sat, find model
 if solver.satisfiable?
   model = solver.model
-  
+
   # convert z3 model to ruby types
-  hash = model.to_h do |zvar, zvalue| 
-    [zvar.to_s, zvalue.to_i] 
+  hash = model.to_h do |zvar, zvalue|
+    [zvar.to_s, zvalue.to_i]
   end
-  
+
   p hash
   # {"a" => 2, "b" => 1}
 end
