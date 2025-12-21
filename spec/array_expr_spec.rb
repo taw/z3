@@ -24,22 +24,13 @@ module Z3
       expect([a[10] == 20]).to have_solution(
         a => "const(20)",
       )
-      # There are many ways to solve this
-      if Z3.version_at_least?(4, 12)
-        # 4.12.x
-        expect([a[x] == 10, a[y] == 20]).to have_solution(
-          a => "store(const(10), 3, 20)",
-          x => "2",
-          y => "3",
-        )
-      else
-        # 4.8.x
-        expect([a[x] == 10, a[y] == 20]).to have_solution(
-          a => "store(const(10), 1, 20)",
-          x => "0",
-          y => "1",
-        )
-      end
+      # Forced x and y to specific values, otherwise this spec fails between versions
+      expect([a[x] == 10, a[y] == 20, x == 30, y == 40]).to have_solution(
+        a => "store(const(20), 30, 10)",
+        #    "store(const(10), 40, 20)" would also work
+        x => "30",
+        y => "40",
+      )
     end
 
     it "store" do
