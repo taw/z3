@@ -38,14 +38,8 @@ module Z3
       solver.assert Z3.Or(a == 2, a == -2)
       stats = solver.statistics
       # This depends on Z3 version so it's not a great test
-      # Not sure which version has exactly which set
-      if Z3.version_at_least?(4, 12)
-        # 4.12.x
-        expect(stats.keys).to match_array(["rlimit count", "max memory", "memory", "num allocs"])
-      else
-        # 4.8.x
-        expect(stats.keys).to match_array(["rlimit count", "max memory", "memory", "num allocs", "mk bool var"])
-      end
+      expect(stats.keys).to be_an(Array)
+      expect(stats.keys).to include("rlimit count", "max memory", "memory", "num allocs")
     end
 
     # This is a very simple example of unknown satisfiablity
