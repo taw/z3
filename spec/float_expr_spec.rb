@@ -114,7 +114,8 @@ module Z3
         #
         # It's not even a bug in printer Z3_mk_fpa_numeral_double is broken for denormals
         #
-        # Probably best revisit it in 4.7+
+        # This is broken for every version 4.6 to 4.16
+        # Might be worth rechecking in newer Z3 versions
       else
         expect(float_double.from_const(1234 * 0.5**1040).to_s).to eq("1.205078125B-1030")
       end
