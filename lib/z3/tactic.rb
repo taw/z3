@@ -1,8 +1,9 @@
 module Z3
   class Tactic
-    attr_reader :tactic
+    attr_reader :_tactic
     def initialize(_tactic)
       @_tactic = _tactic
+      LowLevel.tactic_inc_ref(self)
     end
 
     def help

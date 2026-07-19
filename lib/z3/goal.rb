@@ -3,6 +3,7 @@ module Z3
     attr_reader :_goal
     def initialize(_goal)
       @_goal = _goal
+      LowLevel.goal_inc_ref(self)
     end
 
     def assert(ast)

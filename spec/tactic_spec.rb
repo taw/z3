@@ -5,5 +5,33 @@ module Z3
       expect(Tactic.fail_if_not_decided).to be_a Tactic
       expect(Tactic.skip).to be_a Tactic
     end
+
+    it "combinators" do
+      probe = Probe.named("is-qfbv")
+      expect(Tactic.skip.and_then(Tactic.skip)).to be_a Tactic
+      expect(Tactic.skip.or_else(Tactic.fail)).to be_a Tactic
+      expect(Tactic.skip.parallel_and_then(Tactic.skip)).to be_a Tactic
+      expect(Tactic.skip.repeat(2)).to be_a Tactic
+      expect(Tactic.skip.try_for(100)).to be_a Tactic
+      expect(Tactic.fail_if(probe)).to be_a Tactic
+      expect(Tactic.when(probe, Tactic.skip)).to be_a Tactic
+      expect(Tactic.cond(probe, Tactic.skip, Tactic.fail)).to be_a Tactic
+    end
+
+    it "survives allocation of other tactics" do
+      tactic = Tactic.new(LowLevel.mk_tactic("simplify"))
+      500.times { Tactic.skip }
+      GC.start
+      expect(tactic.help).to include("simplify")
+    end
+
+    it "can be applied to a goal" do
+      goal = Goal.new
+      goal.assert Z3.Int("x") == 3
+      tactic = Tactic.new(LowLevel.mk_tactic("simplify"))
+      500.times { Tactic.skip; Goal.new }
+      GC.start
+      expect(LowLevel.tactic_apply(tactic, goal)).to be_a FFI::Pointer
+    end
   end
 end

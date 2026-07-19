@@ -13,6 +13,9 @@ module Z3
       end
 
       def set_error_handler(&block)
+        # Z3 keeps the native trampoline FFI builds for this block, and that
+        # trampoline dies with the Proc - so we must hold onto it forever
+        @error_handler = block
         Z3::VeryLowLevel.Z3_set_error_handler(_ctx_pointer, block)
       end
 

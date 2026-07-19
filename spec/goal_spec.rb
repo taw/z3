@@ -13,5 +13,13 @@ module Z3
       expect(g.inconsistent?).to eq(false)
       expect(g.formula(0).to_s).to eq("x = 3")
     end
+
+    it "survives allocation of other goals" do
+      g = Goal.new
+      g.assert Z3.Int("x") == 3
+      100.times { Goal.new }
+      GC.start
+      expect(g.to_s).to eq("(goal\n  (= x 3))")
+    end
   end
 end
