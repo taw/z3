@@ -182,13 +182,18 @@ module Z3
       expect([a ==   127, b ==  1, x == a.signed_div_no_overflow?(b)]).to have_solution(x => true)
     end
 
+    # This changes based on Z3 version, so I'm not sure what's supposed semantics here
+    # This documents what Z3 4.16 does
     it "signed_mul_no_overflow?" do
       expect([a ==   10, b ==   10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => true)
       expect([a ==   20, b ==   10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => false)
       expect([a ==   20, b ==   20, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => false)
-      expect([a ==   10, b ==  -10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => false)
-      expect([a ==  -10, b ==   10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => false)
-      expect([a ==  -10, b ==  -10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => false)
+      expect([a ==   10, b ==  -10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => true)
+      expect([a ==  -10, b ==   10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => true)
+      expect([a ==  -10, b ==  -10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => true)
+      expect([a ==  100, b ==  100, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => false)
+      expect([a == -100, b ==  100, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => true)
+      expect([a == -100, b == -100, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => false)
     end
 
     it "unsigned_mul_no_overflow?" do
