@@ -51,6 +51,11 @@ module Z3
       else
         decl = a.func_decl
         name = decl.name
+        # It looks like Z3 bug, or at least a major quirk
+        # various set operations all say (map) when it's really (_ map and), (_ map or) etc.
+        if name == "map"
+          return a.sexpr.gsub(/\s+/, " ")
+        end
         args = a.arguments.map{|x| format_ast(x)}
         return PrintedExpr.new(name, false) if args.size == 0
 

@@ -23,7 +23,7 @@ module Z3
     end
 
     def intersection(other)
-      SetExpr.Union(self, other)
+      SetExpr.Intersection(self, other)
     end
 
     def difference(other)
