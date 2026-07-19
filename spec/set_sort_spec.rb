@@ -23,5 +23,20 @@ module Z3
     it "can instantiate empty set" do
       expect(int_set.Empty.inspect).to eq("Set(Int)<const(false)>")
     end
+
+    it "empty and full sets have the sort they claim to have" do
+      expect(int_set.Empty.sexpr).to eq("((as const (Array Int Bool)) false)")
+      expect(int_set.Full.sexpr).to eq("((as const (Array Int Bool)) true)")
+      expect(bool_set.Empty.sexpr).to eq("((as const (Array Bool Bool)) false)")
+      expect(bv32_set.Full.sexpr).to eq("((as const (Array (_ BitVec 32) Bool)) true)")
+      expect(int_set_set.Empty.sexpr).to eq("((as const (Array (Array Int Bool) Bool)) false)")
+    end
+
+    it "empty and full sets can be used in constraints" do
+      a = int_set.var("a")
+      expect([a == int_set.Empty, a.include?(1)]).to have_no_solution
+      expect([a == int_set.Full]).to have_solution(a => "const(true)")
+      expect([a == int_set.Empty, !a.include?(1)]).to have_solution(a => "const(false)")
+    end
   end
 end

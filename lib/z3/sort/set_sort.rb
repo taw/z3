@@ -19,11 +19,11 @@ module Z3
     end
 
     def Empty
-      new(LowLevel.mk_empty_set(self))
+      new(LowLevel.mk_empty_set(element_sort))
     end
 
     def Full
-      new(LowLevel.mk_full_set(self))
+      new(LowLevel.mk_full_set(element_sort))
     end
 
     public_class_method :new
