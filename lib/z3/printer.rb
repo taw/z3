@@ -45,9 +45,11 @@ module Z3
         PrintedExpr.new(decl.sexpr.gsub(/k!\d+/, "k!"))
       elsif a.func_decl.name == "fp.numeral" and a.sort.is_a?(FloatSort)
         # This API chaged in Z3 4.6
+        negative = LowLevel::fpa_is_numeral_negative(a)
         s = a.significand_string
         e = "%+d" % a.exponent_string(false).to_i
-        PrintedExpr.new("#{s}B#{e}")
+        # a leading - is not atomic, so it needs parens as a subexpression
+        PrintedExpr.new("#{negative ? "-" : ""}#{s}B#{e}", negative)
       else
         decl = a.func_decl
         name = decl.name

@@ -56,7 +56,7 @@ module Z3
 
     it "neg" do
       expect([a == 7.5, c == -a]).to have_solution(
-        c => float_double.from_const(7.5),
+        c => float_double.from_const(-7.5),
       )
       expect([a == -7.5, c == -a]).to have_solution(
         c => float_double.from_const(7.5),
@@ -118,6 +118,14 @@ module Z3
       else
         expect(float_double.from_const(1234 * 0.5**1040).to_s).to eq("1.205078125B-1030")
       end
+    end
+
+    it "to_s of negative numerals" do
+      expect(float_double.from_const(-1.0).to_s).to eq("-1B+0")
+      expect(float_double.from_const(-2.0).to_s).to eq("-1B+1")
+      expect(float_double.from_const(-0.5).to_s).to eq("-1B-1")
+      expect(float_double.from_const(-7.5).to_s).to eq("-1.875B+2")
+      expect(float_single.from_const(-1.5).to_s).to eq("-1.5B+0")
     end
 
     it "zero?" do
