@@ -183,8 +183,10 @@ module Z3
     end
 
     # This changes based on Z3 version, so I'm not sure what's supposed semantics here
-    # This documents what Z3 4.16 does
+    # This documents what Z3 4.16 does, so skip on older versions
     it "signed_mul_no_overflow?" do
+      skip "Semantics differ on Z3 older than 4.16" unless Z3.version_at_least?(4, 16)
+
       expect([a ==   10, b ==   10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => true)
       expect([a ==   20, b ==   10, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => false)
       expect([a ==   20, b ==   20, x == a.signed_mul_no_overflow?(b)]).to have_solution(x => false)
