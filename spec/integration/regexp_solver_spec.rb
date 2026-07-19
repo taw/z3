@@ -12,6 +12,9 @@ describe "Regexp Solver" do
     [1, '(?=[ab])(?![bc])[ac]'],
     [2, '(?=a$)a\n'],
     [2, '(?=a\s$)a\n'],
+    [2, 'a(?<=a)c'],
+    [2, 'a(?<!b)c'],
+    [1, '(?<!a)b'],
   ]
 
   examples.each do |length, rx|

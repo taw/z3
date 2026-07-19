@@ -47,7 +47,7 @@ class RegexpStringMatcher
       ~regexp_match([:seq, anchor[1], [:any_star]], start_idx, @str.size)
     when :lookbehind
       regexp_match([:seq, [:any_star], anchor[1]], 0, start_idx)
-    when :lookbehind
+    when :negative_lookbehind
       ~regexp_match([:seq, [:any_star], anchor[1]], 0, start_idx)
     else
       raise "Unknown anchor type #{anchor[0]}"
