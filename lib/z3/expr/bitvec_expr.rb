@@ -77,10 +77,12 @@ module Z3
     end
 
     def rotate_left(num)
+      raise Z3::Exception, "Rotation amount must be a nonnegative Integer" unless num.is_a?(Integer) and num >= 0
       sort.new(LowLevel.mk_rotate_left(num, self))
     end
 
     def rotate_right(num)
+      raise Z3::Exception, "Rotation amount must be a nonnegative Integer" unless num.is_a?(Integer) and num >= 0
       sort.new(LowLevel.mk_rotate_right(num, self))
     end
 
@@ -95,10 +97,12 @@ module Z3
     end
 
     def zero_ext(size)
+      raise Z3::Exception, "Extension size must be a nonnegative Integer" unless size.is_a?(Integer) and size >= 0
       BitvecSort.new(sort.size + size).new(LowLevel.mk_zero_ext(size, self))
     end
 
     def sign_ext(size)
+      raise Z3::Exception, "Extension size must be a nonnegative Integer" unless size.is_a?(Integer) and size >= 0
       BitvecSort.new(sort.size + size).new(LowLevel.mk_sign_ext(size, self))
     end
 

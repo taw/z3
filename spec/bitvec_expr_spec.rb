@@ -217,6 +217,10 @@ module Z3
       expect([a == -100, d ==  a.zero_ext(4)]).to have_solution(d => 2**8-100)
       expect([a ==  100, d ==  a.sign_ext(4)]).to have_solution(d => 100)
       expect([a == -100, d ==  a.sign_ext(4)]).to have_solution(d => 2**12-100)
+      expect{ a.zero_ext(-1) }.to raise_error(Z3::Exception)
+      expect{ a.sign_ext(-1) }.to raise_error(Z3::Exception)
+      expect{ a.zero_ext(1.5) }.to raise_error(Z3::Exception)
+      expect{ a.sign_ext(1.5) }.to raise_error(Z3::Exception)
     end
 
     it "rotate_left / rotate_right" do
@@ -224,6 +228,10 @@ module Z3
       expect([a == 0b0101_0110, b == a.rotate_left(4)]).to have_solution(b => 0b0110_0101)
       expect([a == 0b0101_0110, b == a.rotate_right(1)]).to have_solution(b => 0b0_0101_011)
       expect([a == 0b0101_0110, b == a.rotate_right(4)]).to have_solution(b => 0b0110_0101)
+      expect{ a.rotate_left(-1) }.to raise_error(Z3::Exception)
+      expect{ a.rotate_right(-1) }.to raise_error(Z3::Exception)
+      expect{ a.rotate_left(1.5) }.to raise_error(Z3::Exception)
+      expect{ a.rotate_right(1.5) }.to raise_error(Z3::Exception)
     end
 
     it "extract" do
