@@ -110,9 +110,6 @@ module Z3
       raise Z3::Exception, "Use #signed_add_no_overflow? or #unsigned_add_no_overflow? for Bitvec, not #add_no_overflow?"
     end
 
-    def add_no_overflow?(other)
-      raise "Use signed_add_no_overflow? or unsigned_add_no_overflow?"
-    end
     def signed_add_no_overflow?(other)
       BitvecExpr.SignedAddNoOverflow(self, other)
     end
@@ -127,11 +124,11 @@ module Z3
       BitvecExpr.SignedAddNoUnderflow(self, other)
     end
     def unsigned_add_no_underflow?(other)
-      raise "Unsigned + cannot underflow"
+      raise Z3::Exception, "Unsigned + cannot underflow"
     end
 
     def unsigned_neg_no_overflow?
-      raise "There is no unsigned negation"
+      raise Z3::Exception, "There is no unsigned negation"
     end
     def signed_neg_no_overflow?
       BitvecExpr.SignedNegNoOverflow(self)
@@ -141,7 +138,7 @@ module Z3
     end
 
     def mul_no_overflow?(other)
-      raise "Use signed_mul_no_overflow? or unsigned_mul_no_overflow?"
+      raise Z3::Exception, "Use signed_mul_no_overflow? or unsigned_mul_no_overflow?"
     end
     def signed_mul_no_overflow?(other)
       BitvecExpr.SignedMulNoOverflow(self, other)
@@ -157,7 +154,7 @@ module Z3
       BitvecExpr.SignedMulNoUnderflow(self, other)
     end
     def unsigned_mul_no_underflow?(other)
-      raise "Unsigned + cannot underflow"
+      raise Z3::Exception, "Unsigned * cannot underflow"
     end
 
     def div_no_overflow?(other)
@@ -167,7 +164,7 @@ module Z3
       BitvecExpr.SignedDivNoOverflow(self, other)
     end
     def unsigned_div_no_overflow?(other)
-      raise "Unsigned / cannot underflow"
+      raise Z3::Exception, "Unsigned / cannot overflow"
     end
 
     def >>(other)

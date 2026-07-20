@@ -158,12 +158,18 @@ module Z3
       expect([a == -100, b == -100, x == a.unsigned_add_no_overflow?(b)]).to have_solution(x => false)
     end
 
+    # Signedness matters, so the unqualified version just tells you to pick one
+    it "add_no_overflow?" do
+      expect{ a.add_no_overflow?(b) }.to raise_error(Z3::Exception, /signed_add_no_overflow/)
+    end
+
     # Inherently signed, unsigned add can't underflow
     it "signed_add_no_underflow?" do
       expect([a ==  100, b ==  100, x == a.signed_add_no_underflow?(b)]).to have_solution(x => true)
       expect([a ==   50, b ==   50, x == a.signed_add_no_underflow?(b)]).to have_solution(x => true)
       expect([a ==  -50, b ==  -50, x == a.signed_add_no_underflow?(b)]).to have_solution(x => true)
       expect([a == -100, b == -100, x == a.signed_add_no_underflow?(b)]).to have_solution(x => false)
+      expect{ a.unsigned_add_no_underflow?(b) }.to raise_error(Z3::Exception)
     end
 
     # Inherently signed, there is no signed neg
@@ -173,6 +179,7 @@ module Z3
       expect([a ==    0, x == a.signed_neg_no_overflow?]).to have_solution(x => true)
       expect([a ==  127, x == a.signed_neg_no_overflow?]).to have_solution(x => true)
       expect([a == -128, x == a.signed_neg_no_overflow?]).to have_solution(x => false)
+      expect{ a.unsigned_neg_no_overflow? }.to raise_error(Z3::Exception)
     end
 
     # Unsigned div can't overflow, and signed div can only overflow for one value
@@ -180,6 +187,7 @@ module Z3
       expect([a ==  -128, b == -1, x == a.signed_div_no_overflow?(b)]).to have_solution(x => false)
       expect([a ==  -128, b == -2, x == a.signed_div_no_overflow?(b)]).to have_solution(x => true)
       expect([a ==   127, b ==  1, x == a.signed_div_no_overflow?(b)]).to have_solution(x => true)
+      expect{ a.unsigned_div_no_overflow?(b) }.to raise_error(Z3::Exception)
     end
 
     # This changes based on Z3 version, so I'm not sure what's supposed semantics here
@@ -210,6 +218,12 @@ module Z3
       expect([a ==  -10, b ==  -10, x == a.signed_mul_no_underflow?(b)]).to have_solution(x => true)
       expect([a ==  -20, b ==  -20, x == a.signed_mul_no_underflow?(b)]).to have_solution(x => true)
       expect([a ==  -20, b ==   20, x == a.signed_mul_no_underflow?(b)]).to have_solution(x => false)
+      expect{ a.unsigned_mul_no_underflow?(b) }.to raise_error(Z3::Exception)
+    end
+
+    # Signedness matters, so the unqualified version just tells you to pick one
+    it "mul_no_overflow?" do
+      expect{ a.mul_no_overflow?(b) }.to raise_error(Z3::Exception, /signed_mul_no_overflow/)
     end
 
     it "zero_ext / sign_ext" do
