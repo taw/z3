@@ -20,7 +20,7 @@ module Z3
         when :quadruple
           super LowLevel.mk_fpa_sort_quadruple
         else
-          raise "Unknown float type #{e}, use FloatSort.new(exponent_bits, significant_bits)"
+          raise Z3::Exception, "Unknown float type #{e}, use FloatSort.new(exponent_bits, significant_bits)"
         end
       else
         super LowLevel.mk_fpa_sort(e, s)

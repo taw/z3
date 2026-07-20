@@ -24,6 +24,13 @@ module Z3
       expect((e+f).inspect).to eq("Real<e + f>")
     end
 
+    # Reachable from Z3.And(*conditions) when the array turns out to be empty
+    it "variadic operators reject an empty argument list" do
+      %w[And Or Xor Add Sub Mul].each do |op|
+        expect{ Expr.send(op) }.to raise_error(Z3::Exception, /#{op} requires at least one argument/)
+      end
+    end
+
     describe "#~" do
       it "allows negating boolean variables" do
         expect((~c).sexpr).to eq("(not c)")

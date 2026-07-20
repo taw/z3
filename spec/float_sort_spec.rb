@@ -40,5 +40,10 @@ module Z3
       expect([float_64, float_double, float_11_53]).to be_all_same
       expect([float_128, float_quadruple, float_15_113]).to be_all_same
     end
+
+    it "rejects unknown shortcuts" do
+      expect{ FloatSort.new(:octuple) }.to raise_error(Z3::Exception, /Unknown float type octuple/)
+      expect{ FloatSort.new(42) }.to raise_error(Z3::Exception, /Unknown float type 42/)
+    end
   end
 end

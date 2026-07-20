@@ -122,7 +122,7 @@ module Z3
       when 10
         RoundingModeSort.new
       else
-        raise "Unknown sort kind #{kind}"
+        raise Z3::Exception, "Unknown sort kind #{kind}"
       end
     end
   end

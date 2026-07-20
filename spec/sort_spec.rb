@@ -12,6 +12,11 @@ module Z3
       expect{ Sort.new }.to raise_error(NoMethodError)
     end
 
+    it ".from_pointer rejects sort kinds the gem doesn't wrap" do
+      uninterpreted = LowLevel.mk_uninterpreted_sort(LowLevel.mk_string_symbol("U"))
+      expect{ Sort.from_pointer(uninterpreted) }.to raise_error(Z3::Exception, /Unknown sort kind/)
+    end
+
     it "#to_s" do
       expect(bool_sort.to_s).to eq("Bool")
       expect( int_sort.to_s).to eq("Int")

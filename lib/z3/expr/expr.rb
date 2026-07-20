@@ -106,6 +106,7 @@ module Z3
       end
 
       def And(*args)
+        raise Z3::Exception, "And requires at least one argument" if args.empty?
         args = coerce_to_same_sort(*args)
         case args[0]
         when BoolExpr
@@ -120,6 +121,7 @@ module Z3
       end
 
       def Or(*args)
+        raise Z3::Exception, "Or requires at least one argument" if args.empty?
         args = coerce_to_same_sort(*args)
         case args[0]
         when BoolExpr
@@ -134,6 +136,7 @@ module Z3
       end
 
       def Xor(*args)
+        raise Z3::Exception, "Xor requires at least one argument" if args.empty?
         args = coerce_to_same_sort(*args)
         case args[0]
         when BoolExpr
@@ -150,7 +153,7 @@ module Z3
       end
 
       def Add(*args)
-        raise Z3::Exception if args.empty?
+        raise Z3::Exception, "Add requires at least one argument" if args.empty?
         args = coerce_to_same_sort(*args)
         case args[0]
         when ArithExpr
@@ -165,6 +168,7 @@ module Z3
       end
 
       def Sub(*args)
+        raise Z3::Exception, "Sub requires at least one argument" if args.empty?
         args = coerce_to_same_sort(*args)
         case args[0]
         when ArithExpr
@@ -179,6 +183,7 @@ module Z3
       end
 
       def Mul(*args)
+        raise Z3::Exception, "Mul requires at least one argument" if args.empty?
         args = coerce_to_same_sort(*args)
         case args[0]
         when ArithExpr
