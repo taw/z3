@@ -29,10 +29,11 @@ class LightUp
       end
     end
 
-    # Every cell is in raycast of a lamp
+    # Every white cell is in raycast of a lamp (walls don't need to be lit)
     # No lamp is in raycast of another lamp
     (0...@ysize).each do |y|
       (0...@xsize).each do |x|
+        next unless @data[[x,y]] == "."
         raycast = Z3.Add(*raycast_cells(x,y))
         @solver.assert Z3.Implies(@lamps[[x,y]] == 0, raycast >= 1)
         @solver.assert Z3.Implies(@lamps[[x,y]] == 1, raycast == 0)
