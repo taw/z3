@@ -7,10 +7,20 @@ agent:
 blocks:
   - name: bundle exec rspec
     task:
+      env_vars:
+        - name: Z3_VERSION
+          value: "4.16.0"
+        - name: Z3_DIST
+          value: x64-glibc-2.39
       jobs:
         - name: bundle install
           commands:
-            - sudo apt install -y z3
+            - curl -sSLo /tmp/z3.zip https://github.com/Z3Prover/z3/releases/download/z3-$Z3_VERSION/z3-$Z3_VERSION-$Z3_DIST.zip
+            - unzip -q /tmp/z3.zip -d /tmp
+            - sudo cp /tmp/z3-$Z3_VERSION-$Z3_DIST/bin/libz3.so /usr/local/lib/
+            - sudo cp /tmp/z3-$Z3_VERSION-$Z3_DIST/bin/z3 /usr/local/bin/
+            - sudo ldconfig
+            - z3 --version
             - checkout
             - sem-version ruby 3.2.2
             - bundle install --path vendor/bundle
