@@ -91,6 +91,7 @@ module Z3
     attach_function :Z3_fpa_get_numeral_significand_bv, [:ctx_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_fpa_get_numeral_significand_string, [:ctx_pointer, :ast_pointer], :string
     attach_function :Z3_fpa_get_sbits, [:ctx_pointer, :sort_pointer], :uint
+    attach_function :Z3_fpa_is_numeral, [:ctx_pointer, :ast_pointer], :bool
     attach_function :Z3_fpa_is_numeral_inf, [:ctx_pointer, :ast_pointer], :bool
     attach_function :Z3_fpa_is_numeral_nan, [:ctx_pointer, :ast_pointer], :bool
     attach_function :Z3_fpa_is_numeral_negative, [:ctx_pointer, :ast_pointer], :bool
@@ -285,7 +286,6 @@ module Z3
     attach_function :Z3_mk_const, [:ctx_pointer, :symbol_pointer, :sort_pointer], :ast_pointer
     attach_function :Z3_mk_const_array, [:ctx_pointer, :sort_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_context_rc, [:config_pointer], :ctx_pointer
-    attach_function :Z3_mk_datatype_sort, [:ctx_pointer, :symbol_pointer], :sort_pointer
     attach_function :Z3_mk_div, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_divides, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_empty_set, [:ctx_pointer, :sort_pointer], :ast_pointer
@@ -407,11 +407,13 @@ module Z3
     attach_function :Z3_mk_seq_map, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_mapi, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_nth, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_seq_replace_all, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_seq_replace_re, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_seq_replace_re_all, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_set_add, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_set_complement, [:ctx_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_set_del, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_set_difference, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
-    attach_function :Z3_mk_set_has_size, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_set_member, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_set_sort, [:ctx_pointer, :sort_pointer], :sort_pointer
     attach_function :Z3_mk_set_subset, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
@@ -480,6 +482,7 @@ module Z3
     attach_function :Z3_optimize_set_initial_value, [:ctx_pointer, :optimize_pointer, :ast_pointer, :ast_pointer], :void
     attach_function :Z3_optimize_set_params, [:ctx_pointer, :optimize_pointer, :params_pointer], :void
     attach_function :Z3_optimize_to_string, [:ctx_pointer, :optimize_pointer], :string
+    attach_function :Z3_optimize_translate, [:ctx_pointer, :optimize_pointer, :ctx_pointer], :optimize_pointer
     attach_function :Z3_param_descrs_dec_ref, [:ctx_pointer, :param_descrs_pointer], :void
     attach_function :Z3_param_descrs_get_kind, [:ctx_pointer, :param_descrs_pointer, :symbol_pointer], :uint
     attach_function :Z3_param_descrs_get_name, [:ctx_pointer, :param_descrs_pointer, :uint], :symbol_pointer

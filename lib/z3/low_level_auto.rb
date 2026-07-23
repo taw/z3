@@ -365,6 +365,10 @@ module Z3
         VeryLowLevel.Z3_fpa_get_sbits(_ctx_pointer, sort._ast)
       end
 
+      def fpa_is_numeral(ast) #=> :bool
+        VeryLowLevel.Z3_fpa_is_numeral(_ctx_pointer, ast._ast)
+      end
+
       def fpa_is_numeral_inf(ast) #=> :bool
         VeryLowLevel.Z3_fpa_is_numeral_inf(_ctx_pointer, ast._ast)
       end
@@ -1141,10 +1145,6 @@ module Z3
         VeryLowLevel.Z3_mk_context_rc(config._config)
       end
 
-      def mk_datatype_sort(sym) #=> :sort_pointer
-        VeryLowLevel.Z3_mk_datatype_sort(_ctx_pointer, sym)
-      end
-
       def mk_div(ast1, ast2) #=> :ast_pointer
         VeryLowLevel.Z3_mk_div(_ctx_pointer, ast1._ast, ast2._ast)
       end
@@ -1629,6 +1629,18 @@ module Z3
         VeryLowLevel.Z3_mk_seq_nth(_ctx_pointer, ast1._ast, ast2._ast)
       end
 
+      def mk_seq_replace_all(ast1, ast2, ast3) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_seq_replace_all(_ctx_pointer, ast1._ast, ast2._ast, ast3._ast)
+      end
+
+      def mk_seq_replace_re(ast1, ast2, ast3) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_seq_replace_re(_ctx_pointer, ast1._ast, ast2._ast, ast3._ast)
+      end
+
+      def mk_seq_replace_re_all(ast1, ast2, ast3) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_seq_replace_re_all(_ctx_pointer, ast1._ast, ast2._ast, ast3._ast)
+      end
+
       def mk_set_add(ast1, ast2) #=> :ast_pointer
         VeryLowLevel.Z3_mk_set_add(_ctx_pointer, ast1._ast, ast2._ast)
       end
@@ -1643,10 +1655,6 @@ module Z3
 
       def mk_set_difference(ast1, ast2) #=> :ast_pointer
         VeryLowLevel.Z3_mk_set_difference(_ctx_pointer, ast1._ast, ast2._ast)
-      end
-
-      def mk_set_has_size(ast1, ast2) #=> :ast_pointer
-        VeryLowLevel.Z3_mk_set_has_size(_ctx_pointer, ast1._ast, ast2._ast)
       end
 
       def mk_set_member(ast1, ast2) #=> :ast_pointer
@@ -1919,6 +1927,10 @@ module Z3
 
       def optimize_to_string(optimize) #=> :string
         VeryLowLevel.Z3_optimize_to_string(_ctx_pointer, optimize._optimize)
+      end
+
+      def optimize_translate(optimize, context) #=> :optimize_pointer
+        VeryLowLevel.Z3_optimize_translate(_ctx_pointer, optimize._optimize, context._context)
       end
 
       def param_descrs_dec_ref(param_descrs) #=> :void
