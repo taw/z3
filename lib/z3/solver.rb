@@ -29,6 +29,13 @@ module Z3
       LowLevel.solver_assert(self, ast)
     end
 
+    # `tracker` is a Bool const standing in for `ast`, and it's what shows up in
+    # #unsat_core if the solver blames this assertion
+    def assert_and_track(ast, tracker)
+      reset_model!
+      LowLevel.solver_assert_and_track(self, ast, tracker)
+    end
+
     def check
       reset_model!
       result = check_sat_results(LowLevel.solver_check(self))
@@ -71,9 +78,36 @@ module Z3
       LowLevel.unpack_ast_vector(_ast_vector)
     end
 
+    # Only the trackers passed to #assert_and_track can ever show up here,
+    # plainly asserted formulas are never blamed
+    def unsat_core
+      _ast_vector = LowLevel.solver_get_unsat_core(self)
+      LowLevel.unpack_ast_vector(_ast_vector)
+    end
+
     def statistics
       _stats = LowLevel::solver_get_statistics(self)
       LowLevel.unpack_statistics(_stats)
+    end
+
+    def help
+      LowLevel.solver_get_help(self)
+    end
+
+    def num_scopes
+      LowLevel.solver_get_num_scopes(self)
+    end
+
+    def reason_unknown
+      LowLevel.solver_get_reason_unknown(self)
+    end
+
+    def to_s
+      LowLevel.solver_to_string(self)
+    end
+
+    def to_dimacs(include_names=true)
+      LowLevel.solver_to_dimacs_string(self, include_names)
     end
 
     def prove!(ast)

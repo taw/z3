@@ -6,6 +6,12 @@ module Z3
       expect(Tactic.skip).to be_a Tactic
     end
 
+    it "descriptions" do
+      expect(Tactic.description("simplify")).to eq("apply simplification rules.")
+      # We have no tactic name list to check against, so this comes straight from Z3
+      expect{Tactic.description("no-such-tactic")}.to raise_error(Z3::Exception)
+    end
+
     it "combinators" do
       probe = Probe.named("is-qfbv")
       expect(Tactic.skip.and_then(Tactic.skip)).to be_a Tactic

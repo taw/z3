@@ -42,6 +42,65 @@ module Z3
       expect(stats.keys).to include("rlimit count", "max memory", "memory", "num allocs")
     end
 
+    it "#assert_and_track and #unsat_core" do
+      solver.assert_and_track a > 5, Z3.Bool("p1")
+      solver.assert_and_track a < 2, Z3.Bool("p2")
+      solver.assert_and_track b == 0, Z3.Bool("p3")
+      expect(solver).to be_unsatisfiable
+      # Z3 picks the order, and p3 is not part of the contradiction
+      expect(solver.unsat_core.map(&:to_s).sort).to eq(["p1", "p2"])
+    end
+
+    it "#unsat_core is empty unless the solver got to blame something" do
+      solver.assert_and_track a > 5, Z3.Bool("p1")
+      expect(solver).to be_satisfiable
+      expect(solver.unsat_core).to eq([])
+    end
+
+    it "#unsat_core only blames tracked assertions" do
+      solver.assert a > 5
+      solver.assert_and_track a < 2, Z3.Bool("p1")
+      expect(solver).to be_unsatisfiable
+      expect(solver.unsat_core.map(&:to_s)).to eq(["p1"])
+    end
+
+    it "#num_scopes" do
+      expect(solver.num_scopes).to eq(0)
+      solver.push
+      solver.push
+      expect(solver.num_scopes).to eq(2)
+      solver.pop
+      expect(solver.num_scopes).to eq(1)
+    end
+
+    it "#reason_unknown" do
+      solver.assert a**a == a
+      expect(solver.check).to eq(:unknown)
+      expect(solver.reason_unknown).to include("incomplete")
+    end
+
+    it "#to_s" do
+      solver.assert a + b == 4
+      solver.assert b >= 2
+      # Z3 picks the order it declares consts in, so only the parts we control are checked
+      expect(solver.to_s).to include("(declare-fun a () Int)")
+      expect(solver.to_s).to include("(declare-fun b () Int)")
+      expect(solver.to_s).to include("(assert (= (+ a b) 4))")
+      expect(solver.to_s).to include("(assert (>= b 2))")
+    end
+
+    it "#to_dimacs" do
+      solver.assert Z3.Or(Z3.Bool("p"), Z3.Bool("q"))
+      # Z3 emits the name comments in whatever order it happens to iterate in
+      expect(solver.to_dimacs.lines.map(&:chomp).sort).to eq(["1 2 0", "c 1 p", "c 2 q", "p cnf 2 1"])
+      expect(solver.to_dimacs(false)).to eq("p cnf 2 1\n1 2 0\n")
+    end
+
+    it "#help" do
+      # This depends on Z3 version so it's not a great test
+      expect(solver.help).to include("random_seed")
+    end
+
     # This is a very simple example of unknown satisfiablity
     # so we might need more complex one in the future
     # This is now satisfiable in 4.6.0

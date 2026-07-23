@@ -58,6 +58,10 @@ module Z3
       LowLevel.goal_to_string(self)
     end
 
+    def to_dimacs(include_names=true)
+      LowLevel.goal_to_dimacs_string(self, include_names)
+    end
+
     class << self
       def new(models=false, unsat_cores=false, proofs=false)
         super LowLevel.mk_goal(!!models, !!unsat_cores, !!proofs)

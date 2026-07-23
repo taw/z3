@@ -77,6 +77,11 @@ module Z3
         (0...LowLevel.get_num_probes).map{|i| LowLevel.get_probe_name(i) }
       end
 
+      def description(name)
+        raise Z3::Exception, "#{name} not on list of known probes, available: #{names.join(" ")}" unless names.include?(name)
+        LowLevel.probe_get_descr(name)
+      end
+
       def named(str)
         new str
       end

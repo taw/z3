@@ -38,6 +38,11 @@ module Z3
     end
 
     class << self
+      # Z3 itself raises on unknown names, as we have no tactic name list to check against
+      def description(name)
+        LowLevel.tactic_get_descr(name)
+      end
+
       def fail
         new LowLevel.tactic_fail
       end

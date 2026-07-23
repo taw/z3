@@ -25,6 +25,13 @@ module Z3
       LowLevel.optimize_assert(self, ast)
     end
 
+    # `tracker` is a Bool const standing in for `ast`, and it's what shows up in
+    # #unsat_core if the solver blames this assertion
+    def assert_and_track(ast, tracker)
+      reset_model!
+      LowLevel.optimize_assert_and_track(self, ast, tracker)
+    end
+
     def assert_soft(ast, weight = "1", id = nil)
       reset_model!
       LowLevel.optimize_assert_soft(self, ast, weight, id)
@@ -72,9 +79,24 @@ module Z3
       LowLevel.unpack_ast_vector(_ast_vector)
     end
 
+    # Only the trackers passed to #assert_and_track can ever show up here,
+    # plainly asserted formulas are never blamed
+    def unsat_core
+      _ast_vector = LowLevel.optimize_get_unsat_core(self)
+      LowLevel.unpack_ast_vector(_ast_vector)
+    end
+
     def statistics
       _stats = LowLevel::optimize_get_statistics(self)
       LowLevel.unpack_statistics(_stats)
+    end
+
+    def help
+      LowLevel.optimize_get_help(self)
+    end
+
+    def to_s
+      LowLevel.optimize_to_string(self)
     end
 
     def prove!(ast)

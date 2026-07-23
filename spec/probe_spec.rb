@@ -4,6 +4,11 @@ module Z3
       expect(Probe.names).to include("num-consts")
     end
 
+    it "descriptions" do
+      expect(Probe.description("num-consts")).to eq("number of non Boolean constants in the given goal.")
+      expect{Probe.description("no-such-probe")}.to raise_error(Z3::Exception, /\Ano-such-probe not on list of known probes, available: /)
+    end
+
     it "can be created by name" do
       # This used to hand the String straight to probe_inc_ref and corrupt memory
       probe = Probe.new("is-qfbv")

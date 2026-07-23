@@ -95,5 +95,23 @@ module Z3
       expect(optimize).to be_satisfiable
       expect(optimize.model[a].to_i).to eq 1
     end
+
+    it "#assert_and_track and #unsat_core" do
+      optimize.assert_and_track a > 5, Z3.Bool("p1")
+      optimize.assert_and_track a < 2, Z3.Bool("p2")
+      expect(optimize).to be_unsatisfiable
+      expect(optimize.unsat_core.map(&:to_s).sort).to eq(["p1", "p2"])
+    end
+
+    it "#to_s" do
+      optimize.assert a > 3
+      expect(optimize.to_s).to include("(declare-fun a () Int)")
+      expect(optimize.to_s).to include("(assert (> a 3))")
+    end
+
+    it "#help" do
+      # This depends on Z3 version so it's not a great test
+      expect(optimize.help).to include("timeout")
+    end
   end
 end
