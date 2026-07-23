@@ -27,7 +27,10 @@ module Z3
     def format_ast(a)
       case a.ast_kind
       when :numeral
-        PrintedExpr.new(Z3::LowLevel.get_numeral_string(a))
+        str = Z3::LowLevel.get_numeral_string(a)
+        # Rationals print as `157/50`, and negatives carry a leading `-`.
+        # Unlike plain integers those are not atomic, so they need parens as a subexpression.
+        PrintedExpr.new(str, str !~ /\A\d+\z/)
       when :app
         format_app(a)
       when :var, :quantifier, :func_decl, :unknown
@@ -39,7 +42,9 @@ module Z3
 
     def format_app(a)
       if LowLevel::is_algebraic_number(a)
-        PrintedExpr.new(LowLevel::get_numeral_decimal_string(a, 10))
+        str = LowLevel::get_numeral_decimal_string(a, 10)
+        # a leading - is not atomic, so it needs parens as a subexpression
+        PrintedExpr.new(str, str.start_with?("-"))
       elsif LowLevel::is_as_array(a)
         decl = FuncDecl.new( LowLevel::get_as_array_func_decl(a) )
         PrintedExpr.new(decl.sexpr.gsub(/k!\d+/, "k!"))
