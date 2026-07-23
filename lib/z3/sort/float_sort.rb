@@ -32,16 +32,24 @@ module Z3
     end
 
     def from_const(val)
-      if val.is_a?(Float)
-        new LowLevel.mk_fpa_numeral_double(val, self)
-      elsif val.is_a?(Integer)
+      if val.is_a?(Integer)
         val_f = val.to_f
-        # FIXME, there are other constructors
         raise Z3::Exception, "Out of range" unless val_f == val
-        new LowLevel.mk_fpa_numeral_double(val_f, self)
-      else
+        val = val_f
+      elsif !val.is_a?(Float)
         raise Z3::Exception, "Cannot convert #{val.class} to #{self.class}"
       end
+
+      # A Ruby Float is a double, so this is exact for the double sort
+      double = FloatSort.new(:double)
+      return new(LowLevel.mk_fpa_numeral_double(val, self)) if self == double
+
+      # For every other sort the value has to be rounded, and Z3_mk_fpa_numeral_double
+      # gets that wrong - it returns NaN on overflow and misencodes denormals. Build the
+      # exact double instead, and let Z3 round it to this sort the way IEEE says to.
+      exact = FloatExpr.new(LowLevel.mk_fpa_numeral_double(val, double), double)
+      rounding_mode = RoundingModeSort.new.nearest_ties_even
+      new(LowLevel.mk_fpa_to_fp_float(rounding_mode, exact, self)).simplify
     end
 
     def >(other)

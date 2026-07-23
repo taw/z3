@@ -107,15 +107,12 @@ module Z3
       if Z3.version_at_least?(4, 6)
         expect(float_double.from_const(1234 * 0.5**1040).to_s).to eq("0.00470733642578125B-1022")
         expect(float_single.from_const(1234 * 0.5**136).to_s).to eq("1.205078125B-126")
-        # This is what we get, all of these are wrong, by a lot:
-        # expect(float_single.from_const(1234 * 0.5**137).to_s).to eq("0.205078125B-126")
-        # expect(float_single.from_const(1234 * 0.5**138).to_s).to eq("0.205078125B-126")
-        # expect(float_single.from_const(1234 * 0.5**139).to_s).to eq("0.205078125B-126")
-        #
-        # It's not even a bug in printer Z3_mk_fpa_numeral_double is broken for denormals
-        #
-        # This is broken for every version 4.6 to 4.16
-        # Might be worth rechecking in newer Z3 versions
+        # These used to come out as "0.205078125B-126", wrong by a lot, because
+        # Z3_mk_fpa_numeral_double misencodes denormals. from_const rounds with
+        # fp.to_fp now, so each of these is exactly 1234 * 2**-k
+        expect(float_single.from_const(1234 * 0.5**137).to_s).to eq("0.6025390625B-126")
+        expect(float_single.from_const(1234 * 0.5**138).to_s).to eq("0.30126953125B-126")
+        expect(float_single.from_const(1234 * 0.5**139).to_s).to eq("0.150634765625B-126")
       else
         expect(float_double.from_const(1234 * 0.5**1040).to_s).to eq("1.205078125B-1030")
       end
