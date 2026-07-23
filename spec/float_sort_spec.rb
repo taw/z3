@@ -89,6 +89,7 @@ module Z3
       end
 
       it "returns a numeral, not an unfolded conversion" do
+        skip "Z3_fpa_is_numeral was added in Z3 4.15.5" unless Z3.version_at_least?(4, 15, 5)
         [1e300, 1e-300, 0.1, 1.5, 1234 * 0.5**137].each do |val|
           expect(LowLevel.fpa_is_numeral(float_single.from_const(val))).to be true
         end
