@@ -48,8 +48,11 @@ module Z3
       self == other
     end
 
+    # Z3 hash-conses sorts, and Set(X) is really Array(X, Bool), so two sorts can be
+    # == while their Ruby classes differ. hash has to follow the pointer like eql? does,
+    # or sorts which are eql? would end up in different Hash buckets.
     def hash
-      self.class.hash
+      _ast.address
     end
 
     def inspect
