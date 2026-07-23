@@ -4,6 +4,27 @@ module Z3
       expect(Probe.names).to include("num-consts")
     end
 
+    it "can be created by name" do
+      # This used to hand the String straight to probe_inc_ref and corrupt memory
+      probe = Probe.new("is-qfbv")
+      expect(probe).to be_a(Probe)
+      expect(probe.apply(Goal.new(LowLevel.mk_goal(false, false, false)))).to eq(1.0)
+      expect(Probe.named("is-qfbv")).to be_a(Probe)
+    end
+
+    it "accepts pointers from the low level API" do
+      expect(Probe.const(10.0)).to be_a(Probe)
+      expect(~Probe.new("is-qfbv")).to be_a(Probe)
+      expect(Probe.new("size") <= Probe.new("depth")).to be_a(Probe)
+    end
+
+    it "rejects unknown probe names and non-probes" do
+      expect{Probe.new("no-such-probe")}.to raise_error(Z3::Exception, /\Ano-such-probe not on list of known probes, available: /)
+      expect{Probe.named("no-such-probe")}.to raise_error(Z3::Exception, /\Ano-such-probe not on list of known probes, available: /)
+      expect{Probe.new(nil)}.to raise_error(Z3::Exception, "Probe name or pointer expected, got NilClass")
+      expect{Probe.new(42)}.to raise_error(Z3::Exception, "Probe name or pointer expected, got Integer")
+    end
+
     # Just simple way to brute force coverage
     it "probe building" do
       a = Probe.named("num-consts") < Probe.const(10.0)

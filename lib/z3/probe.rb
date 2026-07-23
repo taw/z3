@@ -1,7 +1,18 @@
 module Z3
   class Probe
     attr_reader :_probe
+    # Takes either a probe name, or a pointer from the low level API
     def initialize(_probe)
+      case _probe
+      when String
+        names = Probe.names
+        raise Z3::Exception, "#{_probe} not on list of known probes, available: #{names.join(" ")}" unless names.include?(_probe)
+        _probe = LowLevel.mk_probe(_probe)
+      when FFI::Pointer
+        # Nothing to do
+      else
+        raise Z3::Exception, "Probe name or pointer expected, got #{_probe.class}"
+      end
       @_probe = _probe
       LowLevel.probe_inc_ref(self)
     end
@@ -65,8 +76,7 @@ module Z3
       end
 
       def named(str)
-        raise Z3::Exception, "#{str} not on list of known probes, available: #{names.join(" ")}" unless names.include?(str)
-        new LowLevel.mk_probe(str)
+        new str
       end
     end
   end
