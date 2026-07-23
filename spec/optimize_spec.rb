@@ -73,5 +73,27 @@ module Z3
       expect(optimize).to be_satisfiable
       expect(optimize.model[a].to_i).to eq 1
     end
+
+    it "maximize invalidates the model" do
+      optimize.assert a > 0
+      optimize.assert a < 10
+      expect(optimize).to be_satisfiable
+      expect(optimize.model[a].to_i).to be_between(1, 9)
+      optimize.maximize a
+      expect{optimize.model}.to raise_error("You need to check that it's satisfiable before asking for the model")
+      expect(optimize).to be_satisfiable
+      expect(optimize.model[a].to_i).to eq 9
+    end
+
+    it "minimize invalidates the model" do
+      optimize.assert a > 0
+      optimize.assert a < 10
+      expect(optimize).to be_satisfiable
+      expect(optimize.model[a].to_i).to be_between(1, 9)
+      optimize.minimize a
+      expect{optimize.model}.to raise_error("You need to check that it's satisfiable before asking for the model")
+      expect(optimize).to be_satisfiable
+      expect(optimize.model[a].to_i).to eq 1
+    end
   end
 end

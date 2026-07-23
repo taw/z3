@@ -101,10 +101,12 @@ module Z3
     end
 
     def maximize(ast)
+      reset_model!
       LowLevel.optimize_maximize(self, ast)
     end
 
     def minimize(ast)
+      reset_model!
       LowLevel.optimize_minimize(self, ast)
     end
 
