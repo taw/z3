@@ -51,9 +51,10 @@ module Z3
     end
 
     def !
-      Z3.Or(
-        *map{|v| v != self[v]}
-      )
+      differences = map{|v| v != self[v]}
+      # A model with no consts constrains nothing, so there is nothing to differ in
+      return Z3.False if differences.empty?
+      Z3.Or(*differences)
     end
   end
 end

@@ -49,5 +49,23 @@ module Z3
       expect(solver).to be_satisfiable
       expect(!model).to be_same_as((a != 2) | (b != 4))
     end
+
+    it "#! on a model with no consts" do
+      solver.assert(Z3.Bool("p") | true)
+      expect(solver).to be_satisfiable
+      expect(model.num_consts).to eq(0)
+      expect(!model).to be_same_as(Z3.False)
+    end
+
+    it "#! terminates enumeration of a model with no consts" do
+      solver.assert(Z3.Bool("p") | true)
+      solutions = []
+      while solver.satisfiable?
+        solutions << solver.model.to_a
+        solver.assert(!solver.model)
+        raise "Enumeration failed to terminate" if solutions.size > 5
+      end
+      expect(solutions).to eq([[]])
+    end
   end
 end
