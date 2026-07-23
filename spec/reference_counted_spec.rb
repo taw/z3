@@ -62,8 +62,12 @@ module Z3
         end
 
         it "is collectable once dropped" do
-          ref = WeakRef.new(build.call(x))
-          5.times { GC.start }
+          # Built on a throwaway thread, as Ruby scans the machine stack
+          # conservatively, and a leftover slot pointing at an intermediate object
+          # (a Solver still memoizing its Model, say) would falsely keep it alive
+          ref = nil
+          Thread.new { ref = WeakRef.new(build.call(x)) }.join
+          5.times { GC.start(full_mark: true, immediate_sweep: true) }
           # A finalizer closing over the wrapper would keep it alive here,
           # and then nothing would ever be released
           expect(ref.weakref_alive?).to be_falsey
