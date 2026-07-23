@@ -31,7 +31,7 @@ module Z3
         ]).to have_solution(
           a => "store(const(true), 3, false)",
           b => "store(const(true), 1, false)",
-          c => "((_ map or) (store ((as const (Array Int Bool)) true) 3 false) (store ((as const (Array Int Bool)) true) 1 false))",
+          c => "map(or, store(const(true), 3, false), store(const(true), 1, false))",
         )
       end
 
@@ -48,7 +48,7 @@ module Z3
           a => "store(const(true), 3, false)",
           b => "store(const(true), 1, false)",
           # a & !b
-          c => "((_ map and) (store ((as const (Array Int Bool)) true) 3 false) (store ((as const (Array Int Bool)) false) 1 true))",
+          c => "map(and, store(const(true), 3, false), store(const(false), 1, true))",
         )
       end
 
@@ -64,7 +64,7 @@ module Z3
         ]).to have_solution(
           a => "store(const(true), 3, false)",
           b => "store(const(true), 1, false)",
-          c => "((_ map and) (store ((as const (Array Int Bool)) true) 3 false) (store ((as const (Array Int Bool)) true) 1 false))",
+          c => "map(and, store(const(true), 3, false), store(const(true), 1, false))",
         )
       end
     end

@@ -58,12 +58,14 @@ module Z3
       else
         decl = a.func_decl
         name = decl.name
-        # It looks like Z3 bug, or at least a major quirk
-        # various set operations all say (map) when it's really (_ map and), (_ map or) etc.
-        if name == "map"
-          return a.sexpr.gsub(/\s+/, " ")
-        end
         args = a.arguments.map{|x| format_ast(x)}
+
+        # Set operations come back from models as `(_ map and)`, `(_ map or)` etc.
+        # `decl.name` is just "map" for all of them, the mapped function is a decl parameter.
+        if name == "map" and decl.num_parameters == 1 and decl.parameter_kind(0) == :func_decl
+          return PrintedExpr.new("map(#{decl.func_decl_parameter(0).name}, #{args.join(", ")})")
+        end
+
         return PrintedExpr.new(name, false) if args.size == 0
 
         # Special case common Bitvec operators
