@@ -15,6 +15,9 @@ describe "Regexp Solver" do
     [2, 'a(?<=a)c'],
     [2, 'a(?<!b)c'],
     [1, '(?<!a)b'],
+    [1, '(a){0}b'],
+    [2, 'x(a){0}(b){0}y'],
+    [1, '(a){0,2}b'],
   ]
 
   examples.each do |length, rx|

@@ -108,7 +108,7 @@ class SimpleRegexpParser
         sequence(repeat(base, min - 1, max), part)
       end
     elsif max == 0 # a{0} -> empty, not really a thing
-      :empty
+      empty
     else
       if min == 0
         # (a){2,3} -> ()|a{1,2}(a)
