@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.files = %W[Rakefile .rspec examples lib spec README.md].map { |x| Pathname(x).find.to_a.select(&:file?) }.flatten.map(&:to_s)
   s.homepage = "https://github.com/taw/z3"
   s.license = "MIT"
-  s.requirements = "z3 library (4.8+)"
+  s.requirements = "z3 library (4.16+)"
   # development
   s.add_development_dependency "pry"
   s.metadata['msys2_mingw_dependencies'] = 'z3'

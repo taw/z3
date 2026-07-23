@@ -2,9 +2,7 @@
 
 This is a Ruby interface for [Z3](https://github.com/Z3Prover/z3).
 
-Minimum required [Z3](https://github.com/Z3Prover/z3) version is 4.8. Make sure you have it first (e.g. `brew install z3` on MacOS).
-
-It's in very early stages of development. Pull requests always welcome.
+Recommended [Z3](https://github.com/Z3Prover/z3) version is 4.16 or newer. Make sure you have it first (e.g. `brew install z3` on MacOS).
 
 ```sh
 gem install z3
