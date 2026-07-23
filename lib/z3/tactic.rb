@@ -1,9 +1,11 @@
 module Z3
   class Tactic
+    include ReferenceCounted
+
     attr_reader :_tactic
     def initialize(_tactic)
       @_tactic = _tactic
-      LowLevel.tactic_inc_ref(self)
+      inc_ref! :tactic, _tactic
     end
 
     def help

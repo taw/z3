@@ -1,9 +1,11 @@
 module Z3
   class Goal
+    include ReferenceCounted
+
     attr_reader :_goal
     def initialize(_goal)
       @_goal = _goal
-      LowLevel.goal_inc_ref(self)
+      inc_ref! :goal, _goal
     end
 
     def assert(ast)

@@ -95,6 +95,15 @@ module Z3
         stats
       end
 
+      # These take raw pointers, as finalizers must not hold onto the wrapper object
+      def inc_ref_pointer(kind, pointer)
+        Z3::VeryLowLevel.public_send("Z3_#{kind}_inc_ref", _ctx_pointer, pointer)
+      end
+
+      def dec_ref_pointer(kind, pointer)
+        Z3::VeryLowLevel.public_send("Z3_#{kind}_dec_ref", _ctx_pointer, pointer)
+      end
+
       def _ctx_pointer
         @_ctx_pointer ||= Z3::Context.instance._context
       end

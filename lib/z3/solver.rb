@@ -1,9 +1,11 @@
 module Z3
   class Solver
+    include ReferenceCounted
+
     attr_reader :_solver
     def initialize
       @_solver = LowLevel.mk_solver
-      LowLevel.solver_inc_ref(self)
+      inc_ref! :solver, @_solver
       reset_model!
     end
 

@@ -1,10 +1,12 @@
 module Z3
   class Optimize
+    include ReferenceCounted
+
     attr_reader :_optimize
 
     def initialize
       @_optimize = LowLevel.mk_optimize
-      LowLevel.optimize_inc_ref(self)
+      inc_ref! :optimize, @_optimize
       reset_model!
     end
 

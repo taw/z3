@@ -50,6 +50,44 @@ module Z3
       expect(!model).to be_same_as((a != 2) | (b != 4))
     end
 
+    it "stays valid after the solver produces another model" do
+      solver.assert(a == 2)
+      expect(solver).to be_satisfiable
+      first = solver.model
+      solver.assert(b == 4)
+      expect(solver).to be_satisfiable
+      second = solver.model
+      expect(second.to_s).to eq("Z3::Model<a=2, b=4>")
+      # Without model_inc_ref the first model is reclaimed here, and reading it segfaults
+      expect(first.to_s).to eq("Z3::Model<a=2>")
+      expect(first[a]).to be_same_as(Z3.Const(2))
+    end
+
+    it "survives garbage collection while other models are discarded" do
+      solver.assert(a == 2)
+      expect(solver).to be_satisfiable
+      kept = solver.model
+      100.times do
+        solver.send(:reset_model!)
+        expect(solver).to be_satisfiable
+        solver.model
+      end
+      GC.start
+      expect(kept.to_s).to eq("Z3::Model<a=2>")
+    end
+
+    it "keeps every model of an enumeration readable" do
+      solver.assert(a >= 0)
+      solver.assert(a < 5)
+      models = []
+      while solver.satisfiable?
+        models << solver.model
+        solver.assert(!models.last)
+      end
+      expect(models.size).to eq(5)
+      expect(models.map{|m| m[a].to_i}.sort).to eq([0, 1, 2, 3, 4])
+    end
+
     it "#! on a model with no consts" do
       solver.assert(Z3.Bool("p") | true)
       expect(solver).to be_satisfiable

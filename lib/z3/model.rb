@@ -1,10 +1,13 @@
 module Z3
   class Model
     include Enumerable
+    include ReferenceCounted
 
     attr_reader :_model
     def initialize(_model)
       @_model = _model
+      # Without this the solver reclaims the model as soon as it produces another one
+      inc_ref! :model, _model
     end
 
     def num_consts

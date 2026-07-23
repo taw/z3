@@ -8,7 +8,7 @@ module Z3
       # This used to hand the String straight to probe_inc_ref and corrupt memory
       probe = Probe.new("is-qfbv")
       expect(probe).to be_a(Probe)
-      expect(probe.apply(Goal.new(LowLevel.mk_goal(false, false, false)))).to eq(1.0)
+      expect(probe.apply(Goal.new)).to eq(1.0)
       expect(Probe.named("is-qfbv")).to be_a(Probe)
     end
 

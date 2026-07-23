@@ -1,5 +1,7 @@
 module Z3
   class Probe
+    include ReferenceCounted
+
     attr_reader :_probe
     # Takes either a probe name, or a pointer from the low level API
     def initialize(_probe)
@@ -14,7 +16,7 @@ module Z3
         raise Z3::Exception, "Probe name or pointer expected, got #{_probe.class}"
       end
       @_probe = _probe
-      LowLevel.probe_inc_ref(self)
+      inc_ref! :probe, _probe
     end
 
     def &(other)
