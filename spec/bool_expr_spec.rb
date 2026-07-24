@@ -66,6 +66,33 @@ module Z3
       expect([a == false, x == a.ite(2, 3)]).to have_solution(x => 3)
     end
 
+    it "AtMost" do
+      expect([a, b, c, Z3.AtMost([a, b, c], 2)]).to have_no_solution
+      expect([a, b, Z3.AtMost([a, b, c], 2)]).to have_solution(c => false)
+      expect([a, b, c, Z3.AtMost([a, b, c], 0)]).to have_no_solution
+      expect([a, b, c, Z3.AtMost([a, b, c], 3)]).to have_solution(a => true, b => true, c => true)
+    end
+
+    it "AtLeast" do
+      expect([~a, ~b, ~c, Z3.AtLeast([a, b, c], 1)]).to have_no_solution
+      expect([~a, Z3.AtLeast([a, b, c], 2)]).to have_solution(b => true, c => true)
+      expect([~a, ~b, ~c, Z3.AtLeast([a, b, c], 0)]).to have_solution(a => false, b => false, c => false)
+    end
+
+    it "Exactly" do
+      expect([~a, Z3.Exactly([a, b, c], 2)]).to have_solution(b => true, c => true)
+      expect([a, b, c, Z3.Exactly([a, b, c], 2)]).to have_no_solution
+      expect([~a, ~b, ~c, Z3.Exactly([a, b, c], 1)]).to have_no_solution
+      expect([a, b, c, Z3.Exactly([a, b, c], 3)]).to have_solution(a => true, b => true, c => true)
+    end
+
+    it "cardinality constraints reject bad bounds" do
+      expect{ Z3.AtMost([a, b], -1) }.to raise_error(Z3::Exception)
+      expect{ Z3.AtLeast([], 1) }.to raise_error(Z3::Exception)
+      expect{ Z3.AtMost([a, b], 1.5) }.to raise_error(Z3::Exception)
+      expect{ Z3.Exactly([], 0) }.to raise_error(Z3::Exception)
+    end
+
     it "to_b" do
       expect{Z3.Bool("a").to_b}.to raise_error(Z3::Exception)
       expect(Z3.Const(true).to_b).to eq(true)

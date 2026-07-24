@@ -73,7 +73,7 @@ class Dominosa
     end
 
     all.each do |_, vars|
-      @solver.assert Z3.Add(*vars.map{|v| v.ite(1,0) }) == 1
+      @solver.assert Z3.Exactly(vars, 1)
     end
   end
 
@@ -86,7 +86,7 @@ class Dominosa
           left_var(x,y),
           up_var(x,y),
         ].compact
-        @solver.assert Z3.Add(*vars.map{|v| v.ite(1,0) }) == 1
+        @solver.assert Z3.Exactly(vars, 1)
       end
     end
   end

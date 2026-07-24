@@ -134,7 +134,8 @@ class Yajilin
           raise
         end
 
-        @solver.assert Z3.Add(*stripe.map{|c| c.ite(0,1)}) == count
+        # cvar is true for white, so ~cvar counts the black cells the arrow sees
+        @solver.assert Z3.Exactly(stripe.map{|c| ~c }, count)
       end
     end
   end
@@ -182,10 +183,7 @@ class Yajilin
     end
 
     # only one loop start
-    @solver.assert Z3.Add(
-      *enum_for(:each_xy).map{|x,y|
-        (nvar(x,y) == 0).ite(1,0)
-      }) == 1
+    @solver.assert Z3.Exactly(enum_for(:each_xy).map{|x,y| nvar(x,y) == 0 }, 1)
   end
 
   def call

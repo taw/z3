@@ -58,8 +58,7 @@ class ColorNonogram
   def constraint_line(color_constraints, line_vars)
     color_constraints.each_with_index do |(expected_total, expected_continuity), color_index|
       correct_color = line_vars.map{|vi| (vi == color_index) }
-      total = Z3.Add(*correct_color.map{|cc| cc.ite(1, 0)})
-      @solver.assert total == expected_total
+      @solver.assert Z3.Exactly(correct_color, expected_total)
       # For 0 / 1 this is all
       if expected_total >= 2
         continuity = continuity_somewhere(correct_color, expected_total)

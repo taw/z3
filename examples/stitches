@@ -55,20 +55,20 @@ class StitchesSolver
   end
 
   def row_of_cell_vars(y)
-    @xsize.times.map{|x| @cell_vars[[x,y]].ite(1,0) }
+    @xsize.times.map{|x| @cell_vars[[x,y]] }
   end
 
   def col_of_cell_vars(x)
-    @ysize.times.map{|y| @cell_vars[[x,y]].ite(1,0) }
+    @ysize.times.map{|y| @cell_vars[[x,y]] }
   end
 
   def setup_cell_assertions!
     @xsize.times do |x|
-      @solver.assert Z3.Add(*col_of_cell_vars(x)) == @col_counts[x]
+      @solver.assert Z3.Exactly(col_of_cell_vars(x), @col_counts[x])
     end
 
     @ysize.times do |y|
-      @solver.assert Z3.Add(*row_of_cell_vars(y)) == @row_counts[y]
+      @solver.assert Z3.Exactly(row_of_cell_vars(y), @row_counts[y])
     end
   end
 
@@ -110,7 +110,7 @@ class StitchesSolver
 
   def setup_stitch_assertions!
     @stitch_groups.each do |g, vars|
-      @solver.assert Z3.Add(*vars.map{|v| v.ite(1,0)}) == @stitch_count
+      @solver.assert Z3.Exactly(vars, @stitch_count)
     end
   end
 

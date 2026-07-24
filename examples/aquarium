@@ -25,14 +25,12 @@ class Aquarium
 
     # Row sums
     @ysize.times do |y|
-      sum = Z3.Add(*@xsize.times.map{|x| cell_var(x, y).ite(1, 0) })
-      @solver.assert sum == @rows[y]
+      @solver.assert Z3.Exactly(@xsize.times.map{|x| cell_var(x, y) }, @rows[y])
     end
 
     # Col sums
     @xsize.times do |x|
-      sum = Z3.Add(*@ysize.times.map{|y| cell_var(x, y).ite(1, 0) })
-      @solver.assert sum == @cols[x]
+      @solver.assert Z3.Exactly(@ysize.times.map{|y| cell_var(x, y) }, @cols[x])
     end
 
     # Container water flow

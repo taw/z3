@@ -41,6 +41,18 @@ module Z3
         Z3::VeryLowLevel.Z3_mk_or(_ctx_pointer, asts.size, asts_vector(asts))
       end
 
+      def mk_atmost(asts, k)
+        Z3::VeryLowLevel.Z3_mk_atmost(_ctx_pointer, asts.size, asts_vector(asts), k)
+      end
+
+      def mk_atleast(asts, k)
+        Z3::VeryLowLevel.Z3_mk_atleast(_ctx_pointer, asts.size, asts_vector(asts), k)
+      end
+
+      def mk_pbeq(asts, coeffs, k)
+        Z3::VeryLowLevel.Z3_mk_pbeq(_ctx_pointer, asts.size, asts_vector(asts), ints_vector(coeffs), k)
+      end
+
       def mk_mul(asts)
         Z3::VeryLowLevel.Z3_mk_mul(_ctx_pointer, asts.size, asts_vector(asts))
       end
@@ -114,6 +126,12 @@ module Z3
         # raise if args.empty?
         c_args = FFI::MemoryPointer.new(:pointer, args.size)
         c_args.write_array_of_pointer args.map(&:_ast)
+        c_args
+      end
+
+      def ints_vector(args)
+        c_args = FFI::MemoryPointer.new(:int, args.size)
+        c_args.write_array_of_int args
         c_args
       end
     end

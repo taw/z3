@@ -72,6 +72,18 @@ module Z3
     BoolExpr.IfThenElse(a,b,c)
   end
 
+  def AtMost(args, k)
+    BoolExpr.AtMost(args, k)
+  end
+
+  def AtLeast(args, k)
+    BoolExpr.AtLeast(args, k)
+  end
+
+  def Exactly(args, k)
+    BoolExpr.Exactly(args, k)
+  end
+
   #--
   # Global functions
   #++

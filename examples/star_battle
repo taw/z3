@@ -15,20 +15,17 @@ class StarBattle
   def call
     # Each row contains 2 stars
     @size.times do |y|
-      sum = Z3.Add(*@size.times.map{|x| cell_var(x, y).ite(1, 0) })
-      @solver.assert sum == 2
+      @solver.assert Z3.Exactly(@size.times.map{|x| cell_var(x, y) }, 2)
     end
 
     # Each column contains 2 stars
     @size.times do |x|
-      sum = Z3.Add(*@size.times.map{|y| cell_var(x, y).ite(1, 0) })
-      @solver.assert sum == 2
+      @solver.assert Z3.Exactly(@size.times.map{|y| cell_var(x, y) }, 2)
     end
 
     # Each container contains 2 stars
     coords.group_by{|x,y| container_at(x,y) }.each do |name, cells|
-      sum = Z3.Add(*cells.map{|x,y| cell_var(x, y).ite(1, 0) })
-      @solver.assert sum == 2
+      @solver.assert Z3.Exactly(cells.map{|x,y| cell_var(x, y) }, 2)
     end
 
     # Can't be adjacent

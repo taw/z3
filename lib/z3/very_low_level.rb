@@ -36,6 +36,9 @@ module Z3
     attach_function :Z3_model_eval, [:ctx_pointer, :model_pointer, :ast_pointer, :bool, :pointer], :int
     attach_function :Z3_mk_and, [:ctx_pointer, :int, :pointer], :ast_pointer
     attach_function :Z3_mk_or, [:ctx_pointer, :int, :pointer], :ast_pointer
+    attach_function :Z3_mk_atmost, [:ctx_pointer, :int, :pointer, :int], :ast_pointer
+    attach_function :Z3_mk_atleast, [:ctx_pointer, :int, :pointer, :int], :ast_pointer
+    attach_function :Z3_mk_pbeq, [:ctx_pointer, :int, :pointer, :pointer, :int], :ast_pointer
     attach_function :Z3_mk_add, [:ctx_pointer, :int, :pointer], :ast_pointer
     attach_function :Z3_mk_sub, [:ctx_pointer, :int, :pointer], :ast_pointer
     attach_function :Z3_mk_mul, [:ctx_pointer, :int, :pointer], :ast_pointer

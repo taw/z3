@@ -91,10 +91,7 @@ class Nanro
       @solver.assert (cvar(x,y) != 0).implies(Z3.Or(nvar(x,y) == 0, nvar(x,y) == nval))
     end
 
-    @solver.assert Z3.Add(
-      *enum_for(:each_xy).map{|x,y|
-        (nvar(x,y) == 0).ite(1,0)
-      }) == 1
+    @solver.assert Z3.Exactly(enum_for(:each_xy).map{|x,y| nvar(x,y) == 0 }, 1)
   end
 
   def call
