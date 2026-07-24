@@ -3,6 +3,7 @@
 require "pathname"
 require_relative "../lib/z3"
 
+# Also known as Akari
 class LightUp
   def initialize(path)
     data = Pathname(path).read
@@ -14,30 +15,23 @@ class LightUp
   end
 
   def call
-    @lamps = map_coordinates{|x,y| int01(x,y)}
+    @lamps = map_coordinates{|x,y| Z3.Bool("l#{x},#{y}") }
 
-    # No lamps on walls
-    # Numbers count lamps next to node (diagonals don't count)
-    (0...@ysize).each do |y|
-      (0...@xsize).each do |x|
-        v = @data[[x,y]]
-        next if v == "."
-        @solver.assert @lamps[[x,y]] == 0
-        if ("0".."4").include?(v)
-          @solver.assert Z3.Add(*lamps_next_to_cell(x,y)) == v.to_i
-        end
+    each_cell do |x, y|
+      v = @data[[x,y]]
+      if v == "."
+        # Every white cell must be lit: at least one lamp in its line of sight
+        @solver.assert Z3.AtLeast(line_of_sight(x, y), 1)
+      else
+        # No lamps on walls; numbers count lamps next to node (diagonals don't count)
+        @solver.assert ~@lamps[[x,y]]
+        @solver.assert Z3.Exactly(lamps_next_to_cell(x, y), v.to_i) if ("0".."4").include?(v)
       end
     end
 
-    # Every white cell is in raycast of a lamp (walls don't need to be lit)
-    # No lamp is in raycast of another lamp
-    (0...@ysize).each do |y|
-      (0...@xsize).each do |x|
-        next unless @data[[x,y]] == "."
-        raycast = Z3.Add(*raycast_cells(x,y))
-        @solver.assert Z3.Implies(@lamps[[x,y]] == 0, raycast >= 1)
-        @solver.assert Z3.Implies(@lamps[[x,y]] == 1, raycast == 0)
-      end
+    # No lamp is in raycast of another: at most one lamp per maximal white run
+    (white_runs(:horizontal) + white_runs(:vertical)).each do |run|
+      @solver.assert Z3.AtMost(run.map{|xy| @lamps[xy]}, 1)
     end
 
     if @solver.satisfiable?
@@ -54,11 +48,11 @@ class LightUp
     [[x0-1,y0],[x0+1,y0],[x0,y0-1],[x0,y0+1]].map{|x,y| @lamps[[x,y]]}.compact
   end
 
-  def raycast_cells(x0,y0)
-    result = []
+  # The white cell itself plus every white cell visible from it in a straight line
+  def line_of_sight(x0,y0)
+    result = [@lamps[[x0,y0]]]
     [[1,0],[-1,0],[0,1],[0,-1]].each do |dx,dy|
-      x = x0+dx
-      y = y0+dy
+      x, y = x0+dx, y0+dy
       while @data[[x,y]] == "."
         result << @lamps[[x,y]]
         x += dx
@@ -66,6 +60,22 @@ class LightUp
       end
     end
     result
+  end
+
+  # Maximal runs of white cells, broken up by walls, in either direction
+  def white_runs(direction)
+    lines = if direction == :horizontal
+      (0...@ysize).map{|y| (0...@xsize).map{|x| [x,y]}}
+    else
+      (0...@xsize).map{|x| (0...@ysize).map{|y| [x,y]}}
+    end
+    lines.flat_map do |line|
+      line.chunk{|xy| @data[xy] == "."}.select{|white,_| white}.map{|_,run| run}
+    end
+  end
+
+  def each_cell
+    (0...@ysize).each{|y| (0...@xsize).each{|x| yield x, y}}
   end
 
   def map_coordinates
@@ -77,7 +87,7 @@ class LightUp
       (0...@xsize).each do |x|
         if @data[[x,y]] != "."
           print(@data[[x,y]])
-        elsif @model[@lamps[[x,y]]].to_i == 1
+        elsif @model[@lamps[[x,y]]].to_b
           print("*")
         else
           print(" ")
@@ -85,13 +95,6 @@ class LightUp
       end
       puts "\n"
     end
-  end
-
-  def int01(x,y)
-    v = Z3.Int("l#{x},#{y}")
-    @solver.assert v >= 0
-    @solver.assert v <= 1
-    v
   end
 end
 
