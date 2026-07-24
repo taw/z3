@@ -59,9 +59,12 @@ module Z3
       when :uint, :bool, :double, :symbol
         kind
       else
-        # :string parameters would need Z3_params_set_string, which takes a char*
-        # Z3 never frees, so it's not in the FFI layer
-        raise Z3::Exception, "Parameter `#{name}' has type #{kind}, which this API can't set"
+        # Z3's C API has no Z3_params_set_string, so :string parameters (qi.cost,
+        # mbqi.id, ...) simply cannot go into a Params - and passing a symbol
+        # instead is rejected when the solver validates. The only way to set one is
+        # globally, by module-qualified name:
+        #   LowLevel.global_param_set("smt.qi.cost", "(+ weight generation)")
+        raise Z3::Exception, "Parameter `#{name}' has type #{kind}, and Z3 has no API for setting string parameters"
       end
     end
 

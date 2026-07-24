@@ -70,9 +70,9 @@ module Z3
         expect(Params.new({"arith.epsilon" => 1}, descrs).to_s).to eq("(params arith.epsilon 1)")
       end
 
-      it "reports parameters the Ruby API has no setter for" do
+      it "reports parameters Z3 has no setter for" do
         expect{ Params.new({"qi.cost" => "(+ weight generation)"}, descrs) }
-          .to raise_error(Z3::Exception, "Parameter `qi.cost' has type string, which this API can't set")
+          .to raise_error(Z3::Exception, "Parameter `qi.cost' has type string, and Z3 has no API for setting string parameters")
       end
 
       it "#descrs" do
