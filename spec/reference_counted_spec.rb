@@ -40,6 +40,17 @@ module Z3
         ->(p) { p.apply(Z3::Goal.new) },
         1.0,
       ],
+      "Params" => [
+        ->(_x) { Z3::Params.new(timeout: 10) },
+        ->(p) { p.to_s },
+        "(params timeout 10)",
+      ],
+      # These outlive the Solver they came from, so they need their own claim on it
+      "ParamDescrs" => [
+        ->(_x) { Z3::Solver.new.param_descrs },
+        ->(d) { d.include?("timeout") },
+        true,
+      ],
     }
 
     subjects.each do |name, (build, read, expected)|
@@ -56,6 +67,8 @@ module Z3
             Z3::Goal.new
             Z3::Tactic.skip
             Z3::Probe.new("is-qfbv")
+            Z3::Params.new(timeout: 10)
+            s.param_descrs
           end
           3.times { GC.start }
           expect(read.call(kept)).to eq(expected)

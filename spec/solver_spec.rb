@@ -101,6 +101,76 @@ module Z3
       expect(solver.help).to include("random_seed")
     end
 
+    it "#param_descrs" do
+      expect(solver.param_descrs).to include("timeout", "rlimit")
+    end
+
+    describe "parameters" do
+      # `rlimit` is a deterministic resource limit, unlike `timeout`, so these
+      # give the same answer no matter how fast the machine running them is.
+      # rlimit of 1 is small enough that even a trivial problem runs out of budget.
+      let(:easy_problem) { (a > 1) & (b > 0) & (a + b == 100) & (a * b > 300) }
+
+      it "solver without parameters solves it" do
+        solver.assert easy_problem
+        expect(solver.check).to eq(:sat)
+      end
+
+      it "#set_params" do
+        solver.set_params(rlimit: 1)
+        solver.assert easy_problem
+        expect(solver.check).to eq(:unknown)
+      end
+
+      it "#set_params returns the solver, so it chains" do
+        expect(solver.set_params(rlimit: 1)).to equal(solver)
+      end
+
+      it ".new takes parameters" do
+        solver = Solver.new(rlimit: 1)
+        solver.assert easy_problem
+        expect(solver.check).to eq(:unknown)
+      end
+
+      it "#set_params accepts a Params object" do
+        solver.set_params(Params.new(rlimit: 1))
+        solver.assert easy_problem
+        expect(solver.check).to eq(:unknown)
+      end
+
+      it ".new accepts a Params object" do
+        solver = Solver.new(Params.new(rlimit: 1))
+        solver.assert easy_problem
+        expect(solver.check).to eq(:unknown)
+      end
+
+      it "#set_params merges into parameters set before" do
+        solver.set_params(rlimit: 1)
+        solver.set_params(random_seed: 42)
+        solver.assert easy_problem
+        expect(solver.check).to eq(:unknown)
+      end
+
+      it "#set_params overrides parameters set before" do
+        solver.set_params(rlimit: 1)
+        solver.set_params(rlimit: 0) # 0 means no limit
+        solver.assert easy_problem
+        expect(solver.check).to eq(:sat)
+      end
+
+      # Z3 only notices bad parameters once it starts solving, and then it just
+      # says Z3_EXCEPTION, so it's a lot friendlier to catch them here
+      it "#set_params rejects unknown parameters" do
+        expect{ solver.set_params(timout: 1000) }
+          .to raise_error(Z3::Exception, "Unknown parameter `timout'")
+      end
+
+      it "#set_params rejects parameters of wrong type" do
+        expect{ solver.set_params(timeout: "1000") }
+          .to raise_error(Z3::Exception, "Parameter `timeout' expects uint, got \"1000\"")
+      end
+    end
+
     # This is a very simple example of unknown satisfiablity
     # so we might need more complex one in the future
     # This is now satisfiable in 4.6.0

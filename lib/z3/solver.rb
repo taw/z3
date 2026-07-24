@@ -3,10 +3,28 @@ module Z3
     include ReferenceCounted
 
     attr_reader :_solver
-    def initialize
+    def initialize(params = {})
       @_solver = LowLevel.mk_solver
       inc_ref! :solver, @_solver
       reset_model!
+      # Skipped for the common no-parameters case, as #set_params has to build
+      # the parameter descriptions to check against, and there are hundreds of them
+      set_params(params) unless params == {}
+    end
+
+    # `Z3_solver_get_param_descrs` lists every parameter the solver takes,
+    # `#help` describes them
+    def param_descrs
+      ParamDescrs.new(LowLevel.solver_get_param_descrs(self))
+    end
+
+    # Parameters accumulate - setting one twice overrides it, but parameters set
+    # by earlier calls stay. Pass a Params if you want to skip the name and type
+    # checks, a Hash if you don't.
+    def set_params(params)
+      params = Params.new(params, param_descrs) unless params.is_a?(Params)
+      LowLevel.solver_set_params(self, params)
+      self
     end
 
     def push

@@ -113,5 +113,37 @@ module Z3
       # This depends on Z3 version so it's not a great test
       expect(optimize.help).to include("timeout")
     end
+
+    it "#param_descrs" do
+      expect(optimize.param_descrs).to include("timeout", "rlimit")
+    end
+
+    describe "parameters" do
+      # See solver_spec for why this uses `rlimit` rather than `timeout`
+      let(:easy_problem) { (a > 1) & (b > 0) & (a + b == 100) & (a * b > 300) }
+
+      it "optimize without parameters solves it" do
+        optimize.assert easy_problem
+        expect(optimize.check).to eq(:sat)
+      end
+
+      it "#set_params" do
+        optimize.set_params(rlimit: 1)
+        optimize.assert easy_problem
+        expect(optimize.check).to eq(:unknown)
+      end
+
+      it ".new takes parameters" do
+        optimize = Optimize.new(rlimit: 1)
+        optimize.assert easy_problem
+        expect(optimize.check).to eq(:unknown)
+      end
+
+      # Optimize takes far fewer parameters than Solver, and this is one Solver has
+      it "#set_params rejects parameters Optimize does not take" do
+        expect{ optimize.set_params("arith.nl" => true) }
+          .to raise_error(Z3::Exception, "Unknown parameter `arith.nl'")
+      end
+    end
   end
 end

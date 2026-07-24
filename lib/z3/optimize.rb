@@ -4,10 +4,27 @@ module Z3
 
     attr_reader :_optimize
 
-    def initialize
+    def initialize(params = {})
       @_optimize = LowLevel.mk_optimize
       inc_ref! :optimize, @_optimize
       reset_model!
+      # Skipped for the common no-parameters case, as #set_params has to build
+      # the parameter descriptions to check against
+      set_params(params) unless params == {}
+    end
+
+    # Optimize takes far fewer parameters than Solver does
+    def param_descrs
+      ParamDescrs.new(LowLevel.optimize_get_param_descrs(self))
+    end
+
+    # Parameters accumulate - setting one twice overrides it, but parameters set
+    # by earlier calls stay. Pass a Params if you want to skip the name and type
+    # checks, a Hash if you don't.
+    def set_params(params)
+      params = Params.new(params, param_descrs) unless params.is_a?(Params)
+      LowLevel.optimize_set_params(self, params)
+      self
     end
 
     def push
