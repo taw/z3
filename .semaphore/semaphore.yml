@@ -23,5 +23,6 @@ blocks:
             - z3 --version
             - checkout
             - sem-version ruby 3.3.12
-            - bundle install --path vendor/bundle
+            - bundle config set --local path vendor/bundle
+            - bundle install
             - bundle exec rspec
