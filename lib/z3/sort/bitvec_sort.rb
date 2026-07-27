@@ -1,7 +1,7 @@
 module Z3
   class BitvecSort < Sort
     def initialize(n)
-      raise Z3::Exception, "Bitvec width must be positive" unless n >= 1
+      raise Z3::Exception, "Bitvec width must be a positive Integer" unless n.is_a?(Integer) and n >= 1
       super LowLevel.mk_bv_sort(n)
     end
 

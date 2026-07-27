@@ -35,6 +35,18 @@ module Z3
 
     it "number of bits must be positive" do
       expect{ Z3.Bitvec("a", 0) }.to raise_error(Z3::Exception)
+      expect{ Z3.Bitvec("a", -8) }.to raise_error(Z3::Exception)
+      expect{ BitvecSort.new(0) }.to raise_error(Z3::Exception)
+    end
+
+    # Anything but an Integer used to reach Z3_mk_bv_sort and get truncated there,
+    # so Bitvec(3.9) silently became Bitvec(3)
+    it "number of bits must be an Integer" do
+      expect{ Z3.Bitvec("a", 3.9) }.to raise_error(Z3::Exception)
+      expect{ Z3.Bitvec("a", Rational(7, 2)) }.to raise_error(Z3::Exception)
+      expect{ Z3.Bitvec("a", "8") }.to raise_error(Z3::Exception)
+      expect{ Z3.Bitvec("a", nil) }.to raise_error(Z3::Exception)
+      expect{ BitvecSort.new(3.9) }.to raise_error(Z3::Exception)
     end
   end
 end
