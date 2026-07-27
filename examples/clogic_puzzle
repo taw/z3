@@ -52,8 +52,8 @@ class CLogicPuzzleSolver
 
   def digit_var(name)
     v = Z3.Bitvec(name, 32)
-    solver.assert v >= 0
-    solver.assert v <= 9
+    solver.assert v.unsigned_ge(0)
+    solver.assert v.unsigned_le(9)
     v
   end
 
@@ -89,8 +89,8 @@ class CLogicPuzzleSolver
       model = solver.model
       model_vars = {}
       model.each do |k,v|
-        v = v.to_s.sub(/\A#x/, "").to_i(16)
-        model_vars[k] = v
+        v = v.to_s.to_i
+        model_vars[k.to_s] = v
         puts "#{k}=#{v}"
       end
       result = key.map do |ab|
