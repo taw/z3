@@ -2,8 +2,8 @@ require "pathname"
 
 Gem::Specification.new do |s|
   s.name = "z3"
-  s.version = "0.0.20251017"
-  s.date = "2025-10-17"
+  s.version = "0.0.20260727"
+  s.date = "2026-07-27"
   s.summary = "Z3 Constraint Solver"
   s.description = "Ruby bindings for Z3 Constraint Solver"
   s.authors = ["Tomasz Wegrzanowski"]
@@ -12,9 +12,10 @@ Gem::Specification.new do |s|
   s.homepage = "https://github.com/taw/z3"
   s.license = "MIT"
   s.requirements = "z3 library (4.16+)"
+  s.required_ruby_version = ">= 3.0"
   # development
   s.add_development_dependency "pry"
-  s.metadata['msys2_mingw_dependencies'] = 'z3'
+  s.metadata["msys2_mingw_dependencies"] = "z3"
   # tests
   s.add_development_dependency "rake", ">= 13"
   s.add_development_dependency "rspec", "~> 3.13"
