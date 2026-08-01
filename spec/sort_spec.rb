@@ -8,13 +8,39 @@ module Z3
 
     let(:sorts) { [bool_sort, int_sort, real_sort, bv8_sort, bv32_sort] }
 
+    # Every sort the gem wraps, each of them the only one of its class here
+    let(:all_sorts) {
+      sorts + [
+        SetSort.new(IntSort.new),
+        ArraySort.new(IntSort.new, IntSort.new),
+        FloatSort.new(:single),
+        RoundingModeSort.new,
+        UninterpretedSort.new("U"),
+        FiniteDomainSort.new("FD", 3),
+        CharSort.new,
+        StringSort.new,
+        SeqSort.new(IntSort.new),
+        ReSort.new(StringSort.new),
+        TypeVariableSort.new("T"),
+      ]
+    }
+
     it "can't instantiate Sort abstract superclass" do
       expect{ Sort.new }.to raise_error(NoMethodError)
     end
 
-    it ".from_pointer rejects sort kinds the gem doesn't wrap" do
-      uninterpreted = LowLevel.mk_uninterpreted_sort(LowLevel.mk_string_symbol("U"))
-      expect{ Sort.from_pointer(uninterpreted) }.to raise_error(Z3::Exception, /Unknown sort kind/)
+    # Datatype and relation sorts are still unwrapped, but there's no way to build one yet
+    it ".from_pointer round-trips every sort the gem wraps" do
+      all_sorts.each do |sort|
+        expect(Sort.from_pointer(sort._ast)).to be_same_as(sort)
+      end
+    end
+
+    # Z3 represents String as Seq(Char), so this is the only one that can't round-trip its class
+    it ".from_pointer returns Seq(Char) as StringSort" do
+      seq_of_char = SeqSort.new(CharSort.new)
+      expect(Sort.from_pointer(seq_of_char._ast)).to be_same_as(StringSort.new)
+      expect(Sort.from_pointer(seq_of_char._ast)).to eq(seq_of_char)
     end
 
     it "#to_s" do
@@ -56,8 +82,7 @@ module Z3
       let(:set_of_int)    { SetSort.new(IntSort.new) }
 
       it "matches eql? for every pair of sorts" do
-        all = sorts + [set_of_int, array_of_bool, ArraySort.new(IntSort.new, IntSort.new),
-                       FloatSort.new(:single), RoundingModeSort.new]
+        all = all_sorts + [array_of_bool, SeqSort.new(CharSort.new)]
         all.each do |sort1|
           all.each do |sort2|
             # Ruby requires eql? objects to hash the same

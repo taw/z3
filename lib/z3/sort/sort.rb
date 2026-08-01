@@ -101,6 +101,8 @@ module Z3
     def self.from_pointer(_sort)
       kind = VeryLowLevel.Z3_get_sort_kind(LowLevel._ctx_pointer, _sort)
       case kind
+      when 0
+        UninterpretedSort.new(name_from_pointer(_sort))
       when 1
         BoolSort.new
       when 2
@@ -118,14 +120,44 @@ module Z3
         else
           ArraySort.new(domain, range)
         end
+      when 8
+        FiniteDomainSort.new(
+          name_from_pointer(_sort),
+          LowLevel.get_finite_domain_sort_size(_sort),
+        )
       when 9
         e = VeryLowLevel.Z3_fpa_get_ebits(LowLevel._ctx_pointer, _sort)
         s = VeryLowLevel.Z3_fpa_get_sbits(LowLevel._ctx_pointer, _sort)
         FloatSort.new(e, s)
       when 10
         RoundingModeSort.new
+      when 11
+        element_sort = from_pointer(VeryLowLevel.Z3_get_seq_sort_basis(LowLevel._ctx_pointer, _sort))
+        # Just like Set(X) is really Array(X, Bool), String is really Seq(Char)
+        if element_sort == CharSort.new
+          StringSort.new
+        else
+          SeqSort.new(element_sort)
+        end
+      when 12
+        seq_sort = from_pointer(VeryLowLevel.Z3_get_re_sort_basis(LowLevel._ctx_pointer, _sort))
+        ReSort.new(seq_sort)
+      when 13
+        CharSort.new
+      when 14
+        TypeVariableSort.new(name_from_pointer(_sort))
       else
         raise Z3::Exception, "Unknown sort kind #{kind}"
+      end
+    end
+
+    # Sorts with a name (uninterpreted, finite domain, type variable) need it to be rebuilt
+    def self.name_from_pointer(_sort)
+      _symbol = VeryLowLevel.Z3_get_sort_name(LowLevel._ctx_pointer, _sort)
+      if VeryLowLevel.Z3_get_symbol_kind(LowLevel._ctx_pointer, _symbol) == 0
+        VeryLowLevel.Z3_get_symbol_int(LowLevel._ctx_pointer, _symbol)
+      else
+        VeryLowLevel.Z3_get_symbol_string(LowLevel._ctx_pointer, _symbol)
       end
     end
   end

@@ -33,6 +33,23 @@ module Z3
         end
       end
 
+      # Takes a raw sort pointer, as Sort.from_pointer needs it before there's any Sort object
+      def get_finite_domain_sort_size(_sort)
+        size_ptr = FFI::MemoryPointer.new(:uint64)
+        found = Z3::VeryLowLevel.Z3_get_finite_domain_sort_size(_ctx_pointer, _sort, size_ptr)
+        raise Z3::Exception, "Sort is not a finite domain sort" unless found
+        size_ptr.get_uint64(0)
+      end
+
+      # Z3 symbols are either strings or integers
+      def mk_symbol(name)
+        if name.is_a?(Integer)
+          mk_int_symbol(name)
+        else
+          mk_string_symbol(name.to_s)
+        end
+      end
+
       def mk_and(asts)
         Z3::VeryLowLevel.Z3_mk_and(_ctx_pointer, asts.size, asts_vector(asts))
       end

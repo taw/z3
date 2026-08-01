@@ -29,6 +29,13 @@ require_relative "z3/sort/float_sort"
 require_relative "z3/sort/rounding_mode_sort"
 require_relative "z3/sort/set_sort"
 require_relative "z3/sort/array_sort"
+require_relative "z3/sort/uninterpreted_sort"
+require_relative "z3/sort/finite_domain_sort"
+require_relative "z3/sort/char_sort"
+require_relative "z3/sort/seq_sort"
+require_relative "z3/sort/string_sort"
+require_relative "z3/sort/re_sort"
+require_relative "z3/sort/type_variable_sort"
 
 # ASTs
 require_relative "z3/expr/expr"

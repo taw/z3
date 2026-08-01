@@ -1565,6 +1565,10 @@ module Z3
         VeryLowLevel.Z3_mk_re_range(_ctx_pointer, ast1._ast, ast2._ast)
       end
 
+      def mk_re_sort(sort) #=> :sort_pointer
+        VeryLowLevel.Z3_mk_re_sort(_ctx_pointer, sort._ast)
+      end
+
       def mk_real(num1, num2) #=> :ast_pointer
         VeryLowLevel.Z3_mk_real(_ctx_pointer, num1, num2)
       end
@@ -1641,6 +1645,10 @@ module Z3
         VeryLowLevel.Z3_mk_seq_replace_re_all(_ctx_pointer, ast1._ast, ast2._ast, ast3._ast)
       end
 
+      def mk_seq_sort(sort) #=> :sort_pointer
+        VeryLowLevel.Z3_mk_seq_sort(_ctx_pointer, sort._ast)
+      end
+
       def mk_set_add(ast1, ast2) #=> :ast_pointer
         VeryLowLevel.Z3_mk_set_add(_ctx_pointer, ast1._ast, ast2._ast)
       end
@@ -1707,6 +1715,10 @@ module Z3
 
       def mk_string_from_code(ast) #=> :ast_pointer
         VeryLowLevel.Z3_mk_string_from_code(_ctx_pointer, ast._ast)
+      end
+
+      def mk_string_sort #=> :sort_pointer
+        VeryLowLevel.Z3_mk_string_sort(_ctx_pointer)
       end
 
       def mk_string_symbol(str) #=> :symbol_pointer

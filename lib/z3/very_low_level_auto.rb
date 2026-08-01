@@ -391,6 +391,7 @@ module Z3
     attach_function :Z3_mk_re_loop, [:ctx_pointer, :ast_pointer, :uint, :uint], :ast_pointer
     attach_function :Z3_mk_re_power, [:ctx_pointer, :ast_pointer, :uint], :ast_pointer
     attach_function :Z3_mk_re_range, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_re_sort, [:ctx_pointer, :sort_pointer], :sort_pointer
     attach_function :Z3_mk_real, [:ctx_pointer, :int, :int], :ast_pointer
     attach_function :Z3_mk_real2int, [:ctx_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_real_int64, [:ctx_pointer, :int64, :int64], :ast_pointer
@@ -410,6 +411,7 @@ module Z3
     attach_function :Z3_mk_seq_replace_all, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_replace_re, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_replace_re_all, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_seq_sort, [:ctx_pointer, :sort_pointer], :sort_pointer
     attach_function :Z3_mk_set_add, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_set_complement, [:ctx_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_set_del, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
@@ -427,6 +429,7 @@ module Z3
     attach_function :Z3_mk_str_lt, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_str_to_int, [:ctx_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_string_from_code, [:ctx_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_string_sort, [:ctx_pointer], :sort_pointer
     attach_function :Z3_mk_string_symbol, [:ctx_pointer, :string], :symbol_pointer
     attach_function :Z3_mk_string_to_code, [:ctx_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_tactic, [:ctx_pointer, :string], :tactic_pointer

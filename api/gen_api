@@ -44,12 +44,10 @@ class GenerateAPI
         "mk_context",
 
         "is_string_sort",
-        "mk_string_sort",
         "mk_string",
         "is_string",
 
         "is_re_sort",
-        "mk_re_sort",
         "mk_re_option",
         "mk_re_plus",
         "mk_re_star",
@@ -57,7 +55,6 @@ class GenerateAPI
         "mk_re_union",
 
         "is_seq_sort",
-        "mk_seq_sort",
         "mk_seq_at",
         "mk_seq_contains",
         "mk_seq_empty",

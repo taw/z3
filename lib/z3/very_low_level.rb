@@ -34,6 +34,7 @@ module Z3
     attach_function :Z3_set_error_handler, [:ctx_pointer, :error_handler], :void
     attach_function :Z3_mk_context, [:config_pointer], :ctx_pointer
     attach_function :Z3_model_eval, [:ctx_pointer, :model_pointer, :ast_pointer, :bool, :pointer], :int
+    attach_function :Z3_get_finite_domain_sort_size, [:ctx_pointer, :sort_pointer, :pointer], :bool
     attach_function :Z3_mk_and, [:ctx_pointer, :int, :pointer], :ast_pointer
     attach_function :Z3_mk_or, [:ctx_pointer, :int, :pointer], :ast_pointer
     attach_function :Z3_mk_atmost, [:ctx_pointer, :int, :pointer, :int], :ast_pointer

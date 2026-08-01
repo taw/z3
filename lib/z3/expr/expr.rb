@@ -197,5 +197,9 @@ module Z3
         end
       end
     end
+
+    # Sorts with no Expr class of their own (Seq, Re, Char, uninterpreted etc.) use plain
+    # Exprs, so this can't stay private
+    public_class_method :new
   end
 end
