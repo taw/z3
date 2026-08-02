@@ -59,9 +59,10 @@ module Z3
       expect(CharSort.new.var("a")).to stringify("a")
     end
 
-    # Values have from_const, but nothing on the Ruby side builds string or seq
-    # *operations* yet, so those have to come out of the SMT-LIB2 parser. `q` is the
-    # variable being defined, `r` a spare one of the same sort to build them out of.
+    # For the operations the Ruby API can't build - either because they're Z3 spellings
+    # with no Ruby name, or because they only ever come back out of a model - the
+    # SMT-LIB2 parser builds them instead. `q` is the variable being defined, `r` a
+    # spare one of the same sort to build them out of.
     def parse_expr(sort, expr, spare_sort = sort)
       solver = Solver.new
       LowLevel.solver_from_string(solver, "(declare-const q #{sort})(declare-const r #{spare_sort})(assert (= q #{expr}))")
@@ -88,7 +89,40 @@ module Z3
       it "string operations" do
         expect(parse_expr("String", %q{(str.++ r "ab")})).to stringify(%q{r + "ab"})
         expect(parse_expr("String", %q{(str.++ "ab" r "cd")})).to stringify(%q{"ab" + r + "cd"})
-        expect(parse_expr("String", %q{(str.replace r "a" "b")})).to stringify(%q{str.replace(r, "a", "b")})
+      end
+
+      # Everything StringExpr has a Ruby name for prints under that name, so the output
+      # can be pasted back in and mean the same thing
+      it "string operations as Ruby" do
+        r = sort.var("r")
+        expect(r.include?("a")).to stringify(%q{r.include?("a")})
+        expect(r.start_with?("a")).to stringify(%q{r.start_with?("a")})
+        expect(r.end_with?("a")).to stringify(%q{r.end_with?("a")})
+        expect(r.index("a")).to stringify(%q{r.index("a")})
+        expect(r.index("a", 2)).to stringify(%q{r.index("a", 2)})
+        expect(r.rindex("a")).to stringify(%q{r.rindex("a")})
+        expect(r.sub("a", "b")).to stringify(%q{r.sub("a", "b")})
+        expect(r.gsub("a", "b")).to stringify(%q{r.gsub("a", "b")})
+        expect(r.to_i).to stringify("r.to_i")
+        expect(r[2]).to stringify("r[2]")
+        expect(r[2, 3]).to stringify("r[2, 3]")
+        expect(r < "a").to stringify(%q{r < "a"})
+        expect(r <= "a").to stringify(%q{r <= "a"})
+      end
+
+      # `str.prefixof` takes the prefix first and the string second, so the receiver is
+      # the *second* argument - and it's still the one that needs the parentheses
+      it "prefixof and suffixof flip their arguments" do
+        expect(parse_expr("Bool", %q{(str.prefixof "a" (str.++ r "b"))}, "String")).to stringify(%q{(r + "b").start_with?("a")})
+        expect(parse_expr("Bool", %q{(str.suffixof "a" (str.++ r "b"))}, "String")).to stringify(%q{(r + "b").end_with?("a")})
+      end
+
+      # `seq.nth` of a String is a Char, which no Ruby method returns - `s[i]` is
+      # `str.at`, a one character String - so it keeps the Z3 spelling
+      it "operations with no Ruby equivalent keep their Z3 name" do
+        nth = CharSort.new.new(LowLevel.mk_seq_nth(sort.var("r"), IntSort.new.from_const(1)))
+        expect(nth).to stringify("seq.nth(r, 1)")
+        expect(parse_expr("String", "(str.from_int 5)", "String")).to stringify("str.from_int(5)")
       end
 
       # Operations with a Ruby method of their own print as a call on the receiver
@@ -128,7 +162,22 @@ module Z3
         expect(parse_expr("(Seq Int)", "(seq.++ r (seq.unit 1) (seq.unit 2))")).to stringify("r + [1, 2]")
         expect(parse_expr("(Seq Int)", "(seq.++ (seq.unit 1) r (seq.unit 2))")).to stringify("[1] + r + [2]")
         expect(parse_expr("(Seq Int)", "(seq.++ r r)")).to stringify("r + r")
-        expect(parse_expr("(Seq Int)", "(seq.extract r 1 2)")).to stringify("seq.extract(r, 1, 2)")
+      end
+
+      # A Seq reads like a Ruby Array, so `r[i]` is the element (`seq.nth`) and the
+      # subsequence operations print with a length - including `seq.at`, which is a
+      # one element sequence and so `r[i, 1]`
+      it "sequence operations as Ruby" do
+        r = int_seq.var("r")
+        expect(r[2]).to stringify("r[2]")
+        expect(r[2, 3]).to stringify("r[2, 3]")
+        expect(r.include?(1)).to stringify("r.include?(1)")
+        expect(r.start_with?(1)).to stringify("r.start_with?(1)")
+        expect(r.end_with?([1, 2])).to stringify("r.end_with?([1, 2])")
+        expect(r.index(1)).to stringify("r.index(1)")
+        expect(r.sub([1], [2])).to stringify("r.sub(1, 2)")
+        expect(r.gsub([1], [2])).to stringify("r.gsub(1, 2)")
+        expect(parse_expr("(Seq Int)", "(seq.at r 1)")).to stringify("r[1, 1]")
       end
 
       # `seq.len` and String's `str.len` are one Z3 operation, and print the same way

@@ -1609,8 +1609,20 @@ module Z3
         VeryLowLevel.Z3_mk_select(_ctx_pointer, ast1._ast, ast2._ast)
       end
 
+      def mk_seq_at(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_seq_at(_ctx_pointer, ast1._ast, ast2._ast)
+      end
+
+      def mk_seq_contains(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_seq_contains(_ctx_pointer, ast1._ast, ast2._ast)
+      end
+
       def mk_seq_empty(sort) #=> :ast_pointer
         VeryLowLevel.Z3_mk_seq_empty(_ctx_pointer, sort._ast)
+      end
+
+      def mk_seq_extract(ast1, ast2, ast3) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_seq_extract(_ctx_pointer, ast1._ast, ast2._ast, ast3._ast)
       end
 
       def mk_seq_foldl(ast1, ast2, ast3) #=> :ast_pointer
@@ -1619,6 +1631,10 @@ module Z3
 
       def mk_seq_foldli(ast1, ast2, ast3, ast4) #=> :ast_pointer
         VeryLowLevel.Z3_mk_seq_foldli(_ctx_pointer, ast1._ast, ast2._ast, ast3._ast, ast4._ast)
+      end
+
+      def mk_seq_index(ast1, ast2, ast3) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_seq_index(_ctx_pointer, ast1._ast, ast2._ast, ast3._ast)
       end
 
       def mk_seq_last_index(ast1, ast2) #=> :ast_pointer
@@ -1641,6 +1657,14 @@ module Z3
         VeryLowLevel.Z3_mk_seq_nth(_ctx_pointer, ast1._ast, ast2._ast)
       end
 
+      def mk_seq_prefix(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_seq_prefix(_ctx_pointer, ast1._ast, ast2._ast)
+      end
+
+      def mk_seq_replace(ast1, ast2, ast3) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_seq_replace(_ctx_pointer, ast1._ast, ast2._ast, ast3._ast)
+      end
+
       def mk_seq_replace_all(ast1, ast2, ast3) #=> :ast_pointer
         VeryLowLevel.Z3_mk_seq_replace_all(_ctx_pointer, ast1._ast, ast2._ast, ast3._ast)
       end
@@ -1655,6 +1679,10 @@ module Z3
 
       def mk_seq_sort(sort) #=> :sort_pointer
         VeryLowLevel.Z3_mk_seq_sort(_ctx_pointer, sort._ast)
+      end
+
+      def mk_seq_suffix(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_seq_suffix(_ctx_pointer, ast1._ast, ast2._ast)
       end
 
       def mk_seq_unit(ast) #=> :ast_pointer

@@ -46,10 +46,63 @@ module Z3
     # Z3 decl name => Ruby method, printed as `receiver.method` or
     # `receiver.method(rest)` with the first argument as the receiver. Z3 names the
     # same operation `str.foo` for Strings and `seq.foo` for every other Seq, so both
-    # spellings map to the one Ruby method.
+    # spellings map to the one Ruby method - except `replace_all`, which Z3 calls
+    # `str.replace_all` even for sequences of non-characters.
     METHOD_CALL_NAMES = {
       "seq.len" => "size",
       "str.len" => "size",
+      "seq.contains" => "include?",
+      "str.contains" => "include?",
+      "seq.indexof" => "index",
+      "str.indexof" => "index",
+      "seq.last_indexof" => "rindex",
+      "seq.replace" => "sub",
+      "str.replace" => "sub",
+      "seq.replace_all" => "gsub",
+      "str.replace_all" => "gsub",
+      "str.to_int" => "to_i",
+    }
+
+    # Same idea, but Z3 takes the prefix/suffix first and the string second, where
+    # Ruby's String#start_with? / #end_with? take it the other way round - so it's the
+    # *second* argument that prints as the receiver.
+    FLIPPED_METHOD_CALL_NAMES = {
+      "seq.prefixof" => "start_with?",
+      "str.prefixof" => "start_with?",
+      "seq.suffixof" => "end_with?",
+      "str.suffixof" => "end_with?",
+    }
+
+    # Lexicographic string comparison. These are operators in Ruby, but their Z3 names
+    # contain letters, so the generic operator path doesn't catch them.
+    OPERATOR_NAMES = {
+      "str.<" => "<",
+      "str.<=" => "<=",
+    }
+
+    # Z3 always spells the starting offset out, Ruby's String#index / Array#index
+    # default it to 0 - so a trailing 0 is noise, and `s.index("a")` is what anyone
+    # would have written
+    DEFAULT_TRAILING_ARG = {
+      "seq.indexof" => "0",
+      "str.indexof" => "0",
+    }
+
+    # Argument positions that take an element-or-subsequence. `xs.include?(7)` builds
+    # `(seq.contains xs (seq.unit 7))`, and printing that back as `xs.include?([7])` is
+    # correct but isn't what anyone wrote - Ruby's Array#include? takes the element, so
+    # a lone unit in one of these positions prints as the element it wraps.
+    SEQ_ELEMENT_ARGS = {
+      "seq.contains" => [1],
+      "seq.indexof" => [1],
+      "seq.last_indexof" => [1],
+      "seq.prefixof" => [0],
+      "seq.suffixof" => [0],
+      "seq.replace" => [1, 2],
+      "seq.replace_all" => [1, 2],
+      # Z3 uses the `str.` name here even for sequences of non-characters. A String
+      # argument is never a `seq.unit`, so this is a no-op for actual strings.
+      "str.replace_all" => [1, 2],
     }
 
     def string_value?(decl)
@@ -90,10 +143,36 @@ module Z3
       method = METHOD_CALL_NAMES[name]
       return nil unless method and args.size >= 1
       receiver, *rest = args
+      rest.pop if DEFAULT_TRAILING_ARG[name] == rest.last&.to_s
       if rest.empty?
         PrintedExpr.new("#{receiver.enforce_parentheses}.#{method}")
       else
         PrintedExpr.new("#{receiver.enforce_parentheses}.#{method}(#{rest.join(", ")})")
+      end
+    end
+
+    def format_flipped_method_call(name, args)
+      method = FLIPPED_METHOD_CALL_NAMES[name]
+      return nil unless method and args.size == 2
+      PrintedExpr.new("#{args[1].enforce_parentheses}.#{method}(#{args[0]})")
+    end
+
+    # Ruby indexing. `str.at` gives a one character String, so it's `s[i]` - but
+    # `seq.at` gives a one element Seq, which in Ruby is `xs[i, 1]`, because `xs[i]`
+    # on a Seq is the element itself (`seq.nth`).
+    def format_index(a, name, args)
+      case name
+      when "str.at"
+        PrintedExpr.new("#{args[0].enforce_parentheses}[#{args[1]}]") if args.size == 2
+      when "seq.at"
+        PrintedExpr.new("#{args[0].enforce_parentheses}[#{args[1]}, 1]") if args.size == 2
+      when "seq.nth"
+        # `seq.nth` of a String is a Char, and StringExpr has no Ruby method for that -
+        # `s[i]` there is `str.at`, a one character String
+        return nil if args.size != 2 or a.arguments[0].sort.is_a?(StringSort)
+        PrintedExpr.new("#{args[0].enforce_parentheses}[#{args[1]}]")
+      when "str.substr", "seq.extract"
+        PrintedExpr.new("#{args[0].enforce_parentheses}[#{args[1]}, #{args[2]}]") if args.size == 3
       end
     end
 
@@ -116,6 +195,12 @@ module Z3
         decl = a.func_decl
         name = decl.name
         args = a.arguments.map{|x| format_ast(x)}
+
+        # A lone `seq.unit` where Ruby's Array takes a bare element prints as that element
+        SEQ_ELEMENT_ARGS.fetch(name, []).each do |i|
+          arg = a.arguments[i]
+          args[i] = format_ast(arg.arguments[0]) if arg and seq_unit?(arg)
+        end
 
         # String and Char values are indexed decls - `(_ String "abc")` and `(_ Char 97)` -
         # so `decl.name` is just "String"/"Char", and the value is a decl parameter.
@@ -150,6 +235,17 @@ module Z3
         # Operations which read best in Ruby as a method call on their first argument
         method_call = format_method_call(name, args)
         return method_call if method_call
+
+        # ...and the ones where the receiver is the second argument instead
+        flipped_call = format_flipped_method_call(name, args)
+        return flipped_call if flipped_call
+
+        index = format_index(a, name, args)
+        return index if index
+
+        if OPERATOR_NAMES[name] and args.size == 2
+          return PrintedExpr.new("#{args[0].enforce_parentheses} #{OPERATOR_NAMES[name]} #{args[1].enforce_parentheses}", true)
+        end
 
         # Special case common Bitvec operators
         case name

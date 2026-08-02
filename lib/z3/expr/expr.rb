@@ -46,6 +46,36 @@ module Z3
         end
       end
 
+      # Ruby counts a negative index from the end, so `s[-1]` is the last character.
+      # Only a Ruby Integer can be recognized as negative - a symbolic index is passed
+      # through as it stands, so `s[i]` with a negative `i` is out of range instead.
+      # A plain non-negative Integer comes back as an Integer rather than an IntExpr,
+      # so that `offset_and_length` can do its arithmetic in Ruby.
+      def normalize_index(index, size)
+        return index unless index.is_a?(Integer)
+        index < 0 ? size - (-index) : index
+      end
+
+      # Turns `s[a..b]` into the offset and length that `str.substr` / `seq.extract`
+      # want, with either end counted from the end when it's negative, and an open end
+      # meaning "to the end" - so the size is passed in rather than recomputed. Two
+      # literal ends stay Ruby Integers all the way through, so `s[2..4]` builds
+      # `(str.substr s 2 3)` rather than `(str.substr s 2 (+ (- 4 2) 1))`.
+      #
+      # It lives here rather than on StringExpr or SeqExpr because both need it and
+      # neither is the other's ancestor - and unlike everything else those two share,
+      # this is Ruby arithmetic, not a Z3 call.
+      def offset_and_length(range, size)
+        offset = normalize_index(range.begin || 0, size)
+        return [offset, size - offset] if range.end.nil?
+        last = normalize_index(range.end, size)
+        # Ruby has no `-` taking an Expr on the right, so a mixed pair goes to Z3
+        unless offset.is_a?(Integer) and last.is_a?(Integer)
+          offset, last = IntSort.new.cast(offset), IntSort.new.cast(last)
+        end
+        [offset, range.exclude_end? ? last - offset : last - offset + 1]
+      end
+
       def new_from_pointer(_ast)
         _sort = Z3::VeryLowLevel.Z3_get_sort(Z3::LowLevel._ctx_pointer, _ast)
         Sort.from_pointer(_sort).new(_ast)

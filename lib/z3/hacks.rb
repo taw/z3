@@ -79,9 +79,40 @@ class FalseClass
   prepend EqualityHacks
 end
 
-# Only EqualityHacks, as `<` `<=` on strings (str.< / str.<=) aren't exposed yet
+# Strings don't get CompareHacks, because that routes through `coerce`, and a String
+# has no sort to coerce towards - `"a" < int_expr` is a sort mismatch, not an
+# arithmetic one. Flipping the operator round to the Expr says the same thing and lets
+# StringExpr raise its own error.
+module StringHacks
+  def +(other)
+    return Z3::StringExpr.Concat(self, other) if other.is_a?(Z3::Expr)
+    super
+  end
+
+  def <(other)
+    return other > self if other.is_a?(Z3::Expr)
+    super
+  end
+
+  def <=(other)
+    return other >= self if other.is_a?(Z3::Expr)
+    super
+  end
+
+  def >(other)
+    return other < self if other.is_a?(Z3::Expr)
+    super
+  end
+
+  def >=(other)
+    return other <= self if other.is_a?(Z3::Expr)
+    super
+  end
+end
+
 class String
   prepend EqualityHacks
+  prepend StringHacks
 end
 
 class Rational
