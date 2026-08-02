@@ -43,7 +43,11 @@ module Z3
       expect([a == b.store(10, 20), x == a[y], y == 10]).to have_solution(
         x => 20,
       )
-      expect([a == b.store(10, 20), x == a[y], x == 20]).to have_solution(
+      # `b` is a free array, so `x == 20` alone doesn't say where the 20 came from -
+      # Z3 is free to answer `b = store(const(2), 3, 20), y = 3`, and which way it
+      # goes depends on what else has been solved in the process already.
+      # `b[y] != 20` rules out every index the store didn't write, forcing y == 10.
+      expect([a == b.store(10, 20), x == a[y], x == 20, b[y] != 20]).to have_solution(
         x => 20,
         y => 10,
       )
