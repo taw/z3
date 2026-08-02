@@ -132,13 +132,8 @@ module Z3
       when 10
         RoundingModeSort.new
       when 11
-        element_sort = from_pointer(VeryLowLevel.Z3_get_seq_sort_basis(LowLevel._ctx_pointer, _sort))
-        # Just like Set(X) is really Array(X, Bool), String is really Seq(Char)
-        if element_sort == CharSort.new
-          StringSort.new
-        else
-          SeqSort.new(element_sort)
-        end
+        # SeqSort.new turns Seq(Char) back into a StringSort, just like Set(X) is really Array(X, Bool)
+        SeqSort.new(from_pointer(VeryLowLevel.Z3_get_seq_sort_basis(LowLevel._ctx_pointer, _sort)))
       when 12
         seq_sort = from_pointer(VeryLowLevel.Z3_get_re_sort_basis(LowLevel._ctx_pointer, _sort))
         ReSort.new(seq_sort)

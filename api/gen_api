@@ -43,7 +43,6 @@ class GenerateAPI
         "mk_context",
 
         "is_string_sort",
-        "mk_string",
         "is_string",
 
         "is_re_sort",
@@ -56,17 +55,14 @@ class GenerateAPI
         "is_seq_sort",
         "mk_seq_at",
         "mk_seq_contains",
-        "mk_seq_empty",
         "mk_seq_in_re",
         "mk_seq_length",
         "mk_seq_prefix",
         "mk_seq_suffix",
         "mk_seq_to_re",
-        "mk_seq_unit",
         "mk_seq_extract",
         "mk_seq_index",
         "mk_seq_replace",
-        "mk_seq_concat",
 
         # Just C type casts, not needed
         "to_app",
@@ -111,6 +107,7 @@ class GenerateAPI
         "mk_distinct",
         "mk_mul",
         "mk_or",
+        "mk_seq_concat",
         "mk_set_intersect",
         "mk_set_union",
         "mk_sub",

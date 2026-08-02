@@ -54,6 +54,20 @@ module Z3
         }.pack("U*")
       end
 
+      # The other direction. Z3 decodes escapes in what we pass it, so every code point
+      # that get_string would escape has to go back in escaped - including `\` itself,
+      # or a string containing the text `\u{41}` would come back as `A`.
+      def mk_string(str)
+        escaped = str.each_codepoint.map { |code_point|
+          if (1..255).cover?(code_point) and code_point != 0x5c
+            code_point.chr("BINARY")
+          else
+            "\\u{%x}" % code_point
+          end
+        }.join
+        Z3::VeryLowLevel.Z3_mk_string(_ctx_pointer, escaped)
+      end
+
       # Z3 symbols are either strings or integers
       def mk_symbol(name)
         if name.is_a?(Integer)
@@ -81,6 +95,10 @@ module Z3
 
       def mk_pbeq(asts, coeffs, k)
         Z3::VeryLowLevel.Z3_mk_pbeq(_ctx_pointer, asts.size, asts_vector(asts), ints_vector(coeffs), k)
+      end
+
+      def mk_seq_concat(asts)
+        Z3::VeryLowLevel.Z3_mk_seq_concat(_ctx_pointer, asts.size, asts_vector(asts))
       end
 
       def mk_mul(asts)

@@ -1609,6 +1609,10 @@ module Z3
         VeryLowLevel.Z3_mk_select(_ctx_pointer, ast1._ast, ast2._ast)
       end
 
+      def mk_seq_empty(sort) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_seq_empty(_ctx_pointer, sort._ast)
+      end
+
       def mk_seq_foldl(ast1, ast2, ast3) #=> :ast_pointer
         VeryLowLevel.Z3_mk_seq_foldl(_ctx_pointer, ast1._ast, ast2._ast, ast3._ast)
       end
@@ -1647,6 +1651,10 @@ module Z3
 
       def mk_seq_sort(sort) #=> :sort_pointer
         VeryLowLevel.Z3_mk_seq_sort(_ctx_pointer, sort._ast)
+      end
+
+      def mk_seq_unit(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_seq_unit(_ctx_pointer, ast._ast)
       end
 
       def mk_set_add(ast1, ast2) #=> :ast_pointer
