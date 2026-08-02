@@ -9,7 +9,7 @@ module Z3
     MAX_CODE_POINT = 0x2FFFF
 
     def expr_class
-      Expr
+      CharExpr
     end
 
     # Ruby has no character type, so a Char can be built either from a code point

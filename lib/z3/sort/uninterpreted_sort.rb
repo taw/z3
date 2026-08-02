@@ -7,7 +7,7 @@ module Z3
     end
 
     def expr_class
-      Expr
+      UninterpretedExpr
     end
 
     def inspect

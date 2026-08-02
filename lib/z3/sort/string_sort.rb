@@ -10,7 +10,7 @@ module Z3
     end
 
     def expr_class
-      Expr
+      StringExpr
     end
 
     # A Z3 string is a sequence of code points, so a Ruby String converts character by

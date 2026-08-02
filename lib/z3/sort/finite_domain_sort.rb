@@ -8,7 +8,7 @@ module Z3
     end
 
     def expr_class
-      Expr
+      FiniteDomainExpr
     end
 
     def size

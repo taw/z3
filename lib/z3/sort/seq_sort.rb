@@ -14,7 +14,7 @@ module Z3
     end
 
     def expr_class
-      Expr
+      SeqExpr
     end
 
     # Z3 has no sequence literals, a sequence value is a concatenation of one element

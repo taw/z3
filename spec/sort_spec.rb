@@ -29,6 +29,28 @@ module Z3
       expect{ Sort.new }.to raise_error(NoMethodError)
     end
 
+    # Seq, Re, Char, uninterpreted, finite domain and type variable sorts used to fall
+    # back to plain Exprs, which meant no place to hang their operations
+    it "every sort has an Expr class of its own" do
+      expect(all_sorts.map(&:expr_class).uniq).to eq([
+        BoolExpr, IntExpr, RealExpr, BitvecExpr, SetExpr, ArrayExpr, FloatExpr,
+        RoundingModeExpr, UninterpretedExpr, FiniteDomainExpr, CharExpr,
+        StringExpr, SeqExpr, ReExpr, TypeVariableExpr,
+      ])
+    end
+
+    it "#var and #new build Exprs of that class" do
+      all_sorts.each do |sort|
+        expect(sort.var("v")).to be_a(sort.expr_class)
+      end
+    end
+
+    # Nothing returns one any more, so it's abstract like ArithExpr
+    it "Expr itself is abstract" do
+      expect{ Expr.new(nil, nil) }.to raise_error(NoMethodError)
+      expect(all_sorts.map(&:expr_class)).to_not include(Expr)
+    end
+
     # Datatype and relation sorts are still unwrapped, but there's no way to build one yet
     it ".from_pointer round-trips every sort the gem wraps" do
       all_sorts.each do |sort|

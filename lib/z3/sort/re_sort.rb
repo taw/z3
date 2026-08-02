@@ -7,7 +7,7 @@ module Z3
     end
 
     def expr_class
-      Expr
+      ReExpr
     end
 
     def to_s

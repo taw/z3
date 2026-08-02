@@ -48,6 +48,13 @@ require_relative "z3/expr/float_expr"
 require_relative "z3/expr/rounding_mode_expr"
 require_relative "z3/expr/set_expr"
 require_relative "z3/expr/array_expr"
+require_relative "z3/expr/uninterpreted_expr"
+require_relative "z3/expr/finite_domain_expr"
+require_relative "z3/expr/char_expr"
+require_relative "z3/expr/seq_expr"
+require_relative "z3/expr/string_expr"
+require_relative "z3/expr/re_expr"
+require_relative "z3/expr/type_variable_expr"
 
 # Tactics, Probes, and Goals
 require_relative "z3/tactic"
