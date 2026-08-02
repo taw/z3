@@ -41,6 +41,19 @@ module Z3
         size_ptr.get_uint64(0)
       end
 
+      # Z3 strings are sequences of code points up to 0x2FFFF, and Z3_get_lstring returns
+      # them in a half-escaped form: code points 1 to 255 come back as literal bytes,
+      # 0 and 256+ as `\u{...}`, and a `\` is escaped as `\u{5c}` only when it would
+      # otherwise start an escape. Decoding that gives an ordinary UTF-8 Ruby String.
+      def get_string(ast)
+        length_ptr = FFI::MemoryPointer.new(:uint)
+        _string = Z3::VeryLowLevel.Z3_get_lstring(_ctx_pointer, ast._ast, length_ptr)
+        raw = _string.read_string(length_ptr.get_uint(0))
+        raw.scan(/\\u\{([0-9a-fA-F]+)\}|(.)/m).map { |escape, byte|
+          escape ? escape.to_i(16) : byte.ord
+        }.pack("U*")
+      end
+
       # Z3 symbols are either strings or integers
       def mk_symbol(name)
         if name.is_a?(Integer)

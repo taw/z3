@@ -37,7 +37,6 @@ class GenerateAPI
       [
         # Not in library according to FFI
         "get_estimated_alloc_size",
-        "get_string",
         "mk_array_ext",
         "solver_translate",
         "param_descrs_get_documentation",
@@ -115,6 +114,7 @@ class GenerateAPI
         "mk_set_intersect",
         "mk_set_union",
         "mk_sub",
+        "get_string",
         "get_version",
       ] + (Pathname(__dir__) + "../lib/z3/low_level.rb").read.scan(/^\s+def \K\w+/)
     end.to_set

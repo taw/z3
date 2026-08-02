@@ -54,6 +54,78 @@ module Z3
       expect(Z3.Real("a")).to stringify("a")
       expect(Z3.Bool("a")).to stringify("a")
       expect(Z3.Bitvec("a", 32)).to stringify("a")
+      expect(StringSort.new.var("a")).to stringify("a")
+      expect(SeqSort.new(IntSort.new).var("a")).to stringify("a")
+      expect(CharSort.new.var("a")).to stringify("a")
+    end
+
+    # Nothing on the Ruby side builds string or seq exprs yet, so the only way to get one
+    # is to let Z3 parse it. `q` is the variable being defined, `r` a spare one of the
+    # same sort to build symbolic exprs out of.
+    def parse_expr(sort, expr)
+      solver = Solver.new
+      LowLevel.solver_from_string(solver, "(declare-const q #{sort})(declare-const r #{sort})(assert (= q #{expr}))")
+      solver.assertions.first.arguments.find { |arg| arg.to_s != "q" }
+    end
+
+    describe "strings" do
+      it "string values" do
+        expect(parse_expr("String", %q{"hello"})).to stringify(%q{"hello"})
+        expect(parse_expr("String", %q{""})).to stringify(%q{""})
+        # `""` is how SMT-LIB2 escapes a quote
+        expect(parse_expr("String", %q{"a""b"})).to stringify(%q{"a\"b"})
+      end
+
+      it "string values with escapes" do
+        expect(parse_expr("String", %q{"a\u{a}b\u{9}c"})).to stringify(%q{"a\nb\tc"})
+        expect(parse_expr("String", %q{"a\u{0}b"})).to stringify(%q{"a\u0000b"})
+        # A backslash is only special to Z3 when it starts an escape, and this one doesn't
+        expect(parse_expr("String", %q{"a\u{5c}u{41}b"})).to stringify(%q{"a\\\\u{41}b"})
+        expect(parse_expr("String", %q{"\u{4e2d}\u{1f600}"})).to stringify(%q{"中😀"})
+      end
+
+      it "string operations" do
+        expect(parse_expr("String", %q{(str.++ r "ab")})).to stringify(%q{r + "ab"})
+        expect(parse_expr("String", %q{(str.++ "ab" r "cd")})).to stringify(%q{"ab" + r + "cd"})
+        expect(parse_expr("String", %q{(str.replace r "a" "b")})).to stringify(%q{str.replace(r, "a", "b")})
+      end
+
+      it "char values" do
+        expect(Expr.new_from_pointer(LowLevel.mk_char("a".ord))).to stringify(%q{Char("a")})
+        expect(Expr.new_from_pointer(LowLevel.mk_char("\n".ord))).to stringify(%q{Char("\n")})
+        expect(Expr.new_from_pointer(LowLevel.mk_char("中".ord))).to stringify(%q{Char("中")})
+      end
+    end
+
+    describe "sequences" do
+      it "sequence values" do
+        expect(parse_expr("(Seq Int)", "(as seq.empty (Seq Int))")).to stringify("[]")
+        expect(parse_expr("(Seq Int)", "(seq.unit 42)")).to stringify("[42]")
+        expect(parse_expr("(Seq Int)", "(seq.++ (seq.unit 1) (seq.unit (- 2)) (seq.unit 3))")).to stringify("[1, -2, 3]")
+        expect(parse_expr("(Seq Bool)", "(seq.++ (seq.unit true) (seq.unit false))")).to stringify("[true, false]")
+      end
+
+      it "nested sequence values" do
+        expect(
+          parse_expr("(Seq (Seq Int))", "(seq.++ (seq.unit (seq.unit 1)) (seq.unit (as seq.empty (Seq Int))))")
+        ).to stringify("[[1], []]")
+        expect(parse_expr("(Seq String)", %q{(seq.++ (seq.unit "ab") (seq.unit "c"))})).to stringify(%q{["ab", "c"]})
+      end
+
+      # Concat is associative, and Z3 hands it back as a right-nested binary tree,
+      # so it's flattened and runs of units are merged into a single array literal
+      it "sequence operations" do
+        expect(parse_expr("(Seq Int)", "(seq.++ r (seq.unit 1) (seq.unit 2))")).to stringify("r + [1, 2]")
+        expect(parse_expr("(Seq Int)", "(seq.++ (seq.unit 1) r (seq.unit 2))")).to stringify("[1] + r + [2]")
+        expect(parse_expr("(Seq Int)", "(seq.++ r r)")).to stringify("r + r")
+        expect(parse_expr("(Seq Int)", "(seq.extract r 1 2)")).to stringify("seq.extract(r, 1, 2)")
+      end
+
+      it "sequences as subexpressions" do
+        solver = Solver.new
+        LowLevel.solver_from_string(solver, "(declare-const q (Seq Int))(assert (= q (seq.++ q (seq.unit 1))))")
+        expect(solver.assertions.first).to stringify("q = (q + [1])")
+      end
     end
 
     describe "expressions" do

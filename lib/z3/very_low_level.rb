@@ -35,6 +35,8 @@ module Z3
     attach_function :Z3_mk_context, [:config_pointer], :ctx_pointer
     attach_function :Z3_model_eval, [:ctx_pointer, :model_pointer, :ast_pointer, :bool, :pointer], :int
     attach_function :Z3_get_finite_domain_sort_size, [:ctx_pointer, :sort_pointer, :pointer], :bool
+    # Returns the length in an out param, and the string can contain \0, so it's :pointer not :string
+    attach_function :Z3_get_lstring, [:ctx_pointer, :ast_pointer, :pointer], :pointer
     attach_function :Z3_mk_and, [:ctx_pointer, :int, :pointer], :ast_pointer
     attach_function :Z3_mk_or, [:ctx_pointer, :int, :pointer], :ast_pointer
     attach_function :Z3_mk_atmost, [:ctx_pointer, :int, :pointer, :int], :ast_pointer

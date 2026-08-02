@@ -40,6 +40,41 @@ module Z3
       end
     end
 
+    # `str.++` is the same operation as `seq.++`, Z3 just names it differently for String
+    SEQ_CONCAT_NAMES = ["seq.++", "str.++"]
+
+    def string_value?(decl)
+      decl.arity == 0 and decl.num_parameters == 1 and decl.parameter_kind(0) == :zstring
+    end
+
+    def char_value?(decl)
+      decl.arity == 0 and decl.name == "Char" and decl.num_parameters == 1 and decl.parameter_kind(0) == :int
+    end
+
+    def seq_unit?(a)
+      a.ast_kind == :app and a.func_decl.name == "seq.unit" and a.sort.is_a?(SeqSort)
+    end
+
+    # Concatenation is associative, and models return it as a right-nested binary tree,
+    # so flattening it and merging every run of `seq.unit`s into one array literal turns
+    # `(seq.++ (seq.unit 1) (seq.++ (seq.unit 2) xs))` into `[1, 2] + xs`
+    def format_seq_concat(a)
+      parts = flatten_seq_concat(a).chunk{|x| seq_unit?(x)}.flat_map do |unit, exprs|
+        if unit
+          "[#{exprs.map{|x| format_ast(x.arguments[0])}.join(", ")}]"
+        else
+          exprs.map{|x| format_ast(x).enforce_parentheses}
+        end
+      end
+      return PrintedExpr.new(parts[0]) if parts.size == 1
+      PrintedExpr.new(parts.join(" + "), true)
+    end
+
+    def flatten_seq_concat(a)
+      return [a] unless a.ast_kind == :app and SEQ_CONCAT_NAMES.include?(a.func_decl.name)
+      a.arguments.flat_map{|x| flatten_seq_concat(x)}
+    end
+
     def format_app(a)
       if LowLevel::is_algebraic_number(a)
         str = LowLevel::get_numeral_decimal_string(a, 10)
@@ -59,6 +94,28 @@ module Z3
         decl = a.func_decl
         name = decl.name
         args = a.arguments.map{|x| format_ast(x)}
+
+        # String and Char values are indexed decls - `(_ String "abc")` and `(_ Char 97)` -
+        # so `decl.name` is just "String"/"Char", and the value is a decl parameter.
+        if string_value?(decl)
+          return PrintedExpr.new(LowLevel.get_string(a).inspect)
+        end
+        if char_value?(decl)
+          return PrintedExpr.new("Char(#{[LowLevel.get_decl_int_parameter(decl, 0)].pack("U").inspect})")
+        end
+
+        # Sequence values, as Ruby array literals
+        if a.sort.is_a?(SeqSort)
+          case name
+          when "seq.unit"
+            return PrintedExpr.new("[#{args[0]}]")
+          when "seq.empty"
+            return PrintedExpr.new("[]")
+          end
+        end
+        if SEQ_CONCAT_NAMES.include?(name) and args.size >= 2
+          return format_seq_concat(a)
+        end
 
         # Set operations come back from models as `(_ map and)`, `(_ map or)` etc.
         # `decl.name` is just "map" for all of them, the mapped function is a decl parameter.
