@@ -43,17 +43,15 @@ module Z3
         "é中😀",
         "\u{2FFFF}",
       ].each do |str|
-        value = sort.from_const(str)
-        expect(LowLevel.get_string(value)).to eq(str)
-        expect(LowLevel.get_string_length(value)).to eq(str.size)
+        expect(sort.from_const(str)).to stringify(str.inspect)
       end
     end
 
     # Z3 strings are sequences of code points, so it's characters in the String's
     # own encoding that convert, not bytes
     it "converts characters, not bytes" do
-      expect(LowLevel.get_string_length(sort.from_const("é中😀"))).to eq(3)
-      expect(LowLevel.get_string_length(sort.from_const("é中😀".b))).to eq(9)
+      expect(sort.from_const("é")).to stringify(%q{"é"})
+      expect(sort.from_const("é".b)).to stringify(%q{"Ã©"})
     end
 
     # Z3 doesn't check this itself, it just quietly stores `\u{30000}` as 9 characters

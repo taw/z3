@@ -36,11 +36,10 @@ module Z3
       end
     end
 
-    # Z3 represents String as Seq(Char), so this is the only one that can't round-trip its class
+    # Z3 represents String as Seq(Char), and SeqSort.new hands that back as a StringSort,
+    # so there's no sort left whose class .from_pointer would have to guess at
     it ".from_pointer returns Seq(Char) as StringSort" do
-      seq_of_char = SeqSort.new(CharSort.new)
-      expect(Sort.from_pointer(seq_of_char._ast)).to be_same_as(StringSort.new)
-      expect(Sort.from_pointer(seq_of_char._ast)).to eq(seq_of_char)
+      expect(Sort.from_pointer(SeqSort.new(CharSort.new)._ast)).to be_same_as(StringSort.new)
     end
 
     it "#to_s" do

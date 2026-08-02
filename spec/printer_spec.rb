@@ -59,9 +59,9 @@ module Z3
       expect(CharSort.new.var("a")).to stringify("a")
     end
 
-    # Nothing on the Ruby side builds string or seq exprs yet, so the only way to get one
-    # is to let Z3 parse it. `q` is the variable being defined, `r` a spare one of the
-    # same sort to build symbolic exprs out of.
+    # Values have from_const, but nothing on the Ruby side builds string or seq
+    # *operations* yet, so those have to come out of the SMT-LIB2 parser. `q` is the
+    # variable being defined, `r` a spare one of the same sort to build them out of.
     def parse_expr(sort, expr)
       solver = Solver.new
       LowLevel.solver_from_string(solver, "(declare-const q #{sort})(declare-const r #{sort})(assert (= q #{expr}))")
@@ -69,19 +69,20 @@ module Z3
     end
 
     describe "strings" do
+      let(:sort) { StringSort.new }
+
       it "string values" do
-        expect(parse_expr("String", %q{"hello"})).to stringify(%q{"hello"})
-        expect(parse_expr("String", %q{""})).to stringify(%q{""})
-        # `""` is how SMT-LIB2 escapes a quote
-        expect(parse_expr("String", %q{"a""b"})).to stringify(%q{"a\"b"})
+        expect(sort.from_const("hello")).to stringify(%q{"hello"})
+        expect(sort.from_const("")).to stringify(%q{""})
+        expect(sort.from_const(%q{a"b})).to stringify(%q{"a\"b"})
       end
 
       it "string values with escapes" do
-        expect(parse_expr("String", %q{"a\u{a}b\u{9}c"})).to stringify(%q{"a\nb\tc"})
-        expect(parse_expr("String", %q{"a\u{0}b"})).to stringify(%q{"a\u0000b"})
-        # A backslash is only special to Z3 when it starts an escape, and this one doesn't
-        expect(parse_expr("String", %q{"a\u{5c}u{41}b"})).to stringify(%q{"a\\\\u{41}b"})
-        expect(parse_expr("String", %q{"\u{4e2d}\u{1f600}"})).to stringify(%q{"中😀"})
+        expect(sort.from_const("a\nb\tc")).to stringify(%q{"a\nb\tc"})
+        expect(sort.from_const("a\0b")).to stringify(%q{"a\u0000b"})
+        # Text that looks like a Z3 escape but isn't one
+        expect(sort.from_const(%q{a\u{41}b})).to stringify(%q{"a\\\\u{41}b"})
+        expect(sort.from_const("中😀")).to stringify(%q{"中😀"})
       end
 
       it "string operations" do
@@ -91,25 +92,25 @@ module Z3
       end
 
       it "char values" do
-        expect(Expr.new_from_pointer(LowLevel.mk_char("a".ord))).to stringify(%q{Char("a")})
-        expect(Expr.new_from_pointer(LowLevel.mk_char("\n".ord))).to stringify(%q{Char("\n")})
-        expect(Expr.new_from_pointer(LowLevel.mk_char("中".ord))).to stringify(%q{Char("中")})
+        expect(CharSort.new.from_const("a")).to stringify(%q{Char("a")})
+        expect(CharSort.new.from_const("\n")).to stringify(%q{Char("\n")})
+        expect(CharSort.new.from_const("中")).to stringify(%q{Char("中")})
       end
     end
 
     describe "sequences" do
+      let(:int_seq) { SeqSort.new(IntSort.new) }
+
       it "sequence values" do
-        expect(parse_expr("(Seq Int)", "(as seq.empty (Seq Int))")).to stringify("[]")
-        expect(parse_expr("(Seq Int)", "(seq.unit 42)")).to stringify("[42]")
-        expect(parse_expr("(Seq Int)", "(seq.++ (seq.unit 1) (seq.unit (- 2)) (seq.unit 3))")).to stringify("[1, -2, 3]")
-        expect(parse_expr("(Seq Bool)", "(seq.++ (seq.unit true) (seq.unit false))")).to stringify("[true, false]")
+        expect(int_seq.from_const([])).to stringify("[]")
+        expect(int_seq.from_const([42])).to stringify("[42]")
+        expect(int_seq.from_const([1, -2, 3])).to stringify("[1, -2, 3]")
+        expect(SeqSort.new(BoolSort.new).from_const([true, false])).to stringify("[true, false]")
       end
 
       it "nested sequence values" do
-        expect(
-          parse_expr("(Seq (Seq Int))", "(seq.++ (seq.unit (seq.unit 1)) (seq.unit (as seq.empty (Seq Int))))")
-        ).to stringify("[[1], []]")
-        expect(parse_expr("(Seq String)", %q{(seq.++ (seq.unit "ab") (seq.unit "c"))})).to stringify(%q{["ab", "c"]})
+        expect(SeqSort.new(int_seq).from_const([[1], []])).to stringify("[[1], []]")
+        expect(SeqSort.new(StringSort.new).from_const(["ab", "c"])).to stringify(%q{["ab", "c"]})
       end
 
       # Concat is associative, and Z3 hands it back as a right-nested binary tree,
@@ -122,9 +123,8 @@ module Z3
       end
 
       it "sequences as subexpressions" do
-        solver = Solver.new
-        LowLevel.solver_from_string(solver, "(declare-const q (Seq Int))(assert (= q (seq.++ q (seq.unit 1))))")
-        expect(solver.assertions.first).to stringify("q = (q + [1])")
+        concat = parse_expr("(Seq Int)", "(seq.++ r (seq.unit 1))")
+        expect(int_seq.var("q") == concat).to stringify("q = (r + [1])")
       end
     end
 
