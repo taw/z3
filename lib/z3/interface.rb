@@ -18,6 +18,10 @@ module Z3
     BitvecSort.new(n).var(v)
   end
 
+  def String(v)
+    StringSort.new.var(v)
+  end
+
   #--
   # Constants
   #++
@@ -99,6 +103,10 @@ module Z3
     LowLevel.global_param_set(k,v)
   end
 
+  # This is only so these can be called as `Z3.Int("x")`. Including Z3 into your own
+  # code is not supported - `Z3#String` shadows the private `Kernel#String`, and the
+  # `Z3::Exception` constant shadows `::Exception`, so `rescue Exception` would quietly
+  # stop catching anything that isn't ours.
   class << self
     include Z3
   end
