@@ -3,13 +3,38 @@ module Z3
     include ReferenceCounted
 
     attr_reader :_solver
-    def initialize(params = {})
-      @_solver = LowLevel.mk_solver
+    # `_solver` is how the alternative constructors below pass in their own solver;
+    # `Solver.new` is the general purpose one and you almost always want it
+    def initialize(params = {}, _solver = LowLevel.mk_solver)
+      @_solver = _solver
       inc_ref! :solver, @_solver
       reset_model!
       # Skipped for the common no-parameters case, as #set_params has to build
       # the parameter descriptions to check against, and there are hundreds of them
       set_params(params) unless params == {}
+    end
+
+    class << self
+      # `Solver.new` inspects the assertions and assembles a tactic to match them.
+      # This one is just the incremental SMT core, which is usually weaker - but it's
+      # the only solver which implements #trail.
+      def simple(params = {})
+        new(params, LowLevel.mk_simple_solver)
+      end
+
+      # Specializes the solver for one SMT-LIB2 logic ("QF_LIA", "QF_BV", ...), which
+      # can be much faster, at the cost of raising on anything outside that logic.
+      # Z3 rejects unknown names itself, we have no list to check against.
+      def for_logic(logic, params = {})
+        new(params, LowLevel.mk_solver_for_logic(LowLevel.mk_symbol(logic)))
+      end
+
+      # Every #check runs the tactic on the assertions. Tactics have no notion of
+      # scopes, so #push / #pop are simulated by re-running everything.
+      def from_tactic(tactic, params = {})
+        raise Z3::Exception, "Tactic required" unless tactic.is_a?(Tactic)
+        new(params, LowLevel.mk_solver_from_tactic(tactic))
+      end
     end
 
     # `Z3_solver_get_param_descrs` lists every parameter the solver takes,
@@ -101,6 +126,49 @@ module Z3
     def unsat_core
       _ast_vector = LowLevel.solver_get_unsat_core(self)
       LowLevel.unpack_ast_vector(_ast_vector)
+    end
+
+    # The assertions Z3 has boiled down to a single literal, and everything it
+    # hasn't - together they're a partition of what the solver currently knows
+    def units
+      _ast_vector = LowLevel.solver_get_units(self)
+      LowLevel.unpack_ast_vector(_ast_vector)
+    end
+
+    def non_units
+      _ast_vector = LowLevel.solver_get_non_units(self)
+      LowLevel.unpack_ast_vector(_ast_vector)
+    end
+
+    # The literals the solver currently has assigned, in assignment order.
+    # Only Solver.simple implements it - every other kind raises Z3::Exception.
+    def trail
+      _ast_vector = LowLevel.solver_get_trail(self)
+      LowLevel.unpack_ast_vector(_ast_vector)
+    end
+
+    # Cancels a #check in progress, so it returns :unknown instead of an answer.
+    # It's meant for another thread or a signal handler - on an idle solver it does
+    # nothing, and the flag is cleared by the time the next #check starts.
+    def interrupt
+      LowLevel.solver_interrupt(self)
+      self
+    end
+
+    # Parses SMT-LIB2 and adds its assertions on top of whatever's already asserted.
+    # Anything it declares goes into the shared context, so `(declare-const a Int)`
+    # here is the same variable as `Z3.Int("a")` in Ruby - but the parser starts with
+    # an empty symbol table every time, so each string has to declare what it uses.
+    def from_string(str)
+      reset_model!
+      LowLevel.solver_from_string(self, str)
+      self
+    end
+
+    def from_file(path)
+      reset_model!
+      LowLevel.solver_from_file(self, path)
+      self
     end
 
     def statistics
