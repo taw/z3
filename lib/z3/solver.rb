@@ -128,6 +128,28 @@ module Z3
       LowLevel.unpack_ast_vector(_ast_vector)
     end
 
+    # Everything about `variables` which follows from the assertions, as a list of
+    # `assumption => literal` implications (`true => literal` for the ones which
+    # hold outright). This solves, so it's much more work than #assertions.
+    def consequences(variables, assumptions = [])
+      reset_model!
+      LowLevel.with_ast_vectors(assumptions, variables, []) do |_assumptions, _variables, _consequences|
+        result = check_sat_results(LowLevel.solver_get_consequences(self, _assumptions, _variables, _consequences))
+        raise Z3::Exception, "Consequences need satisfiable assertions, these are #{result}" unless result == :sat
+        LowLevel.unpack_ast_vector(_consequences)
+      end
+    end
+
+    # One case split, for divide-and-conquer solving - each call returns the next
+    # cube, and `[false]` once they're exhausted (after which it starts over).
+    # `variables` is which literals to split on, or [] to let Z3 choose.
+    def cube(variables = [], backtrack_level = 0)
+      reset_model!
+      LowLevel.with_ast_vectors(variables) do |_variables|
+        LowLevel.unpack_ast_vector(LowLevel.solver_cube(self, _variables, backtrack_level))
+      end
+    end
+
     # The assertions Z3 has boiled down to a single literal, and everything it
     # hasn't - together they're a partition of what the solver currently knows
     def units

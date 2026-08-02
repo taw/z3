@@ -131,6 +131,25 @@ module Z3
 
       # Should be private
 
+      # Every AST_VECTOR parameter in the C API is an `_in` - the ones which act like
+      # out parameters are vectors the caller allocates and Z3 fills in or empties.
+      # So they only ever need to live for the length of one call, and there's no
+      # reason for a Ruby class: build them here, read the results back with
+      # #unpack_ast_vector, and let the ensure release them.
+      def with_ast_vectors(*arrays)
+        _ast_vectors = []
+        arrays.each do |asts|
+          # Pushed onto the list before anything can raise, so a bad `asts` still frees
+          _ast_vector = mk_ast_vector
+          ast_vector_inc_ref(_ast_vector)
+          _ast_vectors << _ast_vector
+          asts.each { |ast| ast_vector_push(_ast_vector, ast) }
+        end
+        yield(*_ast_vectors)
+      ensure
+        _ast_vectors.each { |_ast_vector| ast_vector_dec_ref(_ast_vector) }
+      end
+
       def unpack_ast_vector(_ast_vector)
         ast_vector_size(_ast_vector).times.map do |i|
           _ast = ast_vector_get(_ast_vector, i)

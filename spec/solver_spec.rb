@@ -64,6 +64,67 @@ module Z3
       expect(solver.unsat_core.map(&:to_s)).to eq(["p1"])
     end
 
+    describe "#consequences" do
+      let(:p) { Z3.Bool("p") }
+      let(:q) { Z3.Bool("q") }
+      let(:r) { Z3.Bool("r") }
+
+      it "reports what follows from the assertions" do
+        solver.assert Z3.Implies(p, q)
+        solver.assert Z3.Implies(q, r)
+        solver.assert p
+        expect(solver.consequences([p, q, r]).map(&:to_s).sort)
+          .to eq(["true => p", "true => q", "true => r"])
+      end
+
+      it "reports what follows only under an assumption" do
+        solver.assert Z3.Implies(p, q)
+        expect(solver.consequences([q], [p]).map(&:to_s)).to eq(["p => q"])
+        expect(solver.consequences([q])).to eq([])
+      end
+
+      it "raises unless the assertions are satisfiable" do
+        solver.assert p
+        solver.assert ~p
+        expect{ solver.consequences([p]) }.to raise_error(Z3::Exception, /unsat/)
+      end
+
+      # It solves, so anything #model was holding is stale afterwards
+      it "invalidates the model" do
+        solver.assert p
+        expect(solver).to be_satisfiable
+        solver.consequences([p])
+        expect{ solver.model }.to raise_error(Z3::Exception, /need to check/)
+      end
+    end
+
+    describe "#cube" do
+      let(:p) { Z3.Bool("p") }
+      let(:q) { Z3.Bool("q") }
+
+      it "enumerates case splits, ending with false" do
+        solver.assert Z3.Or(p, q)
+        cubes = 3.times.map { solver.cube.map(&:to_s) }
+        # Z3 picks which literal to split on, so only the shape is checked
+        expect(cubes.map(&:size)).to eq([1, 1, 1])
+        expect(cubes.last).to eq(["false"])
+        expect(cubes[0..1].flatten.sort).to eq(["not(q)", "q"])
+      end
+
+      it "splits on the variables it's given" do
+        solver.assert Z3.Or(p, q)
+        cube = solver.cube([p, q])
+        expect(cube.size).to eq(1)
+        expect(["p", "q"]).to include(cube[0].to_s)
+      end
+
+      # Nothing to case split on, rather than "no solution"
+      it "is empty when the assertions already decide everything" do
+        solver.assert p
+        expect(solver.cube([p])).to eq([])
+      end
+    end
+
     # This is internal solver state, not a promise, so it's only checked on a case
     # simple enough that any version of Z3 has to see it the same way
     it "#units and #non_units" do
