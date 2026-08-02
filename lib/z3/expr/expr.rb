@@ -37,6 +37,10 @@ module Z3
           IntSort.new
         when Float, Rational
           RealSort.new
+        # Ruby has no character type, so Strings are Strings - `char_var == "a"` is a sort
+        # mismatch, and `CharSort.new.from_const("a")` is the way to say that
+        when String
+          StringSort.new
         else
           raise Z3::Exception, "No idea how to autoconvert `#{a.class}': `#{a.inspect}'"
         end

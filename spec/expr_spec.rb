@@ -8,6 +8,9 @@ module Z3
     let(:d) { Z3.Bool("d") }
     let(:e) { Z3.Real("e") }
     let(:f) { Z3.Real("f") }
+    let(:s) { StringSort.new.var("s") }
+    let(:t) { StringSort.new.var("t") }
+    let(:u) { CharSort.new.var("u") }
 
     it "#sort returns Sort object" do
       expect(a.sort).to eq(IntSort.new)
@@ -120,6 +123,7 @@ module Z3
         expect((a == b).sexpr).to eq "(= a b)"
         expect((c == d).sexpr).to eq "(= c d)"
         expect((e == f).sexpr).to eq "(= e f)"
+        expect((s == t).sexpr).to eq "(= s t)"
       end
 
       it "casts to correct type if possible" do
@@ -137,6 +141,8 @@ module Z3
         expect((e == Rational(19, 7)).sexpr).to eq "(= e (/ 19.0 7.0))"
         expect((true == c).sexpr).to eq "(= c true)"
         expect((false == c).sexpr).to eq "(= c false)"
+        expect((s == "abc").sexpr).to eq %q{(= s "abc")}
+        expect(("abc" == s).sexpr).to eq %q{(= s "abc")}
       end
 
       it "raises exception if type cast is not possible" do
@@ -150,6 +156,26 @@ module Z3
         expect{c == 42.5}.to raise_error(ArgumentError)
         expect{42 == c}.to raise_error(ArgumentError)
         expect{42.5 == c}.to raise_error(ArgumentError)
+        expect{a == "abc"}.to raise_error(ArgumentError)
+        expect{"abc" == a}.to raise_error(ArgumentError)
+        expect{s == 42}.to raise_error(ArgumentError)
+        expect{s == true}.to raise_error(ArgumentError)
+      end
+
+      # Ruby has no character type, so a String is always a String, never a Char -
+      # `CharSort.new.from_const("a")` is how you say that
+      it "does not autoconvert Strings to Chars" do
+        expect{u == "a"}.to raise_error(ArgumentError)
+        expect{"a" == u}.to raise_error(ArgumentError)
+        expect((u == CharSort.new.from_const("a")).sexpr).to eq "(= u (_ Char 97))"
+      end
+
+      # We prepend to String#== to make `"abc" == s` work, so plain Ruby == must survive
+      it "leaves == of Strings which aren't exprs alone" do
+        expect("abc" == "abc").to be true
+        expect("abc" == "abd").to be false
+        expect("abc" == 42).to be false
+        expect("abc" != "abd").to be true
       end
     end
 
@@ -173,6 +199,8 @@ module Z3
         expect((42.5 != e).sexpr).to eq "(distinct (/ 85.0 2.0) e)"
         expect((true != c).sexpr).to eq "(distinct c true)"
         expect((false != c).sexpr).to eq "(distinct c false)"
+        expect((s != "abc").sexpr).to eq %q{(distinct s "abc")}
+        expect(("abc" != s).sexpr).to eq %q{(distinct s "abc")}
       end
 
       it "raises exception if type cast is not possible" do
@@ -187,6 +215,28 @@ module Z3
         expect{c != Rational(19, 7)}.to raise_error(ArgumentError)
         expect{42 != c}.to raise_error(ArgumentError)
         expect{Rational(19, 7) != c}.to raise_error(ArgumentError)
+        expect{a != "abc"}.to raise_error(ArgumentError)
+        expect{"abc" != a}.to raise_error(ArgumentError)
+        expect{s != 42}.to raise_error(ArgumentError)
+        expect{u != "a"}.to raise_error(ArgumentError)
+      end
+    end
+
+    describe ".sort_for_const" do
+      it "knows the sorts Ruby values map to" do
+        expect(Expr.sort_for_const(true)).to eq(BoolSort.new)
+        expect(Expr.sort_for_const(false)).to eq(BoolSort.new)
+        expect(Expr.sort_for_const(42)).to eq(IntSort.new)
+        expect(Expr.sort_for_const(42.5)).to eq(RealSort.new)
+        expect(Expr.sort_for_const(Rational(19, 7))).to eq(RealSort.new)
+        expect(Expr.sort_for_const("abc")).to eq(StringSort.new)
+        expect(Expr.sort_for_const("a")).to eq(StringSort.new)
+      end
+
+      it "raises exception for Ruby values with no sort" do
+        expect{Expr.sort_for_const(nil)}.to raise_error(Z3::Exception)
+        expect{Expr.sort_for_const(:abc)}.to raise_error(Z3::Exception)
+        expect{Expr.sort_for_const([1, 2])}.to raise_error(Z3::Exception)
       end
     end
   end

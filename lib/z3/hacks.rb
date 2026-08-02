@@ -79,6 +79,11 @@ class FalseClass
   prepend EqualityHacks
 end
 
+# Only EqualityHacks, as `<` `<=` on strings (str.< / str.<=) aren't exposed yet
+class String
+  prepend EqualityHacks
+end
+
 class Rational
   prepend CompareHacks
 end

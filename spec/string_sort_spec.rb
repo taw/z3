@@ -64,6 +64,10 @@ module Z3
       expect{ sort.from_const("\xFF") }.to raise_error(Z3::Exception)
     end
 
+    it "Z3.Const builds string constants" do
+      expect(Z3.Const("hello")).to be_same_as(sort.from_const("hello"))
+    end
+
     it "raises exception when trying to convert constants of wrong type" do
       expect{ sort.from_const(42) }.to raise_error(Z3::Exception)
       expect{ sort.from_const(nil) }.to raise_error(Z3::Exception)
@@ -73,6 +77,14 @@ module Z3
     it "values can be used in constraints" do
       s = sort.var("s")
       expect([s == sort.from_const("héllo")]).to have_solution(s => %q{"héllo"})
+    end
+
+    # Expr.sort_for_const knows about String, so no explicit from_const is needed
+    it "Ruby Strings autoconvert in constraints" do
+      s = sort.var("s")
+      expect([s == "héllo"]).to have_solution(s => %q{"héllo"})
+      expect([s != "a", s != "b", s.sort.from_const("") != s, "c" == s]).to have_solution(s => %q{"c"})
+      expect([s == "a", s == "b"]).to have_no_solution
     end
   end
 end
