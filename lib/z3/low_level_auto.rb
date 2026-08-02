@@ -1625,6 +1625,10 @@ module Z3
         VeryLowLevel.Z3_mk_seq_last_index(_ctx_pointer, ast1._ast, ast2._ast)
       end
 
+      def mk_seq_length(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_seq_length(_ctx_pointer, ast._ast)
+      end
+
       def mk_seq_map(ast1, ast2) #=> :ast_pointer
         VeryLowLevel.Z3_mk_seq_map(_ctx_pointer, ast1._ast, ast2._ast)
       end

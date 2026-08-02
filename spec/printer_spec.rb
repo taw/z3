@@ -62,9 +62,9 @@ module Z3
     # Values have from_const, but nothing on the Ruby side builds string or seq
     # *operations* yet, so those have to come out of the SMT-LIB2 parser. `q` is the
     # variable being defined, `r` a spare one of the same sort to build them out of.
-    def parse_expr(sort, expr)
+    def parse_expr(sort, expr, spare_sort = sort)
       solver = Solver.new
-      LowLevel.solver_from_string(solver, "(declare-const q #{sort})(declare-const r #{sort})(assert (= q #{expr}))")
+      LowLevel.solver_from_string(solver, "(declare-const q #{sort})(declare-const r #{spare_sort})(assert (= q #{expr}))")
       solver.assertions.first.arguments.find { |arg| arg.to_s != "q" }
     end
 
@@ -89,6 +89,15 @@ module Z3
         expect(parse_expr("String", %q{(str.++ r "ab")})).to stringify(%q{r + "ab"})
         expect(parse_expr("String", %q{(str.++ "ab" r "cd")})).to stringify(%q{"ab" + r + "cd"})
         expect(parse_expr("String", %q{(str.replace r "a" "b")})).to stringify(%q{str.replace(r, "a", "b")})
+      end
+
+      # Operations with a Ruby method of their own print as a call on the receiver
+      it "string length" do
+        expect(sort.var("r").length).to stringify("r.size")
+        expect(sort.from_const("ab").length).to stringify(%q{"ab".size})
+        # A method call binds tighter than any operator, so only the receiver needs parens
+        expect(parse_expr("Int", %q{(str.len (str.++ r "ab"))}, "String")).to stringify(%q{(r + "ab").size})
+        expect(sort.var("r").length + 1).to stringify("r.size + 1")
       end
 
       it "char values" do
@@ -120,6 +129,13 @@ module Z3
         expect(parse_expr("(Seq Int)", "(seq.++ (seq.unit 1) r (seq.unit 2))")).to stringify("[1] + r + [2]")
         expect(parse_expr("(Seq Int)", "(seq.++ r r)")).to stringify("r + r")
         expect(parse_expr("(Seq Int)", "(seq.extract r 1 2)")).to stringify("seq.extract(r, 1, 2)")
+      end
+
+      # `seq.len` and String's `str.len` are one Z3 operation, and print the same way
+      it "sequence length" do
+        expect(int_seq.var("r").length).to stringify("r.size")
+        expect(int_seq.from_const([1, 2]).length).to stringify("[1, 2].size")
+        expect(parse_expr("Int", "(seq.len (seq.++ r (seq.unit 1)))", "(Seq Int)")).to stringify("(r + [1]).size")
       end
 
       it "sequences as subexpressions" do

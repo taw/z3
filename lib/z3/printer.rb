@@ -43,6 +43,15 @@ module Z3
     # `str.++` is the same operation as `seq.++`, Z3 just names it differently for String
     SEQ_CONCAT_NAMES = ["seq.++", "str.++"]
 
+    # Z3 decl name => Ruby method, printed as `receiver.method` or
+    # `receiver.method(rest)` with the first argument as the receiver. Z3 names the
+    # same operation `str.foo` for Strings and `seq.foo` for every other Seq, so both
+    # spellings map to the one Ruby method.
+    METHOD_CALL_NAMES = {
+      "seq.len" => "size",
+      "str.len" => "size",
+    }
+
     def string_value?(decl)
       decl.arity == 0 and decl.num_parameters == 1 and decl.parameter_kind(0) == :zstring
     end
@@ -73,6 +82,19 @@ module Z3
     def flatten_seq_concat(a)
       return [a] unless a.ast_kind == :app and SEQ_CONCAT_NAMES.include?(a.func_decl.name)
       a.arguments.flat_map{|x| flatten_seq_concat(x)}
+    end
+
+    # A method call binds tighter than any operator, so the result is atomic - only
+    # the receiver can need parentheses
+    def format_method_call(name, args)
+      method = METHOD_CALL_NAMES[name]
+      return nil unless method and args.size >= 1
+      receiver, *rest = args
+      if rest.empty?
+        PrintedExpr.new("#{receiver.enforce_parentheses}.#{method}")
+      else
+        PrintedExpr.new("#{receiver.enforce_parentheses}.#{method}(#{rest.join(", ")})")
+      end
     end
 
     def format_app(a)
@@ -124,6 +146,10 @@ module Z3
         end
 
         return PrintedExpr.new(name, false) if args.size == 0
+
+        # Operations which read best in Ruby as a method call on their first argument
+        method_call = format_method_call(name, args)
+        return method_call if method_call
 
         # Special case common Bitvec operators
         case name

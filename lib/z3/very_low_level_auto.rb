@@ -406,6 +406,7 @@ module Z3
     attach_function :Z3_mk_seq_foldl, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_foldli, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_last_index, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_seq_length, [:ctx_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_map, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_mapi, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_nth, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
