@@ -61,11 +61,13 @@ module Z3
         offset = range.begin || 0
         return [offset, size - offset] if range.end.nil?
         last = range.end
-        # Ruby has no `-` taking an Expr on the right, so a mixed pair goes to Z3
-        unless offset.is_a?(Integer) and last.is_a?(Integer)
-          offset, last = IntSort.new.cast(offset), IntSort.new.cast(last)
-        end
-        [offset, range.exclude_end? ? last - offset : last - offset + 1]
+        # Ruby has no `-` taking an Expr on the right, so a literal end above a
+        # symbolic offset is the one pair that has to go to Z3. The other way round
+        # doesn't - IntExpr#- takes an Integer.
+        last = IntSort.new.cast(last) if last.is_a?(Integer) and !offset.is_a?(Integer)
+        # An open beginning is offset 0, and subtracting it would only clutter the term
+        len = (offset.is_a?(Integer) and offset.zero?) ? last : last - offset
+        [offset, range.exclude_end? ? len : len + 1]
       end
 
       def new_from_pointer(_ast)

@@ -2,6 +2,7 @@ module Z3
   describe StringExpr do
     let(:sort) { StringSort.new }
     let(:s) { sort.var("s") }
+    let(:t) { sort.var("t") }
     let(:x) { Z3.Int("x") }
 
     describe "#length" do
@@ -160,14 +161,15 @@ module Z3
 
       # An index is an offset however it's spelled, so a literal -1 and an IntExpr
       # equal to -1 have to mean the same thing. Only the literal could ever be
-      # recognized as negative, so neither counts from the end.
+      # recognized as negative, so neither counts from the end - `t` is what Z3
+      # answers, rather than an answer proposed to it.
       it "means the same by a literal index and a symbolic one" do
-        expect([s == "hello", x == -1, s[-1] == ""]).to have_solution(s => %q{"hello"})
-        expect([s == "hello", x == -1, s[x] == ""]).to have_solution(s => %q{"hello"})
-        expect([s == "hello", x == -1, s[-1, 2] == ""]).to have_solution(s => %q{"hello"})
-        expect([s == "hello", x == -1, s[x, 2] == ""]).to have_solution(s => %q{"hello"})
-        expect([s == "hello", x == -1, s[0..-1] == ""]).to have_solution(s => %q{"hello"})
-        expect([s == "hello", x == -1, s[0..x] == ""]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", x == -1, t == s[-1]]).to have_solution(t => %q{""})
+        expect([s == "hello", x == -1, t == s[x]]).to have_solution(t => %q{""})
+        expect([s == "hello", x == -1, t == s[-1, 2]]).to have_solution(t => %q{""})
+        expect([s == "hello", x == -1, t == s[x, 2]]).to have_solution(t => %q{""})
+        expect([s == "hello", x == -1, t == s[0..-1]]).to have_solution(t => %q{""})
+        expect([s == "hello", x == -1, t == s[0..x]]).to have_solution(t => %q{""})
       end
 
       it "passes a negative index through as an offset" do
@@ -178,9 +180,9 @@ module Z3
       # Counting from the end is spelled out, and then it works for a symbolic offset
       # too, which is the whole point of not emulating it
       it "counts from the end when told to" do
-        expect([s == "hello", s[s.length - 1] == "o"]).to have_solution(s => %q{"hello"})
-        expect([s == "hello", x == 1, s[s.length - x] == "o"]).to have_solution(s => %q{"hello"})
-        expect([s == "hello", s[s.length - 2, 2] == "lo"]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", t == s[s.length - 1]]).to have_solution(t => %q{"o"})
+        expect([s == "hello", x == 1, t == s[s.length - x]]).to have_solution(t => %q{"o"})
+        expect([s == "hello", t == s[s.length - 2, 2]]).to have_solution(t => %q{"lo"})
       end
 
       # This denotes a String wherever it appears, so `nil` was never one of its
@@ -201,6 +203,35 @@ module Z3
         i = IntSort.new.var("i")
         expect([s == "hello", s[i] == "l", i == 2]).to have_solution(s => %q{"hello"})
         expect([s == "hello", s[i, 2] == "lo", i == 3]).to have_solution(s => %q{"hello"})
+      end
+
+      # Both ends of a Range can be symbolic too, open ends included - it's all Ruby
+      # arithmetic on top of `str.substr`, and none of it looks at the index
+      it "takes symbolic ranges" do
+        i = IntSort.new.var("i")
+        j = IntSort.new.var("j")
+        expect([s == "hello", i == 1, j == 3, t == s[i..j]]).to have_solution(t => %q{"ell"})
+        expect([s == "hello", i == 1, j == 3, t == s[i...j]]).to have_solution(t => %q{"el"})
+        expect([s == "hello", i == 2, t == s[i..]]).to have_solution(t => %q{"llo"})
+        expect([s == "hello", i == 2, t == s[..i]]).to have_solution(t => %q{"hel"})
+        expect([s == "hello", i == 2, t == s[i..3]]).to have_solution(t => %q{"ll"})
+        expect([s == "hello", i == 3, t == s[1..i]]).to have_solution(t => %q{"ell"})
+      end
+
+      it "means the same by a literal range end and a symbolic one" do
+        expect(s[..x]).to be_same_as(s[0..x])
+        [2, 0, -1, 10].each do |v|
+          expect([s == "hello", x == v, s[x..] == s[v..]]).to have_solution(s => %q{"hello"})
+          expect([s == "hello", x == v, s[..x] == s[..v]]).to have_solution(s => %q{"hello"})
+          expect([s == "hello", x == v, s[x..] != s[v..]]).to have_no_solution
+          expect([s == "hello", x == v, s[..x] != s[..v]]).to have_no_solution
+        end
+      end
+
+      it "builds the range arithmetic without an extra zero" do
+        expect(s[..x].sexpr).to eq("(str.substr s 0 (+ x 1))")
+        expect(s[x..].sexpr).to eq("(str.substr s x (- (str.len s) x))")
+        expect(s[x..2].sexpr).to eq("(str.substr s x (+ (- 2 x) 1))")
       end
     end
 

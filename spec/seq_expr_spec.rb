@@ -2,6 +2,8 @@ module Z3
   describe SeqExpr do
     let(:sort) { SeqSort.new(IntSort.new) }
     let(:xs) { sort.var("xs") }
+    let(:ys) { sort.var("ys") }
+    let(:n) { Z3.Int("n") }
 
     it "#element_sort" do
       expect(xs.element_sort).to eq(IntSort.new)
@@ -149,18 +151,18 @@ module Z3
         # with any value at all rather than with the last one
         expect([xs == value, xs[-1] == 99]).to have_solution(xs => "[10, 20, 30]")
         expect([xs == value, i == -1, xs[i] == 99]).to have_solution(xs => "[10, 20, 30]")
-        # An out of range subsequence is empty
-        expect([xs == value, xs[-2, 2].empty?]).to have_solution(xs => "[10, 20, 30]")
-        expect([xs == value, i == -1, xs[i, 2].empty?]).to have_solution(xs => "[10, 20, 30]")
-        expect([xs == value, xs[0..-1].empty?]).to have_solution(xs => "[10, 20, 30]")
-        expect([xs == value, i == -1, xs[0..i].empty?]).to have_solution(xs => "[10, 20, 30]")
+        # An out of range subsequence is empty, and that one does have a value to read
+        expect([xs == value, ys == xs[-2, 2]]).to have_solution(ys => "[]")
+        expect([xs == value, i == -1, ys == xs[i, 2]]).to have_solution(ys => "[]")
+        expect([xs == value, ys == xs[0..-1]]).to have_solution(ys => "[]")
+        expect([xs == value, i == -1, ys == xs[0..i]]).to have_solution(ys => "[]")
       end
 
       # Counting from the end is spelled out, and #last is exactly that
       it "counts from the end when told to" do
         value = sort.from_const([10, 20, 30])
-        expect([xs == value, xs[xs.length - 1] == 30]).to have_solution(xs => "[10, 20, 30]")
-        expect([xs == value, xs[xs.length - 2, 2] == sort.from_const([20, 30])]).to have_solution(xs => "[10, 20, 30]")
+        expect([xs == value, n == xs[xs.length - 1]]).to have_solution(n => "30")
+        expect([xs == value, ys == xs[xs.length - 2, 2]]).to have_solution(ys => "[20, 30]")
       end
 
       # #at is Ruby Array#at and #slice is Ruby Array#slice - both are #[]
@@ -173,6 +175,17 @@ module Z3
       it "takes symbolic indices" do
         i = IntSort.new.var("i")
         expect([xs == sort.from_const([10, 20, 30]), xs[i] == 30, i == 2]).to have_solution(xs => "[10, 20, 30]")
+      end
+
+      # Both ends of a Range can be symbolic too, open ends included
+      it "takes symbolic ranges" do
+        i = IntSort.new.var("i")
+        j = IntSort.new.var("j")
+        value = sort.from_const([10, 20, 30, 40])
+        expect([xs == value, i == 1, j == 2, ys == xs[i..j]]).to have_solution(ys => "[20, 30]")
+        expect([xs == value, i == 1, j == 3, ys == xs[i...j]]).to have_solution(ys => "[20, 30]")
+        expect([xs == value, i == 2, ys == xs[i..]]).to have_solution(ys => "[30, 40]")
+        expect([xs == value, i == 1, ys == xs[..i]]).to have_solution(ys => "[10, 20]")
       end
     end
 
