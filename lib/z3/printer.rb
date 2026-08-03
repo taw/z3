@@ -61,6 +61,12 @@ module Z3
       "seq.replace_all" => "gsub",
       "str.replace_all" => "gsub",
       "str.to_int" => "to_i",
+      # `str.replace_re` / `str.replace_re_all` are the same Ruby methods as
+      # `str.replace` / `str.replace_all` - #sub and #gsub take a Re pattern too
+      "str.replace_re" => "sub",
+      "str.replace_re_all" => "gsub",
+      "str.in_re" => "matches?",
+      "seq.in.re" => "matches?",
     }
 
     # Same idea, but Z3 takes the prefix/suffix first and the string second, where
@@ -103,6 +109,9 @@ module Z3
       # Z3 uses the `str.` name here even for sequences of non-characters. A String
       # argument is never a `seq.unit`, so this is a no-op for actual strings.
       "str.replace_all" => [1, 2],
+      # Only the replacement - argument 1 of these two is a regex, not a sequence
+      "str.replace_re" => [2],
+      "str.replace_re_all" => [2],
     }
 
     def string_value?(decl)
@@ -176,6 +185,86 @@ module Z3
       end
     end
 
+    # Regex operations that print as Ruby operators on ReExpr. `re.++` is
+    # concatenation and `re.+` is one-or-more - different Z3 names, so no clash.
+    RE_OPERATOR_NAMES = {
+      "re.++" => "+",
+      "re.union" => "|",
+      "re.inter" => "&",
+      "re.diff" => "-",
+    }
+
+    # ...and the ones that print as methods, since Ruby has no operators to spare
+    RE_METHOD_NAMES = {
+      "re.*" => "star",
+      "re.+" => "plus",
+      "re.opt" => "option",
+    }
+
+    # Concat, union and intersection are associative, and Z3 hands them back as a
+    # nested binary tree however many arguments they were built with
+    RE_ASSOCIATIVE_NAMES = ["re.++", "re.union", "re.inter"]
+
+    # The regexes with no arguments at all, named after the constructors that build
+    # them. Z3 calls the empty language `re.none` over Strings and `re.empty` over
+    # every other sequence sort.
+    RE_CONSTANT_NAMES = {
+      "re.none" => "Empty",
+      "re.empty" => "Empty",
+      "re.all" => "Full",
+      "re.allchar" => "AllChar",
+    }
+
+    # A regex sort is only worth spelling out when it isn't the String one, which is
+    # what `Re.Empty` and friends default to
+    def re_basis_arg(a)
+      return "" unless a.sort.is_a?(ReSort) and a.sort.seq_sort != StringSort.new
+      "(#{a.sort.seq_sort})"
+    end
+
+    # Regexes have no Ruby literal - `Re.Of` and `Re.Range` are how they're built, so
+    # that's how they print, rather than as `str.to_re` / `re.range`
+    def format_re(a, name, args)
+      if RE_CONSTANT_NAMES[name] and args.empty?
+        return PrintedExpr.new("Re.#{RE_CONSTANT_NAMES[name]}#{re_basis_arg(a)}")
+      end
+      case name
+      when "str.to_re", "seq.to.re"
+        return PrintedExpr.new("Re.Of(#{args[0]})") if args.size == 1
+      when "re.range"
+        return PrintedExpr.new("Re.Range(#{args.join(", ")})") if args.size == 2
+      when "re.comp"
+        return PrintedExpr.new("~#{args[0].enforce_parentheses}", true) if args.size == 1
+      when "re.^"
+        n = Z3::LowLevel.get_decl_int_parameter(a.func_decl, 0)
+        return PrintedExpr.new("#{args[0].enforce_parentheses} * #{n}", true) if args.size == 1
+      when "re.loop"
+        return nil unless args.size == 1
+        decl = a.func_decl
+        from = Z3::LowLevel.get_decl_int_parameter(decl, 0)
+        # Z3 drops the upper bound from the decl entirely when there isn't one
+        to = decl.num_parameters >= 2 ? Z3::LowLevel.get_decl_int_parameter(decl, 1) : nil
+        return PrintedExpr.new("#{args[0].enforce_parentheses} * (#{from}..#{to})", true)
+      end
+      if RE_METHOD_NAMES[name] and args.size == 1
+        return PrintedExpr.new("#{args[0].enforce_parentheses}.#{RE_METHOD_NAMES[name]}")
+      end
+      if RE_OPERATOR_NAMES[name] and args.size >= 2
+        parts = if RE_ASSOCIATIVE_NAMES.include?(name)
+          flatten_re(a, name).map { |x| format_ast(x).enforce_parentheses }
+        else
+          args.map(&:enforce_parentheses)
+        end
+        return PrintedExpr.new(parts.join(" #{RE_OPERATOR_NAMES[name]} "), true)
+      end
+      nil
+    end
+
+    def flatten_re(a, name)
+      return [a] unless a.ast_kind == :app and a.func_decl.name == name
+      a.arguments.flat_map { |x| flatten_re(x, name) }
+    end
+
     def format_app(a)
       if LowLevel::is_algebraic_number(a)
         str = LowLevel::get_numeral_decimal_string(a, 10)
@@ -229,6 +318,11 @@ module Z3
         if name == "map" and decl.num_parameters == 1 and decl.parameter_kind(0) == :func_decl
           return PrintedExpr.new("map(#{decl.func_decl_parameter(0).name}, #{args.join(", ")})")
         end
+
+        # Before the zero-argument case below, since `re.none` / `re.all` /
+        # `re.allchar` are three of these
+        re = format_re(a, name, args)
+        return re if re
 
         return PrintedExpr.new(name, false) if args.size == 0
 

@@ -118,14 +118,30 @@ module Z3
       IntSort.new.new(LowLevel.mk_seq_last_index(self, cast_to_seq(element_or_subsequence)))
     end
 
+    # `seq.in_re`, the same operation as StringExpr#matches? and named the same way -
+    # see there for why it isn't `match?`, and why the argument is never converted
+    def matches?(re)
+      BoolSort.new.new(LowLevel.mk_seq_in_re(self, ReExpr.expect_re_over(re, sort)))
+    end
+
     # Ruby Array has nothing like these, so they keep String's names along with
-    # String's first-one versus every-one split
+    # String's first-one versus every-one split. The pattern can be a ReExpr here
+    # too, which is the one argument that isn't read as an element-or-subsequence -
+    # and which Z3 4.16 can build but not yet reason about, see StringExpr#sub.
     def sub(pattern, replacement)
-      sort.new(LowLevel.mk_seq_replace(self, cast_to_seq(pattern), cast_to_seq(replacement)))
+      if pattern.is_a?(ReExpr)
+        sort.new(LowLevel.mk_seq_replace_re(self, ReExpr.expect_re_over(pattern, sort), cast_to_seq(replacement)))
+      else
+        sort.new(LowLevel.mk_seq_replace(self, cast_to_seq(pattern), cast_to_seq(replacement)))
+      end
     end
 
     def gsub(pattern, replacement)
-      sort.new(LowLevel.mk_seq_replace_all(self, cast_to_seq(pattern), cast_to_seq(replacement)))
+      if pattern.is_a?(ReExpr)
+        sort.new(LowLevel.mk_seq_replace_re_all(self, ReExpr.expect_re_over(pattern, sort), cast_to_seq(replacement)))
+      else
+        sort.new(LowLevel.mk_seq_replace_all(self, cast_to_seq(pattern), cast_to_seq(replacement)))
+      end
     end
 
     class << self

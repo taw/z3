@@ -105,14 +105,42 @@ module Z3
       IntSort.new.new(LowLevel.mk_seq_last_index(self, sort.cast(substring)))
     end
 
+    # `str.in_re`. Ruby's String#match? searches for the pattern anywhere in the
+    # string, while Z3's matches the whole of it - so this is one of the very few
+    # places Ruby doesn't win, and it can't, because an anchored match is what Z3
+    # has. `matches?` rather than `match?` says which of the two it is; searching is
+    # `s.matches?(Z3::Re.Full + re + Z3::Re.Full)`.
+    #
+    # For the same reason the argument has to be a ReExpr already: `s.matches?("ab")`
+    # would read as Ruby's unanchored search and mean the exact opposite, so it's a
+    # error rather than a conversion, even though `Z3::Re.Union("ab", re)` converts.
+    def matches?(re)
+      BoolSort.new.new(LowLevel.mk_seq_in_re(self, ReExpr.expect_re_over(re, sort)))
+    end
+
     # Ruby String#sub and #gsub, split the same way: `str.replace` replaces the first
-    # occurrence, `str.replace_all` every one. The pattern is a string, not a Regexp.
+    # occurrence, `str.replace_all` every one. The pattern is a String or - unlike
+    # everywhere else, since Z3 has `str.replace_re` for it - a ReExpr. Both of those
+    # match unanchored here, exactly as Ruby's do.
+    #
+    # The Re form is only as good as Z3's support for it, and as of 4.16 that support
+    # is "builds the term, decides nothing": a constraint mentioning `str.replace_re`
+    # comes back `unknown`, and even a fully constant one doesn't simplify. So it's
+    # here to build with, not yet to solve with.
     def sub(pattern, replacement)
-      sort.new(LowLevel.mk_seq_replace(self, sort.cast(pattern), sort.cast(replacement)))
+      if pattern.is_a?(ReExpr)
+        sort.new(LowLevel.mk_seq_replace_re(self, ReExpr.expect_re_over(pattern, sort), sort.cast(replacement)))
+      else
+        sort.new(LowLevel.mk_seq_replace(self, sort.cast(pattern), sort.cast(replacement)))
+      end
     end
 
     def gsub(pattern, replacement)
-      sort.new(LowLevel.mk_seq_replace_all(self, sort.cast(pattern), sort.cast(replacement)))
+      if pattern.is_a?(ReExpr)
+        sort.new(LowLevel.mk_seq_replace_re_all(self, ReExpr.expect_re_over(pattern, sort), sort.cast(replacement)))
+      else
+        sort.new(LowLevel.mk_seq_replace_all(self, sort.cast(pattern), sort.cast(replacement)))
+      end
     end
 
     # Ruby String#to_i, so this is the symbolic `str.to_int` - not IntExpr#to_i, which

@@ -39,6 +39,9 @@ module Z3
     attach_function :Z3_get_lstring, [:ctx_pointer, :ast_pointer, :pointer], :pointer
     attach_function :Z3_mk_and, [:ctx_pointer, :int, :pointer], :ast_pointer
     attach_function :Z3_mk_seq_concat, [:ctx_pointer, :int, :pointer], :ast_pointer
+    attach_function :Z3_mk_re_concat, [:ctx_pointer, :int, :pointer], :ast_pointer
+    attach_function :Z3_mk_re_union, [:ctx_pointer, :int, :pointer], :ast_pointer
+    attach_function :Z3_mk_re_intersect, [:ctx_pointer, :int, :pointer], :ast_pointer
     attach_function :Z3_mk_string, [:ctx_pointer, :string], :ast_pointer
     attach_function :Z3_mk_or, [:ctx_pointer, :int, :pointer], :ast_pointer
     attach_function :Z3_mk_atmost, [:ctx_pointer, :int, :pointer, :int], :ast_pointer

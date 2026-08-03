@@ -316,6 +316,34 @@ module Z3
       end
     end
 
+    describe "#matches?" do
+      it "sexpr" do
+        expect(s.matches?(Re.Of("ab")).sexpr).to eq(%q{(str.in_re s (str.to_re "ab"))})
+      end
+
+      it "prints as Ruby" do
+        expect(s.matches?(Re.Range("a", "z").star)).to stringify(%q{s.matches?(Re.Range("a", "z").star)})
+      end
+
+      it "matches the whole string, not a substring" do
+        expect([s.matches?(Re.Range("a", "z").plus), s == "abc"]).to have_solution(s => %q{"abc"})
+        expect([s.matches?(Re.Range("a", "z").plus), s == "ab1"]).to have_no_solution
+        # Ruby's String#match? would search - that's spelled out here
+        expect([s.matches?(Re.Full + Re.Of("b") + Re.Full), s == "ab1"]).to have_solution(s => %q{"ab1"})
+      end
+
+      # Everywhere else a Ruby String converts to the regex matching exactly it, but
+      # here that would look like Ruby's unanchored String#match? and mean the opposite
+      it "does not convert its argument" do
+        expect { s.matches?("ab") }.to raise_error(Z3::Exception)
+        expect { s.matches?(t) }.to raise_error(Z3::Exception)
+      end
+
+      it "rejects a Re over the wrong sort" do
+        expect { s.matches?(Re.Of([1], SeqSort.new(IntSort.new))) }.to raise_error(Z3::Exception)
+      end
+    end
+
     describe "#sub and #gsub" do
       # The same first-one versus every-one split Ruby's have
       it "sexpr" do
@@ -331,6 +359,20 @@ module Z3
       it "replaces the first occurrence, or all of them" do
         expect([s == "banana", s.sub("a", "!") == "b!nana"]).to have_solution(s => %q{"banana"})
         expect([s == "banana", s.gsub("a", "!") == "b!n!n!"]).to have_solution(s => %q{"banana"})
+      end
+
+      # `str.replace_re` / `str.replace_re_all`, and unanchored like Ruby's are.
+      # Z3 4.16 builds these terms but neither solves nor simplifies them, so there's
+      # nothing to assert past the term itself.
+      it "takes a Re pattern, like Ruby's do" do
+        expect(s.sub(Re.Range("a", "z"), "!").sexpr).to eq(%q{(str.replace_re s (re.range "a" "z") "!")})
+        expect(s.gsub(Re.Range("a", "z"), "!").sexpr).to eq(%q{(str.replace_re_all s (re.range "a" "z") "!")})
+        expect(s.sub(Re.Range("a", "z"), "!")).to be_a(StringExpr)
+        expect(s.gsub(Re.Range("a", "z"), "!")).to be_a(StringExpr)
+      end
+
+      it "rejects a Re over the wrong sort" do
+        expect { s.sub(Re.Of([1], SeqSort.new(IntSort.new)), "!") }.to raise_error(Z3::Exception)
       end
 
       # The classic path traversal bug - one pass of the sanitizer isn't enough

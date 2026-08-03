@@ -1557,6 +1557,14 @@ module Z3
         VeryLowLevel.Z3_mk_re_loop(_ctx_pointer, ast._ast, num1, num2)
       end
 
+      def mk_re_option(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_re_option(_ctx_pointer, ast._ast)
+      end
+
+      def mk_re_plus(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_re_plus(_ctx_pointer, ast._ast)
+      end
+
       def mk_re_power(ast, num) #=> :ast_pointer
         VeryLowLevel.Z3_mk_re_power(_ctx_pointer, ast._ast, num)
       end
@@ -1567,6 +1575,10 @@ module Z3
 
       def mk_re_sort(sort) #=> :sort_pointer
         VeryLowLevel.Z3_mk_re_sort(_ctx_pointer, sort._ast)
+      end
+
+      def mk_re_star(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_re_star(_ctx_pointer, ast._ast)
       end
 
       def mk_real(num1, num2) #=> :ast_pointer
@@ -1633,6 +1645,10 @@ module Z3
         VeryLowLevel.Z3_mk_seq_foldli(_ctx_pointer, ast1._ast, ast2._ast, ast3._ast, ast4._ast)
       end
 
+      def mk_seq_in_re(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_seq_in_re(_ctx_pointer, ast1._ast, ast2._ast)
+      end
+
       def mk_seq_index(ast1, ast2, ast3) #=> :ast_pointer
         VeryLowLevel.Z3_mk_seq_index(_ctx_pointer, ast1._ast, ast2._ast, ast3._ast)
       end
@@ -1683,6 +1699,10 @@ module Z3
 
       def mk_seq_suffix(ast1, ast2) #=> :ast_pointer
         VeryLowLevel.Z3_mk_seq_suffix(_ctx_pointer, ast1._ast, ast2._ast)
+      end
+
+      def mk_seq_to_re(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_seq_to_re(_ctx_pointer, ast._ast)
       end
 
       def mk_seq_unit(ast) #=> :ast_pointer

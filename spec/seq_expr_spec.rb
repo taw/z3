@@ -303,6 +303,36 @@ module Z3
         expect([xs == value, xs.sub(1, 9) == sort.from_const([9, 2, 1])]).to have_solution(xs => "[1, 2, 1]")
         expect([xs == value, xs.gsub(1, 9) == sort.from_const([9, 2, 9])]).to have_solution(xs => "[1, 2, 1]")
       end
+
+      # A ReExpr is the one argument here that isn't read as an element-or-subsequence.
+      # Z3 4.16 builds these terms but neither solves nor simplifies them.
+      it "takes a Re pattern" do
+        re = Re.Of([1], sort)
+        expect(xs.sub(re, 9).sexpr).to eq("(str.replace_re xs (seq.to.re (seq.unit 1)) (seq.unit 9))")
+        expect(xs.gsub(re, 9).sexpr).to eq("(str.replace_re_all xs (seq.to.re (seq.unit 1)) (seq.unit 9))")
+        expect(xs.sub(re, 9).sort).to eq(sort)
+      end
+    end
+
+    describe "#matches?" do
+      it "sexpr" do
+        expect(xs.matches?(Re.Of([1], sort)).sexpr).to eq("(seq.in.re xs (seq.to.re (seq.unit 1)))")
+      end
+
+      it "prints as Ruby" do
+        expect(xs.matches?(Re.Of([1], sort))).to stringify("xs.matches?(Re.Of([1]))")
+      end
+
+      it "matches the whole sequence" do
+        expect([xs.matches?(Re.Of([1], sort).plus), xs == sort.from_const([1, 1])]).to have_solution(xs => "[1, 1]")
+        expect([xs.matches?(Re.Of([1], sort).plus), xs == sort.from_const([1, 2])]).to have_no_solution
+      end
+
+      # Same rule as StringExpr#matches? - a sequence is never silently a regex here
+      it "does not convert its argument" do
+        expect { xs.matches?([1]) }.to raise_error(Z3::Exception)
+        expect { xs.matches?(Re.Of("a")) }.to raise_error(Z3::Exception)
+      end
     end
 
     describe ".Unit" do

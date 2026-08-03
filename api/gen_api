@@ -48,16 +48,6 @@ class GenerateAPI
         "is_re_sort",
         "is_seq_sort",
 
-        # Regexes - nothing wraps them yet, and the array-taking ones
-        # (concat/union/intersect) are behind the `_in_array` gate anyway
-        "mk_re_option",
-        "mk_re_plus",
-        "mk_re_star",
-        "mk_re_concat",
-        "mk_re_union",
-        "mk_seq_in_re",
-        "mk_seq_to_re",
-
         # Just C type casts, not needed
         "to_app",
         "to_func_decl",

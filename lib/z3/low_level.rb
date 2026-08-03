@@ -101,6 +101,18 @@ module Z3
         Z3::VeryLowLevel.Z3_mk_seq_concat(_ctx_pointer, asts.size, asts_vector(asts))
       end
 
+      def mk_re_concat(asts)
+        Z3::VeryLowLevel.Z3_mk_re_concat(_ctx_pointer, asts.size, asts_vector(asts))
+      end
+
+      def mk_re_union(asts)
+        Z3::VeryLowLevel.Z3_mk_re_union(_ctx_pointer, asts.size, asts_vector(asts))
+      end
+
+      def mk_re_intersect(asts)
+        Z3::VeryLowLevel.Z3_mk_re_intersect(_ctx_pointer, asts.size, asts_vector(asts))
+      end
+
       def mk_mul(asts)
         Z3::VeryLowLevel.Z3_mk_mul(_ctx_pointer, asts.size, asts_vector(asts))
       end

@@ -193,6 +193,81 @@ module Z3
       end
     end
 
+    # Regexes have no Ruby literal at all, so they print as the constructor calls and
+    # combinators that built them
+    describe "regexes" do
+      let(:int_seq) { SeqSort.new(IntSort.new) }
+      let(:lower) { Re.Range("a", "z") }
+
+      it "constructors" do
+        expect(Re.Of("ab")).to stringify(%q{Re.Of("ab")})
+        expect(Re.Of([1, 2], int_seq)).to stringify("Re.Of([1, 2])")
+        expect(lower).to stringify(%q{Re.Range("a", "z")})
+      end
+
+      it "constants" do
+        expect(Re.Empty).to stringify("Re.Empty")
+        expect(Re.Full).to stringify("Re.Full")
+        expect(Re.AllChar).to stringify("Re.AllChar")
+      end
+
+      # Only the String basis is the default, so it's the only one left off. Z3 also
+      # renames the empty language from `re.none` to `re.empty` once it isn't Strings.
+      it "constants over other sequence sorts spell out the basis" do
+        expect(Re.Empty(int_seq)).to stringify("Re.Empty(Seq(Int))")
+        expect(Re.Full(int_seq)).to stringify("Re.Full(Seq(Int))")
+        expect(Re.AllChar(int_seq)).to stringify("Re.AllChar(Seq(Int))")
+      end
+
+      it "methods" do
+        expect(lower.star).to stringify(%q{Re.Range("a", "z").star})
+        expect(lower.plus).to stringify(%q{Re.Range("a", "z").plus})
+        expect(lower.option).to stringify(%q{Re.Range("a", "z").option})
+      end
+
+      it "operators" do
+        expect(Re.Of("a") + Re.Of("b")).to stringify(%q{Re.Of("a") + Re.Of("b")})
+        expect(Re.Of("a") | Re.Of("b")).to stringify(%q{Re.Of("a") | Re.Of("b")})
+        expect(Re.Of("a") & Re.Of("b")).to stringify(%q{Re.Of("a") & Re.Of("b")})
+        expect(Re.Of("a") - Re.Of("b")).to stringify(%q{Re.Of("a") - Re.Of("b")})
+        expect(~Re.Of("a")).to stringify(%q{~Re.Of("a")})
+      end
+
+      it "repetition" do
+        expect(lower * 3).to stringify(%q{Re.Range("a", "z") * 3})
+        expect(lower * (2..5)).to stringify(%q{Re.Range("a", "z") * (2..5)})
+        # Z3 drops the upper bound from the decl when there isn't one
+        expect(lower * (2..)).to stringify(%q{Re.Range("a", "z") * (2..)})
+      end
+
+      # Concat, union and intersection are associative, and Z3 hands them back
+      # nested however many arguments they were built with
+      it "associative operators flatten" do
+        expect(Re.Concat("a", "b", "c")).to stringify(%q{Re.Of("a") + Re.Of("b") + Re.Of("c")})
+        expect(Re.Union("a", "b", "c")).to stringify(%q{Re.Of("a") | Re.Of("b") | Re.Of("c")})
+        expect(Re.Intersect("a", "b", "c")).to stringify(%q{Re.Of("a") & Re.Of("b") & Re.Of("c")})
+      end
+
+      it "subexpressions get parentheses" do
+        expect((Re.Of("a") | Re.Of("b")).star).to stringify(%q{(Re.Of("a") | Re.Of("b")).star})
+        expect((Re.Of("a") | Re.Of("b")) & Re.Of("c")).to stringify(%q{(Re.Of("a") | Re.Of("b")) & Re.Of("c")})
+        expect(Re.Of("a") - (Re.Of("b") - Re.Of("c"))).to stringify(%q{Re.Of("a") - (Re.Of("b") - Re.Of("c"))})
+        expect(lower.star * 2).to stringify(%q{Re.Range("a", "z").star * 2})
+        expect((lower | Re.Of("!")) * (1..2)).to stringify(%q{(Re.Range("a", "z") | Re.Of("!")) * (1..2)})
+      end
+
+      it "matching and regex replacement" do
+        s = Z3.String("s")
+        xs = int_seq.var("xs")
+        expect(s.matches?(lower.star)).to stringify(%q{s.matches?(Re.Range("a", "z").star)})
+        expect(xs.matches?(Re.Of([1], int_seq))).to stringify("xs.matches?(Re.Of([1]))")
+        expect(s.sub(lower, "!")).to stringify(%q{s.sub(Re.Range("a", "z"), "!")})
+        expect(s.gsub(lower, "!")).to stringify(%q{s.gsub(Re.Range("a", "z"), "!")})
+        # The replacement is a sequence, so a lone unit prints as the element it wraps
+        expect(xs.gsub(Re.Of([1], int_seq), 9)).to stringify("xs.gsub(Re.Of([1]), 9)")
+      end
+    end
+
     describe "expressions" do
       let(:a) { Z3.Int("a") }
       let(:b) { Z3.Int("b") }

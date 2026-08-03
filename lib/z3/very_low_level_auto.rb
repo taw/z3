@@ -389,9 +389,12 @@ module Z3
     attach_function :Z3_mk_re_empty, [:ctx_pointer, :sort_pointer], :ast_pointer
     attach_function :Z3_mk_re_full, [:ctx_pointer, :sort_pointer], :ast_pointer
     attach_function :Z3_mk_re_loop, [:ctx_pointer, :ast_pointer, :uint, :uint], :ast_pointer
+    attach_function :Z3_mk_re_option, [:ctx_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_re_plus, [:ctx_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_re_power, [:ctx_pointer, :ast_pointer, :uint], :ast_pointer
     attach_function :Z3_mk_re_range, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_re_sort, [:ctx_pointer, :sort_pointer], :sort_pointer
+    attach_function :Z3_mk_re_star, [:ctx_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_real, [:ctx_pointer, :int, :int], :ast_pointer
     attach_function :Z3_mk_real2int, [:ctx_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_real_int64, [:ctx_pointer, :int64, :int64], :ast_pointer
@@ -408,6 +411,7 @@ module Z3
     attach_function :Z3_mk_seq_extract, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_foldl, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_foldli, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_seq_in_re, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_index, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_last_index, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_length, [:ctx_pointer, :ast_pointer], :ast_pointer
@@ -421,6 +425,7 @@ module Z3
     attach_function :Z3_mk_seq_replace_re_all, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_sort, [:ctx_pointer, :sort_pointer], :sort_pointer
     attach_function :Z3_mk_seq_suffix, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_seq_to_re, [:ctx_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_unit, [:ctx_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_set_add, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_set_complement, [:ctx_pointer, :ast_pointer], :ast_pointer
