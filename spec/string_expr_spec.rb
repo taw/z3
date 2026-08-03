@@ -2,6 +2,7 @@ module Z3
   describe StringExpr do
     let(:sort) { StringSort.new }
     let(:s) { sort.var("s") }
+    let(:x) { Z3.Int("x") }
 
     describe "#length" do
       it "is an IntExpr" do
@@ -157,28 +158,29 @@ module Z3
         expect([s == "hello", s[..2] == "hel"]).to have_solution(s => %q{"hello"})
       end
 
-      # A Ruby Integer can be recognized as negative, so it counts from the end the
-      # way Ruby's does. Every one of these is checked against what Ruby answers.
-      it "counts a negative index from the end, like Ruby" do
-        solver = Solver.new
-        solver.assert s == "hello"
-        expect(solver).to be_satisfiable
-        model = solver.model
-        indices = [-1, -5, -10, 0, 2, 10]
-        indices.each do |i|
-          expect(model.model_eval(s[i]).to_str).to eq("hello"[i].to_s), "s[#{i}]"
-        end
-        [[-2, 2], [-5, 3], [1, 2], [-10, 2]].each do |offset, len|
-          expect(model.model_eval(s[offset, len]).to_str).to eq("hello"[offset, len].to_s), "s[#{offset}, #{len}]"
-        end
-        [0..-1, 1..-2, -3..-1, -3...-1, -3.., ..-2, 2.., ..2].each do |range|
-          expect(model.model_eval(s[range]).to_str).to eq("hello"[range].to_s), "s[#{range}]"
-        end
+      # An index is an offset however it's spelled, so a literal -1 and an IntExpr
+      # equal to -1 have to mean the same thing. Only the literal could ever be
+      # recognized as negative, so neither counts from the end.
+      it "means the same by a literal index and a symbolic one" do
+        expect([s == "hello", x == -1, s[-1] == ""]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", x == -1, s[x] == ""]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", x == -1, s[-1, 2] == ""]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", x == -1, s[x, 2] == ""]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", x == -1, s[0..-1] == ""]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", x == -1, s[0..x] == ""]).to have_solution(s => %q{"hello"})
       end
 
-      it "is negative when it counts from the end" do
-        expect(s[-1].sexpr).to eq("(str.at s (- (str.len s) 1))")
-        expect(s[-2, 2].sexpr).to eq("(str.substr s (- (str.len s) 2) 2)")
+      it "passes a negative index through as an offset" do
+        expect(s[-1].sexpr).to eq("(str.at s (- 1))")
+        expect(s[-2, 2].sexpr).to eq("(str.substr s (- 2) 2)")
+      end
+
+      # Counting from the end is spelled out, and then it works for a symbolic offset
+      # too, which is the whole point of not emulating it
+      it "counts from the end when told to" do
+        expect([s == "hello", s[s.length - 1] == "o"]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", x == 1, s[s.length - x] == "o"]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", s[s.length - 2, 2] == "lo"]).to have_solution(s => %q{"hello"})
       end
 
       # This denotes a String wherever it appears, so `nil` was never one of its
@@ -187,13 +189,6 @@ module Z3
         expect([s == "hello", s[10] == ""]).to have_solution(s => %q{"hello"})
         expect([s == "hello", s[-10] == ""]).to have_solution(s => %q{"hello"})
         expect([s == "hello", s[3, 100] == "lo"]).to have_solution(s => %q{"hello"})
-      end
-
-      # Nothing can be told about a symbolic index at build time, so it isn't counted
-      # backwards - it's just out of range, and therefore ""
-      it "can't count a symbolic index from the end" do
-        i = IntSort.new.var("i")
-        expect([s == "hello", i == -1, s[i] == ""]).to have_solution(s => %q{"hello"})
       end
 
       it "#slice is #[], like Ruby's" do

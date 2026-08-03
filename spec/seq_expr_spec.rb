@@ -134,16 +134,33 @@ module Z3
         expect([xs == sort.from_const([10]), xs[5, 2].empty?]).to have_solution(xs => "[10]")
       end
 
-      # A Ruby Integer counts from the end, exactly as Ruby's Array#[] does
-      it "counts a negative index from the end, like Ruby" do
-        expect(xs[-1].sexpr).to eq("(seq.nth xs (- (seq.len xs) 1))")
-        expect(xs[-2, 2].sexpr).to eq("(seq.extract xs (- (seq.len xs) 2) 2)")
+      # An index is an offset however it's spelled, so a literal -1 and an IntExpr
+      # equal to -1 have to mean the same thing - which means neither of them counts
+      # from the end the way Ruby's Array#[] does. See StringExpr#[] for why.
+      it "passes a negative index through as an offset" do
+        expect(xs[-1].sexpr).to eq("(seq.nth xs (- 1))")
+        expect(xs[-2, 2].sexpr).to eq("(seq.extract xs (- 2) 2)")
+      end
+
+      it "means the same by a literal index and a symbolic one" do
+        i = IntSort.new.var("i")
         value = sort.from_const([10, 20, 30])
-        expect([xs == value, xs[-1] == 30]).to have_solution(xs => "[10, 20, 30]")
-        expect([xs == value, xs[-3] == 10]).to have_solution(xs => "[10, 20, 30]")
-        expect([xs == value, xs[-2, 2] == sort.from_const([20, 30])]).to have_solution(xs => "[10, 20, 30]")
-        expect([xs == value, xs[0..-1] == value]).to have_solution(xs => "[10, 20, 30]")
-        expect([xs == value, xs[-2..] == sort.from_const([20, 30])]).to have_solution(xs => "[10, 20, 30]")
+        # An out of range element is unspecified, so both of these are satisfiable
+        # with any value at all rather than with the last one
+        expect([xs == value, xs[-1] == 99]).to have_solution(xs => "[10, 20, 30]")
+        expect([xs == value, i == -1, xs[i] == 99]).to have_solution(xs => "[10, 20, 30]")
+        # An out of range subsequence is empty
+        expect([xs == value, xs[-2, 2].empty?]).to have_solution(xs => "[10, 20, 30]")
+        expect([xs == value, i == -1, xs[i, 2].empty?]).to have_solution(xs => "[10, 20, 30]")
+        expect([xs == value, xs[0..-1].empty?]).to have_solution(xs => "[10, 20, 30]")
+        expect([xs == value, i == -1, xs[0..i].empty?]).to have_solution(xs => "[10, 20, 30]")
+      end
+
+      # Counting from the end is spelled out, and #last is exactly that
+      it "counts from the end when told to" do
+        value = sort.from_const([10, 20, 30])
+        expect([xs == value, xs[xs.length - 1] == 30]).to have_solution(xs => "[10, 20, 30]")
+        expect([xs == value, xs[xs.length - 2, 2] == sort.from_const([20, 30])]).to have_solution(xs => "[10, 20, 30]")
       end
 
       # #at is Ruby Array#at and #slice is Ruby Array#slice - both are #[]

@@ -45,17 +45,20 @@ module Z3
     end
 
     # Ruby Array#[]. `xs[i]` is the element (`seq.nth`), `xs[i, len]` and `xs[range]`
-    # are subsequences (`seq.extract`), and a negative index counts from the end just
-    # like Ruby's. Out of range is whatever Z3 says: a subsequence is empty, and an
-    # element is left *unspecified*, so an out of range `xs[i]` is a term the solver may
-    # pick any value for. It denotes an element, and no element is `nil`.
+    # are subsequences (`seq.extract`).
+    #
+    # An index is an offset, and a negative one is not counted from the end the way
+    # Ruby's is - see StringExpr#[] for why. Counting from the end is `xs[xs.length - 1]`,
+    # which is what #last does. Out of range is whatever Z3 says: a subsequence is
+    # empty, and an element is left *unspecified*, so an out of range `xs[i]` is a term
+    # the solver may pick any value for. It denotes an element, and no element is `nil`.
     def [](index, len=nil)
       if len
-        subseq(Expr.normalize_index(index, length), len)
+        subseq(index, len)
       elsif index.is_a?(Range)
         subseq(*Expr.offset_and_length(index, length))
       else
-        element_sort.new(LowLevel.mk_seq_nth(self, IntSort.new.cast(Expr.normalize_index(index, length))))
+        element_sort.new(LowLevel.mk_seq_nth(self, IntSort.new.cast(index)))
       end
     end
 

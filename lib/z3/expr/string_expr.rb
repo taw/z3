@@ -44,16 +44,23 @@ module Z3
     end
 
     # Ruby String#[]. `s[i]` is a one character String (`str.at`), `s[i, len]` and
-    # `s[range]` are substrings (`str.substr`), and a negative index counts from the
-    # end just like Ruby's. Out of range this is whatever Z3 says, which is `""` -
-    # the result is a String-sorted subexpression, so `nil` isn't one of its options.
+    # `s[range]` are substrings (`str.substr`).
+    #
+    # An index is an offset, and that's the whole of it - a negative one is not counted
+    # from the end the way Ruby's is. Only a literal could ever be recognized as
+    # negative, and `s[-1]` meaning the last character while `s[i]` with `i == -1`
+    # means something else is worse than not emulating it at all: an index has to mean
+    # the same thing however it's spelled. So a negative index is simply out of range,
+    # and out of range is whatever Z3 says, which is `""` - the result is a
+    # String-sorted subexpression, so `nil` isn't one of its options. Counting from the
+    # end is `s[s.length - 1]`, which works for a symbolic offset too.
     def [](index, len=nil)
       if len
-        substr(Expr.normalize_index(index, length), len)
+        substr(index, len)
       elsif index.is_a?(Range)
         substr(*Expr.offset_and_length(index, length))
       else
-        sort.new(LowLevel.mk_seq_at(self, IntSort.new.cast(Expr.normalize_index(index, length))))
+        sort.new(LowLevel.mk_seq_at(self, IntSort.new.cast(index)))
       end
     end
 
