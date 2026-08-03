@@ -22,7 +22,7 @@ module Z3
       expect(bv3.from_const(-1).inspect).to eq("Bitvec(3)<7>")
     end
 
-    it "raisesbv32 exception when trying to convert constants of wrong type" do
+    it "raises exception when trying to convert constants of wrong type" do
       expect{ bv32.from_const(true) }.to raise_error(Z3::Exception)
       expect{ bv32.from_const(false) }.to raise_error(Z3::Exception)
       expect{ bv32.from_const(0.0) }.to raise_error(Z3::Exception)
