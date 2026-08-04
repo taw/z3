@@ -148,6 +148,7 @@ module Z3
     attach_function :Z3_get_domain, [:ctx_pointer, :func_decl_pointer, :uint], :sort_pointer
     attach_function :Z3_get_domain_size, [:ctx_pointer, :func_decl_pointer], :uint
     attach_function :Z3_get_error_code, [:ctx_pointer], :uint
+    attach_function :Z3_get_error_msg, [:ctx_pointer, :int], :string
     attach_function :Z3_get_full_version, [], :string
     attach_function :Z3_get_func_decl_id, [:ctx_pointer, :func_decl_pointer], :uint
     attach_function :Z3_get_global_param_descrs, [:ctx_pointer], :param_descrs_pointer
@@ -379,6 +380,7 @@ module Z3
     attach_function :Z3_mk_numeral, [:ctx_pointer, :string, :sort_pointer], :ast_pointer
     attach_function :Z3_mk_optimize, [:ctx_pointer], :optimize_pointer
     attach_function :Z3_mk_params, [:ctx_pointer], :params_pointer
+    attach_function :Z3_mk_parser_context, [:ctx_pointer], :parser_context_pointer
     attach_function :Z3_mk_partial_order, [:ctx_pointer, :sort_pointer, :uint], :func_decl_pointer
     attach_function :Z3_mk_piecewise_linear_order, [:ctx_pointer, :sort_pointer, :uint], :func_decl_pointer
     attach_function :Z3_mk_power, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
@@ -436,6 +438,7 @@ module Z3
     attach_function :Z3_mk_set_subset, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_sign_ext, [:ctx_pointer, :uint, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_simple_solver, [:ctx_pointer], :solver_pointer
+    attach_function :Z3_mk_simplifier, [:ctx_pointer, :string], :simplifier_pointer
     attach_function :Z3_mk_solver, [:ctx_pointer], :solver_pointer
     attach_function :Z3_mk_solver_for_logic, [:ctx_pointer, :symbol_pointer], :solver_pointer
     attach_function :Z3_mk_solver_from_tactic, [:ctx_pointer, :tactic_pointer], :solver_pointer
@@ -515,6 +518,11 @@ module Z3
     attach_function :Z3_params_set_uint, [:ctx_pointer, :params_pointer, :symbol_pointer, :uint], :void
     attach_function :Z3_params_to_string, [:ctx_pointer, :params_pointer], :string
     attach_function :Z3_params_validate, [:ctx_pointer, :params_pointer, :param_descrs_pointer], :void
+    attach_function :Z3_parser_context_add_decl, [:ctx_pointer, :parser_context_pointer, :func_decl_pointer], :void
+    attach_function :Z3_parser_context_add_sort, [:ctx_pointer, :parser_context_pointer, :sort_pointer], :void
+    attach_function :Z3_parser_context_dec_ref, [:ctx_pointer, :parser_context_pointer], :void
+    attach_function :Z3_parser_context_from_string, [:ctx_pointer, :parser_context_pointer, :string], :ast_vector_pointer
+    attach_function :Z3_parser_context_inc_ref, [:ctx_pointer, :parser_context_pointer], :void
     attach_function :Z3_pattern_to_string, [:ctx_pointer, :pattern_pointer], :string
     attach_function :Z3_polynomial_subresultants, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_vector_pointer
     attach_function :Z3_probe_and, [:ctx_pointer, :probe_pointer, :probe_pointer], :probe_pointer
@@ -566,12 +574,21 @@ module Z3
     attach_function :Z3_rcf_sub, [:ctx_pointer, :rcf_num_pointer, :rcf_num_pointer], :rcf_num_pointer
     attach_function :Z3_rcf_transcendental_name, [:ctx_pointer, :rcf_num_pointer], :symbol_pointer
     attach_function :Z3_reset_memory, [], :void
+    attach_function :Z3_set_ast_print_mode, [:ctx_pointer, :int], :void
+    attach_function :Z3_set_error, [:ctx_pointer, :int], :void
     attach_function :Z3_set_param_value, [:config_pointer, :string, :string], :void
+    attach_function :Z3_simplifier_and_then, [:ctx_pointer, :simplifier_pointer, :simplifier_pointer], :simplifier_pointer
+    attach_function :Z3_simplifier_dec_ref, [:ctx_pointer, :simplifier_pointer], :void
     attach_function :Z3_simplifier_get_descr, [:ctx_pointer, :string], :string
+    attach_function :Z3_simplifier_get_help, [:ctx_pointer, :simplifier_pointer], :string
+    attach_function :Z3_simplifier_get_param_descrs, [:ctx_pointer, :simplifier_pointer], :param_descrs_pointer
+    attach_function :Z3_simplifier_inc_ref, [:ctx_pointer, :simplifier_pointer], :void
+    attach_function :Z3_simplifier_using_params, [:ctx_pointer, :simplifier_pointer, :params_pointer], :simplifier_pointer
     attach_function :Z3_simplify, [:ctx_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_simplify_ex, [:ctx_pointer, :ast_pointer, :params_pointer], :ast_pointer
     attach_function :Z3_simplify_get_help, [:ctx_pointer], :string
     attach_function :Z3_simplify_get_param_descrs, [:ctx_pointer], :param_descrs_pointer
+    attach_function :Z3_solver_add_simplifier, [:ctx_pointer, :solver_pointer, :simplifier_pointer], :solver_pointer
     attach_function :Z3_solver_assert, [:ctx_pointer, :solver_pointer, :ast_pointer], :void
     attach_function :Z3_solver_assert_and_track, [:ctx_pointer, :solver_pointer, :ast_pointer, :ast_pointer], :void
     attach_function :Z3_solver_check, [:ctx_pointer, :solver_pointer], :int

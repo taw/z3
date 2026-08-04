@@ -82,12 +82,15 @@ class Definition
       when "SOLVER", "MODEL", "GOAL", "FIXEDPOINT",
            "PROBE", "RCF_NUM", "OPTIMIZE", "PARAMS", "PARAM_DESCRS", "TACTIC",
            "CONTEXT", "AST_MAP", "APPLY_RESULT", "FUNC_INTERP", "CONFIG",
-           "CONSTRUCTOR", "CONSTRUCTOR_LIST", "FUNC_ENTRY"
+           "CONSTRUCTOR", "CONSTRUCTOR_LIST", "FUNC_ENTRY", "PARSER_CONTEXT",
+           "SIMPLIFIER"
         "#{n}._#{t.downcase}"
       when "SYMBOL"
         # FFI but not wrapped
         n
-      when "INT", "UINT", "STRING", "BOOL", "INT64", "UINT64", "DOUBLE", "FLOAT", "LBOOL"
+      when "INT", "UINT", "STRING", "BOOL", "INT64", "UINT64", "DOUBLE", "FLOAT", "LBOOL",
+           "ERROR_CODE", "PRINT_MODE"
+        # Enums are passed as their integer value
         n
       else
         raise "Unknown API/FFI argument #{t}"
@@ -116,7 +119,8 @@ class Definition
       ":string"
     when "UINT"
       ":uint"
-    when "INT", "LBOOL"
+    when "INT", "LBOOL", "ERROR_CODE", "PRINT_MODE"
+      # ERROR_CODE and PRINT_MODE are C enums, so they're plain ints here
       ":int"
     when "INT64"
       ":int64"
@@ -140,7 +144,9 @@ class Definition
          "OPTIMIZE",
          "PARAMS",
          "PARAM_DESCRS",
+         "PARSER_CONTEXT",
          "PROBE",
+         "SIMPLIFIER",
          "SOLVER",
          "SORT",
          "SYMBOL",

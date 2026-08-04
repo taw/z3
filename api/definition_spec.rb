@@ -43,6 +43,55 @@ describe Definition do
     end
   end
 
+  describe "mk_parser_context" do
+    let(:defstr) { "def_API('Z3_mk_parser_context', PARSER_CONTEXT, (_in(CONTEXT),))" }
+    it do
+      expect(supported).to eq(true)
+      expect(ffi).to eq("    attach_function :Z3_mk_parser_context, [:ctx_pointer], :parser_context_pointer")
+      expect(api_def).to eq("mk_parser_context")
+      expect(api_body).to eq(
+        "VeryLowLevel.Z3_mk_parser_context(_ctx_pointer)"
+      )
+    end
+  end
+
+  describe "parser_context_add_decl" do
+    let(:defstr) { "def_API('Z3_parser_context_add_decl', VOID, (_in(CONTEXT), _in(PARSER_CONTEXT), _in(FUNC_DECL)))" }
+    it do
+      expect(supported).to eq(true)
+      expect(ffi).to eq("    attach_function :Z3_parser_context_add_decl, [:ctx_pointer, :parser_context_pointer, :func_decl_pointer], :void")
+      expect(api_def).to eq("parser_context_add_decl(parser_context, func_decl)")
+      expect(api_body).to eq(
+        "VeryLowLevel.Z3_parser_context_add_decl(_ctx_pointer, parser_context._parser_context, func_decl._ast)"
+      )
+    end
+  end
+
+  describe "solver_add_simplifier" do
+    let(:defstr) { "def_API('Z3_solver_add_simplifier', SOLVER, (_in(CONTEXT), _in(SOLVER), _in(SIMPLIFIER)))" }
+    it do
+      expect(supported).to eq(true)
+      expect(ffi).to eq("    attach_function :Z3_solver_add_simplifier, [:ctx_pointer, :solver_pointer, :simplifier_pointer], :solver_pointer")
+      expect(api_def).to eq("solver_add_simplifier(solver, simplifier)")
+      expect(api_body).to eq(
+        "VeryLowLevel.Z3_solver_add_simplifier(_ctx_pointer, solver._solver, simplifier._simplifier)"
+      )
+    end
+  end
+
+  # ERROR_CODE and PRINT_MODE are C enums, so they cross FFI as plain ints
+  describe "get_error_msg" do
+    let(:defstr) { "def_API('Z3_get_error_msg', STRING, (_in(CONTEXT), _in(ERROR_CODE)))" }
+    it do
+      expect(supported).to eq(true)
+      expect(ffi).to eq("    attach_function :Z3_get_error_msg, [:ctx_pointer, :int], :string")
+      expect(api_def).to eq("get_error_msg(error_code)")
+      expect(api_body).to eq(
+        "VeryLowLevel.Z3_get_error_msg(_ctx_pointer, error_code)"
+      )
+    end
+  end
+
   describe "get_arity" do
     let(:defstr) { "def_API('Z3_get_arity', UINT, (_in(CONTEXT), _in(FUNC_DECL)))" }
     it do

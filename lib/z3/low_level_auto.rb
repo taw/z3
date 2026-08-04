@@ -593,6 +593,10 @@ module Z3
         VeryLowLevel.Z3_get_error_code(_ctx_pointer)
       end
 
+      def get_error_msg(error_code) #=> :string
+        VeryLowLevel.Z3_get_error_msg(_ctx_pointer, error_code)
+      end
+
       def get_full_version #=> :string
         VeryLowLevel.Z3_get_full_version()
       end
@@ -1517,6 +1521,10 @@ module Z3
         VeryLowLevel.Z3_mk_params(_ctx_pointer)
       end
 
+      def mk_parser_context #=> :parser_context_pointer
+        VeryLowLevel.Z3_mk_parser_context(_ctx_pointer)
+      end
+
       def mk_partial_order(sort, num) #=> :func_decl_pointer
         VeryLowLevel.Z3_mk_partial_order(_ctx_pointer, sort._ast, num)
       end
@@ -1743,6 +1751,10 @@ module Z3
 
       def mk_simple_solver #=> :solver_pointer
         VeryLowLevel.Z3_mk_simple_solver(_ctx_pointer)
+      end
+
+      def mk_simplifier(str) #=> :simplifier_pointer
+        VeryLowLevel.Z3_mk_simplifier(_ctx_pointer, str)
       end
 
       def mk_solver #=> :solver_pointer
@@ -2061,6 +2073,26 @@ module Z3
         VeryLowLevel.Z3_params_validate(_ctx_pointer, params._params, param_descrs._param_descrs)
       end
 
+      def parser_context_add_decl(parser_context, func_decl) #=> :void
+        VeryLowLevel.Z3_parser_context_add_decl(_ctx_pointer, parser_context._parser_context, func_decl._ast)
+      end
+
+      def parser_context_add_sort(parser_context, sort) #=> :void
+        VeryLowLevel.Z3_parser_context_add_sort(_ctx_pointer, parser_context._parser_context, sort._ast)
+      end
+
+      def parser_context_dec_ref(parser_context) #=> :void
+        VeryLowLevel.Z3_parser_context_dec_ref(_ctx_pointer, parser_context._parser_context)
+      end
+
+      def parser_context_from_string(parser_context, str) #=> :ast_vector_pointer
+        VeryLowLevel.Z3_parser_context_from_string(_ctx_pointer, parser_context._parser_context, str)
+      end
+
+      def parser_context_inc_ref(parser_context) #=> :void
+        VeryLowLevel.Z3_parser_context_inc_ref(_ctx_pointer, parser_context._parser_context)
+      end
+
       def pattern_to_string(pattern) #=> :string
         VeryLowLevel.Z3_pattern_to_string(_ctx_pointer, pattern._ast)
       end
@@ -2265,12 +2297,44 @@ module Z3
         VeryLowLevel.Z3_reset_memory()
       end
 
+      def set_ast_print_mode(print_mode) #=> :void
+        VeryLowLevel.Z3_set_ast_print_mode(_ctx_pointer, print_mode)
+      end
+
+      def set_error(error_code) #=> :void
+        VeryLowLevel.Z3_set_error(_ctx_pointer, error_code)
+      end
+
       def set_param_value(config, str1, str2) #=> :void
         VeryLowLevel.Z3_set_param_value(config._config, str1, str2)
       end
 
+      def simplifier_and_then(simplifier1, simplifier2) #=> :simplifier_pointer
+        VeryLowLevel.Z3_simplifier_and_then(_ctx_pointer, simplifier1._simplifier, simplifier2._simplifier)
+      end
+
+      def simplifier_dec_ref(simplifier) #=> :void
+        VeryLowLevel.Z3_simplifier_dec_ref(_ctx_pointer, simplifier._simplifier)
+      end
+
       def simplifier_get_descr(str) #=> :string
         VeryLowLevel.Z3_simplifier_get_descr(_ctx_pointer, str)
+      end
+
+      def simplifier_get_help(simplifier) #=> :string
+        VeryLowLevel.Z3_simplifier_get_help(_ctx_pointer, simplifier._simplifier)
+      end
+
+      def simplifier_get_param_descrs(simplifier) #=> :param_descrs_pointer
+        VeryLowLevel.Z3_simplifier_get_param_descrs(_ctx_pointer, simplifier._simplifier)
+      end
+
+      def simplifier_inc_ref(simplifier) #=> :void
+        VeryLowLevel.Z3_simplifier_inc_ref(_ctx_pointer, simplifier._simplifier)
+      end
+
+      def simplifier_using_params(simplifier, params) #=> :simplifier_pointer
+        VeryLowLevel.Z3_simplifier_using_params(_ctx_pointer, simplifier._simplifier, params._params)
       end
 
       def simplify(ast) #=> :ast_pointer
@@ -2287,6 +2351,10 @@ module Z3
 
       def simplify_get_param_descrs #=> :param_descrs_pointer
         VeryLowLevel.Z3_simplify_get_param_descrs(_ctx_pointer)
+      end
+
+      def solver_add_simplifier(solver, simplifier) #=> :solver_pointer
+        VeryLowLevel.Z3_solver_add_simplifier(_ctx_pointer, solver._solver, simplifier._simplifier)
       end
 
       def solver_assert(solver, ast) #=> :void
