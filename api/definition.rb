@@ -76,13 +76,13 @@ class Definition
       when "AST", "SORT", "FUNC_DECL", "PATTERN", "APP"
         # C type aliases for AST
         "#{n}._ast"
-      when "AST_VECTOR", "STATS"
+      when "AST_VECTOR", "STATS", "FUNC_INTERP", "FUNC_ENTRY"
         # Always unpacked right away
         n
       when "SOLVER", "MODEL", "GOAL", "FIXEDPOINT",
            "PROBE", "RCF_NUM", "OPTIMIZE", "PARAMS", "PARAM_DESCRS", "TACTIC",
-           "CONTEXT", "AST_MAP", "APPLY_RESULT", "FUNC_INTERP", "CONFIG",
-           "CONSTRUCTOR", "CONSTRUCTOR_LIST", "FUNC_ENTRY", "PARSER_CONTEXT",
+           "CONTEXT", "AST_MAP", "APPLY_RESULT", "CONFIG",
+           "CONSTRUCTOR", "CONSTRUCTOR_LIST", "PARSER_CONTEXT",
            "SIMPLIFIER"
         "#{n}._#{t.downcase}"
       when "SYMBOL"

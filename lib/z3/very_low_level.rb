@@ -56,5 +56,7 @@ module Z3
     attach_function :Z3_optimize_check, [:ctx_pointer, :optimize_pointer, :int, :pointer], :int
     attach_function :Z3_solver_check_assumptions, [:ctx_pointer, :solver_pointer, :int, :pointer], :int
     attach_function :Z3_substitute, [:ctx_pointer, :ast_pointer, :int, :pointer, :pointer], :ast_pointer
+    attach_function :Z3_mk_func_decl, [:ctx_pointer, :symbol_pointer, :int, :pointer, :sort_pointer], :func_decl_pointer
+    attach_function :Z3_mk_app, [:ctx_pointer, :func_decl_pointer, :int, :pointer], :ast_pointer
   end
 end

@@ -150,6 +150,14 @@ module Z3
         Z3::VeryLowLevel.Z3_substitute(_ctx_pointer, ast._ast, from_asts.size, asts_vector(from_asts), asts_vector(to_asts))
       end
 
+      def mk_func_decl(symbol, domain_sorts, range_sort)
+        Z3::VeryLowLevel.Z3_mk_func_decl(_ctx_pointer, symbol, domain_sorts.size, asts_vector(domain_sorts), range_sort._ast)
+      end
+
+      def mk_app(func_decl, args)
+        Z3::VeryLowLevel.Z3_mk_app(_ctx_pointer, func_decl._ast, args.size, asts_vector(args))
+      end
+
       # Should be private
 
       # Every AST_VECTOR parameter in the C API is an `_in` - the ones which act like
@@ -176,6 +184,34 @@ module Z3
           _ast = ast_vector_get(_ast_vector, i)
           Expr.new_from_pointer(_ast)
         end
+      end
+
+      # What a model says a function does: the argument lists it had to pin down, and
+      # a fallback for everything else. Ruby's Hash default is exactly Z3's `else`
+      # branch, so a plain Hash answers for arguments with no entry of their own.
+      # Keys are argument lists whatever the arity, so a unary function is `[[2]]`
+      # rather than `[2]` - one shape for every function.
+      def unpack_func_interp(_func_interp)
+        func_interp_inc_ref(_func_interp)
+        interp = {}
+        begin
+          func_interp_get_num_entries(_func_interp).times do |i|
+            _entry = func_interp_get_entry(_func_interp, i)
+            func_entry_inc_ref(_entry)
+            begin
+              args = func_entry_get_num_args(_entry).times.map do |j|
+                Expr.new_from_pointer(func_entry_get_arg(_entry, j))
+              end
+              interp[args] = Expr.new_from_pointer(func_entry_get_value(_entry))
+            ensure
+              func_entry_dec_ref(_entry)
+            end
+          end
+          interp.default = Expr.new_from_pointer(func_interp_get_else(_func_interp))
+        ensure
+          func_interp_dec_ref(_func_interp)
+        end
+        interp
       end
 
       def unpack_statistics(_stats)

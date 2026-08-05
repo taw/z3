@@ -4,6 +4,16 @@ module Z3
       format_ast(a).to_s
     end
 
+    # A model value, which is an Expr for a constant but a Hash for a function.
+    # Hash#inspect leaves the default out, and for a function interpretation the
+    # default *is* the answer everywhere the model didn't say otherwise, so printing
+    # without it would be printing the least useful half.
+    def format_value(value)
+      return value.to_s unless value.is_a?(Hash)
+      cases = value.map { |args, result| "(#{args.join(", ")}) => #{result}" }
+      "{#{(cases << "else => #{value.default}").join(", ")}}"
+    end
+
     private
 
     class PrintedExpr

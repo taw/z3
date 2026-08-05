@@ -37,6 +37,19 @@ module Z3
     Expr.sort_for_const(v).from_const(v)
   end
 
+  # An uninterpreted function - a symbol the solver gets to decide the meaning of.
+  # The last sort is the range and the ones before it are the domain, the same order
+  # SMT-LIB's `declare-fun` uses, so `Z3.Function("f", Int, Int, Bool)` is a two
+  # argument predicate. Apply it with `f[x, y]`.
+  def Function(name, *sorts)
+    raise Z3::Exception, "Function needs at least a range sort" if sorts.empty?
+    sorts.each do |sort|
+      raise Z3::Exception, "Sort expected, got #{AST.describe(sort)}" unless sort.is_a?(Sort)
+    end
+    range = sorts.pop
+    FuncDecl.new(LowLevel.mk_func_decl(LowLevel.mk_symbol(name), sorts, range))
+  end
+
   #--
   # Multiargument constructors
   #++

@@ -398,55 +398,55 @@ module Z3
       end
 
       def func_entry_dec_ref(func_entry) #=> :void
-        VeryLowLevel.Z3_func_entry_dec_ref(_ctx_pointer, func_entry._func_entry)
+        VeryLowLevel.Z3_func_entry_dec_ref(_ctx_pointer, func_entry)
       end
 
       def func_entry_get_arg(func_entry, num) #=> :ast_pointer
-        VeryLowLevel.Z3_func_entry_get_arg(_ctx_pointer, func_entry._func_entry, num)
+        VeryLowLevel.Z3_func_entry_get_arg(_ctx_pointer, func_entry, num)
       end
 
       def func_entry_get_num_args(func_entry) #=> :uint
-        VeryLowLevel.Z3_func_entry_get_num_args(_ctx_pointer, func_entry._func_entry)
+        VeryLowLevel.Z3_func_entry_get_num_args(_ctx_pointer, func_entry)
       end
 
       def func_entry_get_value(func_entry) #=> :ast_pointer
-        VeryLowLevel.Z3_func_entry_get_value(_ctx_pointer, func_entry._func_entry)
+        VeryLowLevel.Z3_func_entry_get_value(_ctx_pointer, func_entry)
       end
 
       def func_entry_inc_ref(func_entry) #=> :void
-        VeryLowLevel.Z3_func_entry_inc_ref(_ctx_pointer, func_entry._func_entry)
+        VeryLowLevel.Z3_func_entry_inc_ref(_ctx_pointer, func_entry)
       end
 
       def func_interp_add_entry(func_interp, ast_vector, ast) #=> :void
-        VeryLowLevel.Z3_func_interp_add_entry(_ctx_pointer, func_interp._func_interp, ast_vector, ast._ast)
+        VeryLowLevel.Z3_func_interp_add_entry(_ctx_pointer, func_interp, ast_vector, ast._ast)
       end
 
       def func_interp_dec_ref(func_interp) #=> :void
-        VeryLowLevel.Z3_func_interp_dec_ref(_ctx_pointer, func_interp._func_interp)
+        VeryLowLevel.Z3_func_interp_dec_ref(_ctx_pointer, func_interp)
       end
 
       def func_interp_get_arity(func_interp) #=> :uint
-        VeryLowLevel.Z3_func_interp_get_arity(_ctx_pointer, func_interp._func_interp)
+        VeryLowLevel.Z3_func_interp_get_arity(_ctx_pointer, func_interp)
       end
 
       def func_interp_get_else(func_interp) #=> :ast_pointer
-        VeryLowLevel.Z3_func_interp_get_else(_ctx_pointer, func_interp._func_interp)
+        VeryLowLevel.Z3_func_interp_get_else(_ctx_pointer, func_interp)
       end
 
       def func_interp_get_entry(func_interp, num) #=> :func_entry_pointer
-        VeryLowLevel.Z3_func_interp_get_entry(_ctx_pointer, func_interp._func_interp, num)
+        VeryLowLevel.Z3_func_interp_get_entry(_ctx_pointer, func_interp, num)
       end
 
       def func_interp_get_num_entries(func_interp) #=> :uint
-        VeryLowLevel.Z3_func_interp_get_num_entries(_ctx_pointer, func_interp._func_interp)
+        VeryLowLevel.Z3_func_interp_get_num_entries(_ctx_pointer, func_interp)
       end
 
       def func_interp_inc_ref(func_interp) #=> :void
-        VeryLowLevel.Z3_func_interp_inc_ref(_ctx_pointer, func_interp._func_interp)
+        VeryLowLevel.Z3_func_interp_inc_ref(_ctx_pointer, func_interp)
       end
 
       def func_interp_set_else(func_interp, ast) #=> :void
-        VeryLowLevel.Z3_func_interp_set_else(_ctx_pointer, func_interp._func_interp, ast._ast)
+        VeryLowLevel.Z3_func_interp_set_else(_ctx_pointer, func_interp, ast._ast)
       end
 
       def get_algebraic_number_lower(ast, num) #=> :ast_pointer

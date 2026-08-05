@@ -53,6 +53,19 @@ module Z3
       FuncDecl.new(LowLevel.get_decl_func_decl_parameter(self, i))
     end
 
+    # Applies the function. Arguments are cast to the declared domain and the result
+    # has the declared range, so it composes like any other expression.
+    def [](*args)
+      unless args.size == arity
+        raise Z3::Exception, "#{name} takes #{arity} argument#{"s" unless arity == 1}, got #{args.size}"
+      end
+      range.new(LowLevel.mk_app(self, args.each_with_index.map { |arg, i| domain(i).cast(arg) }))
+    end
+
+    def call(*args)
+      self[*args]
+    end
+
     def to_s
       name
     end

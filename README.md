@@ -50,6 +50,25 @@ The [`examples/`](https://github.com/taw/z3/blob/master/examples) directory is p
 
 You can use most Ruby operators to construct Z3 expressions, but use `| &` instead of `|| &&` for boolean operators. They unfortunately have wrong operator precedence so you'll need to use some extra parentheses.
 
+`Z3.Function` declares an uninterpreted function - a symbol the solver decides the meaning of. The last sort is the range, the ones before it the domain, and you apply it with `[]`:
+
+```ruby
+f = Z3.Function("f", Z3::IntSort.new, Z3::IntSort.new)
+solver.assert f[f[x]] == x
+solver.assert f[x] != x
+```
+
+A model reports one as a Hash from argument lists to values, with Ruby's Hash default holding Z3's `else` branch - the answer for every argument the solver never had to pin down. Z3 picks one of the values as that fallback, so the entries are only the exceptions to it:
+
+```ruby
+# after asserting f[1] == 10 and f[2] == 20
+interp = model.func_interp(f)   # {[2] => 20}
+interp.default                  # 10 - which is also the answer for f[1] and f[999]
+model.to_s                      # Z3::Model<f={(2) => 20, else => 10}>
+```
+
+`Model#each` walks constants and functions alike; `#each_const` and `#each_func` take one kind at a time. For an `UninterpretedSort`, `#sorts` and `#sort_universe` give the elements the model had to invent.
+
 To get a Ruby object back out of a Z3 expression, use `#value`. It works on any expression Z3 can reduce to a literal - most usefully the ones you get out of a model - and raises otherwise:
 
 ```ruby

@@ -24,8 +24,38 @@ module Z3
       LowLevel.model_get_num_sorts(self)
     end
 
+    # The uninterpreted sorts the model had to invent elements for
+    def sorts
+      (0...num_sorts).map do |i|
+        Sort.from_pointer(LowLevel.model_get_sort(self, i))
+      end
+    end
+
+    # Every element the model gave an uninterpreted sort. Z3 only ever needs finitely
+    # many, so this is the whole sort as far as this model is concerned.
+    def sort_universe(sort)
+      raise Z3::Exception, "Sort expected, got #{AST.describe(sort)}" unless sort.is_a?(Sort)
+      LowLevel.unpack_ast_vector(LowLevel.model_get_sort_universe(self, sort))
+    end
+
     def num_funcs
       LowLevel.model_get_num_funcs(self)
+    end
+
+    def funcs
+      (0...num_funcs).map do |i|
+        FuncDecl.new(LowLevel.model_get_func_decl(self, i))
+      end
+    end
+
+    # What the model decided a function does, as a Hash from argument lists to values
+    # with Ruby's Hash default standing in for Z3's `else` branch - so `interp[[9]]`
+    # answers for arguments the model never had to pin down.
+    def func_interp(func_decl)
+      raise Z3::Exception, "FuncDecl expected, got #{AST.describe(func_decl)}" unless func_decl.is_a?(FuncDecl)
+      _func_interp = LowLevel.model_get_func_interp(self, func_decl)
+      raise Z3::Exception, "Model has no interpretation for #{func_decl}" if _func_interp.null?
+      LowLevel.unpack_func_interp(_func_interp)
     end
 
     def model_eval(ast, model_completion=false)
@@ -37,15 +67,24 @@ module Z3
     end
 
     def to_s
-      "Z3::Model<#{ map{|n,v| "#{n}=#{v}"}.join(", ") }>"
+      "Z3::Model<#{ map{|name, value| "#{name}=#{Printer.new.format_value(value)}"}.join(", ") }>"
     end
 
     def inspect
       to_s
     end
 
-    def each
-      consts.sort_by(&:name).each do |c|
+    # Constants come back as `variable, value` pairs, functions as `func_decl,
+    # interpretation` - see #func_interp for what an interpretation looks like
+    def each(&block)
+      return to_enum(:each) unless block_given?
+      each_const(&block)
+      each_func(&block)
+    end
+
+    def each_const
+      return to_enum(:each_const) unless block_given?
+      consts.sort_by { |c| c.name.to_s }.each do |c|
         yield(
           c.range.var(c.name),
           Expr.new_from_pointer(LowLevel.model_get_const_interp(self, c))
@@ -53,8 +92,18 @@ module Z3
       end
     end
 
+    def each_func
+      return to_enum(:each_func) unless block_given?
+      funcs.sort_by { |f| f.name.to_s }.each do |f|
+        yield(f, func_interp(f))
+      end
+    end
+
+    # Only constants are negated. Saying "some function differs somewhere" needs a
+    # quantifier, so a model with functions in it can repeat under this.
     def !
-      differences = map{|v| v != self[v]}
+      differences = []
+      each_const { |var, _value| differences << (var != self[var]) }
       # A model with no consts constrains nothing, so there is nothing to differ in
       return Z3.False if differences.empty?
       Z3.Or(*differences)
