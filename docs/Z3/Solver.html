@@ -8,12 +8,45 @@
 <title>class Z3::Solver - RDoc Documentation</title>
 
 
-  <meta name="keywords" content="ruby,class,Z3::Solver">
+  <meta
+    name="keywords"
+    content="ruby,class,Z3::Solver"
+  >
+
+    <meta
+      name="description"
+      content="Documentation for the Z3::Solver class"
+    >
 
 
-    <meta name="description" content="Documentation for the Z3::Solver class">
 
 
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="class Z3::Solver - RDoc Documentation">
+
+
+
+    <meta
+      property="og:description"
+      content="Documentation for Z3::Solver class - API reference and code examples"
+    >
+
+
+
+
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="class Z3::Solver - RDoc Documentation">
+
+
+
+    <meta
+      name="twitter:description"
+      content="Documentation for Z3::Solver class - API reference and code examples"
+    >
 
 
 
@@ -22,118 +55,524 @@
   var index_rel_prefix = "../";
 </script>
 
-<script src="../js/navigation.js" defer></script>
-<script src="../js/search.js" defer></script>
-<script src="../js/search_index.js" defer></script>
-<script src="../js/searcher.js" defer></script>
-<script src="../js/darkfish.js" defer></script>
+<script
+  src="../js/theme-toggle.js?v=7.0.1"
+></script>
 
-<link href="../css/fonts.css" rel="stylesheet">
-<link href="../css/rdoc.css" rel="stylesheet">
+<script
+  src="../js/search_navigation.js?v=7.0.1"
+  defer
+></script>
+
+<script
+  src="../js/search_data.js?v=7.0.1"
+  defer
+></script>
+
+<script
+  src="../js/search_ranker.js?v=7.0.1"
+  defer
+></script>
+
+<script
+  src="../js/search_controller.js?v=7.0.1"
+  defer
+></script>
+
+<script
+  src="../js/c_highlighter.js?v=7.0.1"
+  defer
+></script>
+
+<script
+  src="../js/aliki.js?v=7.0.1"
+  defer
+></script>
+
+<link
+  href="../css/rdoc.css?v=7.0.1"
+  rel="stylesheet"
+>
 
 
 
-<body id="top" role="document" class="class">
+
+<body role="document" class="class has-toc">
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <!-- Chevron (right arrow) - used for expand/collapse -->
+  <symbol
+    id="icon-chevron"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </symbol>
+
+  <!-- File/Document - Pages section -->
+  <symbol
+    id="icon-file"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path
+      d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"
+    ></path>
+
+    <polyline points="14 2 14 8 20 8"></polyline>
+  </symbol>
+
+  <!-- Layers/Stack - Classes and Modules section -->
+  <symbol
+    id="icon-layers"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+    <polyline points="2 17 12 22 22 17"></polyline>
+    <polyline points="2 12 12 17 22 12"></polyline>
+  </symbol>
+
+  <!-- Curly braces with C - Class Methods section -->
+  <symbol
+    id="icon-class-methods"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M6 3C3.5 3 2 4.5 2 7v3c0 1.5-1 2-1 2s1 .5 1 2v5c0 2.5 1.5 4 4 4"></path>
+    <path d="M18 3c2.5 0 4 1.5 4 4v3c0 1.5 1 2 1 2s-1 .5-1 2v5c0 2.5-1.5 4-4 4"></path>
+
+    <text
+      x="12"
+      y="17"
+      text-anchor="middle"
+      font-size="13"
+      font-weight="bold"
+      fill="currentColor"
+      stroke="none"
+    >
+      C
+    </text>
+  </symbol>
+
+  <!-- Curly braces with I - Instance Methods section -->
+  <symbol
+    id="icon-instance-methods"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M6 3C3.5 3 2 4.5 2 7v3c0 1.5-1 2-1 2s1 .5 1 2v5c0 2.5 1.5 4 4 4"></path>
+    <path d="M18 3c2.5 0 4 1.5 4 4v3c0 1.5 1 2 1 2s-1 .5-1 2v5c0 2.5-1.5 4-4 4"></path>
+
+    <text
+      x="12"
+      y="17"
+      text-anchor="middle"
+      font-size="13"
+      font-weight="bold"
+      fill="currentColor"
+      stroke="none"
+    >
+      I
+    </text>
+  </symbol>
+
+  <!-- Double chevrons up - Ancestors section -->
+  <symbol
+    id="icon-ancestors"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <polyline points="17 11 12 6 7 11"></polyline>
+    <polyline points="17 18 12 13 7 18"></polyline>
+  </symbol>
+
+  <!-- User with plus - Included Modules section -->
+  <symbol
+    id="icon-includes"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+    <circle cx="8.5" cy="7" r="4"></circle>
+
+    <line
+      x1="20"
+      y1="8"
+      x2="20"
+      y2="14"
+    ></line>
+
+    <line
+      x1="23"
+      y1="11"
+      x2="17"
+      y2="11"
+    ></line>
+  </symbol>
+
+  <!-- User with check - Extended Modules section -->
+  <symbol
+    id="icon-extends"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+    <circle cx="8.5" cy="7" r="4"></circle>
+    <polyline points="17 11 19 13 23 9"></polyline>
+  </symbol>
+
+  <!-- List - Sections section -->
+  <symbol
+    id="icon-list"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <line
+      x1="8"
+      y1="6"
+      x2="21"
+      y2="6"
+    ></line>
+
+    <line
+      x1="8"
+      y1="12"
+      x2="21"
+      y2="12"
+    ></line>
+
+    <line
+      x1="8"
+      y1="18"
+      x2="21"
+      y2="18"
+    ></line>
+
+    <line
+      x1="3"
+      y1="6"
+      x2="3.01"
+      y2="6"
+    ></line>
+
+    <line
+      x1="3"
+      y1="12"
+      x2="3.01"
+      y2="12"
+    ></line>
+
+    <line
+      x1="3"
+      y1="18"
+      x2="3.01"
+      y2="18"
+    ></line>
+  </symbol>
+</svg>
+
+<header class="top-navbar">
+  <a href="../index.html" class="navbar-brand">
+    RDoc Documentation
+  </a>
+
+  <!-- Desktop search bar -->
+  <div class="navbar-search navbar-search-desktop" role="search">
+    <form action="#" method="get" accept-charset="utf-8">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results-desktop"
+             type="text" name="search" placeholder="Search (/) for a class, method..."
+             spellcheck="false" autocomplete="off"
+             title="Type to search, Up and Down to navigate, Enter to load">
+      <ul id="search-results-desktop" aria-label="Search Results"
+          aria-busy="false" aria-expanded="false"
+          aria-atomic="false" class="initially-hidden search-results"></ul>
+    </form>
+  </div>
+
+  <!-- Mobile search icon button -->
+  <button id="search-toggle" class="navbar-search-mobile" aria-label="Open search" type="button">
+    <span aria-hidden="true">🔍</span>
+  </button>
+
+  <!-- Theme toggle button -->
+  <button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" type="button">
+    <span class="theme-toggle-icon" aria-hidden="true">🌙</span>
+  </button>
+</header>
+
+<!-- Search Modal (Mobile) -->
+<div id="search-modal" class="search-modal" hidden aria-modal="true" role="dialog" aria-label="Search">
+  <div class="search-modal-backdrop"></div>
+  <div class="search-modal-content">
+    <div class="search-modal-header">
+      <form class="search-modal-form" action="#" method="get" accept-charset="utf-8">
+        <span class="search-modal-icon" aria-hidden="true">🔍</span>
+        <input id="search-field-mobile" role="combobox" aria-label="Search"
+               aria-autocomplete="list" aria-controls="search-results-mobile"
+               type="text" name="search" placeholder="Search documentation"
+               spellcheck="false" autocomplete="off">
+        <button type="button" class="search-modal-close" aria-label="Close search" id="search-modal-close">
+          <span aria-hidden="true">esc</span>
+        </button>
+      </form>
+    </div>
+    <div class="search-modal-body">
+      <ul id="search-results-mobile" aria-label="Search Results"
+          aria-busy="false" aria-expanded="false"
+          aria-atomic="false" class="search-results search-modal-results initially-hidden"></ul>
+      <div class="search-modal-empty">
+        <p>No recent searches</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="navigation-toggle" role="button" tabindex="0" aria-label="Toggle sidebar" aria-expanded="true" aria-controls="navigation">
   <span aria-hidden="true">&#9776;</span>
 </div>
 
 
 <nav id="navigation" role="navigation">
-  <div id="project-navigation">
-    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
-  <h2>
-    <a href="../index.html" rel="home">Home</a>
-  </h2>
-
-  <div id="table-of-contents-navigation">
-    <a href="../table_of_contents.html#pages">Pages</a>
-    <a href="../table_of_contents.html#classes">Classes</a>
-    <a href="../table_of_contents.html#methods">Methods</a>
-  </div>
-</div>
-
-    <div id="search-section" role="search" class="project-section initially-hidden">
-  <form action="#" method="get" accept-charset="utf-8">
-    <div id="search-field-wrapper">
-      <input id="search-field" role="combobox" aria-label="Search"
-             aria-autocomplete="list" aria-controls="search-results"
-             type="text" name="search" placeholder="Search (/) for a class, method, ..." spellcheck="false"
-             autocomplete="off"
-             title="Type to search, Up and Down to navigate, Enter to load">
-    </div>
-
-    <ul id="search-results" aria-label="Search Results"
-        aria-busy="false" aria-expanded="false"
-        aria-atomic="false" class="initially-hidden"></ul>
-  </form>
-</div>
-
-  </div>
-
   
+
+
+
+
+  <div id="fileindex-section" class="nav-section">
+    <details class="nav-section-collapsible" >
+      <summary class="nav-section-header">
+        <span class="nav-section-icon">
+          <svg>
+            <use href="#icon-file"></use>
+          </svg>
+        </span>
+
+        <span class="nav-section-title">Pages</span>
+
+        <span class="nav-section-chevron">
+          <svg>
+            <use href="#icon-chevron"></use>
+          </svg>
+        </span>
+      </summary>
+
+      <ul class="nav-list">
+
+
+
+
+
+
+            <li>
+              <a href="../README_md.html">
+                README
+              </a>
+            </li>
+
+      </ul>
+    </details>
+  </div>
+
 
   
 
   
 <div id="parent-class-section" class="nav-section">
-  <h3>Ancestors</h3>
-  <ul><li>Object</li></ul>
+  <details class="nav-section-collapsible" open>
+    <summary class="nav-section-header">
+      <span class="nav-section-icon">
+        <svg><use href="#icon-ancestors"></use></svg>
+      </span>
+      <span class="nav-section-title">Ancestors</span>
+      <span class="nav-section-chevron">
+        <svg><use href="#icon-chevron"></use></svg>
+      </span>
+    </summary>
+    <ul><li>Object</li></ul>
+  </details>
+</div>
+
+
+  
+<div id="includes-section" class="nav-section">
+  <details class="nav-section-collapsible" open>
+    <summary class="nav-section-header">
+      <span class="nav-section-icon">
+        <svg><use href="#icon-includes"></use></svg>
+      </span>
+      <span class="nav-section-title">Included Modules</span>
+      <span class="nav-section-chevron">
+        <svg><use href="#icon-chevron"></use></svg>
+      </span>
+    </summary>
+
+    <ul class="nav-list">
+
+
+      <li><a class="include" href="ReferenceCounted.html">Z3::ReferenceCounted</a></li>
+
+
+    </ul>
+  </details>
 </div>
 
 
   
 
   
-
-  
   <div class="nav-section">
-    <h3>Class Methods</h3>
-    <ul class="link-list" role="directory">
+    <details class="nav-section-collapsible" open>
+      <summary class="nav-section-header">
+        <span class="nav-section-icon">
+          <svg><use href="#icon-class-methods"></use></svg>
+        </span>
+        <span class="nav-section-title">Class Methods</span>
+        <span class="nav-section-chevron">
+          <svg><use href="#icon-chevron"></use></svg>
+        </span>
+      </summary>
+      <ul class="nav-list" role="directory">
 
-      <li ><a href="#method-c-new">new</a></li>
+        <li ><a href="#method-c-for_logic">for_logic</a></li>
 
-    </ul>
+        <li ><a href="#method-c-from_tactic">from_tactic</a></li>
+
+        <li ><a href="#method-c-new">new</a></li>
+
+        <li ><a href="#method-c-simple">simple</a></li>
+
+      </ul>
+    </details>
   </div>
 
 
 
   <div class="nav-section">
-    <h3>Instance Methods</h3>
-    <ul class="link-list" role="directory">
+    <details class="nav-section-collapsible" open>
+      <summary class="nav-section-header">
+        <span class="nav-section-icon">
+          <svg><use href="#icon-instance-methods"></use></svg>
+        </span>
+        <span class="nav-section-title">Instance Methods</span>
+        <span class="nav-section-chevron">
+          <svg><use href="#icon-chevron"></use></svg>
+        </span>
+      </summary>
+      <ul class="nav-list" role="directory">
 
-      <li ><a href="#method-i-assert">assert</a></li>
+        <li ><a href="#method-i-assert">assert</a></li>
 
-      <li ><a href="#method-i-assertions">assertions</a></li>
+        <li ><a href="#method-i-assert_and_track">assert_and_track</a></li>
 
-      <li ><a href="#method-i-check">check</a></li>
+        <li ><a href="#method-i-assertions">assertions</a></li>
 
-      <li ><a href="#method-i-model">model</a></li>
+        <li ><a href="#method-i-check">check</a></li>
 
-      <li ><a href="#method-i-pop">pop</a></li>
+        <li ><a href="#method-i-consequences">consequences</a></li>
 
-      <li ><a href="#method-i-prove-21">prove!</a></li>
+        <li ><a href="#method-i-cube">cube</a></li>
 
-      <li ><a href="#method-i-push">push</a></li>
+        <li ><a href="#method-i-from_file">from_file</a></li>
 
-      <li ><a href="#method-i-reset">reset</a></li>
+        <li ><a href="#method-i-from_string">from_string</a></li>
 
-      <li ><a href="#method-i-satisfiable-3F">satisfiable?</a></li>
+        <li ><a href="#method-i-help">help</a></li>
 
-      <li ><a href="#method-i-statistics">statistics</a></li>
+        <li ><a href="#method-i-interrupt">interrupt</a></li>
 
-      <li ><a href="#method-i-unsatisfiable-3F">unsatisfiable?</a></li>
+        <li ><a href="#method-i-model">model</a></li>
 
-    </ul>
+        <li ><a href="#method-i-non_units">non_units</a></li>
+
+        <li ><a href="#method-i-num_scopes">num_scopes</a></li>
+
+        <li ><a href="#method-i-param_descrs">param_descrs</a></li>
+
+        <li ><a href="#method-i-pop">pop</a></li>
+
+        <li ><a href="#method-i-prove-21">prove!</a></li>
+
+        <li ><a href="#method-i-push">push</a></li>
+
+        <li ><a href="#method-i-reason_unknown">reason_unknown</a></li>
+
+        <li ><a href="#method-i-reset">reset</a></li>
+
+        <li ><a href="#method-i-satisfiable-3F">satisfiable?</a></li>
+
+        <li ><a href="#method-i-set_params">set_params</a></li>
+
+        <li ><a href="#method-i-statistics">statistics</a></li>
+
+        <li ><a href="#method-i-to_dimacs">to_dimacs</a></li>
+
+        <li ><a href="#method-i-to_s">to_s</a></li>
+
+        <li ><a href="#method-i-trail">trail</a></li>
+
+        <li ><a href="#method-i-units">units</a></li>
+
+        <li ><a href="#method-i-unsat_core">unsat_core</a></li>
+
+        <li ><a href="#method-i-unsatisfiable-3F">unsatisfiable?</a></li>
+
+      </ul>
+    </details>
   </div>
 
 
+  <div id="classindex-section" class="nav-section">
+  <details class="nav-section-collapsible" open>
+    <summary class="nav-section-header">
+      <span class="nav-section-icon">
+        <svg><use href="#icon-layers"></use></svg>
+      </span>
+      <span class="nav-section-title">Classes and Modules</span>
+      <span class="nav-section-chevron">
+        <svg><use href="#icon-chevron"></use></svg>
+      </span>
+    </summary>
 
-  <footer id="validator-badges" role="contentinfo">
-  <p><a href="https://validator.w3.org/check/referer">Validate</a></p>
-  <p>Generated by <a href="https://ruby.github.io/rdoc/">RDoc</a> 6.17.0.</p>
-  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.</p>
-</footer>
+    <ul class="link-list nav-list"><li><details open><summary><code><a href="../Z3.html">Z3</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/AST.html">AST</a></code></li><li><code><a href="../Z3/ArithExpr.html">ArithExpr</a></code></li><li><code><a href="../Z3/ArrayExpr.html">ArrayExpr</a></code></li><li><code><a href="../Z3/ArraySort.html">ArraySort</a></code></li><li><code><a href="../Z3/BitvecExpr.html">BitvecExpr</a></code></li><li><code><a href="../Z3/BitvecSort.html">BitvecSort</a></code></li><li><code><a href="../Z3/BoolExpr.html">BoolExpr</a></code></li><li><code><a href="../Z3/BoolSort.html">BoolSort</a></code></li><li><code><a href="../Z3/CharExpr.html">CharExpr</a></code></li><li><code><a href="../Z3/CharSort.html">CharSort</a></code></li><li><code><a href="../Z3/Context.html">Context</a></code></li><li><code><a href="../Z3/Exception.html">Exception</a></code></li><li><code><a href="../Z3/Expr.html">Expr</a></code></li><li><code><a href="../Z3/FiniteDomainExpr.html">FiniteDomainExpr</a></code></li><li><code><a href="../Z3/FiniteDomainSort.html">FiniteDomainSort</a></code></li><li><code><a href="../Z3/FloatExpr.html">FloatExpr</a></code></li><li><code><a href="../Z3/FloatSort.html">FloatSort</a></code></li><li><code><a href="../Z3/FuncDecl.html">FuncDecl</a></code></li><li><code><a href="../Z3/Goal.html">Goal</a></code></li><li><code><a href="../Z3/IntExpr.html">IntExpr</a></code></li><li><code><a href="../Z3/IntSort.html">IntSort</a></code></li><li><code><a href="../Z3/LowLevel.html">LowLevel</a></code></li><li><code><a href="../Z3/Model.html">Model</a></code></li><li><code><a href="../Z3/Optimize.html">Optimize</a></code></li><li><code><a href="../Z3/ParamDescrs.html">ParamDescrs</a></code></li><li><code><a href="../Z3/Params.html">Params</a></code></li><li><details><summary><code><a href="../Z3/Printer.html">Printer</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/Printer/PrintedExpr.html">PrintedExpr</a></code></li></ul></details></li><li><code><a href="../Z3/Probe.html">Probe</a></code></li><li><code><a href="../Z3/ReExpr.html">Re</a></code></li><li><code><a href="../Z3/ReExpr.html">ReExpr</a></code></li><li><code><a href="../Z3/ReSort.html">ReSort</a></code></li><li><code><a href="../Z3/RealExpr.html">RealExpr</a></code></li><li><code><a href="../Z3/RealSort.html">RealSort</a></code></li><li><code><a href="../Z3/ReferenceCounted.html">ReferenceCounted</a></code></li><li><code><a href="../Z3/RoundingModeExpr.html">RoundingModeExpr</a></code></li><li><code><a href="../Z3/RoundingModeSort.html">RoundingModeSort</a></code></li><li><code><a href="../Z3/SeqExpr.html">SeqExpr</a></code></li><li><code><a href="../Z3/SeqSort.html">SeqSort</a></code></li><li><code><a href="../Z3/SetExpr.html">SetExpr</a></code></li><li><code><a href="../Z3/SetSort.html">SetSort</a></code></li><li><code><a href="../Z3/Solver.html">Solver</a></code></li><li><code><a href="../Z3/Sort.html">Sort</a></code></li><li><code><a href="../Z3/StringExpr.html">StringExpr</a></code></li><li><code><a href="../Z3/StringSort.html">StringSort</a></code></li><li><code><a href="../Z3/Tactic.html">Tactic</a></code></li><li><code><a href="../Z3/TypeVariableExpr.html">TypeVariableExpr</a></code></li><li><code><a href="../Z3/TypeVariableSort.html">TypeVariableSort</a></code></li><li><code><a href="../Z3/UninterpretedExpr.html">UninterpretedExpr</a></code></li><li><code><a href="../Z3/UninterpretedSort.html">UninterpretedSort</a></code></li></ul></details></li></ul>
+  </details>
+</div>
 
 </nav>
 
@@ -176,7 +615,7 @@
 
     <section class="attribute-method-details method-section">
       <header>
-        <h3>Attributes</h3>
+        <h3 id="attributes"><a href="#attributes">Attributes</a></h3>
       </header>
 
 
@@ -202,17 +641,17 @@
 
      <section id="public-class-5Buntitled-5D-method-details" class="method-section anchor-link">
        <header>
-         <h3>Public Class Methods</h3>
+         <h3 id="public-class-methods"><a href="#public-class-methods">Public Class Methods</a></h3>
        </header>
 
 
-      <div id="method-c-new" class="method-detail anchor-link ">
+      <div id="method-c-for_logic" class="method-detail anchor-link ">
         <div class="method-header">
 
             <div class="method-heading">
-              <a href="#method-c-new" title="Link to this method">
-                <span class="method-name">new</span>
-                <span class="method-args">()</span>
+              <a href="#method-c-for_logic" title="Link to this method">
+                <span class="method-name">for_logic</span>
+                <span class="method-args">(logic, params = {})</span>
               </a>
             </div>
 
@@ -224,23 +663,151 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
-          <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/z3/solver.rb, line 4</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>
-  <span class="ruby-ivar">@_solver</span> = <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_solver</span>
-  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_inc_ref</span>(<span class="ruby-keyword">self</span>)
-  <span class="ruby-identifier">reset_model!</span>
+          <div class="method-source-code" id="for_logic-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 28</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">for_logic</span>(<span class="ruby-identifier">logic</span>, <span class="ruby-identifier">params</span> = {})
+  <span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>, <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_solver_for_logic</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_symbol</span>(<span class="ruby-identifier">logic</span>)))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
 
 
-          
+        <div class="method-description">
+
+
+          <p>Specializes the solver for one SMT-LIB2 logic (“QF_LIA”, “QF_BV”, …), which can be much faster, at the cost of raising on anything outside that logic. <a href="../Z3.html"><code>Z3</code></a> rejects unknown names itself, we have no list to check against.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-from_tactic" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-from_tactic" title="Link to this method">
+                <span class="method-name">from_tactic</span>
+                <span class="method-args">(tactic, params = {})</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="from_tactic-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 34</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">from_tactic</span>(<span class="ruby-identifier">tactic</span>, <span class="ruby-identifier">params</span> = {})
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Tactic required&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">tactic</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tactic</span>)
+  <span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>, <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_solver_from_tactic</span>(<span class="ruby-identifier">tactic</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Every <a href="Solver.html#method-i-check"><code>check</code></a> runs the tactic on the assertions. Tactics have no notion of scopes, so <a href="Solver.html#method-i-push"><code>push</code></a> / <a href="Solver.html#method-i-pop"><code>pop</code></a> are simulated by re-running everything.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-new" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-new" title="Link to this method">
+                <span class="method-name">new</span>
+                <span class="method-args">(params = {}, _solver = LowLevel.mk_solver)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="new-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 8</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">params</span> = {}, <span class="ruby-identifier">_solver</span> = <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_solver</span>)
+  <span class="ruby-ivar">@_solver</span> = <span class="ruby-identifier">_solver</span>
+  <span class="ruby-identifier">inc_ref!</span> <span class="ruby-value">:solver</span>, <span class="ruby-ivar">@_solver</span>
+  <span class="ruby-identifier">reset_model!</span>
+  <span class="ruby-comment"># Skipped for the common no-parameters case, as #set_params has to build</span>
+  <span class="ruby-comment"># the parameter descriptions to check against, and there are hundreds of them</span>
+  <span class="ruby-identifier">set_params</span>(<span class="ruby-identifier">params</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span> <span class="ruby-operator">==</span> {}
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>‘_solver` is how the alternative constructors below pass in their own solver; `Solver.new` is the general purpose one and you almost always want it</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-simple" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-simple" title="Link to this method">
+                <span class="method-name">simple</span>
+                <span class="method-args">(params = {})</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="simple-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 21</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">simple</span>(<span class="ruby-identifier">params</span> = {})
+  <span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>, <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_simple_solver</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>‘Solver.new` inspects the assertions and assembles a tactic to match them. This one is just the incremental SMT core, which is usually weaker - but it’s the only solver which implements <a href="Solver.html#method-i-trail"><code>trail</code></a>.</p>
 
 
         </div>
@@ -256,7 +823,7 @@
 
      <section id="public-instance-5Buntitled-5D-method-details" class="method-section anchor-link">
        <header>
-         <h3>Public Instance Methods</h3>
+         <h3 id="public-instance-methods"><a href="#public-instance-methods">Public Instance Methods</a></h3>
        </header>
 
 
@@ -278,13 +845,8 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="assert-source">
-            <pre><span class="ruby-comment"># File lib/z3/solver.rb, line 25</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 70</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">assert</span>(<span class="ruby-identifier">ast</span>)
   <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_assert</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">ast</span>)
@@ -293,7 +855,53 @@
 
 
 
+        <div class="method-description">
+
+
           
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-assert_and_track" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-assert_and_track" title="Link to this method">
+                <span class="method-name">assert_and_track</span>
+                <span class="method-args">(ast, tracker)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="assert_and_track-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 77</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">assert_and_track</span>(<span class="ruby-identifier">ast</span>, <span class="ruby-identifier">tracker</span>)
+  <span class="ruby-identifier">reset_model!</span>
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_assert_and_track</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">ast</span>, <span class="ruby-identifier">tracker</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>‘tracker` is a Bool const standing in for `ast`, and it’s what shows up in <a href="Solver.html#method-i-unsat_core"><code>unsat_core</code></a> if the solver blames this assertion</p>
 
 
         </div>
@@ -323,19 +931,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="assertions-source">
-            <pre><span class="ruby-comment"># File lib/z3/solver.rb, line 67</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 129</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">assertions</span>
   <span class="ruby-identifier">_ast_vector</span> = <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_assertions</span>(<span class="ruby-keyword">self</span>)
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">unpack_ast_vector</span>(<span class="ruby-identifier">_ast_vector</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -356,6 +962,237 @@
             <div class="method-heading">
               <a href="#method-i-check" title="Link to this method">
                 <span class="method-name">check</span>
+                <span class="method-args">(*assumptions)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="check-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 86</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">check</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">assumptions</span>)
+  <span class="ruby-identifier">reset_model!</span>
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">check_sat_results</span>(
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">assumptions</span>.<span class="ruby-identifier">empty?</span>
+      <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_check</span>(<span class="ruby-keyword">self</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_check_assumptions</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">coerce_assumptions</span>(<span class="ruby-identifier">assumptions</span>))
+    <span class="ruby-keyword">end</span>
+  )
+  <span class="ruby-ivar">@has_model</span> = <span class="ruby-keyword">true</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">result</span> <span class="ruby-operator">==</span> <span class="ruby-value">:sat</span>
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Assumptions are Bool exprs taken as true for this one check and nothing after it - unlike <a href="Solver.html#method-i-assert"><code>assert</code></a> they leave no trace on the solver, so there’s no <a href="Solver.html#method-i-push"><code>push</code></a> / <a href="Solver.html#method-i-pop"><code>pop</code></a> to pair up. They’re also what <a href="Solver.html#method-i-unsat_core"><code>unsat_core</code></a> blames, so an :unsat names the assumptions responsible without any of <a href="Solver.html#method-i-assert_and_track"><code>assert_and_track</code></a>‘s tracker variables.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-consequences" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-consequences" title="Link to this method">
+                <span class="method-name">consequences</span>
+                <span class="method-args">(variables, assumptions = [])</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="consequences-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 144</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">consequences</span>(<span class="ruby-identifier">variables</span>, <span class="ruby-identifier">assumptions</span> = [])
+  <span class="ruby-identifier">reset_model!</span>
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">with_ast_vectors</span>(<span class="ruby-identifier">assumptions</span>, <span class="ruby-identifier">variables</span>, []) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">_assumptions</span>, <span class="ruby-identifier">_variables</span>, <span class="ruby-identifier">_consequences</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">check_sat_results</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_consequences</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">_assumptions</span>, <span class="ruby-identifier">_variables</span>, <span class="ruby-identifier">_consequences</span>))
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-node">&quot;Consequences need satisfiable assertions, these are #{result}&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">result</span> <span class="ruby-operator">==</span> <span class="ruby-value">:sat</span>
+    <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">unpack_ast_vector</span>(<span class="ruby-identifier">_consequences</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Everything about ‘variables` which follows from the assertions, as a list of `assumption =&gt; literal` implications (`true =&gt; literal` for the ones which hold outright). This solves, so it’s much more work than <a href="Solver.html#method-i-assertions"><code>assertions</code></a>.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-cube" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-cube" title="Link to this method">
+                <span class="method-name">cube</span>
+                <span class="method-args">(variables = [], backtrack_level = 0)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="cube-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 156</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">cube</span>(<span class="ruby-identifier">variables</span> = [], <span class="ruby-identifier">backtrack_level</span> = <span class="ruby-value">0</span>)
+  <span class="ruby-identifier">reset_model!</span>
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">with_ast_vectors</span>(<span class="ruby-identifier">variables</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">_variables</span><span class="ruby-operator">|</span>
+    <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">unpack_ast_vector</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_cube</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">_variables</span>, <span class="ruby-identifier">backtrack_level</span>))
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>One case split, for divide-and-conquer solving - each call returns the next cube, and ‘[false]` once they’re exhausted (after which it starts over). ‘variables` is which literals to split on, or [] to let <a href="../Z3.html"><code>Z3</code></a> choose.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-from_file" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-from_file" title="Link to this method">
+                <span class="method-name">from_file</span>
+                <span class="method-args">(path)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="from_file-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 200</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">from_file</span>(<span class="ruby-identifier">path</span>)
+  <span class="ruby-identifier">reset_model!</span>
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_from_file</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">path</span>)
+  <span class="ruby-keyword">self</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-from_string" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-from_string" title="Link to this method">
+                <span class="method-name">from_string</span>
+                <span class="method-args">(str)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="from_string-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 194</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">from_string</span>(<span class="ruby-identifier">str</span>)
+  <span class="ruby-identifier">reset_model!</span>
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_from_string</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">str</span>)
+  <span class="ruby-keyword">self</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Parses SMT-LIB2 and adds its assertions on top of whatever’s already asserted. Anything it declares goes into the shared context, so ‘(declare-const a Int)` here is the same variable as `Z3.Int(“a”)` in Ruby - but the parser starts with an empty symbol table every time, so each string has to declare what it uses.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-help" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-help" title="Link to this method">
+                <span class="method-name">help</span>
                 <span class="method-args">()</span>
               </a>
             </div>
@@ -368,24 +1205,62 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
-          <div class="method-source-code" id="check-source">
-            <pre><span class="ruby-comment"># File lib/z3/solver.rb, line 30</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">check</span>
-  <span class="ruby-identifier">reset_model!</span>
-  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">check_sat_results</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_check</span>(<span class="ruby-keyword">self</span>))
-  <span class="ruby-ivar">@has_model</span> = <span class="ruby-keyword">true</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">result</span> <span class="ruby-operator">==</span> <span class="ruby-value">:sat</span>
-  <span class="ruby-identifier">result</span>
+          <div class="method-source-code" id="help-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 211</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">help</span>
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_help</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
 
 
+        <div class="method-description">
+
+
           
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-interrupt" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-interrupt" title="Link to this method">
+                <span class="method-name">interrupt</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="interrupt-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 185</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">interrupt</span>
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_interrupt</span>(<span class="ruby-keyword">self</span>)
+  <span class="ruby-keyword">self</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Cancels a <a href="Solver.html#method-i-check"><code>check</code></a> in progress, so it returns :unknown instead of an answer. It’s meant for another thread or a signal handler - on an idle solver it does nothing, and the flag is cleared by the time the next <a href="Solver.html#method-i-check"><code>check</code></a> starts.</p>
 
 
         </div>
@@ -415,13 +1290,8 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="model-source">
-            <pre><span class="ruby-comment"># File lib/z3/solver.rb, line 59</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 121</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">model</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@has_model</span>
     <span class="ruby-ivar">@model</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Model</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_model</span>(<span class="ruby-keyword">self</span>))
@@ -433,7 +1303,137 @@
 
 
 
+        <div class="method-description">
+
+
           
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-non_units" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-non_units" title="Link to this method">
+                <span class="method-name">non_units</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="non_units-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 170</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">non_units</span>
+  <span class="ruby-identifier">_ast_vector</span> = <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_non_units</span>(<span class="ruby-keyword">self</span>)
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">unpack_ast_vector</span>(<span class="ruby-identifier">_ast_vector</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-num_scopes" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-num_scopes" title="Link to this method">
+                <span class="method-name">num_scopes</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="num_scopes-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 215</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">num_scopes</span>
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_num_scopes</span>(<span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-param_descrs" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-param_descrs" title="Link to this method">
+                <span class="method-name">param_descrs</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="param_descrs-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 42</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">param_descrs</span>
+  <span class="ruby-constant">ParamDescrs</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_param_descrs</span>(<span class="ruby-keyword">self</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>‘Z3_solver_get_param_descrs` lists every parameter the solver takes, `#help` describes them</p>
 
 
         </div>
@@ -463,19 +1463,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="pop-source">
-            <pre><span class="ruby-comment"># File lib/z3/solver.rb, line 15</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 60</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">pop</span>(<span class="ruby-identifier">n</span>=<span class="ruby-value">1</span>)
   <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_pop</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">n</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -508,13 +1506,8 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="prove-21-source">
-            <pre><span class="ruby-comment"># File lib/z3/solver.rb, line 77</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 231</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">prove!</span>(<span class="ruby-identifier">ast</span>)
   <span class="ruby-ivar">@has_model</span> = <span class="ruby-keyword">false</span>
   <span class="ruby-identifier">push</span>
@@ -537,6 +1530,9 @@
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -569,19 +1565,59 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="push-source">
-            <pre><span class="ruby-comment"># File lib/z3/solver.rb, line 10</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 55</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">push</span>
   <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_push</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-reason_unknown" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-reason_unknown" title="Link to this method">
+                <span class="method-name">reason_unknown</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="reason_unknown-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 219</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">reason_unknown</span>
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_reason_unknown</span>(<span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
 
 
           
@@ -614,19 +1650,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="reset-source">
-            <pre><span class="ruby-comment"># File lib/z3/solver.rb, line 20</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 65</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">reset</span>
   <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_reset</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -647,7 +1681,7 @@
             <div class="method-heading">
               <a href="#method-i-satisfiable-3F" title="Link to this method">
                 <span class="method-name">satisfiable?</span>
-                <span class="method-args">()</span>
+                <span class="method-args">(*assumptions)</span>
               </a>
             </div>
 
@@ -659,15 +1693,10 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="satisfiable-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/solver.rb, line 37</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">satisfiable?</span>
-  <span class="ruby-keyword">case</span> <span class="ruby-identifier">check</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 99</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">satisfiable?</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">assumptions</span>)
+  <span class="ruby-keyword">case</span> <span class="ruby-identifier">check</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">assumptions</span>)
   <span class="ruby-keyword">when</span> <span class="ruby-value">:sat</span>
     <span class="ruby-keyword">true</span>
   <span class="ruby-keyword">when</span> <span class="ruby-value">:unsat</span>
@@ -680,7 +1709,54 @@
 
 
 
+        <div class="method-description">
+
+
           
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-set_params" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-set_params" title="Link to this method">
+                <span class="method-name">set_params</span>
+                <span class="method-args">(params)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="set_params-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 49</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">set_params</span>(<span class="ruby-identifier">params</span>)
+  <span class="ruby-identifier">params</span> = <span class="ruby-constant">Params</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>, <span class="ruby-identifier">param_descrs</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Params</span>)
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_set_params</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">params</span>)
+  <span class="ruby-keyword">self</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Parameters accumulate - setting one twice overrides it, but parameters set by earlier calls stay. Pass a <a href="Params.html"><code>Params</code></a> if you want to skip the name and type checks, a Hash if you don’t.</p>
 
 
         </div>
@@ -710,13 +1786,8 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="statistics-source">
-            <pre><span class="ruby-comment"># File lib/z3/solver.rb, line 72</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 206</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">statistics</span>
   <span class="ruby-identifier">_stats</span> = <span class="ruby-constant">LowLevel</span><span class="ruby-operator">::</span><span class="ruby-identifier">solver_get_statistics</span>(<span class="ruby-keyword">self</span>)
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">unpack_statistics</span>(<span class="ruby-identifier">_stats</span>)
@@ -725,7 +1796,223 @@
 
 
 
+        <div class="method-description">
+
+
           
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-to_dimacs" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-to_dimacs" title="Link to this method">
+                <span class="method-name">to_dimacs</span>
+                <span class="method-args">(include_names=true)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="to_dimacs-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 227</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_dimacs</span>(<span class="ruby-identifier">include_names</span>=<span class="ruby-keyword">true</span>)
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_to_dimacs_string</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">include_names</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-to_s" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-to_s" title="Link to this method">
+                <span class="method-name">to_s</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="to_s-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 223</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_s</span>
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_to_string</span>(<span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-trail" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-trail" title="Link to this method">
+                <span class="method-name">trail</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="trail-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 177</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">trail</span>
+  <span class="ruby-identifier">_ast_vector</span> = <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_trail</span>(<span class="ruby-keyword">self</span>)
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">unpack_ast_vector</span>(<span class="ruby-identifier">_ast_vector</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>The literals the solver currently has assigned, in assignment order. Only <a href="Solver.html#method-c-simple"><code>Solver.simple</code></a> implements it - every other kind raises <a href="Exception.html"><code>Z3::Exception</code></a>.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-units" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-units" title="Link to this method">
+                <span class="method-name">units</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="units-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 165</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">units</span>
+  <span class="ruby-identifier">_ast_vector</span> = <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_units</span>(<span class="ruby-keyword">self</span>)
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">unpack_ast_vector</span>(<span class="ruby-identifier">_ast_vector</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>The assertions <a href="../Z3.html"><code>Z3</code></a> has boiled down to a single literal, and everything it hasn’t - together they’re a partition of what the solver currently knows</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-unsat_core" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-unsat_core" title="Link to this method">
+                <span class="method-name">unsat_core</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="unsat_core-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 136</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsat_core</span>
+  <span class="ruby-identifier">_ast_vector</span> = <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_unsat_core</span>(<span class="ruby-keyword">self</span>)
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">unpack_ast_vector</span>(<span class="ruby-identifier">_ast_vector</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Only the trackers passed to <a href="Solver.html#method-i-assert_and_track"><code>assert_and_track</code></a> can ever show up here, plainly asserted formulas are never blamed</p>
 
 
         </div>
@@ -743,7 +2030,7 @@
             <div class="method-heading">
               <a href="#method-i-unsatisfiable-3F" title="Link to this method">
                 <span class="method-name">unsatisfiable?</span>
-                <span class="method-args">()</span>
+                <span class="method-args">(*assumptions)</span>
               </a>
             </div>
 
@@ -755,15 +2042,10 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="unsatisfiable-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/solver.rb, line 48</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsatisfiable?</span>
-  <span class="ruby-keyword">case</span> <span class="ruby-identifier">check</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 110</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsatisfiable?</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">assumptions</span>)
+  <span class="ruby-keyword">case</span> <span class="ruby-identifier">check</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">assumptions</span>)
   <span class="ruby-keyword">when</span> <span class="ruby-value">:unsat</span>
     <span class="ruby-keyword">true</span>
   <span class="ruby-keyword">when</span> <span class="ruby-value">:sat</span>
@@ -774,6 +2056,9 @@
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -793,5 +2078,27 @@
   </section>
 
 </main>
+
+<aside class="table-of-contents" role="complementary" aria-label="Table of Contents">
+  <div class="toc-sticky">
+    <h3 class="toc-heading">On This Page</h3>
+    <nav class="toc-nav" id="toc-nav" aria-label="Page sections">
+      <!-- Generated by JavaScript based on page headings -->
+    </nav>
+  </div>
+</aside>
+
+
+<footer class="site-footer">
+  
+
+  <div class="footer-bottom">
+    <p>
+      Generated by <a href="https://ruby.github.io/rdoc/">RDoc 7.0.1</a>
+      using the Aliki theme by <a href="http://st0012.dev">Stan Lo</a>
+    </p>
+  </div>
+</footer>
+
 </body>
 

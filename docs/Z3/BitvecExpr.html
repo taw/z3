@@ -8,12 +8,45 @@
 <title>class Z3::BitvecExpr - RDoc Documentation</title>
 
 
-  <meta name="keywords" content="ruby,class,Z3::BitvecExpr">
+  <meta
+    name="keywords"
+    content="ruby,class,Z3::BitvecExpr"
+  >
+
+    <meta
+      name="description"
+      content="Documentation for the Z3::BitvecExpr class"
+    >
 
 
-    <meta name="description" content="Documentation for the Z3::BitvecExpr class">
 
 
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="class Z3::BitvecExpr - RDoc Documentation">
+
+
+
+    <meta
+      property="og:description"
+      content="Documentation for Z3::BitvecExpr class - API reference and code examples"
+    >
+
+
+
+
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="class Z3::BitvecExpr - RDoc Documentation">
+
+
+
+    <meta
+      name="twitter:description"
+      content="Documentation for Z3::BitvecExpr class - API reference and code examples"
+    >
 
 
 
@@ -22,63 +55,378 @@
   var index_rel_prefix = "../";
 </script>
 
-<script src="../js/navigation.js" defer></script>
-<script src="../js/search.js" defer></script>
-<script src="../js/search_index.js" defer></script>
-<script src="../js/searcher.js" defer></script>
-<script src="../js/darkfish.js" defer></script>
+<script
+  src="../js/theme-toggle.js?v=7.0.1"
+></script>
 
-<link href="../css/fonts.css" rel="stylesheet">
-<link href="../css/rdoc.css" rel="stylesheet">
+<script
+  src="../js/search_navigation.js?v=7.0.1"
+  defer
+></script>
+
+<script
+  src="../js/search_data.js?v=7.0.1"
+  defer
+></script>
+
+<script
+  src="../js/search_ranker.js?v=7.0.1"
+  defer
+></script>
+
+<script
+  src="../js/search_controller.js?v=7.0.1"
+  defer
+></script>
+
+<script
+  src="../js/c_highlighter.js?v=7.0.1"
+  defer
+></script>
+
+<script
+  src="../js/aliki.js?v=7.0.1"
+  defer
+></script>
+
+<link
+  href="../css/rdoc.css?v=7.0.1"
+  rel="stylesheet"
+>
 
 
 
-<body id="top" role="document" class="class">
+
+<body role="document" class="class has-toc">
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <!-- Chevron (right arrow) - used for expand/collapse -->
+  <symbol
+    id="icon-chevron"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </symbol>
+
+  <!-- File/Document - Pages section -->
+  <symbol
+    id="icon-file"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path
+      d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"
+    ></path>
+
+    <polyline points="14 2 14 8 20 8"></polyline>
+  </symbol>
+
+  <!-- Layers/Stack - Classes and Modules section -->
+  <symbol
+    id="icon-layers"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+    <polyline points="2 17 12 22 22 17"></polyline>
+    <polyline points="2 12 12 17 22 12"></polyline>
+  </symbol>
+
+  <!-- Curly braces with C - Class Methods section -->
+  <symbol
+    id="icon-class-methods"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M6 3C3.5 3 2 4.5 2 7v3c0 1.5-1 2-1 2s1 .5 1 2v5c0 2.5 1.5 4 4 4"></path>
+    <path d="M18 3c2.5 0 4 1.5 4 4v3c0 1.5 1 2 1 2s-1 .5-1 2v5c0 2.5-1.5 4-4 4"></path>
+
+    <text
+      x="12"
+      y="17"
+      text-anchor="middle"
+      font-size="13"
+      font-weight="bold"
+      fill="currentColor"
+      stroke="none"
+    >
+      C
+    </text>
+  </symbol>
+
+  <!-- Curly braces with I - Instance Methods section -->
+  <symbol
+    id="icon-instance-methods"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M6 3C3.5 3 2 4.5 2 7v3c0 1.5-1 2-1 2s1 .5 1 2v5c0 2.5 1.5 4 4 4"></path>
+    <path d="M18 3c2.5 0 4 1.5 4 4v3c0 1.5 1 2 1 2s-1 .5-1 2v5c0 2.5-1.5 4-4 4"></path>
+
+    <text
+      x="12"
+      y="17"
+      text-anchor="middle"
+      font-size="13"
+      font-weight="bold"
+      fill="currentColor"
+      stroke="none"
+    >
+      I
+    </text>
+  </symbol>
+
+  <!-- Double chevrons up - Ancestors section -->
+  <symbol
+    id="icon-ancestors"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <polyline points="17 11 12 6 7 11"></polyline>
+    <polyline points="17 18 12 13 7 18"></polyline>
+  </symbol>
+
+  <!-- User with plus - Included Modules section -->
+  <symbol
+    id="icon-includes"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+    <circle cx="8.5" cy="7" r="4"></circle>
+
+    <line
+      x1="20"
+      y1="8"
+      x2="20"
+      y2="14"
+    ></line>
+
+    <line
+      x1="23"
+      y1="11"
+      x2="17"
+      y2="11"
+    ></line>
+  </symbol>
+
+  <!-- User with check - Extended Modules section -->
+  <symbol
+    id="icon-extends"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+    <circle cx="8.5" cy="7" r="4"></circle>
+    <polyline points="17 11 19 13 23 9"></polyline>
+  </symbol>
+
+  <!-- List - Sections section -->
+  <symbol
+    id="icon-list"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <line
+      x1="8"
+      y1="6"
+      x2="21"
+      y2="6"
+    ></line>
+
+    <line
+      x1="8"
+      y1="12"
+      x2="21"
+      y2="12"
+    ></line>
+
+    <line
+      x1="8"
+      y1="18"
+      x2="21"
+      y2="18"
+    ></line>
+
+    <line
+      x1="3"
+      y1="6"
+      x2="3.01"
+      y2="6"
+    ></line>
+
+    <line
+      x1="3"
+      y1="12"
+      x2="3.01"
+      y2="12"
+    ></line>
+
+    <line
+      x1="3"
+      y1="18"
+      x2="3.01"
+      y2="18"
+    ></line>
+  </symbol>
+</svg>
+
+<header class="top-navbar">
+  <a href="../index.html" class="navbar-brand">
+    RDoc Documentation
+  </a>
+
+  <!-- Desktop search bar -->
+  <div class="navbar-search navbar-search-desktop" role="search">
+    <form action="#" method="get" accept-charset="utf-8">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results-desktop"
+             type="text" name="search" placeholder="Search (/) for a class, method..."
+             spellcheck="false" autocomplete="off"
+             title="Type to search, Up and Down to navigate, Enter to load">
+      <ul id="search-results-desktop" aria-label="Search Results"
+          aria-busy="false" aria-expanded="false"
+          aria-atomic="false" class="initially-hidden search-results"></ul>
+    </form>
+  </div>
+
+  <!-- Mobile search icon button -->
+  <button id="search-toggle" class="navbar-search-mobile" aria-label="Open search" type="button">
+    <span aria-hidden="true">🔍</span>
+  </button>
+
+  <!-- Theme toggle button -->
+  <button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" type="button">
+    <span class="theme-toggle-icon" aria-hidden="true">🌙</span>
+  </button>
+</header>
+
+<!-- Search Modal (Mobile) -->
+<div id="search-modal" class="search-modal" hidden aria-modal="true" role="dialog" aria-label="Search">
+  <div class="search-modal-backdrop"></div>
+  <div class="search-modal-content">
+    <div class="search-modal-header">
+      <form class="search-modal-form" action="#" method="get" accept-charset="utf-8">
+        <span class="search-modal-icon" aria-hidden="true">🔍</span>
+        <input id="search-field-mobile" role="combobox" aria-label="Search"
+               aria-autocomplete="list" aria-controls="search-results-mobile"
+               type="text" name="search" placeholder="Search documentation"
+               spellcheck="false" autocomplete="off">
+        <button type="button" class="search-modal-close" aria-label="Close search" id="search-modal-close">
+          <span aria-hidden="true">esc</span>
+        </button>
+      </form>
+    </div>
+    <div class="search-modal-body">
+      <ul id="search-results-mobile" aria-label="Search Results"
+          aria-busy="false" aria-expanded="false"
+          aria-atomic="false" class="search-results search-modal-results initially-hidden"></ul>
+      <div class="search-modal-empty">
+        <p>No recent searches</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="navigation-toggle" role="button" tabindex="0" aria-label="Toggle sidebar" aria-expanded="true" aria-controls="navigation">
   <span aria-hidden="true">&#9776;</span>
 </div>
 
 
 <nav id="navigation" role="navigation">
-  <div id="project-navigation">
-    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
-  <h2>
-    <a href="../index.html" rel="home">Home</a>
-  </h2>
-
-  <div id="table-of-contents-navigation">
-    <a href="../table_of_contents.html#pages">Pages</a>
-    <a href="../table_of_contents.html#classes">Classes</a>
-    <a href="../table_of_contents.html#methods">Methods</a>
-  </div>
-</div>
-
-    <div id="search-section" role="search" class="project-section initially-hidden">
-  <form action="#" method="get" accept-charset="utf-8">
-    <div id="search-field-wrapper">
-      <input id="search-field" role="combobox" aria-label="Search"
-             aria-autocomplete="list" aria-controls="search-results"
-             type="text" name="search" placeholder="Search (/) for a class, method, ..." spellcheck="false"
-             autocomplete="off"
-             title="Type to search, Up and Down to navigate, Enter to load">
-    </div>
-
-    <ul id="search-results" aria-label="Search Results"
-        aria-busy="false" aria-expanded="false"
-        aria-atomic="false" class="initially-hidden"></ul>
-  </form>
-</div>
-
-  </div>
-
   
+
+
+
+
+  <div id="fileindex-section" class="nav-section">
+    <details class="nav-section-collapsible" >
+      <summary class="nav-section-header">
+        <span class="nav-section-icon">
+          <svg>
+            <use href="#icon-file"></use>
+          </svg>
+        </span>
+
+        <span class="nav-section-title">Pages</span>
+
+        <span class="nav-section-chevron">
+          <svg>
+            <use href="#icon-chevron"></use>
+          </svg>
+        </span>
+      </summary>
+
+      <ul class="nav-list">
+
+
+
+
+
+
+            <li>
+              <a href="../README_md.html">
+                README
+              </a>
+            </li>
+
+      </ul>
+    </details>
+  </div>
+
 
   
 
   
 <div id="parent-class-section" class="nav-section">
-  <h3>Ancestors</h3>
-  <ul><li>Expr</li></ul>
+  <details class="nav-section-collapsible" open>
+    <summary class="nav-section-header">
+      <span class="nav-section-icon">
+        <svg><use href="#icon-ancestors"></use></svg>
+      </span>
+      <span class="nav-section-title">Ancestors</span>
+      <span class="nav-section-chevron">
+        <svg><use href="#icon-chevron"></use></svg>
+      </span>
+    </summary>
+    <ul><li>Expr</li></ul>
+  </details>
 </div>
 
 
@@ -88,222 +436,293 @@
 
   
   <div class="nav-section">
-    <h3>Class Methods</h3>
-    <ul class="link-list" role="directory">
+    <details class="nav-section-collapsible" open>
+      <summary class="nav-section-header">
+        <span class="nav-section-icon">
+          <svg><use href="#icon-class-methods"></use></svg>
+        </span>
+        <span class="nav-section-title">Class Methods</span>
+        <span class="nav-section-chevron">
+          <svg><use href="#icon-chevron"></use></svg>
+        </span>
+      </summary>
+      <ul class="nav-list" role="directory">
 
-      <li ><a href="#method-c-LShift">LShift</a></li>
+        <li ><a href="#method-c-LShift">LShift</a></li>
 
-      <li ><a href="#method-c-Nand">Nand</a></li>
+        <li ><a href="#method-c-Nand">Nand</a></li>
 
-      <li ><a href="#method-c-Nor">Nor</a></li>
+        <li ><a href="#method-c-Nor">Nor</a></li>
 
-      <li ><a href="#method-c-SignedAddNoOverflow">SignedAddNoOverflow</a></li>
+        <li ><a href="#method-c-SignedAddNoOverflow">SignedAddNoOverflow</a></li>
 
-      <li ><a href="#method-c-SignedAddNoUnderflow">SignedAddNoUnderflow</a></li>
+        <li ><a href="#method-c-SignedAddNoUnderflow">SignedAddNoUnderflow</a></li>
 
-      <li ><a href="#method-c-SignedDiv">SignedDiv</a></li>
+        <li ><a href="#method-c-SignedDiv">SignedDiv</a></li>
 
-      <li ><a href="#method-c-SignedDivNoOverflow">SignedDivNoOverflow</a></li>
+        <li ><a href="#method-c-SignedDivNoOverflow">SignedDivNoOverflow</a></li>
 
-      <li ><a href="#method-c-SignedGe">SignedGe</a></li>
+        <li ><a href="#method-c-SignedGe">SignedGe</a></li>
 
-      <li ><a href="#method-c-SignedGt">SignedGt</a></li>
+        <li ><a href="#method-c-SignedGt">SignedGt</a></li>
 
-      <li ><a href="#method-c-SignedLe">SignedLe</a></li>
+        <li ><a href="#method-c-SignedLe">SignedLe</a></li>
 
-      <li ><a href="#method-c-SignedLt">SignedLt</a></li>
+        <li ><a href="#method-c-SignedLt">SignedLt</a></li>
 
-      <li ><a href="#method-c-SignedMod">SignedMod</a></li>
+        <li ><a href="#method-c-SignedMod">SignedMod</a></li>
 
-      <li ><a href="#method-c-SignedMulNoOverflow">SignedMulNoOverflow</a></li>
+        <li ><a href="#method-c-SignedMulNoOverflow">SignedMulNoOverflow</a></li>
 
-      <li ><a href="#method-c-SignedMulNoUnderflow">SignedMulNoUnderflow</a></li>
+        <li ><a href="#method-c-SignedMulNoUnderflow">SignedMulNoUnderflow</a></li>
 
-      <li ><a href="#method-c-SignedNegNoOverflow">SignedNegNoOverflow</a></li>
+        <li ><a href="#method-c-SignedNegNoOverflow">SignedNegNoOverflow</a></li>
 
-      <li ><a href="#method-c-SignedRShift">SignedRShift</a></li>
+        <li ><a href="#method-c-SignedRShift">SignedRShift</a></li>
 
-      <li ><a href="#method-c-SignedRem">SignedRem</a></li>
+        <li ><a href="#method-c-SignedRem">SignedRem</a></li>
 
-      <li ><a href="#method-c-UnsignedAddNoOverflow">UnsignedAddNoOverflow</a></li>
+        <li ><a href="#method-c-SignedSubNoOverflow">SignedSubNoOverflow</a></li>
 
-      <li ><a href="#method-c-UnsignedDiv">UnsignedDiv</a></li>
+        <li ><a href="#method-c-SignedSubNoUnderflow">SignedSubNoUnderflow</a></li>
 
-      <li ><a href="#method-c-UnsignedGe">UnsignedGe</a></li>
+        <li ><a href="#method-c-UnsignedAddNoOverflow">UnsignedAddNoOverflow</a></li>
 
-      <li ><a href="#method-c-UnsignedGt">UnsignedGt</a></li>
+        <li ><a href="#method-c-UnsignedDiv">UnsignedDiv</a></li>
 
-      <li ><a href="#method-c-UnsignedLe">UnsignedLe</a></li>
+        <li ><a href="#method-c-UnsignedGe">UnsignedGe</a></li>
 
-      <li ><a href="#method-c-UnsignedLt">UnsignedLt</a></li>
+        <li ><a href="#method-c-UnsignedGt">UnsignedGt</a></li>
 
-      <li ><a href="#method-c-UnsignedMulNoOverflow">UnsignedMulNoOverflow</a></li>
+        <li ><a href="#method-c-UnsignedLe">UnsignedLe</a></li>
 
-      <li ><a href="#method-c-UnsignedRShift">UnsignedRShift</a></li>
+        <li ><a href="#method-c-UnsignedLt">UnsignedLt</a></li>
 
-      <li ><a href="#method-c-UnsignedRem">UnsignedRem</a></li>
+        <li ><a href="#method-c-UnsignedMulNoOverflow">UnsignedMulNoOverflow</a></li>
 
-      <li ><a href="#method-c-Xnor">Xnor</a></li>
+        <li ><a href="#method-c-UnsignedRShift">UnsignedRShift</a></li>
 
-      <li ><a href="#method-c-coerce_to_same_bv_sort">coerce_to_same_bv_sort</a></li>
+        <li ><a href="#method-c-UnsignedRem">UnsignedRem</a></li>
 
-    </ul>
+        <li ><a href="#method-c-UnsignedSubNoUnderflow">UnsignedSubNoUnderflow</a></li>
+
+        <li ><a href="#method-c-Xnor">Xnor</a></li>
+
+        <li ><a href="#method-c-coerce_to_same_bv_sort">coerce_to_same_bv_sort</a></li>
+
+      </ul>
+    </details>
   </div>
 
 
 
   <div class="nav-section">
-    <h3>Instance Methods</h3>
-    <ul class="link-list" role="directory">
+    <details class="nav-section-collapsible" open>
+      <summary class="nav-section-header">
+        <span class="nav-section-icon">
+          <svg><use href="#icon-instance-methods"></use></svg>
+        </span>
+        <span class="nav-section-title">Instance Methods</span>
+        <span class="nav-section-chevron">
+          <svg><use href="#icon-chevron"></use></svg>
+        </span>
+      </summary>
+      <ul class="nav-list" role="directory">
 
-      <li ><a href="#method-i-21">!</a></li>
+        <li ><a href="#method-i-21">!</a></li>
 
-      <li ><a href="#method-i-25">%</a></li>
+        <li ><a href="#method-i-25">%</a></li>
 
-      <li ><a href="#method-i-26">&amp;</a></li>
+        <li ><a href="#method-i-26">&amp;</a></li>
 
-      <li ><a href="#method-i-2A">*</a></li>
+        <li ><a href="#method-i-2A">*</a></li>
 
-      <li ><a href="#method-i-2B">+</a></li>
+        <li ><a href="#method-i-2B">+</a></li>
 
-      <li ><a href="#method-i-2D">-</a></li>
+        <li ><a href="#method-i-2D">-</a></li>
 
-      <li ><a href="#method-i-2D-40">-@</a></li>
+        <li ><a href="#method-i-2D-40">-@</a></li>
 
-      <li ><a href="#method-i-2F">/</a></li>
+        <li ><a href="#method-i-2F">/</a></li>
 
-      <li ><a href="#method-i-3C">&lt;</a></li>
+        <li ><a href="#method-i-3C">&lt;</a></li>
 
-      <li ><a href="#method-i-3C-3C">&lt;&lt;</a></li>
+        <li ><a href="#method-i-3C-3C">&lt;&lt;</a></li>
 
-      <li ><a href="#method-i-3C-3D">&lt;=</a></li>
+        <li ><a href="#method-i-3C-3D">&lt;=</a></li>
 
-      <li ><a href="#method-i-3E">&gt;</a></li>
+        <li ><a href="#method-i-3E">&gt;</a></li>
 
-      <li ><a href="#method-i-3E-3D">&gt;=</a></li>
+        <li ><a href="#method-i-3E-3D">&gt;=</a></li>
 
-      <li ><a href="#method-i-3E-3E">&gt;&gt;</a></li>
+        <li ><a href="#method-i-3E-3E">&gt;&gt;</a></li>
 
-      <li ><a href="#method-i-5E">^</a></li>
+        <li ><a href="#method-i-5E">^</a></li>
 
-      <li ><a href="#method-i-7C">|</a></li>
+        <li ><a href="#method-i-7C">|</a></li>
 
-      <li ><a href="#method-i-~">~</a></li>
+        <li ><a href="#method-i-~">~</a></li>
 
-      <li ><a href="#method-i-abs">abs</a></li>
+        <li ><a href="#method-i-abs">abs</a></li>
 
-      <li ><a href="#method-i-add_no_overflow-3F">add_no_overflow?</a></li>
+        <li ><a href="#method-i-add_no_overflow-3F">add_no_overflow?</a></li>
 
-      <li ><a href="#method-i-add_no_underflow-3F">add_no_underflow?</a></li>
+        <li ><a href="#method-i-add_no_underflow-3F">add_no_underflow?</a></li>
 
-      <li ><a href="#method-i-coerce">coerce</a></li>
+        <li ><a href="#method-i-all_bits_set-3F">all_bits_set?</a></li>
 
-      <li ><a href="#method-i-concat">concat</a></li>
+        <li ><a href="#method-i-any_bits_set-3F">any_bits_set?</a></li>
 
-      <li ><a href="#method-i-div_no_overflow-3F">div_no_overflow?</a></li>
+        <li ><a href="#method-i-bit">bit</a></li>
 
-      <li ><a href="#method-i-extract">extract</a></li>
+        <li ><a href="#method-i-coerce">coerce</a></li>
 
-      <li ><a href="#method-i-lshift">lshift</a></li>
+        <li ><a href="#method-i-concat">concat</a></li>
 
-      <li ><a href="#method-i-mul_no_overflow-3F">mul_no_overflow?</a></li>
+        <li ><a href="#method-i-div_no_overflow-3F">div_no_overflow?</a></li>
 
-      <li ><a href="#method-i-mul_no_underflow-3F">mul_no_underflow?</a></li>
+        <li ><a href="#method-i-extract">extract</a></li>
 
-      <li ><a href="#method-i-nand">nand</a></li>
+        <li ><a href="#method-i-lshift">lshift</a></li>
 
-      <li ><a href="#method-i-neg_no_overflow-3F">neg_no_overflow?</a></li>
+        <li ><a href="#method-i-mul_no_overflow-3F">mul_no_overflow?</a></li>
 
-      <li ><a href="#method-i-negative-3F">negative?</a></li>
+        <li ><a href="#method-i-mul_no_underflow-3F">mul_no_underflow?</a></li>
 
-      <li ><a href="#method-i-nonzero-3F">nonzero?</a></li>
+        <li ><a href="#method-i-nand">nand</a></li>
 
-      <li ><a href="#method-i-nor">nor</a></li>
+        <li ><a href="#method-i-neg_no_overflow-3F">neg_no_overflow?</a></li>
 
-      <li ><a href="#method-i-positive-3F">positive?</a></li>
+        <li ><a href="#method-i-negative-3F">negative?</a></li>
 
-      <li ><a href="#method-i-rotate_left">rotate_left</a></li>
+        <li ><a href="#method-i-nonzero-3F">nonzero?</a></li>
 
-      <li ><a href="#method-i-rotate_right">rotate_right</a></li>
+        <li ><a href="#method-i-nor">nor</a></li>
 
-      <li ><a href="#method-i-rshift">rshift</a></li>
+        <li ><a href="#method-i-positive-3F">positive?</a></li>
 
-      <li ><a href="#method-i-sign_ext">sign_ext</a></li>
+        <li ><a href="#method-i-redand">redand</a></li>
 
-      <li ><a href="#method-i-signed_add_no_overflow-3F">signed_add_no_overflow?</a></li>
+        <li ><a href="#method-i-redor">redor</a></li>
 
-      <li ><a href="#method-i-signed_add_no_underflow-3F">signed_add_no_underflow?</a></li>
+        <li ><a href="#method-i-repeat">repeat</a></li>
 
-      <li ><a href="#method-i-signed_div">signed_div</a></li>
+        <li ><a href="#method-i-rotate_left">rotate_left</a></li>
 
-      <li ><a href="#method-i-signed_div_no_overflow-3F">signed_div_no_overflow?</a></li>
+        <li ><a href="#method-i-rotate_right">rotate_right</a></li>
 
-      <li ><a href="#method-i-signed_ge">signed_ge</a></li>
+        <li ><a href="#method-i-rshift">rshift</a></li>
 
-      <li ><a href="#method-i-signed_gt">signed_gt</a></li>
+        <li ><a href="#method-i-sign_ext">sign_ext</a></li>
 
-      <li ><a href="#method-i-signed_le">signed_le</a></li>
+        <li ><a href="#method-i-signed_add_no_overflow-3F">signed_add_no_overflow?</a></li>
 
-      <li ><a href="#method-i-signed_lshift">signed_lshift</a></li>
+        <li ><a href="#method-i-signed_add_no_underflow-3F">signed_add_no_underflow?</a></li>
 
-      <li ><a href="#method-i-signed_lt">signed_lt</a></li>
+        <li ><a href="#method-i-signed_div">signed_div</a></li>
 
-      <li ><a href="#method-i-signed_mod">signed_mod</a></li>
+        <li ><a href="#method-i-signed_div_no_overflow-3F">signed_div_no_overflow?</a></li>
 
-      <li ><a href="#method-i-signed_mul_no_overflow-3F">signed_mul_no_overflow?</a></li>
+        <li ><a href="#method-i-signed_ge">signed_ge</a></li>
 
-      <li ><a href="#method-i-signed_mul_no_underflow-3F">signed_mul_no_underflow?</a></li>
+        <li ><a href="#method-i-signed_gt">signed_gt</a></li>
 
-      <li ><a href="#method-i-signed_neg_no_overflow-3F">signed_neg_no_overflow?</a></li>
+        <li ><a href="#method-i-signed_le">signed_le</a></li>
 
-      <li ><a href="#method-i-signed_rem">signed_rem</a></li>
+        <li ><a href="#method-i-signed_lshift">signed_lshift</a></li>
 
-      <li ><a href="#method-i-signed_rshift">signed_rshift</a></li>
+        <li ><a href="#method-i-signed_lt">signed_lt</a></li>
 
-      <li ><a href="#method-i-unsigned_add_no_overflow-3F">unsigned_add_no_overflow?</a></li>
+        <li ><a href="#method-i-signed_mod">signed_mod</a></li>
 
-      <li ><a href="#method-i-unsigned_add_no_underflow-3F">unsigned_add_no_underflow?</a></li>
+        <li ><a href="#method-i-signed_mul_no_overflow-3F">signed_mul_no_overflow?</a></li>
 
-      <li ><a href="#method-i-unsigned_div">unsigned_div</a></li>
+        <li ><a href="#method-i-signed_mul_no_underflow-3F">signed_mul_no_underflow?</a></li>
 
-      <li ><a href="#method-i-unsigned_div_no_overflow-3F">unsigned_div_no_overflow?</a></li>
+        <li ><a href="#method-i-signed_neg_no_overflow-3F">signed_neg_no_overflow?</a></li>
 
-      <li ><a href="#method-i-unsigned_ge">unsigned_ge</a></li>
+        <li ><a href="#method-i-signed_rem">signed_rem</a></li>
 
-      <li ><a href="#method-i-unsigned_gt">unsigned_gt</a></li>
+        <li ><a href="#method-i-signed_rshift">signed_rshift</a></li>
 
-      <li ><a href="#method-i-unsigned_le">unsigned_le</a></li>
+        <li ><a href="#method-i-signed_sub_no_overflow-3F">signed_sub_no_overflow?</a></li>
 
-      <li ><a href="#method-i-unsigned_lshift">unsigned_lshift</a></li>
+        <li ><a href="#method-i-signed_sub_no_underflow-3F">signed_sub_no_underflow?</a></li>
 
-      <li ><a href="#method-i-unsigned_lt">unsigned_lt</a></li>
+        <li ><a href="#method-i-signed_to_i">signed_to_i</a></li>
 
-      <li ><a href="#method-i-unsigned_mul_no_overflow-3F">unsigned_mul_no_overflow?</a></li>
+        <li ><a href="#method-i-signed_value">signed_value</a></li>
 
-      <li ><a href="#method-i-unsigned_mul_no_underflow-3F">unsigned_mul_no_underflow?</a></li>
+        <li ><a href="#method-i-sub_no_overflow-3F">sub_no_overflow?</a></li>
 
-      <li ><a href="#method-i-unsigned_neg_no_overflow-3F">unsigned_neg_no_overflow?</a></li>
+        <li ><a href="#method-i-sub_no_underflow-3F">sub_no_underflow?</a></li>
 
-      <li ><a href="#method-i-unsigned_rem">unsigned_rem</a></li>
+        <li ><a href="#method-i-to_i">to_i</a></li>
 
-      <li ><a href="#method-i-unsigned_rshift">unsigned_rshift</a></li>
+        <li ><a href="#method-i-unsigned_add_no_overflow-3F">unsigned_add_no_overflow?</a></li>
 
-      <li ><a href="#method-i-xnor">xnor</a></li>
+        <li ><a href="#method-i-unsigned_add_no_underflow-3F">unsigned_add_no_underflow?</a></li>
 
-      <li ><a href="#method-i-zero-3F">zero?</a></li>
+        <li ><a href="#method-i-unsigned_div">unsigned_div</a></li>
 
-      <li ><a href="#method-i-zero_ext">zero_ext</a></li>
+        <li ><a href="#method-i-unsigned_div_no_overflow-3F">unsigned_div_no_overflow?</a></li>
 
-    </ul>
+        <li ><a href="#method-i-unsigned_ge">unsigned_ge</a></li>
+
+        <li ><a href="#method-i-unsigned_gt">unsigned_gt</a></li>
+
+        <li ><a href="#method-i-unsigned_le">unsigned_le</a></li>
+
+        <li ><a href="#method-i-unsigned_lshift">unsigned_lshift</a></li>
+
+        <li ><a href="#method-i-unsigned_lt">unsigned_lt</a></li>
+
+        <li ><a href="#method-i-unsigned_mul_no_overflow-3F">unsigned_mul_no_overflow?</a></li>
+
+        <li ><a href="#method-i-unsigned_mul_no_underflow-3F">unsigned_mul_no_underflow?</a></li>
+
+        <li ><a href="#method-i-unsigned_neg_no_overflow-3F">unsigned_neg_no_overflow?</a></li>
+
+        <li ><a href="#method-i-unsigned_rem">unsigned_rem</a></li>
+
+        <li ><a href="#method-i-unsigned_rshift">unsigned_rshift</a></li>
+
+        <li ><a href="#method-i-unsigned_sub_no_overflow-3F">unsigned_sub_no_overflow?</a></li>
+
+        <li ><a href="#method-i-unsigned_sub_no_underflow-3F">unsigned_sub_no_underflow?</a></li>
+
+        <li ><a href="#method-i-unsigned_to_i">unsigned_to_i</a></li>
+
+        <li ><a href="#method-i-unsigned_value">unsigned_value</a></li>
+
+        <li ><a href="#method-i-value">value</a></li>
+
+        <li ><a href="#method-i-xnor">xnor</a></li>
+
+        <li ><a href="#method-i-zero-3F">zero?</a></li>
+
+        <li ><a href="#method-i-zero_ext">zero_ext</a></li>
+
+      </ul>
+    </details>
   </div>
 
 
+  <div id="classindex-section" class="nav-section">
+  <details class="nav-section-collapsible" open>
+    <summary class="nav-section-header">
+      <span class="nav-section-icon">
+        <svg><use href="#icon-layers"></use></svg>
+      </span>
+      <span class="nav-section-title">Classes and Modules</span>
+      <span class="nav-section-chevron">
+        <svg><use href="#icon-chevron"></use></svg>
+      </span>
+    </summary>
 
-  <footer id="validator-badges" role="contentinfo">
-  <p><a href="https://validator.w3.org/check/referer">Validate</a></p>
-  <p>Generated by <a href="https://ruby.github.io/rdoc/">RDoc</a> 6.17.0.</p>
-  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.</p>
-</footer>
+    <ul class="link-list nav-list"><li><details open><summary><code><a href="../Z3.html">Z3</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/AST.html">AST</a></code></li><li><code><a href="../Z3/ArithExpr.html">ArithExpr</a></code></li><li><code><a href="../Z3/ArrayExpr.html">ArrayExpr</a></code></li><li><code><a href="../Z3/ArraySort.html">ArraySort</a></code></li><li><code><a href="../Z3/BitvecExpr.html">BitvecExpr</a></code></li><li><code><a href="../Z3/BitvecSort.html">BitvecSort</a></code></li><li><code><a href="../Z3/BoolExpr.html">BoolExpr</a></code></li><li><code><a href="../Z3/BoolSort.html">BoolSort</a></code></li><li><code><a href="../Z3/CharExpr.html">CharExpr</a></code></li><li><code><a href="../Z3/CharSort.html">CharSort</a></code></li><li><code><a href="../Z3/Context.html">Context</a></code></li><li><code><a href="../Z3/Exception.html">Exception</a></code></li><li><code><a href="../Z3/Expr.html">Expr</a></code></li><li><code><a href="../Z3/FiniteDomainExpr.html">FiniteDomainExpr</a></code></li><li><code><a href="../Z3/FiniteDomainSort.html">FiniteDomainSort</a></code></li><li><code><a href="../Z3/FloatExpr.html">FloatExpr</a></code></li><li><code><a href="../Z3/FloatSort.html">FloatSort</a></code></li><li><code><a href="../Z3/FuncDecl.html">FuncDecl</a></code></li><li><code><a href="../Z3/Goal.html">Goal</a></code></li><li><code><a href="../Z3/IntExpr.html">IntExpr</a></code></li><li><code><a href="../Z3/IntSort.html">IntSort</a></code></li><li><code><a href="../Z3/LowLevel.html">LowLevel</a></code></li><li><code><a href="../Z3/Model.html">Model</a></code></li><li><code><a href="../Z3/Optimize.html">Optimize</a></code></li><li><code><a href="../Z3/ParamDescrs.html">ParamDescrs</a></code></li><li><code><a href="../Z3/Params.html">Params</a></code></li><li><details><summary><code><a href="../Z3/Printer.html">Printer</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/Printer/PrintedExpr.html">PrintedExpr</a></code></li></ul></details></li><li><code><a href="../Z3/Probe.html">Probe</a></code></li><li><code><a href="../Z3/ReExpr.html">Re</a></code></li><li><code><a href="../Z3/ReExpr.html">ReExpr</a></code></li><li><code><a href="../Z3/ReSort.html">ReSort</a></code></li><li><code><a href="../Z3/RealExpr.html">RealExpr</a></code></li><li><code><a href="../Z3/RealSort.html">RealSort</a></code></li><li><code><a href="../Z3/ReferenceCounted.html">ReferenceCounted</a></code></li><li><code><a href="../Z3/RoundingModeExpr.html">RoundingModeExpr</a></code></li><li><code><a href="../Z3/RoundingModeSort.html">RoundingModeSort</a></code></li><li><code><a href="../Z3/SeqExpr.html">SeqExpr</a></code></li><li><code><a href="../Z3/SeqSort.html">SeqSort</a></code></li><li><code><a href="../Z3/SetExpr.html">SetExpr</a></code></li><li><code><a href="../Z3/SetSort.html">SetSort</a></code></li><li><code><a href="../Z3/Solver.html">Solver</a></code></li><li><code><a href="../Z3/Sort.html">Sort</a></code></li><li><code><a href="../Z3/StringExpr.html">StringExpr</a></code></li><li><code><a href="../Z3/StringSort.html">StringSort</a></code></li><li><code><a href="../Z3/Tactic.html">Tactic</a></code></li><li><code><a href="../Z3/TypeVariableExpr.html">TypeVariableExpr</a></code></li><li><code><a href="../Z3/TypeVariableSort.html">TypeVariableSort</a></code></li><li><code><a href="../Z3/UninterpretedExpr.html">UninterpretedExpr</a></code></li><li><code><a href="../Z3/UninterpretedSort.html">UninterpretedSort</a></code></li></ul></details></li></ul>
+  </details>
+</div>
 
 </nav>
 
@@ -348,7 +767,7 @@
 
      <section id="public-class-5Buntitled-5D-method-details" class="method-section anchor-link">
        <header>
-         <h3>Public Class Methods</h3>
+         <h3 id="public-class-methods"><a href="#public-class-methods">Public Class Methods</a></h3>
        </header>
 
 
@@ -370,19 +789,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="LShift-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 295</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 385</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">LShift</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvshl</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           <p>Signed/Unsigned work the same</p>
@@ -415,13 +832,8 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="Nand-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 332</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 422</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">Nand</span>(<span class="ruby-operator">*</span><span class="ruby-identifier ruby-title">args</span>)
   <span class="ruby-identifier">args</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
   <span class="ruby-identifier">args</span>.<span class="ruby-identifier">inject</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span>,<span class="ruby-identifier">b</span><span class="ruby-operator">|</span>
@@ -430,6 +842,9 @@
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -462,13 +877,8 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="Nor-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 339</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 429</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">Nor</span>(<span class="ruby-operator">*</span><span class="ruby-identifier ruby-title">args</span>)
   <span class="ruby-identifier">args</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
   <span class="ruby-identifier">args</span>.<span class="ruby-identifier">inject</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span>,<span class="ruby-identifier">b</span><span class="ruby-operator">|</span>
@@ -477,6 +887,9 @@
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -509,19 +922,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="SignedAddNoOverflow-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 386</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 476</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">SignedAddNoOverflow</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvadd_no_overflow</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-keyword">true</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -554,19 +965,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="SignedAddNoUnderflow-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 396</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 486</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">SignedAddNoUnderflow</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvadd_no_underflow</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -599,19 +1008,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="SignedDiv-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 300</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 390</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">SignedDiv</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvsdiv</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -644,19 +1051,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="SignedDivNoOverflow-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 420</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 510</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">SignedDivNoOverflow</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvsdiv_no_overflow</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -689,19 +1094,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="SignedGe-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 371</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 461</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">SignedGe</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvsge</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -734,19 +1137,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="SignedGt-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 366</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 456</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">SignedGt</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvsgt</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -779,19 +1180,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="SignedLe-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 381</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 471</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">SignedLe</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvsle</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -824,19 +1223,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="SignedLt-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 376</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 466</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">SignedLt</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvslt</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -869,19 +1266,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="SignedMod-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 310</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 400</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">SignedMod</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvsmod</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -914,19 +1309,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="SignedMulNoOverflow-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 405</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 495</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">SignedMulNoOverflow</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvmul_no_overflow</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-keyword">true</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -959,19 +1352,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="SignedMulNoUnderflow-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 415</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 505</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">SignedMulNoUnderflow</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvmul_no_underflow</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1004,18 +1395,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="SignedNegNoOverflow-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 401</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 491</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">SignedNegNoOverflow</span>(<span class="ruby-identifier ruby-title">a</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvneg_no_overflow</span>(<span class="ruby-identifier">a</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1048,19 +1437,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="SignedRShift-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 284</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 374</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">SignedRShift</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvashr</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1093,19 +1480,103 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="SignedRem-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 315</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 405</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">SignedRem</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvsrem</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-SignedSubNoOverflow" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-SignedSubNoOverflow" title="Link to this method">
+                <span class="method-name">SignedSubNoOverflow</span>
+                <span class="method-args">(a, b)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="SignedSubNoOverflow-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 515</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">SignedSubNoOverflow</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvsub_no_overflow</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-SignedSubNoUnderflow" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-SignedSubNoUnderflow" title="Link to this method">
+                <span class="method-name">SignedSubNoUnderflow</span>
+                <span class="method-args">(a, b)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="SignedSubNoUnderflow-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 520</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">SignedSubNoUnderflow</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvsub_no_underflow</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-keyword">true</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
 
 
           
@@ -1138,19 +1609,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="UnsignedAddNoOverflow-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 391</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 481</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">UnsignedAddNoOverflow</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvadd_no_overflow</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-keyword">false</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1183,19 +1652,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="UnsignedDiv-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 305</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 395</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">UnsignedDiv</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvudiv</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1228,19 +1695,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="UnsignedGe-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 351</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 441</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">UnsignedGe</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvuge</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1273,19 +1738,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="UnsignedGt-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 346</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 436</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">UnsignedGt</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvugt</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1318,19 +1781,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="UnsignedLe-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 361</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 451</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">UnsignedLe</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvule</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1363,19 +1824,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="UnsignedLt-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 356</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 446</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">UnsignedLt</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvult</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1408,19 +1867,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="UnsignedMulNoOverflow-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 410</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 500</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">UnsignedMulNoOverflow</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvmul_no_overflow</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-keyword">false</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1453,19 +1910,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="UnsignedRShift-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 289</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 379</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">UnsignedRShift</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvlshr</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1498,19 +1953,60 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="UnsignedRem-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 320</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 410</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">UnsignedRem</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvurem</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-UnsignedSubNoUnderflow" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-UnsignedSubNoUnderflow" title="Link to this method">
+                <span class="method-name">UnsignedSubNoUnderflow</span>
+                <span class="method-args">(a, b)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="UnsignedSubNoUnderflow-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 525</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">UnsignedSubNoUnderflow</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvsub_no_underflow</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-keyword">false</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
 
 
           
@@ -1543,13 +2039,8 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="Xnor-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 325</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 415</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">Xnor</span>(<span class="ruby-operator">*</span><span class="ruby-identifier ruby-title">args</span>)
   <span class="ruby-identifier">args</span> = <span class="ruby-identifier">coerce_to_same_bv_sort</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
   <span class="ruby-identifier">args</span>.<span class="ruby-identifier">inject</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span>,<span class="ruby-identifier">b</span><span class="ruby-operator">|</span>
@@ -1558,6 +2049,9 @@
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1590,13 +2084,8 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="coerce_to_same_bv_sort-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 278</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 368</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">coerce_to_same_bv_sort</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
   <span class="ruby-identifier">args</span> = <span class="ruby-identifier">coerce_to_same_sort</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
   <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Bitvec value with same size expected&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">BitvecExpr</span>)
@@ -1604,6 +2093,9 @@
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1622,7 +2114,7 @@
 
      <section id="public-instance-5Buntitled-5D-method-details" class="method-section anchor-link">
        <header>
-         <h3>Public Instance Methods</h3>
+         <h3 id="public-instance-methods"><a href="#public-instance-methods">Public Instance Methods</a></h3>
        </header>
 
 
@@ -1644,18 +2136,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="21-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 7</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 7</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">!</span>
   <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvnot</span>(<span class="ruby-keyword">self</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1688,18 +2178,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="25-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 63</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 63</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">%</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Use signed_mod or signed_rem or unsigned_rem&quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1732,18 +2220,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="26-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 15</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 15</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&amp;</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">Expr</span>.<span class="ruby-constant">And</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1776,18 +2262,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="2A-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 47</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 47</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">*</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">Expr</span>.<span class="ruby-constant">Mul</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1820,18 +2304,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="2B-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 39</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 39</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">+</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">Expr</span>.<span class="ruby-constant">Add</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1864,18 +2346,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="2D-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 43</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 43</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">-</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">Expr</span>.<span class="ruby-constant">Sub</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1908,18 +2388,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="2D-40-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 11</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 11</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">-@</span>
   <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvneg</span>(<span class="ruby-keyword">self</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1952,18 +2430,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="2F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 51</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 51</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">/</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Use signed_div or unsigned_div&quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -1996,18 +2472,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="3C-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 213</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 303</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&lt;</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">Expr</span>.<span class="ruby-constant">Lt</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -2040,18 +2514,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="3C-3C-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 185</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 275</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&lt;&lt;</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">LShift</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -2084,18 +2556,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="3C-3D-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 209</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 299</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&lt;=</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">Expr</span>.<span class="ruby-constant">Le</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -2128,18 +2598,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="3E-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 201</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 291</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&gt;</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">Expr</span>.<span class="ruby-constant">Gt</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -2172,18 +2640,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="3E-3D-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 205</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 295</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&gt;=</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">Expr</span>.<span class="ruby-constant">Ge</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -2216,18 +2682,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="3E-3E-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 169</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 259</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&gt;&gt;</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Use #signed_rshift or #unsigned_rshift for Bitvec, not &gt;&gt;&quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -2260,18 +2724,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="5E-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 23</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 23</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">^</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">Expr</span>.<span class="ruby-constant">Xor</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -2304,18 +2766,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="7C-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 19</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 19</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">|</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">Expr</span>.<span class="ruby-constant">Or</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -2348,18 +2808,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="~-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 3</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 3</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">~</span>
   <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvnot</span>(<span class="ruby-keyword">self</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -2392,18 +2850,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="abs-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 265</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 355</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">abs</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">negative?</span>.<span class="ruby-identifier">ite</span>(<span class="ruby-operator">-</span><span class="ruby-keyword">self</span>, <span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -2436,18 +2892,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="add_no_overflow-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 105</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 176</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">add_no_overflow?</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Use #signed_add_no_overflow? or #unsigned_add_no_overflow? for Bitvec, not #add_no_overflow?&quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -2480,13 +2934,8 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="add_no_underflow-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 119</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 187</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">add_no_underflow?</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedAddNoUnderflow</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -2494,7 +2943,137 @@
 
 
 
+        <div class="method-description">
+
+
           
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-all_bits_set-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-all_bits_set-3F" title="Link to this method">
+                <span class="method-name">all_bits_set?</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="all_bits_set-3F-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 126</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">all_bits_set?</span>
+  <span class="ruby-identifier">redand</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-any_bits_set-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-any_bits_set-3F" title="Link to this method">
+                <span class="method-name">any_bits_set?</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="any_bits_set-3F-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 130</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">any_bits_set?</span>
+  <span class="ruby-identifier">redor</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-bit" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-bit" title="Link to this method">
+                <span class="method-name">bit</span>
+                <span class="method-args">(index)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="bit-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 106</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">bit</span>(<span class="ruby-identifier">index</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Trying to take a bit out of range&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">index</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Integer</span>) <span class="ruby-keyword">and</span> <span class="ruby-identifier">index</span>.<span class="ruby-identifier">between?</span>(<span class="ruby-value">0</span>, <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bit2bool</span>(<span class="ruby-identifier">index</span>, <span class="ruby-keyword">self</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>A single bit, as a Bool. Deliberately not [] - that would read like <a href="BitvecExpr.html#method-i-extract"><code>extract</code></a> with a one-bit range, which gives a Bitvec(1) instead</p>
 
 
         </div>
@@ -2524,20 +3103,18 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="coerce-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 269</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 359</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">coerce</span>(<span class="ruby-identifier">other</span>)
-  <span class="ruby-identifier">other_sort</span> = <span class="ruby-constant">Expr</span>.<span class="ruby-identifier">sort_for_const</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-identifier">other_sort</span> = <span class="ruby-constant">Expr</span>.<span class="ruby-identifier">sort_for_const</span>(<span class="ruby-identifier">other</span>, <span class="ruby-value">toward:</span> <span class="ruby-identifier">sort</span>)
   <span class="ruby-identifier">max_sort</span> = [<span class="ruby-identifier">sort</span>, <span class="ruby-identifier">other_sort</span>].<span class="ruby-identifier">max</span>
   [<span class="ruby-identifier">max_sort</span>.<span class="ruby-identifier">from_const</span>(<span class="ruby-identifier">other</span>), <span class="ruby-identifier">max_sort</span>.<span class="ruby-identifier">from_value</span>(<span class="ruby-keyword">self</span>)]
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -2570,19 +3147,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="concat-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 92</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 99</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">concat</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Can only concatenate another Bitvec&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">other</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">BitvecExpr</span>)
   <span class="ruby-constant">BitvecSort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">other</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">size</span>).<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_concat</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -2615,18 +3190,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="div_no_overflow-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 159</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 249</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">div_no_overflow?</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedDivNoOverflow</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -2659,19 +3232,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="extract-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 87</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 94</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">extract</span>(<span class="ruby-identifier">hi</span>, <span class="ruby-identifier">lo</span>)
   <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Trying to extract bits out of range&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">hi</span> <span class="ruby-keyword">and</span> <span class="ruby-identifier">hi</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-identifier">lo</span> <span class="ruby-keyword">and</span> <span class="ruby-identifier">lo</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">0</span>
   <span class="ruby-constant">BitvecSort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">hi</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">lo</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>).<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_extract</span>(<span class="ruby-identifier">hi</span>, <span class="ruby-identifier">lo</span>, <span class="ruby-keyword">self</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -2704,18 +3275,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="lshift-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 197</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 287</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">lshift</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">LShift</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -2748,18 +3317,16 @@
               <summary>Source</summary>
             </details>
           </div>
+          <div class="method-source-code" id="mul_no_overflow-3F-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 229</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">mul_no_overflow?</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Use signed_mul_no_overflow? or unsigned_mul_no_overflow?&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
 
 
 
         <div class="method-description">
-
-          <div class="method-source-code" id="mul_no_overflow-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 139</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">mul_no_overflow?</span>(<span class="ruby-identifier">other</span>)
-  <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Use signed_mul_no_overflow? or unsigned_mul_no_overflow?&quot;</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-
 
 
           
@@ -2792,18 +3359,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="mul_no_underflow-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 149</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 239</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">mul_no_underflow?</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedMulNoUnderflow</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -2836,18 +3401,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="nand-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 31</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 31</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">nand</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">Nand</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -2880,18 +3443,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="neg_no_overflow-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 135</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 225</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">neg_no_overflow?</span>
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedNegNoOverflow</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -2924,18 +3485,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="negative-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 261</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 351</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">negative?</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">signed_lt</span> <span class="ruby-value">0</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -2968,18 +3527,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="nonzero-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 253</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 343</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">nonzero?</span>
   <span class="ruby-keyword">self</span> <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -3012,18 +3569,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="nor-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 35</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 35</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">nor</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">Nor</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -3056,18 +3611,143 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="positive-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 257</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 347</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">positive?</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">signed_gt</span> <span class="ruby-value">0</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-redand" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-redand" title="Link to this method">
+                <span class="method-name">redand</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="redand-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 118</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">redand</span>
+  <span class="ruby-constant">BitvecSort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">1</span>).<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvredand</span>(<span class="ruby-keyword">self</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p><a href="../Z3.html"><code>Z3</code></a> answers these with a one-bit Bitvec rather than a Bool, which is what <a href="BitvecExpr.html#method-i-all_bits_set-3F"><code>all_bits_set?</code></a> and <a href="BitvecExpr.html#method-i-any_bits_set-3F"><code>any_bits_set?</code></a> are for</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-redor" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-redor" title="Link to this method">
+                <span class="method-name">redor</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="redor-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 122</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">redor</span>
+  <span class="ruby-constant">BitvecSort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">1</span>).<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bvredor</span>(<span class="ruby-keyword">self</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-repeat" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-repeat" title="Link to this method">
+                <span class="method-name">repeat</span>
+                <span class="method-args">(count)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="repeat-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 111</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">repeat</span>(<span class="ruby-identifier">count</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Repeat count must be a positive Integer&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">count</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Integer</span>) <span class="ruby-keyword">and</span> <span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">1</span>
+  <span class="ruby-constant">BitvecSort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">count</span>).<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_repeat</span>(<span class="ruby-identifier">count</span>, <span class="ruby-keyword">self</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
 
 
           
@@ -3100,21 +3780,21 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="rotate_left-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 79</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 82</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">rotate_left</span>(<span class="ruby-identifier">num</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_ext_rotate_left</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">num</span>))) <span class="ruby-keyword">if</span> <span class="ruby-identifier">num</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Expr</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Rotation amount must be a nonnegative Integer&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">num</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Integer</span>) <span class="ruby-keyword">and</span> <span class="ruby-identifier">num</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">0</span>
   <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_rotate_left</span>(<span class="ruby-identifier">num</span>, <span class="ruby-keyword">self</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
 
 
-          
+        <div class="method-description">
+
+
+          <p>An Integer rotates by a fixed amount, a Bitvec of the same size by whatever it turns out to be - <a href="../Z3.html"><code>Z3</code></a> has a separate operation for each, and the fixed one gives the solver much more to work with, so a literal never goes through the other</p>
 
 
         </div>
@@ -3144,18 +3824,18 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="rotate_right-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 83</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 88</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">rotate_right</span>(<span class="ruby-identifier">num</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_ext_rotate_right</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">num</span>))) <span class="ruby-keyword">if</span> <span class="ruby-identifier">num</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Expr</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Rotation amount must be a nonnegative Integer&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">num</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Integer</span>) <span class="ruby-keyword">and</span> <span class="ruby-identifier">num</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">0</span>
   <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_rotate_right</span>(<span class="ruby-identifier">num</span>, <span class="ruby-keyword">self</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -3188,18 +3868,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="rshift-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 181</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 271</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">rshift</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Use #signed_rshift or #unsigned_rshift for Bitvec, not #rshift&quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -3232,18 +3910,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="sign_ext-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 101</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 171</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">sign_ext</span>(<span class="ruby-identifier">size</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Extension size must be a nonnegative Integer&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">size</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Integer</span>) <span class="ruby-keyword">and</span> <span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">0</span>
   <span class="ruby-constant">BitvecSort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">size</span>).<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_sign_ext</span>(<span class="ruby-identifier">size</span>, <span class="ruby-keyword">self</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -3276,18 +3953,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="signed_add_no_overflow-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 112</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 180</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">signed_add_no_overflow?</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedAddNoOverflow</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -3320,18 +3995,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="signed_add_no_underflow-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 122</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 190</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">signed_add_no_underflow?</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedAddNoUnderflow</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -3364,18 +4037,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="signed_div-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 55</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 55</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">signed_div</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedDiv</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -3408,18 +4079,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="signed_div_no_overflow-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 162</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 252</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">signed_div_no_overflow?</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedDivNoOverflow</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -3452,18 +4121,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="signed_ge-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 221</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 311</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">signed_ge</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedGe</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -3496,18 +4163,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="signed_gt-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 217</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 307</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">signed_gt</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedGt</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -3540,18 +4205,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="signed_le-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 229</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 319</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">signed_le</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedLe</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -3584,18 +4247,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="signed_lshift-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 189</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 279</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">signed_lshift</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">LShift</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -3628,18 +4289,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="signed_lt-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 225</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 315</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">signed_lt</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedLt</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -3672,18 +4331,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="signed_mod-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 67</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 67</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">signed_mod</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedMod</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -3716,18 +4373,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="signed_mul_no_overflow-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 142</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 232</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">signed_mul_no_overflow?</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedMulNoOverflow</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -3760,18 +4415,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="signed_mul_no_underflow-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 152</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 242</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">signed_mul_no_underflow?</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedMulNoUnderflow</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -3804,18 +4457,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="signed_neg_no_overflow-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 132</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 222</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">signed_neg_no_overflow?</span>
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedNegNoOverflow</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -3848,18 +4499,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="signed_rem-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 71</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 71</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">signed_rem</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedRem</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -3892,13 +4541,8 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="signed_rshift-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 173</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 263</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">signed_rshift</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedRShift</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -3906,7 +4550,305 @@
 
 
 
+        <div class="method-description">
+
+
           
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-signed_sub_no_overflow-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-signed_sub_no_overflow-3F" title="Link to this method">
+                <span class="method-name">signed_sub_no_overflow?</span>
+                <span class="method-args">(other)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="signed_sub_no_overflow-3F-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 202</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">signed_sub_no_overflow?</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedSubNoOverflow</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-signed_sub_no_underflow-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-signed_sub_no_underflow-3F" title="Link to this method">
+                <span class="method-name">signed_sub_no_underflow?</span>
+                <span class="method-args">(other)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="signed_sub_no_underflow-3F-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 212</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">signed_sub_no_underflow?</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedSubNoUnderflow</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-signed_to_i" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-signed_to_i" title="Link to this method">
+                <span class="method-name">signed_to_i</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="signed_to_i-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 142</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">signed_to_i</span>
+  <span class="ruby-constant">IntSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bv2int</span>(<span class="ruby-keyword">self</span>, <span class="ruby-keyword">true</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-signed_value" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-signed_value" title="Link to this method">
+                <span class="method-name">signed_value</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="signed_value-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 154</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">signed_value</span>
+  <span class="ruby-identifier">v</span> = <span class="ruby-identifier">unsigned_value</span>
+  <span class="ruby-identifier">v</span> <span class="ruby-operator">&gt;=</span> (<span class="ruby-value">1</span> <span class="ruby-operator">&lt;&lt;</span> (<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)) <span class="ruby-operator">?</span> <span class="ruby-identifier">v</span> <span class="ruby-operator">-</span> (<span class="ruby-value">1</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">size</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">v</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-sub_no_overflow-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-sub_no_overflow-3F" title="Link to this method">
+                <span class="method-name">sub_no_overflow?</span>
+                <span class="method-args">(other)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="sub_no_overflow-3F-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 199</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">sub_no_overflow?</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">SignedSubNoOverflow</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Subtraction is addition’s mirror image: only signed can overflow, and both signs can underflow - so which of these takes a sign is the other way round</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-sub_no_underflow-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-sub_no_underflow-3F" title="Link to this method">
+                <span class="method-name">sub_no_underflow?</span>
+                <span class="method-args">(other)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="sub_no_underflow-3F-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 209</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">sub_no_underflow?</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Use #signed_sub_no_underflow? or #unsigned_sub_no_underflow? for Bitvec, not #sub_no_underflow?&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-to_i" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-to_i" title="Link to this method">
+                <span class="method-name">to_i</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="to_i-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 138</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_i</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Use #signed_to_i or #unsigned_to_i for Bitvec, not #to_i&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p><a href="BitvecExpr.html#method-i-to_i"><code>to_i</code></a> and friends build a <a href="../Z3.html"><code>Z3</code></a> Int expression out of this one. <a href="BitvecExpr.html#method-i-value"><code>value</code></a> and friends leave <a href="../Z3.html"><code>Z3</code></a> and give back a Ruby Integer, which only works on a literal. Both come in pairs because a Bitvec carries no sign of its own - the same eight bits are 200 read one way and -56 read the other.</p>
 
 
         </div>
@@ -3936,18 +4878,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="unsigned_add_no_overflow-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 115</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 183</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_add_no_overflow?</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">UnsignedAddNoOverflow</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -3980,18 +4920,16 @@
               <summary>Source</summary>
             </details>
           </div>
+          <div class="method-source-code" id="unsigned_add_no_underflow-3F-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 193</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_add_no_underflow?</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Unsigned + can&#39;t underflow&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
 
 
 
         <div class="method-description">
-
-          <div class="method-source-code" id="unsigned_add_no_underflow-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 125</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_add_no_underflow?</span>(<span class="ruby-identifier">other</span>)
-  <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Unsigned + cannot underflow&quot;</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-
 
 
           
@@ -4024,18 +4962,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="unsigned_div-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 59</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 59</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_div</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">UnsignedDiv</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -4068,18 +5004,16 @@
               <summary>Source</summary>
             </details>
           </div>
+          <div class="method-source-code" id="unsigned_div_no_overflow-3F-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 255</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_div_no_overflow?</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Unsigned / can&#39;t overflow&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
 
 
 
         <div class="method-description">
-
-          <div class="method-source-code" id="unsigned_div_no_overflow-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 165</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_div_no_overflow?</span>(<span class="ruby-identifier">other</span>)
-  <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Unsigned / cannot underflow&quot;</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-
 
 
           
@@ -4112,18 +5046,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="unsigned_ge-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 237</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 327</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_ge</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">UnsignedGe</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -4156,18 +5088,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="unsigned_gt-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 233</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 323</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_gt</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">UnsignedGt</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -4200,18 +5130,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="unsigned_le-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 245</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 335</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_le</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">UnsignedLe</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -4244,18 +5172,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="unsigned_lshift-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 193</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 283</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_lshift</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">LShift</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -4288,18 +5214,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="unsigned_lt-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 241</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 331</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_lt</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">UnsignedLt</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -4332,18 +5256,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="unsigned_mul_no_overflow-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 145</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 235</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_mul_no_overflow?</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">UnsignedMulNoOverflow</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -4376,18 +5298,16 @@
               <summary>Source</summary>
             </details>
           </div>
+          <div class="method-source-code" id="unsigned_mul_no_underflow-3F-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 245</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_mul_no_underflow?</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Unsigned * can&#39;t underflow&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
 
 
 
         <div class="method-description">
-
-          <div class="method-source-code" id="unsigned_mul_no_underflow-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 155</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_mul_no_underflow?</span>(<span class="ruby-identifier">other</span>)
-  <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Unsigned + cannot underflow&quot;</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-
 
 
           
@@ -4420,18 +5340,16 @@
               <summary>Source</summary>
             </details>
           </div>
+          <div class="method-source-code" id="unsigned_neg_no_overflow-3F-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 219</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_neg_no_overflow?</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;There is no unsigned negation&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
 
 
 
         <div class="method-description">
-
-          <div class="method-source-code" id="unsigned_neg_no_overflow-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 129</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_neg_no_overflow?</span>
-  <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;There is no unsigned negation&quot;</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-
 
 
           
@@ -4464,18 +5382,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="unsigned_rem-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 75</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 75</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_rem</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">UnsignedRem</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -4508,18 +5424,228 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="unsigned_rshift-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 177</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 267</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_rshift</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">UnsignedRShift</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-unsigned_sub_no_overflow-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-unsigned_sub_no_overflow-3F" title="Link to this method">
+                <span class="method-name">unsigned_sub_no_overflow?</span>
+                <span class="method-args">(other)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="unsigned_sub_no_overflow-3F-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 205</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_sub_no_overflow?</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Unsigned - can&#39;t overflow&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-unsigned_sub_no_underflow-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-unsigned_sub_no_underflow-3F" title="Link to this method">
+                <span class="method-name">unsigned_sub_no_underflow?</span>
+                <span class="method-args">(other)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="unsigned_sub_no_underflow-3F-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 215</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_sub_no_underflow?</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">UnsignedSubNoUnderflow</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-unsigned_to_i" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-unsigned_to_i" title="Link to this method">
+                <span class="method-name">unsigned_to_i</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="unsigned_to_i-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 146</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_to_i</span>
+  <span class="ruby-constant">IntSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_bv2int</span>(<span class="ruby-keyword">self</span>, <span class="ruby-keyword">false</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-unsigned_value" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-unsigned_value" title="Link to this method">
+                <span class="method-name">unsigned_value</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="unsigned_value-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 160</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsigned_value</span>
+  <span class="ruby-identifier">obj</span> = <span class="ruby-identifier">ast_kind</span> <span class="ruby-operator">==</span> <span class="ruby-value">:numeral</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">simplify</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-node">&quot;Can&#39;t convert expression #{self} into Integer&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">ast_kind</span> <span class="ruby-operator">==</span> <span class="ruby-value">:numeral</span>
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">get_numeral_string</span>(<span class="ruby-identifier">obj</span>).<span class="ruby-identifier">to_i</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p><a href="../Z3.html"><code>Z3</code></a> prints a Bitvec numeral as its unsigned value, so this is the one it gives us</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-value" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-value" title="Link to this method">
+                <span class="method-name">value</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="value-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 150</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">value</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Use #signed_value or #unsigned_value for Bitvec, not #value&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
 
 
           
@@ -4552,18 +5678,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="xnor-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 27</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 27</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">xnor</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">BitvecExpr</span>.<span class="ruby-constant">Xnor</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -4596,18 +5720,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="zero-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 249</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 339</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">zero?</span>
   <span class="ruby-keyword">self</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -4640,18 +5762,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="zero_ext-source">
-            <pre><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 97</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/bitvec_expr.rb, line 166</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">zero_ext</span>(<span class="ruby-identifier">size</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Extension size must be a nonnegative Integer&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">size</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Integer</span>) <span class="ruby-keyword">and</span> <span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">0</span>
   <span class="ruby-constant">BitvecSort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">size</span>).<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_zero_ext</span>(<span class="ruby-identifier">size</span>, <span class="ruby-keyword">self</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -4671,5 +5792,27 @@
   </section>
 
 </main>
+
+<aside class="table-of-contents" role="complementary" aria-label="Table of Contents">
+  <div class="toc-sticky">
+    <h3 class="toc-heading">On This Page</h3>
+    <nav class="toc-nav" id="toc-nav" aria-label="Page sections">
+      <!-- Generated by JavaScript based on page headings -->
+    </nav>
+  </div>
+</aside>
+
+
+<footer class="site-footer">
+  
+
+  <div class="footer-bottom">
+    <p>
+      Generated by <a href="https://ruby.github.io/rdoc/">RDoc 7.0.1</a>
+      using the Aliki theme by <a href="http://st0012.dev">Stan Lo</a>
+    </p>
+  </div>
+</footer>
+
 </body>
 

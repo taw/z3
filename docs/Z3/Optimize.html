@@ -8,12 +8,45 @@
 <title>class Z3::Optimize - RDoc Documentation</title>
 
 
-  <meta name="keywords" content="ruby,class,Z3::Optimize">
+  <meta
+    name="keywords"
+    content="ruby,class,Z3::Optimize"
+  >
+
+    <meta
+      name="description"
+      content="Documentation for the Z3::Optimize class"
+    >
 
 
-    <meta name="description" content="Documentation for the Z3::Optimize class">
 
 
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="class Z3::Optimize - RDoc Documentation">
+
+
+
+    <meta
+      property="og:description"
+      content="Documentation for Z3::Optimize class - API reference and code examples"
+    >
+
+
+
+
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="class Z3::Optimize - RDoc Documentation">
+
+
+
+    <meta
+      name="twitter:description"
+      content="Documentation for Z3::Optimize class - API reference and code examples"
+    >
 
 
 
@@ -22,124 +55,502 @@
   var index_rel_prefix = "../";
 </script>
 
-<script src="../js/navigation.js" defer></script>
-<script src="../js/search.js" defer></script>
-<script src="../js/search_index.js" defer></script>
-<script src="../js/searcher.js" defer></script>
-<script src="../js/darkfish.js" defer></script>
+<script
+  src="../js/theme-toggle.js?v=7.0.1"
+></script>
 
-<link href="../css/fonts.css" rel="stylesheet">
-<link href="../css/rdoc.css" rel="stylesheet">
+<script
+  src="../js/search_navigation.js?v=7.0.1"
+  defer
+></script>
+
+<script
+  src="../js/search_data.js?v=7.0.1"
+  defer
+></script>
+
+<script
+  src="../js/search_ranker.js?v=7.0.1"
+  defer
+></script>
+
+<script
+  src="../js/search_controller.js?v=7.0.1"
+  defer
+></script>
+
+<script
+  src="../js/c_highlighter.js?v=7.0.1"
+  defer
+></script>
+
+<script
+  src="../js/aliki.js?v=7.0.1"
+  defer
+></script>
+
+<link
+  href="../css/rdoc.css?v=7.0.1"
+  rel="stylesheet"
+>
 
 
 
-<body id="top" role="document" class="class">
+
+<body role="document" class="class has-toc">
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <!-- Chevron (right arrow) - used for expand/collapse -->
+  <symbol
+    id="icon-chevron"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </symbol>
+
+  <!-- File/Document - Pages section -->
+  <symbol
+    id="icon-file"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path
+      d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"
+    ></path>
+
+    <polyline points="14 2 14 8 20 8"></polyline>
+  </symbol>
+
+  <!-- Layers/Stack - Classes and Modules section -->
+  <symbol
+    id="icon-layers"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+    <polyline points="2 17 12 22 22 17"></polyline>
+    <polyline points="2 12 12 17 22 12"></polyline>
+  </symbol>
+
+  <!-- Curly braces with C - Class Methods section -->
+  <symbol
+    id="icon-class-methods"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M6 3C3.5 3 2 4.5 2 7v3c0 1.5-1 2-1 2s1 .5 1 2v5c0 2.5 1.5 4 4 4"></path>
+    <path d="M18 3c2.5 0 4 1.5 4 4v3c0 1.5 1 2 1 2s-1 .5-1 2v5c0 2.5-1.5 4-4 4"></path>
+
+    <text
+      x="12"
+      y="17"
+      text-anchor="middle"
+      font-size="13"
+      font-weight="bold"
+      fill="currentColor"
+      stroke="none"
+    >
+      C
+    </text>
+  </symbol>
+
+  <!-- Curly braces with I - Instance Methods section -->
+  <symbol
+    id="icon-instance-methods"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M6 3C3.5 3 2 4.5 2 7v3c0 1.5-1 2-1 2s1 .5 1 2v5c0 2.5 1.5 4 4 4"></path>
+    <path d="M18 3c2.5 0 4 1.5 4 4v3c0 1.5 1 2 1 2s-1 .5-1 2v5c0 2.5-1.5 4-4 4"></path>
+
+    <text
+      x="12"
+      y="17"
+      text-anchor="middle"
+      font-size="13"
+      font-weight="bold"
+      fill="currentColor"
+      stroke="none"
+    >
+      I
+    </text>
+  </symbol>
+
+  <!-- Double chevrons up - Ancestors section -->
+  <symbol
+    id="icon-ancestors"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <polyline points="17 11 12 6 7 11"></polyline>
+    <polyline points="17 18 12 13 7 18"></polyline>
+  </symbol>
+
+  <!-- User with plus - Included Modules section -->
+  <symbol
+    id="icon-includes"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+    <circle cx="8.5" cy="7" r="4"></circle>
+
+    <line
+      x1="20"
+      y1="8"
+      x2="20"
+      y2="14"
+    ></line>
+
+    <line
+      x1="23"
+      y1="11"
+      x2="17"
+      y2="11"
+    ></line>
+  </symbol>
+
+  <!-- User with check - Extended Modules section -->
+  <symbol
+    id="icon-extends"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+    <circle cx="8.5" cy="7" r="4"></circle>
+    <polyline points="17 11 19 13 23 9"></polyline>
+  </symbol>
+
+  <!-- List - Sections section -->
+  <symbol
+    id="icon-list"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <line
+      x1="8"
+      y1="6"
+      x2="21"
+      y2="6"
+    ></line>
+
+    <line
+      x1="8"
+      y1="12"
+      x2="21"
+      y2="12"
+    ></line>
+
+    <line
+      x1="8"
+      y1="18"
+      x2="21"
+      y2="18"
+    ></line>
+
+    <line
+      x1="3"
+      y1="6"
+      x2="3.01"
+      y2="6"
+    ></line>
+
+    <line
+      x1="3"
+      y1="12"
+      x2="3.01"
+      y2="12"
+    ></line>
+
+    <line
+      x1="3"
+      y1="18"
+      x2="3.01"
+      y2="18"
+    ></line>
+  </symbol>
+</svg>
+
+<header class="top-navbar">
+  <a href="../index.html" class="navbar-brand">
+    RDoc Documentation
+  </a>
+
+  <!-- Desktop search bar -->
+  <div class="navbar-search navbar-search-desktop" role="search">
+    <form action="#" method="get" accept-charset="utf-8">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results-desktop"
+             type="text" name="search" placeholder="Search (/) for a class, method..."
+             spellcheck="false" autocomplete="off"
+             title="Type to search, Up and Down to navigate, Enter to load">
+      <ul id="search-results-desktop" aria-label="Search Results"
+          aria-busy="false" aria-expanded="false"
+          aria-atomic="false" class="initially-hidden search-results"></ul>
+    </form>
+  </div>
+
+  <!-- Mobile search icon button -->
+  <button id="search-toggle" class="navbar-search-mobile" aria-label="Open search" type="button">
+    <span aria-hidden="true">🔍</span>
+  </button>
+
+  <!-- Theme toggle button -->
+  <button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" type="button">
+    <span class="theme-toggle-icon" aria-hidden="true">🌙</span>
+  </button>
+</header>
+
+<!-- Search Modal (Mobile) -->
+<div id="search-modal" class="search-modal" hidden aria-modal="true" role="dialog" aria-label="Search">
+  <div class="search-modal-backdrop"></div>
+  <div class="search-modal-content">
+    <div class="search-modal-header">
+      <form class="search-modal-form" action="#" method="get" accept-charset="utf-8">
+        <span class="search-modal-icon" aria-hidden="true">🔍</span>
+        <input id="search-field-mobile" role="combobox" aria-label="Search"
+               aria-autocomplete="list" aria-controls="search-results-mobile"
+               type="text" name="search" placeholder="Search documentation"
+               spellcheck="false" autocomplete="off">
+        <button type="button" class="search-modal-close" aria-label="Close search" id="search-modal-close">
+          <span aria-hidden="true">esc</span>
+        </button>
+      </form>
+    </div>
+    <div class="search-modal-body">
+      <ul id="search-results-mobile" aria-label="Search Results"
+          aria-busy="false" aria-expanded="false"
+          aria-atomic="false" class="search-results search-modal-results initially-hidden"></ul>
+      <div class="search-modal-empty">
+        <p>No recent searches</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="navigation-toggle" role="button" tabindex="0" aria-label="Toggle sidebar" aria-expanded="true" aria-controls="navigation">
   <span aria-hidden="true">&#9776;</span>
 </div>
 
 
 <nav id="navigation" role="navigation">
-  <div id="project-navigation">
-    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
-  <h2>
-    <a href="../index.html" rel="home">Home</a>
-  </h2>
-
-  <div id="table-of-contents-navigation">
-    <a href="../table_of_contents.html#pages">Pages</a>
-    <a href="../table_of_contents.html#classes">Classes</a>
-    <a href="../table_of_contents.html#methods">Methods</a>
-  </div>
-</div>
-
-    <div id="search-section" role="search" class="project-section initially-hidden">
-  <form action="#" method="get" accept-charset="utf-8">
-    <div id="search-field-wrapper">
-      <input id="search-field" role="combobox" aria-label="Search"
-             aria-autocomplete="list" aria-controls="search-results"
-             type="text" name="search" placeholder="Search (/) for a class, method, ..." spellcheck="false"
-             autocomplete="off"
-             title="Type to search, Up and Down to navigate, Enter to load">
-    </div>
-
-    <ul id="search-results" aria-label="Search Results"
-        aria-busy="false" aria-expanded="false"
-        aria-atomic="false" class="initially-hidden"></ul>
-  </form>
-</div>
-
-  </div>
-
   
+
+
+
+
+  <div id="fileindex-section" class="nav-section">
+    <details class="nav-section-collapsible" >
+      <summary class="nav-section-header">
+        <span class="nav-section-icon">
+          <svg>
+            <use href="#icon-file"></use>
+          </svg>
+        </span>
+
+        <span class="nav-section-title">Pages</span>
+
+        <span class="nav-section-chevron">
+          <svg>
+            <use href="#icon-chevron"></use>
+          </svg>
+        </span>
+      </summary>
+
+      <ul class="nav-list">
+
+
+
+
+
+
+            <li>
+              <a href="../README_md.html">
+                README
+              </a>
+            </li>
+
+      </ul>
+    </details>
+  </div>
+
 
   
 
   
 <div id="parent-class-section" class="nav-section">
-  <h3>Ancestors</h3>
-  <ul><li>Object</li></ul>
+  <details class="nav-section-collapsible" open>
+    <summary class="nav-section-header">
+      <span class="nav-section-icon">
+        <svg><use href="#icon-ancestors"></use></svg>
+      </span>
+      <span class="nav-section-title">Ancestors</span>
+      <span class="nav-section-chevron">
+        <svg><use href="#icon-chevron"></use></svg>
+      </span>
+    </summary>
+    <ul><li>Object</li></ul>
+  </details>
+</div>
+
+
+  
+<div id="includes-section" class="nav-section">
+  <details class="nav-section-collapsible" open>
+    <summary class="nav-section-header">
+      <span class="nav-section-icon">
+        <svg><use href="#icon-includes"></use></svg>
+      </span>
+      <span class="nav-section-title">Included Modules</span>
+      <span class="nav-section-chevron">
+        <svg><use href="#icon-chevron"></use></svg>
+      </span>
+    </summary>
+
+    <ul class="nav-list">
+
+
+      <li><a class="include" href="ReferenceCounted.html">Z3::ReferenceCounted</a></li>
+
+
+    </ul>
+  </details>
 </div>
 
 
   
 
   
-
-  
   <div class="nav-section">
-    <h3>Class Methods</h3>
-    <ul class="link-list" role="directory">
+    <details class="nav-section-collapsible" open>
+      <summary class="nav-section-header">
+        <span class="nav-section-icon">
+          <svg><use href="#icon-class-methods"></use></svg>
+        </span>
+        <span class="nav-section-title">Class Methods</span>
+        <span class="nav-section-chevron">
+          <svg><use href="#icon-chevron"></use></svg>
+        </span>
+      </summary>
+      <ul class="nav-list" role="directory">
 
-      <li ><a href="#method-c-new">new</a></li>
+        <li ><a href="#method-c-new">new</a></li>
 
-    </ul>
+      </ul>
+    </details>
   </div>
 
 
 
   <div class="nav-section">
-    <h3>Instance Methods</h3>
-    <ul class="link-list" role="directory">
+    <details class="nav-section-collapsible" open>
+      <summary class="nav-section-header">
+        <span class="nav-section-icon">
+          <svg><use href="#icon-instance-methods"></use></svg>
+        </span>
+        <span class="nav-section-title">Instance Methods</span>
+        <span class="nav-section-chevron">
+          <svg><use href="#icon-chevron"></use></svg>
+        </span>
+      </summary>
+      <ul class="nav-list" role="directory">
 
-      <li ><a href="#method-i-assert">assert</a></li>
+        <li ><a href="#method-i-assert">assert</a></li>
 
-      <li ><a href="#method-i-assert_soft">assert_soft</a></li>
+        <li ><a href="#method-i-assert_and_track">assert_and_track</a></li>
 
-      <li ><a href="#method-i-assertions">assertions</a></li>
+        <li ><a href="#method-i-assert_soft">assert_soft</a></li>
 
-      <li ><a href="#method-i-check">check</a></li>
+        <li ><a href="#method-i-assertions">assertions</a></li>
 
-      <li ><a href="#method-i-maximize">maximize</a></li>
+        <li ><a href="#method-i-check">check</a></li>
 
-      <li ><a href="#method-i-minimize">minimize</a></li>
+        <li ><a href="#method-i-help">help</a></li>
 
-      <li ><a href="#method-i-model">model</a></li>
+        <li ><a href="#method-i-maximize">maximize</a></li>
 
-      <li ><a href="#method-i-pop">pop</a></li>
+        <li ><a href="#method-i-minimize">minimize</a></li>
 
-      <li ><a href="#method-i-prove-21">prove!</a></li>
+        <li ><a href="#method-i-model">model</a></li>
 
-      <li ><a href="#method-i-push">push</a></li>
+        <li ><a href="#method-i-param_descrs">param_descrs</a></li>
 
-      <li ><a href="#method-i-reason_unknown">reason_unknown</a></li>
+        <li ><a href="#method-i-pop">pop</a></li>
 
-      <li ><a href="#method-i-satisfiable-3F">satisfiable?</a></li>
+        <li ><a href="#method-i-prove-21">prove!</a></li>
 
-      <li ><a href="#method-i-statistics">statistics</a></li>
+        <li ><a href="#method-i-push">push</a></li>
 
-      <li ><a href="#method-i-unsatisfiable-3F">unsatisfiable?</a></li>
+        <li ><a href="#method-i-reason_unknown">reason_unknown</a></li>
 
-    </ul>
+        <li ><a href="#method-i-satisfiable-3F">satisfiable?</a></li>
+
+        <li ><a href="#method-i-set_params">set_params</a></li>
+
+        <li ><a href="#method-i-statistics">statistics</a></li>
+
+        <li ><a href="#method-i-to_s">to_s</a></li>
+
+        <li ><a href="#method-i-unsat_core">unsat_core</a></li>
+
+        <li ><a href="#method-i-unsatisfiable-3F">unsatisfiable?</a></li>
+
+      </ul>
+    </details>
   </div>
 
 
+  <div id="classindex-section" class="nav-section">
+  <details class="nav-section-collapsible" open>
+    <summary class="nav-section-header">
+      <span class="nav-section-icon">
+        <svg><use href="#icon-layers"></use></svg>
+      </span>
+      <span class="nav-section-title">Classes and Modules</span>
+      <span class="nav-section-chevron">
+        <svg><use href="#icon-chevron"></use></svg>
+      </span>
+    </summary>
 
-  <footer id="validator-badges" role="contentinfo">
-  <p><a href="https://validator.w3.org/check/referer">Validate</a></p>
-  <p>Generated by <a href="https://ruby.github.io/rdoc/">RDoc</a> 6.17.0.</p>
-  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.</p>
-</footer>
+    <ul class="link-list nav-list"><li><details open><summary><code><a href="../Z3.html">Z3</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/AST.html">AST</a></code></li><li><code><a href="../Z3/ArithExpr.html">ArithExpr</a></code></li><li><code><a href="../Z3/ArrayExpr.html">ArrayExpr</a></code></li><li><code><a href="../Z3/ArraySort.html">ArraySort</a></code></li><li><code><a href="../Z3/BitvecExpr.html">BitvecExpr</a></code></li><li><code><a href="../Z3/BitvecSort.html">BitvecSort</a></code></li><li><code><a href="../Z3/BoolExpr.html">BoolExpr</a></code></li><li><code><a href="../Z3/BoolSort.html">BoolSort</a></code></li><li><code><a href="../Z3/CharExpr.html">CharExpr</a></code></li><li><code><a href="../Z3/CharSort.html">CharSort</a></code></li><li><code><a href="../Z3/Context.html">Context</a></code></li><li><code><a href="../Z3/Exception.html">Exception</a></code></li><li><code><a href="../Z3/Expr.html">Expr</a></code></li><li><code><a href="../Z3/FiniteDomainExpr.html">FiniteDomainExpr</a></code></li><li><code><a href="../Z3/FiniteDomainSort.html">FiniteDomainSort</a></code></li><li><code><a href="../Z3/FloatExpr.html">FloatExpr</a></code></li><li><code><a href="../Z3/FloatSort.html">FloatSort</a></code></li><li><code><a href="../Z3/FuncDecl.html">FuncDecl</a></code></li><li><code><a href="../Z3/Goal.html">Goal</a></code></li><li><code><a href="../Z3/IntExpr.html">IntExpr</a></code></li><li><code><a href="../Z3/IntSort.html">IntSort</a></code></li><li><code><a href="../Z3/LowLevel.html">LowLevel</a></code></li><li><code><a href="../Z3/Model.html">Model</a></code></li><li><code><a href="../Z3/Optimize.html">Optimize</a></code></li><li><code><a href="../Z3/ParamDescrs.html">ParamDescrs</a></code></li><li><code><a href="../Z3/Params.html">Params</a></code></li><li><details><summary><code><a href="../Z3/Printer.html">Printer</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/Printer/PrintedExpr.html">PrintedExpr</a></code></li></ul></details></li><li><code><a href="../Z3/Probe.html">Probe</a></code></li><li><code><a href="../Z3/ReExpr.html">Re</a></code></li><li><code><a href="../Z3/ReExpr.html">ReExpr</a></code></li><li><code><a href="../Z3/ReSort.html">ReSort</a></code></li><li><code><a href="../Z3/RealExpr.html">RealExpr</a></code></li><li><code><a href="../Z3/RealSort.html">RealSort</a></code></li><li><code><a href="../Z3/ReferenceCounted.html">ReferenceCounted</a></code></li><li><code><a href="../Z3/RoundingModeExpr.html">RoundingModeExpr</a></code></li><li><code><a href="../Z3/RoundingModeSort.html">RoundingModeSort</a></code></li><li><code><a href="../Z3/SeqExpr.html">SeqExpr</a></code></li><li><code><a href="../Z3/SeqSort.html">SeqSort</a></code></li><li><code><a href="../Z3/SetExpr.html">SetExpr</a></code></li><li><code><a href="../Z3/SetSort.html">SetSort</a></code></li><li><code><a href="../Z3/Solver.html">Solver</a></code></li><li><code><a href="../Z3/Sort.html">Sort</a></code></li><li><code><a href="../Z3/StringExpr.html">StringExpr</a></code></li><li><code><a href="../Z3/StringSort.html">StringSort</a></code></li><li><code><a href="../Z3/Tactic.html">Tactic</a></code></li><li><code><a href="../Z3/TypeVariableExpr.html">TypeVariableExpr</a></code></li><li><code><a href="../Z3/TypeVariableSort.html">TypeVariableSort</a></code></li><li><code><a href="../Z3/UninterpretedExpr.html">UninterpretedExpr</a></code></li><li><code><a href="../Z3/UninterpretedSort.html">UninterpretedSort</a></code></li></ul></details></li></ul>
+  </details>
+</div>
 
 </nav>
 
@@ -182,7 +593,7 @@
 
     <section class="attribute-method-details method-section">
       <header>
-        <h3>Attributes</h3>
+        <h3 id="attributes"><a href="#attributes">Attributes</a></h3>
       </header>
 
 
@@ -208,7 +619,7 @@
 
      <section id="public-class-5Buntitled-5D-method-details" class="method-section anchor-link">
        <header>
-         <h3>Public Class Methods</h3>
+         <h3 id="public-class-methods"><a href="#public-class-methods">Public Class Methods</a></h3>
        </header>
 
 
@@ -218,7 +629,7 @@
             <div class="method-heading">
               <a href="#method-c-new" title="Link to this method">
                 <span class="method-name">new</span>
-                <span class="method-args">()</span>
+                <span class="method-args">(params = {})</span>
               </a>
             </div>
 
@@ -230,20 +641,21 @@
               <summary>Source</summary>
             </details>
           </div>
+          <div class="method-source-code" id="new-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 7</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">params</span> = {})
+  <span class="ruby-ivar">@_optimize</span> = <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_optimize</span>
+  <span class="ruby-identifier">inc_ref!</span> <span class="ruby-value">:optimize</span>, <span class="ruby-ivar">@_optimize</span>
+  <span class="ruby-identifier">reset_model!</span>
+  <span class="ruby-comment"># Skipped for the common no-parameters case, as #set_params has to build</span>
+  <span class="ruby-comment"># the parameter descriptions to check against</span>
+  <span class="ruby-identifier">set_params</span>(<span class="ruby-identifier">params</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span> <span class="ruby-operator">==</span> {}
+<span class="ruby-keyword">end</span></pre>
+          </div>
 
 
 
         <div class="method-description">
-
-          <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/z3/optimize.rb, line 5</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>
-  <span class="ruby-ivar">@_optimize</span> = <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_optimize</span>
-  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">optimize_inc_ref</span>(<span class="ruby-keyword">self</span>)
-  <span class="ruby-identifier">reset_model!</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-
 
 
           
@@ -262,7 +674,7 @@
 
      <section id="public-instance-5Buntitled-5D-method-details" class="method-section anchor-link">
        <header>
-         <h3>Public Instance Methods</h3>
+         <h3 id="public-instance-methods"><a href="#public-instance-methods">Public Instance Methods</a></h3>
        </header>
 
 
@@ -284,13 +696,8 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="assert-source">
-            <pre><span class="ruby-comment"># File lib/z3/optimize.rb, line 21</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 40</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">assert</span>(<span class="ruby-identifier">ast</span>)
   <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">optimize_assert</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">ast</span>)
@@ -299,7 +706,53 @@
 
 
 
+        <div class="method-description">
+
+
           
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-assert_and_track" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-assert_and_track" title="Link to this method">
+                <span class="method-name">assert_and_track</span>
+                <span class="method-args">(ast, tracker)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="assert_and_track-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 47</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">assert_and_track</span>(<span class="ruby-identifier">ast</span>, <span class="ruby-identifier">tracker</span>)
+  <span class="ruby-identifier">reset_model!</span>
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">optimize_assert_and_track</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">ast</span>, <span class="ruby-identifier">tracker</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>‘tracker` is a Bool const standing in for `ast`, and it’s what shows up in <a href="Optimize.html#method-i-unsat_core"><code>unsat_core</code></a> if the solver blames this assertion</p>
 
 
         </div>
@@ -329,19 +782,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="assert_soft-source">
-            <pre><span class="ruby-comment"># File lib/z3/optimize.rb, line 26</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 52</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">assert_soft</span>(<span class="ruby-identifier">ast</span>, <span class="ruby-identifier">weight</span> = <span class="ruby-string">&quot;1&quot;</span>, <span class="ruby-identifier">id</span> = <span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">optimize_assert_soft</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">ast</span>, <span class="ruby-identifier">weight</span>, <span class="ruby-identifier">id</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -374,19 +825,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="assertions-source">
-            <pre><span class="ruby-comment"># File lib/z3/optimize.rb, line 68</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 94</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">assertions</span>
   <span class="ruby-identifier">_ast_vector</span> = <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">optimize_get_assertions</span>(<span class="ruby-keyword">self</span>)
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">unpack_ast_vector</span>(<span class="ruby-identifier">_ast_vector</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -419,13 +868,8 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="check-source">
-            <pre><span class="ruby-comment"># File lib/z3/optimize.rb, line 31</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 57</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">check</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
   <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-identifier">result</span> = <span class="ruby-identifier">check_sat_results</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">optimize_check</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">args</span>))
@@ -434,6 +878,51 @@
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-help" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-help" title="Link to this method">
+                <span class="method-name">help</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="help-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 111</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">help</span>
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">optimize_get_help</span>(<span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
 
 
           
@@ -466,18 +955,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="maximize-source">
-            <pre><span class="ruby-comment"># File lib/z3/optimize.rb, line 103</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 144</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">maximize</span>(<span class="ruby-identifier">ast</span>)
+  <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">optimize_maximize</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">ast</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -510,18 +998,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="minimize-source">
-            <pre><span class="ruby-comment"># File lib/z3/optimize.rb, line 107</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 149</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">minimize</span>(<span class="ruby-identifier">ast</span>)
+  <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">optimize_minimize</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">ast</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -554,13 +1041,8 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="model-source">
-            <pre><span class="ruby-comment"># File lib/z3/optimize.rb, line 60</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 86</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">model</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@has_model</span>
     <span class="ruby-ivar">@model</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Model</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">optimize_get_model</span>(<span class="ruby-keyword">self</span>))
@@ -572,7 +1054,52 @@
 
 
 
+        <div class="method-description">
+
+
           
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-param_descrs" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-param_descrs" title="Link to this method">
+                <span class="method-name">param_descrs</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="param_descrs-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 17</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">param_descrs</span>
+  <span class="ruby-constant">ParamDescrs</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">optimize_get_param_descrs</span>(<span class="ruby-keyword">self</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p><a href="Optimize.html"><code>Optimize</code></a> takes far fewer parameters than <a href="Solver.html"><code>Solver</code></a> does</p>
 
 
         </div>
@@ -602,19 +1129,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="pop-source">
-            <pre><span class="ruby-comment"># File lib/z3/optimize.rb, line 16</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 35</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">pop</span>
   <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">optimize_pop</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -647,13 +1172,8 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="prove-21-source">
-            <pre><span class="ruby-comment"># File lib/z3/optimize.rb, line 78</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 119</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">prove!</span>(<span class="ruby-identifier">ast</span>)
   <span class="ruby-ivar">@has_model</span> = <span class="ruby-keyword">false</span>
   <span class="ruby-identifier">push</span>
@@ -676,6 +1196,9 @@
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -708,19 +1231,17 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="push-source">
-            <pre><span class="ruby-comment"># File lib/z3/optimize.rb, line 11</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 30</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">push</span>
   <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">optimize_push</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -753,18 +1274,16 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="reason_unknown-source">
-            <pre><span class="ruby-comment"># File lib/z3/optimize.rb, line 99</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 140</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">reason_unknown</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">optimize_get_reason_unknown</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -797,13 +1316,8 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="satisfiable-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/optimize.rb, line 38</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 64</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">satisfiable?</span>
   <span class="ruby-keyword">case</span> <span class="ruby-identifier">check</span>
   <span class="ruby-keyword">when</span> <span class="ruby-value">:sat</span>
@@ -818,7 +1332,54 @@
 
 
 
+        <div class="method-description">
+
+
           
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-set_params" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-set_params" title="Link to this method">
+                <span class="method-name">set_params</span>
+                <span class="method-args">(params)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="set_params-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 24</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">set_params</span>(<span class="ruby-identifier">params</span>)
+  <span class="ruby-identifier">params</span> = <span class="ruby-constant">Params</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>, <span class="ruby-identifier">param_descrs</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Params</span>)
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">optimize_set_params</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">params</span>)
+  <span class="ruby-keyword">self</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Parameters accumulate - setting one twice overrides it, but parameters set by earlier calls stay. Pass a <a href="Params.html"><code>Params</code></a> if you want to skip the name and type checks, a Hash if you don’t.</p>
 
 
         </div>
@@ -848,13 +1409,8 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="statistics-source">
-            <pre><span class="ruby-comment"># File lib/z3/optimize.rb, line 73</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 106</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">statistics</span>
   <span class="ruby-identifier">_stats</span> = <span class="ruby-constant">LowLevel</span><span class="ruby-operator">::</span><span class="ruby-identifier">optimize_get_statistics</span>(<span class="ruby-keyword">self</span>)
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">unpack_statistics</span>(<span class="ruby-identifier">_stats</span>)
@@ -863,7 +1419,95 @@
 
 
 
+        <div class="method-description">
+
+
           
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-to_s" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-to_s" title="Link to this method">
+                <span class="method-name">to_s</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="to_s-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 115</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_s</span>
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">optimize_to_string</span>(<span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-unsat_core" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-unsat_core" title="Link to this method">
+                <span class="method-name">unsat_core</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="unsat_core-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 101</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsat_core</span>
+  <span class="ruby-identifier">_ast_vector</span> = <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">optimize_get_unsat_core</span>(<span class="ruby-keyword">self</span>)
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">unpack_ast_vector</span>(<span class="ruby-identifier">_ast_vector</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Only the trackers passed to <a href="Optimize.html#method-i-assert_and_track"><code>assert_and_track</code></a> can ever show up here, plainly asserted formulas are never blamed</p>
 
 
         </div>
@@ -893,13 +1537,8 @@
               <summary>Source</summary>
             </details>
           </div>
-
-
-
-        <div class="method-description">
-
           <div class="method-source-code" id="unsatisfiable-3F-source">
-            <pre><span class="ruby-comment"># File lib/z3/optimize.rb, line 49</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/optimize.rb, line 75</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsatisfiable?</span>
   <span class="ruby-keyword">case</span> <span class="ruby-identifier">check</span>
   <span class="ruby-keyword">when</span> <span class="ruby-value">:unsat</span>
@@ -912,6 +1551,9 @@
 <span class="ruby-keyword">end</span></pre>
           </div>
 
+
+
+        <div class="method-description">
 
 
           
@@ -931,5 +1573,27 @@
   </section>
 
 </main>
+
+<aside class="table-of-contents" role="complementary" aria-label="Table of Contents">
+  <div class="toc-sticky">
+    <h3 class="toc-heading">On This Page</h3>
+    <nav class="toc-nav" id="toc-nav" aria-label="Page sections">
+      <!-- Generated by JavaScript based on page headings -->
+    </nav>
+  </div>
+</aside>
+
+
+<footer class="site-footer">
+  
+
+  <div class="footer-bottom">
+    <p>
+      Generated by <a href="https://ruby.github.io/rdoc/">RDoc 7.0.1</a>
+      using the Aliki theme by <a href="http://st0012.dev">Stan Lo</a>
+    </p>
+  </div>
+</footer>
+
 </body>
 

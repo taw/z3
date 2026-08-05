@@ -5,17 +5,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>class Z3::Printer - RDoc Documentation</title>
+<title>class Z3::CharExpr - RDoc Documentation</title>
 
 
   <meta
     name="keywords"
-    content="ruby,class,Z3::Printer"
+    content="ruby,class,Z3::CharExpr"
   >
 
     <meta
       name="description"
-      content="Documentation for the Z3::Printer class"
+      content="Documentation for the Z3::CharExpr class"
     >
 
 
@@ -24,13 +24,13 @@
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="class Z3::Printer - RDoc Documentation">
+<meta property="og:title" content="class Z3::CharExpr - RDoc Documentation">
 
 
 
     <meta
       property="og:description"
-      content="Documentation for Z3::Printer class - API reference and code examples"
+      content="Documentation for Z3::CharExpr class - API reference and code examples"
     >
 
 
@@ -39,13 +39,13 @@
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="class Z3::Printer - RDoc Documentation">
+<meta name="twitter:title" content="class Z3::CharExpr - RDoc Documentation">
 
 
 
     <meta
       name="twitter:description"
-      content="Documentation for Z3::Printer class - API reference and code examples"
+      content="Documentation for Z3::CharExpr class - API reference and code examples"
     >
 
 
@@ -425,7 +425,7 @@
         <svg><use href="#icon-chevron"></use></svg>
       </span>
     </summary>
-    <ul><li>Object</li></ul>
+    <ul><li>Expr</li></ul>
   </details>
 </div>
 
@@ -436,25 +436,6 @@
 
   
 
-
-  <div class="nav-section">
-    <details class="nav-section-collapsible" open>
-      <summary class="nav-section-header">
-        <span class="nav-section-icon">
-          <svg><use href="#icon-instance-methods"></use></svg>
-        </span>
-        <span class="nav-section-title">Instance Methods</span>
-        <span class="nav-section-chevron">
-          <svg><use href="#icon-chevron"></use></svg>
-        </span>
-      </summary>
-      <ul class="nav-list" role="directory">
-
-        <li ><a href="#method-i-format">format</a></li>
-
-      </ul>
-    </details>
-  </div>
 
 
   <div id="classindex-section" class="nav-section">
@@ -475,7 +456,7 @@
 
 </nav>
 
-<main role="main" aria-labelledby="class-Z3::Printer">
+<main role="main" aria-labelledby="class-Z3::CharExpr">
   
   
     <ol role="navigation" aria-label="Breadcrumb navigation" class="breadcrumb">
@@ -488,15 +469,15 @@
       
       <li>
         
-        <span>Printer</span>
+        <span>CharExpr</span>
         
       </li>
       
     </ol>
   
 
-  <h1 id="class-Z3::Printer" class="anchor-link class">
-    class Z3::Printer
+  <h1 id="class-Z3::CharExpr" class="anchor-link class">
+    class Z3::CharExpr
   </h1>
 
   <section class="description">
@@ -510,148 +491,9 @@
 
 
 
-    <section class="constants-list">
-      <header>
-        <h3 id="constants"><a href="#constants">Constants</a></h3>
-      </header>
-      <dl>
 
-        <dt id="DEFAULT_TRAILING_ARG">DEFAULT_TRAILING_ARG</dt>
 
-        <dd>
 
-          <p><a href="../Z3.html"><code>Z3</code></a> always spells the starting offset out, Ruby’s String#index / Array#index default it to 0 - so a trailing 0 is noise, and ‘s.index(“a”)` is what anyone would have written</p>
-        </dd>
-
-
-        <dt id="FLIPPED_METHOD_CALL_NAMES">FLIPPED_METHOD_CALL_NAMES</dt>
-
-        <dd>
-
-          <p>Same idea, but <a href="../Z3.html"><code>Z3</code></a> takes the prefix/suffix first and the string second, where Ruby’s String#start_with? / end_with? take it the other way round - so it’s the <strong>second</strong> argument that prints as the receiver.</p>
-        </dd>
-
-
-        <dt id="METHOD_CALL_NAMES">METHOD_CALL_NAMES</dt>
-
-        <dd>
-
-          <p><a href="../Z3.html"><code>Z3</code></a> decl name =&gt; Ruby method, printed as ‘receiver.method` or `receiver.method(rest)` with the first argument as the receiver. <a href="../Z3.html"><code>Z3</code></a> names the same operation `str.foo` for Strings and `seq.foo` for every other Seq, so both spellings map to the one Ruby method - except `replace_all`, which <a href="../Z3.html"><code>Z3</code></a> calls `str.replace_all` even for sequences of non-characters.</p>
-        </dd>
-
-
-        <dt id="OPERATOR_NAMES">OPERATOR_NAMES</dt>
-
-        <dd>
-
-          <p>Lexicographic string comparison. These are operators in Ruby, but their <a href="../Z3.html"><code>Z3</code></a> names contain letters, so the generic operator path doesn’t catch them.</p>
-        </dd>
-
-
-        <dt id="RE_ASSOCIATIVE_NAMES">RE_ASSOCIATIVE_NAMES</dt>
-
-        <dd>
-
-          <p>Concat, union and intersection are associative, and <a href="../Z3.html"><code>Z3</code></a> hands them back as a nested binary tree however many arguments they were built with</p>
-        </dd>
-
-
-        <dt id="RE_CONSTANT_NAMES">RE_CONSTANT_NAMES</dt>
-
-        <dd>
-
-          <p>The regexes with no arguments at all, named after the constructors that build them. <a href="../Z3.html"><code>Z3</code></a> calls the empty language ‘re.none` over Strings and `re.empty` over every other sequence sort.</p>
-        </dd>
-
-
-        <dt id="RE_METHOD_NAMES">RE_METHOD_NAMES</dt>
-
-        <dd>
-
-          <p>…and the ones that print as methods, since Ruby has no operators to spare</p>
-        </dd>
-
-
-        <dt id="RE_OPERATOR_NAMES">RE_OPERATOR_NAMES</dt>
-
-        <dd>
-
-          <p>Regex operations that print as Ruby operators on <a href="ReExpr.html"><code>ReExpr</code></a>. ‘re.++` is concatenation and `re.+` is one-or-more - different <a href="../Z3.html"><code>Z3</code></a> names, so no clash.</p>
-        </dd>
-
-
-        <dt id="SEQ_CONCAT_NAMES">SEQ_CONCAT_NAMES</dt>
-
-        <dd>
-
-          <p>‘str.++` is the same operation as `seq.++`, <a href="../Z3.html"><code>Z3</code></a> just names it differently for String</p>
-        </dd>
-
-
-        <dt id="SEQ_ELEMENT_ARGS">SEQ_ELEMENT_ARGS</dt>
-
-        <dd>
-
-          <p>Argument positions that take an element-or-subsequence. ‘xs.include?(7)` builds `(seq.contains xs (seq.unit 7))`, and printing that back as `<a href="7">xs.include?(</a>)` is correct but isn’t what anyone wrote - Ruby’s Array#include? takes the element, so a lone unit in one of these positions prints as the element it wraps.</p>
-        </dd>
-
-
-      </dl>
-    </section>
-
-
-
-
-
-     <section id="public-instance-5Buntitled-5D-method-details" class="method-section anchor-link">
-       <header>
-         <h3 id="public-instance-methods"><a href="#public-instance-methods">Public Instance Methods</a></h3>
-       </header>
-
-
-      <div id="method-i-format" class="method-detail anchor-link ">
-        <div class="method-header">
-
-            <div class="method-heading">
-              <a href="#method-i-format" title="Link to this method">
-                <span class="method-name">format</span>
-                <span class="method-args">(a)</span>
-              </a>
-            </div>
-
-        </div>
-
-
-          <div class="method-controls">
-            <details class="method-source-toggle">
-              <summary>Source</summary>
-            </details>
-          </div>
-          <div class="method-source-code" id="format-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/printer.rb, line 3</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">format</span>(<span class="ruby-identifier">a</span>)
-  <span class="ruby-identifier">format_ast</span>(<span class="ruby-identifier">a</span>).<span class="ruby-identifier">to_s</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-
-
-
-        <div class="method-description">
-
-
-          
-
-
-        </div>
-
-
-
-
-
-      </div>
-
-
-    </section>
 
   </section>
 

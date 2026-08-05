@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>class Z3::StringExpr - RDoc Documentation</title>
+
+
+  <meta
+    name="keywords"
+    content="ruby,class,Z3::StringExpr"
+  >
+
+    <meta
+      name="description"
+      content="class Z3::StringExpr: The Ruby side of this reads like Ruby&#39;s String - see SeqExpr for why the two don&#39;t share a hierarchy even though Z3 models a String as a Seq(Char). re"
+    >
+
+
+
+
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="class Z3::StringExpr - RDoc Documentation">
+
+
+
+    <meta property="og:description" content="The Ruby side of this reads like Ruby&#39;s String - see SeqExpr for why the two don&#39;t share a hierarchy even though Z3 models a String as a Seq(Char). re">
+
+
+
+
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="class Z3::StringExpr - RDoc Documentation">
+
+
+
+    <meta name="twitter:description" content="The Ruby side of this reads like Ruby&#39;s String - see SeqExpr for why the two don&#39;t share a hierarchy even though Z3 models a String as a Seq(Char). re">
+
+
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+  var index_rel_prefix = "../";
+</script>
+
+<script
+  src="../js/theme-toggle.js?v=7.0.1"
+></script>
+
+<script
+  src="../js/search_navigation.js?v=7.0.1"
+  defer
+></script>
+
+<script
+  src="../js/search_data.js?v=7.0.1"
+  defer
+></script>
+
+<script
+  src="../js/search_ranker.js?v=7.0.1"
+  defer
+></script>
+
+<script
+  src="../js/search_controller.js?v=7.0.1"
+  defer
+></script>
+
+<script
+  src="../js/c_highlighter.js?v=7.0.1"
+  defer
+></script>
+
+<script
+  src="../js/aliki.js?v=7.0.1"
+  defer
+></script>
+
+<link
+  href="../css/rdoc.css?v=7.0.1"
+  rel="stylesheet"
+>
+
+
+
+
+<body role="document" class="class has-toc">
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <!-- Chevron (right arrow) - used for expand/collapse -->
+  <symbol
+    id="icon-chevron"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </symbol>
+
+  <!-- File/Document - Pages section -->
+  <symbol
+    id="icon-file"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path
+      d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"
+    ></path>
+
+    <polyline points="14 2 14 8 20 8"></polyline>
+  </symbol>
+
+  <!-- Layers/Stack - Classes and Modules section -->
+  <symbol
+    id="icon-layers"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+    <polyline points="2 17 12 22 22 17"></polyline>
+    <polyline points="2 12 12 17 22 12"></polyline>
+  </symbol>
+
+  <!-- Curly braces with C - Class Methods section -->
+  <symbol
+    id="icon-class-methods"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M6 3C3.5 3 2 4.5 2 7v3c0 1.5-1 2-1 2s1 .5 1 2v5c0 2.5 1.5 4 4 4"></path>
+    <path d="M18 3c2.5 0 4 1.5 4 4v3c0 1.5 1 2 1 2s-1 .5-1 2v5c0 2.5-1.5 4-4 4"></path>
+
+    <text
+      x="12"
+      y="17"
+      text-anchor="middle"
+      font-size="13"
+      font-weight="bold"
+      fill="currentColor"
+      stroke="none"
+    >
+      C
+    </text>
+  </symbol>
+
+  <!-- Curly braces with I - Instance Methods section -->
+  <symbol
+    id="icon-instance-methods"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M6 3C3.5 3 2 4.5 2 7v3c0 1.5-1 2-1 2s1 .5 1 2v5c0 2.5 1.5 4 4 4"></path>
+    <path d="M18 3c2.5 0 4 1.5 4 4v3c0 1.5 1 2 1 2s-1 .5-1 2v5c0 2.5-1.5 4-4 4"></path>
+
+    <text
+      x="12"
+      y="17"
+      text-anchor="middle"
+      font-size="13"
+      font-weight="bold"
+      fill="currentColor"
+      stroke="none"
+    >
+      I
+    </text>
+  </symbol>
+
+  <!-- Double chevrons up - Ancestors section -->
+  <symbol
+    id="icon-ancestors"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <polyline points="17 11 12 6 7 11"></polyline>
+    <polyline points="17 18 12 13 7 18"></polyline>
+  </symbol>
+
+  <!-- User with plus - Included Modules section -->
+  <symbol
+    id="icon-includes"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+    <circle cx="8.5" cy="7" r="4"></circle>
+
+    <line
+      x1="20"
+      y1="8"
+      x2="20"
+      y2="14"
+    ></line>
+
+    <line
+      x1="23"
+      y1="11"
+      x2="17"
+      y2="11"
+    ></line>
+  </symbol>
+
+  <!-- User with check - Extended Modules section -->
+  <symbol
+    id="icon-extends"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+    <circle cx="8.5" cy="7" r="4"></circle>
+    <polyline points="17 11 19 13 23 9"></polyline>
+  </symbol>
+
+  <!-- List - Sections section -->
+  <symbol
+    id="icon-list"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <line
+      x1="8"
+      y1="6"
+      x2="21"
+      y2="6"
+    ></line>
+
+    <line
+      x1="8"
+      y1="12"
+      x2="21"
+      y2="12"
+    ></line>
+
+    <line
+      x1="8"
+      y1="18"
+      x2="21"
+      y2="18"
+    ></line>
+
+    <line
+      x1="3"
+      y1="6"
+      x2="3.01"
+      y2="6"
+    ></line>
+
+    <line
+      x1="3"
+      y1="12"
+      x2="3.01"
+      y2="12"
+    ></line>
+
+    <line
+      x1="3"
+      y1="18"
+      x2="3.01"
+      y2="18"
+    ></line>
+  </symbol>
+</svg>
+
+<header class="top-navbar">
+  <a href="../index.html" class="navbar-brand">
+    RDoc Documentation
+  </a>
+
+  <!-- Desktop search bar -->
+  <div class="navbar-search navbar-search-desktop" role="search">
+    <form action="#" method="get" accept-charset="utf-8">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results-desktop"
+             type="text" name="search" placeholder="Search (/) for a class, method..."
+             spellcheck="false" autocomplete="off"
+             title="Type to search, Up and Down to navigate, Enter to load">
+      <ul id="search-results-desktop" aria-label="Search Results"
+          aria-busy="false" aria-expanded="false"
+          aria-atomic="false" class="initially-hidden search-results"></ul>
+    </form>
+  </div>
+
+  <!-- Mobile search icon button -->
+  <button id="search-toggle" class="navbar-search-mobile" aria-label="Open search" type="button">
+    <span aria-hidden="true">🔍</span>
+  </button>
+
+  <!-- Theme toggle button -->
+  <button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" type="button">
+    <span class="theme-toggle-icon" aria-hidden="true">🌙</span>
+  </button>
+</header>
+
+<!-- Search Modal (Mobile) -->
+<div id="search-modal" class="search-modal" hidden aria-modal="true" role="dialog" aria-label="Search">
+  <div class="search-modal-backdrop"></div>
+  <div class="search-modal-content">
+    <div class="search-modal-header">
+      <form class="search-modal-form" action="#" method="get" accept-charset="utf-8">
+        <span class="search-modal-icon" aria-hidden="true">🔍</span>
+        <input id="search-field-mobile" role="combobox" aria-label="Search"
+               aria-autocomplete="list" aria-controls="search-results-mobile"
+               type="text" name="search" placeholder="Search documentation"
+               spellcheck="false" autocomplete="off">
+        <button type="button" class="search-modal-close" aria-label="Close search" id="search-modal-close">
+          <span aria-hidden="true">esc</span>
+        </button>
+      </form>
+    </div>
+    <div class="search-modal-body">
+      <ul id="search-results-mobile" aria-label="Search Results"
+          aria-busy="false" aria-expanded="false"
+          aria-atomic="false" class="search-results search-modal-results initially-hidden"></ul>
+      <div class="search-modal-empty">
+        <p>No recent searches</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="navigation-toggle" role="button" tabindex="0" aria-label="Toggle sidebar" aria-expanded="true" aria-controls="navigation">
+  <span aria-hidden="true">&#9776;</span>
+</div>
+
+
+<nav id="navigation" role="navigation">
+  
+
+
+
+
+  <div id="fileindex-section" class="nav-section">
+    <details class="nav-section-collapsible" >
+      <summary class="nav-section-header">
+        <span class="nav-section-icon">
+          <svg>
+            <use href="#icon-file"></use>
+          </svg>
+        </span>
+
+        <span class="nav-section-title">Pages</span>
+
+        <span class="nav-section-chevron">
+          <svg>
+            <use href="#icon-chevron"></use>
+          </svg>
+        </span>
+      </summary>
+
+      <ul class="nav-list">
+
+
+
+
+
+
+            <li>
+              <a href="../README_md.html">
+                README
+              </a>
+            </li>
+
+      </ul>
+    </details>
+  </div>
+
+
+  
+
+  
+<div id="parent-class-section" class="nav-section">
+  <details class="nav-section-collapsible" open>
+    <summary class="nav-section-header">
+      <span class="nav-section-icon">
+        <svg><use href="#icon-ancestors"></use></svg>
+      </span>
+      <span class="nav-section-title">Ancestors</span>
+      <span class="nav-section-chevron">
+        <svg><use href="#icon-chevron"></use></svg>
+      </span>
+    </summary>
+    <ul><li><a href="Expr.html">Z3::Expr</a><ul><li><a href="AST.html">Z3::AST</a><ul><li>Object</li></ul></li></ul></li></ul>
+  </details>
+</div>
+
+
+  
+
+  
+
+  
+  <div class="nav-section">
+    <details class="nav-section-collapsible" open>
+      <summary class="nav-section-header">
+        <span class="nav-section-icon">
+          <svg><use href="#icon-class-methods"></use></svg>
+        </span>
+        <span class="nav-section-title">Class Methods</span>
+        <span class="nav-section-chevron">
+          <svg><use href="#icon-chevron"></use></svg>
+        </span>
+      </summary>
+      <ul class="nav-list" role="directory">
+
+        <li ><a href="#method-c-Concat">Concat</a></li>
+
+        <li ><a href="#method-c-Le">Le</a></li>
+
+        <li ><a href="#method-c-Lt">Lt</a></li>
+
+        <li ><a href="#method-c-coerce_to_string_sort">coerce_to_string_sort</a></li>
+
+        <li class="calls-super" ><a href="#method-c-new">new</a></li>
+
+      </ul>
+    </details>
+  </div>
+
+
+
+  <div class="nav-section">
+    <details class="nav-section-collapsible" open>
+      <summary class="nav-section-header">
+        <span class="nav-section-icon">
+          <svg><use href="#icon-instance-methods"></use></svg>
+        </span>
+        <span class="nav-section-title">Instance Methods</span>
+        <span class="nav-section-chevron">
+          <svg><use href="#icon-chevron"></use></svg>
+        </span>
+      </summary>
+      <ul class="nav-list" role="directory">
+
+        <li ><a href="#method-i-2A">*</a></li>
+
+        <li ><a href="#method-i-2B">+</a></li>
+
+        <li ><a href="#method-i-3C">&lt;</a></li>
+
+        <li ><a href="#method-i-3C-3D">&lt;=</a></li>
+
+        <li ><a href="#method-i-3E">&gt;</a></li>
+
+        <li ><a href="#method-i-3E-3D">&gt;=</a></li>
+
+        <li ><a href="#method-i-5B-5D">[]</a></li>
+
+        <li ><a href="#method-i-empty-3F">empty?</a></li>
+
+        <li ><a href="#method-i-end_with-3F">end_with?</a></li>
+
+        <li ><a href="#method-i-gsub">gsub</a></li>
+
+        <li ><a href="#method-i-include-3F">include?</a></li>
+
+        <li ><a href="#method-i-index">index</a></li>
+
+        <li ><a href="#method-i-length">length</a></li>
+
+        <li ><a href="#method-i-matches-3F">matches?</a></li>
+
+        <li ><a href="#method-i-rindex">rindex</a></li>
+
+        <li ><a href="#method-i-size">size</a></li>
+
+        <li ><a href="#method-i-slice">slice</a></li>
+
+        <li ><a href="#method-i-start_with-3F">start_with?</a></li>
+
+        <li ><a href="#method-i-string_value-3F">string_value?</a></li>
+
+        <li ><a href="#method-i-sub">sub</a></li>
+
+        <li ><a href="#method-i-to_i">to_i</a></li>
+
+        <li ><a href="#method-i-value">value</a></li>
+
+      </ul>
+    </details>
+  </div>
+
+
+  <div id="classindex-section" class="nav-section">
+  <details class="nav-section-collapsible" open>
+    <summary class="nav-section-header">
+      <span class="nav-section-icon">
+        <svg><use href="#icon-layers"></use></svg>
+      </span>
+      <span class="nav-section-title">Classes and Modules</span>
+      <span class="nav-section-chevron">
+        <svg><use href="#icon-chevron"></use></svg>
+      </span>
+    </summary>
+
+    <ul class="link-list nav-list"><li><details open><summary><code><a href="../Z3.html">Z3</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/AST.html">AST</a></code></li><li><code><a href="../Z3/ArithExpr.html">ArithExpr</a></code></li><li><code><a href="../Z3/ArrayExpr.html">ArrayExpr</a></code></li><li><code><a href="../Z3/ArraySort.html">ArraySort</a></code></li><li><code><a href="../Z3/BitvecExpr.html">BitvecExpr</a></code></li><li><code><a href="../Z3/BitvecSort.html">BitvecSort</a></code></li><li><code><a href="../Z3/BoolExpr.html">BoolExpr</a></code></li><li><code><a href="../Z3/BoolSort.html">BoolSort</a></code></li><li><code><a href="../Z3/CharExpr.html">CharExpr</a></code></li><li><code><a href="../Z3/CharSort.html">CharSort</a></code></li><li><code><a href="../Z3/Context.html">Context</a></code></li><li><code><a href="../Z3/Exception.html">Exception</a></code></li><li><code><a href="../Z3/Expr.html">Expr</a></code></li><li><code><a href="../Z3/FiniteDomainExpr.html">FiniteDomainExpr</a></code></li><li><code><a href="../Z3/FiniteDomainSort.html">FiniteDomainSort</a></code></li><li><code><a href="../Z3/FloatExpr.html">FloatExpr</a></code></li><li><code><a href="../Z3/FloatSort.html">FloatSort</a></code></li><li><code><a href="../Z3/FuncDecl.html">FuncDecl</a></code></li><li><code><a href="../Z3/Goal.html">Goal</a></code></li><li><code><a href="../Z3/IntExpr.html">IntExpr</a></code></li><li><code><a href="../Z3/IntSort.html">IntSort</a></code></li><li><code><a href="../Z3/LowLevel.html">LowLevel</a></code></li><li><code><a href="../Z3/Model.html">Model</a></code></li><li><code><a href="../Z3/Optimize.html">Optimize</a></code></li><li><code><a href="../Z3/ParamDescrs.html">ParamDescrs</a></code></li><li><code><a href="../Z3/Params.html">Params</a></code></li><li><details><summary><code><a href="../Z3/Printer.html">Printer</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/Printer/PrintedExpr.html">PrintedExpr</a></code></li></ul></details></li><li><code><a href="../Z3/Probe.html">Probe</a></code></li><li><code><a href="../Z3/ReExpr.html">Re</a></code></li><li><code><a href="../Z3/ReExpr.html">ReExpr</a></code></li><li><code><a href="../Z3/ReSort.html">ReSort</a></code></li><li><code><a href="../Z3/RealExpr.html">RealExpr</a></code></li><li><code><a href="../Z3/RealSort.html">RealSort</a></code></li><li><code><a href="../Z3/ReferenceCounted.html">ReferenceCounted</a></code></li><li><code><a href="../Z3/RoundingModeExpr.html">RoundingModeExpr</a></code></li><li><code><a href="../Z3/RoundingModeSort.html">RoundingModeSort</a></code></li><li><code><a href="../Z3/SeqExpr.html">SeqExpr</a></code></li><li><code><a href="../Z3/SeqSort.html">SeqSort</a></code></li><li><code><a href="../Z3/SetExpr.html">SetExpr</a></code></li><li><code><a href="../Z3/SetSort.html">SetSort</a></code></li><li><code><a href="../Z3/Solver.html">Solver</a></code></li><li><code><a href="../Z3/Sort.html">Sort</a></code></li><li><code><a href="../Z3/StringExpr.html">StringExpr</a></code></li><li><code><a href="../Z3/StringSort.html">StringSort</a></code></li><li><code><a href="../Z3/Tactic.html">Tactic</a></code></li><li><code><a href="../Z3/TypeVariableExpr.html">TypeVariableExpr</a></code></li><li><code><a href="../Z3/TypeVariableSort.html">TypeVariableSort</a></code></li><li><code><a href="../Z3/UninterpretedExpr.html">UninterpretedExpr</a></code></li><li><code><a href="../Z3/UninterpretedSort.html">UninterpretedSort</a></code></li></ul></details></li></ul>
+  </details>
+</div>
+
+</nav>
+
+<main role="main" aria-labelledby="class-Z3::StringExpr">
+  
+  
+    <ol role="navigation" aria-label="Breadcrumb navigation" class="breadcrumb">
+      
+      <li>
+        
+        <a href="../Z3.html">Z3</a><span>::</span>
+        
+      </li>
+      
+      <li>
+        
+        <span>StringExpr</span>
+        
+      </li>
+      
+    </ol>
+  
+
+  <h1 id="class-Z3::StringExpr" class="anchor-link class">
+    class Z3::StringExpr
+  </h1>
+
+  <section class="description">
+    
+<p>The Ruby side of this reads like Ruby’s String - see <a href="SeqExpr.html"><code>SeqExpr</code></a> for why the two don’t share a hierarchy even though <a href="../Z3.html"><code>Z3</code></a> models a String as a Seq(Char).</p>
+
+<p>Where Ruby and SMT-LIB disagree, Ruby wins: ‘#include?` rather than `contains?`, `#sub` / `#gsub` rather than `replace` / `replace_all`, the receiver back in front of `#start_with?`, and a negative index counted from the end.</p>
+
+<p>Where Ruby answers ‘nil` there’s no conflict to resolve, because there’s nothing to answer. Every one of these is a subexpression - ‘<a href="i">s</a>` can appear as `<a href="i">s</a> + “!”`, or under an `==`, or buried in a term a model hands back - so it has to denote a String, and no String is `nil`. Those just return whatever <a href="../Z3.html"><code>Z3</code></a> returns, and the method comments say what that is.</p>
+
+  </section>
+
+
+  <section id="5Buntitled-5D" class="documentation-section anchor-link">
+
+
+
+
+
+
+
+
+
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section anchor-link">
+       <header>
+         <h3 id="public-class-methods"><a href="#public-class-methods">Public Class Methods</a></h3>
+       </header>
+
+
+      <div id="method-c-Concat" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-Concat" title="Link to this method">
+                <span class="method-name">Concat</span>
+                <span class="method-args">(*args)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="Concat-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 212</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">Concat</span>(<span class="ruby-operator">*</span><span class="ruby-identifier ruby-title">args</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Concat requires at least one argument&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">empty?</span>
+  <span class="ruby-identifier">args</span> = <span class="ruby-identifier">coerce_to_string_sort</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+  <span class="ruby-comment"># Z3 rejects a concatenation of fewer than two strings</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+  <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_seq_concat</span>(<span class="ruby-identifier">args</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-Le" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-Le" title="Link to this method">
+                <span class="method-name">Le</span>
+                <span class="method-args">(a, b)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="Le-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 225</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">Le</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_string_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_str_le</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-Lt" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-Lt" title="Link to this method">
+                <span class="method-name">Lt</span>
+                <span class="method-args">(a, b)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="Lt-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 220</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">Lt</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_string_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_str_lt</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-coerce_to_string_sort" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-coerce_to_string_sort" title="Link to this method">
+                <span class="method-name">coerce_to_string_sort</span>
+                <span class="method-args">(*args)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="coerce_to_string_sort-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 206</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">coerce_to_string_sort</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+  <span class="ruby-identifier">args</span> = <span class="ruby-identifier">coerce_to_same_sort</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;String value expected&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">StringExpr</span>)
+  <span class="ruby-identifier">args</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-new" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-new" title="Link to this method">
+                <span class="method-name">new</span>
+                <span class="method-args">(_ast, sort)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="new-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/expr.rb, line 5</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">_ast</span>, <span class="ruby-identifier">sort</span>)
+  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">_ast</span>)
+  <span class="ruby-ivar">@sort</span> = <span class="ruby-identifier">sort</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Values must have AST kind numeral, app, or quantifier&quot;</span> <span class="ruby-keyword">unless</span> [<span class="ruby-value">:numeral</span>, <span class="ruby-value">:app</span>, <span class="ruby-value">:quantifier</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">ast_kind</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+            <div class="method-calls-super">
+              Calls superclass method
+              <a href="Expr.html#method-c-new"><code>Z3::Expr::new</code></a>
+            </div>
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+    </section>
+
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section anchor-link">
+       <header>
+         <h3 id="public-instance-methods"><a href="#public-instance-methods">Public Instance Methods</a></h3>
+       </header>
+
+
+      <div id="method-i-2A" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-2A" title="Link to this method">
+                <span class="method-name">*</span>
+                <span class="method-args">(count)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="2A-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 40</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">*</span>(<span class="ruby-identifier">count</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Can only repeat a String a non-negative Integer number of times&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">count</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Integer</span>) <span class="ruby-keyword">and</span> <span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">0</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">from_const</span>(<span class="ruby-string">&quot;&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">count</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+  <span class="ruby-constant">StringExpr</span>.<span class="ruby-constant">Concat</span>(<span class="ruby-operator">*</span>([<span class="ruby-keyword">self</span>] <span class="ruby-operator">*</span> <span class="ruby-identifier">count</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Ruby String#* repeats. <a href="../Z3.html"><code>Z3</code></a> has no repetition operator, so it’s Ruby-side concatenation, and the count has to be a Ruby Integer rather than an <a href="IntExpr.html"><code>IntExpr</code></a>.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-2B" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-2B" title="Link to this method">
+                <span class="method-name">+</span>
+                <span class="method-args">(other)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="2B-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 34</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">+</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-constant">StringExpr</span>.<span class="ruby-constant">Concat</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Ruby String#+ is concatenation, and so is ‘str.++`. It deliberately doesn’t go through <a href="Expr.html#method-c-Add"><code>Expr.Add</code></a>, which stays arithmetic only.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-3C" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-3C" title="Link to this method">
+                <span class="method-name">&lt;</span>
+                <span class="method-args">(other)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="3C-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 181</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&lt;</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-constant">StringExpr</span>.<span class="ruby-constant">Lt</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>‘str.&lt;` / `str.&lt;=` are lexicographic, and have nothing to do with `==`</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-3C-3D" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-3C-3D" title="Link to this method">
+                <span class="method-name">&lt;=</span>
+                <span class="method-args">(other)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="3C-3D-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 185</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&lt;=</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-constant">StringExpr</span>.<span class="ruby-constant">Le</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-3E" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-3E" title="Link to this method">
+                <span class="method-name">&gt;</span>
+                <span class="method-args">(other)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="3E-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 189</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&gt;</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-constant">StringExpr</span>.<span class="ruby-constant">Lt</span>(<span class="ruby-identifier">other</span>, <span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-3E-3D" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-3E-3D" title="Link to this method">
+                <span class="method-name">&gt;=</span>
+                <span class="method-args">(other)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="3E-3D-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 193</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&gt;=</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-constant">StringExpr</span>.<span class="ruby-constant">Le</span>(<span class="ruby-identifier">other</span>, <span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-5B-5D" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-5B-5D" title="Link to this method">
+                <span class="method-name">[]</span>
+                <span class="method-args">(index, len=nil)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="5B-5D-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 57</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">[]</span>(<span class="ruby-identifier">index</span>, <span class="ruby-identifier">len</span>=<span class="ruby-keyword">nil</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">len</span>
+    <span class="ruby-identifier">substr</span>(<span class="ruby-identifier">index</span>, <span class="ruby-identifier">len</span>)
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">index</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Range</span>)
+    <span class="ruby-identifier">substr</span>(<span class="ruby-operator">*</span><span class="ruby-constant">Expr</span>.<span class="ruby-identifier">offset_and_length</span>(<span class="ruby-identifier">index</span>, <span class="ruby-identifier">length</span>))
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_seq_at</span>(<span class="ruby-keyword">self</span>, <span class="ruby-constant">IntSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">index</span>)))
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Ruby String#[]. ‘<a href="i">s</a>` is a one character String (`str.at`), `s[i, len]` and `<a href="range">s</a>` are substrings (`str.substr`).</p>
+
+<p>An index is an offset, and that’s the whole of it - a negative one is not counted from the end the way Ruby’s is. Only a literal could ever be recognized as negative, and ‘<a href="-1">s</a>` meaning the last character while `<a href="i">s</a>` with `i == -1` means something else is worse than not emulating it at all: an index has to mean the same thing however it’s spelled. So a negative index is simply out of range, and out of range is whatever <a href="../Z3.html"><code>Z3</code></a> says, which is ‘“”` - the result is a String-sorted subexpression, so `nil` isn’t one of its options. Counting from the end is ‘s[s.length - 1]`, which works for a symbolic offset too.</p>
+
+
+        </div>
+
+
+
+        <div class="aliases">
+          Also aliased as: <a href="StringExpr.html#method-i-slice">slice</a>
+        </div>
+
+
+
+      </div>
+
+
+      <div id="method-i-empty-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-empty-3F" title="Link to this method">
+                <span class="method-name">empty?</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="empty-3F-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 28</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">empty?</span>
+  <span class="ruby-identifier">length</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-end_with-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-end_with-3F" title="Link to this method">
+                <span class="method-name">end_with?</span>
+                <span class="method-args">(*suffixes)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="end_with-3F-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 88</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">end_with?</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">suffixes</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-constant">False</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">suffixes</span>.<span class="ruby-identifier">empty?</span>
+  <span class="ruby-identifier">matches</span> = <span class="ruby-identifier">suffixes</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">suffix</span><span class="ruby-operator">|</span>
+    <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_seq_suffix</span>(<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">suffix</span>), <span class="ruby-keyword">self</span>))
+  }
+  <span class="ruby-comment"># `Or` of one thing prints as `or(...)`, and every caller is more likely to pass one</span>
+  <span class="ruby-identifier">matches</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">matches</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">:</span> <span class="ruby-constant">BoolExpr</span>.<span class="ruby-constant">Or</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">matches</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Ruby String#end_with?, ‘str.suffixof` with the arguments the other way round</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-gsub" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-gsub" title="Link to this method">
+                <span class="method-name">gsub</span>
+                <span class="method-args">(pattern, replacement)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="gsub-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 138</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">gsub</span>(<span class="ruby-identifier">pattern</span>, <span class="ruby-identifier">replacement</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">pattern</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">ReExpr</span>)
+    <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_seq_replace_re_all</span>(<span class="ruby-keyword">self</span>, <span class="ruby-constant">ReExpr</span>.<span class="ruby-identifier">expect_re_over</span>(<span class="ruby-identifier">pattern</span>, <span class="ruby-identifier">sort</span>), <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">replacement</span>)))
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_seq_replace_all</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">pattern</span>), <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">replacement</span>)))
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-include-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-include-3F" title="Link to this method">
+                <span class="method-name">include?</span>
+                <span class="method-args">(substring)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="include-3F-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 71</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">include?</span>(<span class="ruby-identifier">substring</span>)
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_seq_contains</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">substring</span>)))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Ruby String#include? - a substring, not a character</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-index" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-index" title="Link to this method">
+                <span class="method-name">index</span>
+                <span class="method-args">(substring, offset=0)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="index-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 99</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">index</span>(<span class="ruby-identifier">substring</span>, <span class="ruby-identifier">offset</span>=<span class="ruby-value">0</span>)
+  <span class="ruby-constant">IntSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_seq_index</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">substring</span>), <span class="ruby-constant">IntSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">offset</span>)))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Ruby String#index. This denotes an Int, so there’s no ‘nil` available for it to be when there’s no match - ‘str.indexof` answers -1, and that’s what comes back</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-length" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-length" title="Link to this method">
+                <span class="method-name">length</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="length-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 20</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">length</span>
+  <span class="ruby-constant">IntSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_seq_length</span>(<span class="ruby-keyword">self</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>‘str.len` and `seq.len` are one <a href="../Z3.html"><code>Z3</code></a> operation, so <a href="SeqExpr.html#method-i-length"><code>SeqExpr#length</code></a> is the same call - shared through <a href="LowLevel.html"><code>LowLevel</code></a>, not through a superclass. Ruby String has both <a href="StringExpr.html#method-i-length"><code>length</code></a> and <a href="StringExpr.html#method-i-size"><code>size</code></a>, so this has both too.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-matches-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-matches-3F" title="Link to this method">
+                <span class="method-name">matches?</span>
+                <span class="method-args">(re)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="matches-3F-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 117</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">matches?</span>(<span class="ruby-identifier">re</span>)
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_seq_in_re</span>(<span class="ruby-keyword">self</span>, <span class="ruby-constant">ReExpr</span>.<span class="ruby-identifier">expect_re_over</span>(<span class="ruby-identifier">re</span>, <span class="ruby-identifier">sort</span>)))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>‘str.in_re`. Ruby’s String#match? searches for the pattern anywhere in the string, while Z3’s matches the whole of it - so this is one of the very few places Ruby doesn’t win, and it can’t, because an anchored match is what <a href="../Z3.html"><code>Z3</code></a> has. ‘matches?` rather than `match?` says which of the two it is; searching is `s.matches?(<a href="ReExpr.html#method-c-Full"><code>Z3::Re.Full</code></a> + re + <a href="ReExpr.html#method-c-Full"><code>Z3::Re.Full</code></a>)`.</p>
+
+<p>For the same reason the argument has to be a <a href="ReExpr.html"><code>ReExpr</code></a> already: ‘s.matches?(“ab”)` would read as Ruby’s unanchored search and mean the exact opposite, so it’s a error rather than a conversion, even though ‘Z3::Re.Union(“ab”, re)` converts.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-rindex" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-rindex" title="Link to this method">
+                <span class="method-name">rindex</span>
+                <span class="method-args">(substring)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="rindex-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 104</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">rindex</span>(<span class="ruby-identifier">substring</span>)
+  <span class="ruby-constant">IntSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_seq_last_index</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">substring</span>)))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Ruby String#rindex. Z3’s ‘seq.last_indexof` takes no offset, so neither does this.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-size" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-size" title="Link to this method">
+                <span class="method-name">size</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="size-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 24</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">size</span>
+  <span class="ruby-identifier">length</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-slice" class="method-detail anchor-link method-alias">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-slice" title="Link to this method">
+                <span class="method-name">slice</span>
+                <span class="method-args">(index, len=nil)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+
+
+        <div class="method-description">
+
+
+          <p>Ruby String#slice is String#[]</p>
+
+
+        </div>
+
+
+
+
+
+        <div class="aliases">
+          Alias for: <a href="StringExpr.html#method-i-5B-5D">[]</a>
+        </div>
+
+      </div>
+
+
+      <div id="method-i-start_with-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-start_with-3F" title="Link to this method">
+                <span class="method-name">start_with?</span>
+                <span class="method-args">(*prefixes)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="start_with-3F-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 78</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">start_with?</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">prefixes</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-constant">False</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">prefixes</span>.<span class="ruby-identifier">empty?</span>
+  <span class="ruby-identifier">matches</span> = <span class="ruby-identifier">prefixes</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">prefix</span><span class="ruby-operator">|</span>
+    <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_seq_prefix</span>(<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">prefix</span>), <span class="ruby-keyword">self</span>))
+  }
+  <span class="ruby-comment"># `Or` of one thing prints as `or(...)`, and every caller is more likely to pass one</span>
+  <span class="ruby-identifier">matches</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">matches</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">:</span> <span class="ruby-constant">BoolExpr</span>.<span class="ruby-constant">Or</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">matches</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Z3’s ‘str.prefixof` takes the prefix first and the string second, the opposite way round from Ruby’s String#start_with?. Like Ruby’s, this takes any number of candidates and holds if any of them matches - and none at all is false.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-string_value-3F" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-string_value-3F" title="Link to this method">
+                <span class="method-name">string_value?</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="string_value-3F-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 174</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">string_value?</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">ast_kind</span> <span class="ruby-operator">==</span> <span class="ruby-value">:app</span>
+  <span class="ruby-identifier">decl</span> = <span class="ruby-identifier">func_decl</span>
+  <span class="ruby-identifier">decl</span>.<span class="ruby-identifier">arity</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span> <span class="ruby-keyword">and</span> <span class="ruby-identifier">decl</span>.<span class="ruby-identifier">num_parameters</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-keyword">and</span> <span class="ruby-identifier">decl</span>.<span class="ruby-identifier">parameter_kind</span>(<span class="ruby-value">0</span>) <span class="ruby-operator">==</span> <span class="ruby-value">:zstring</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>String values are indexed decls - ‘(_ String “abc”)` - not numerals, so `ast_kind` says `:app` for them just as it does for `s + “!”`</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-sub" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-sub" title="Link to this method">
+                <span class="method-name">sub</span>
+                <span class="method-args">(pattern, replacement)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="sub-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 130</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">sub</span>(<span class="ruby-identifier">pattern</span>, <span class="ruby-identifier">replacement</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">pattern</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">ReExpr</span>)
+    <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_seq_replace_re</span>(<span class="ruby-keyword">self</span>, <span class="ruby-constant">ReExpr</span>.<span class="ruby-identifier">expect_re_over</span>(<span class="ruby-identifier">pattern</span>, <span class="ruby-identifier">sort</span>), <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">replacement</span>)))
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_seq_replace</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">pattern</span>), <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">replacement</span>)))
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Ruby String#sub and <a href="StringExpr.html#method-i-gsub"><code>gsub</code></a>, split the same way: ‘str.replace` replaces the first occurrence, `str.replace_all` every one. The pattern is a String or - unlike everywhere else, since <a href="../Z3.html"><code>Z3</code></a> has `str.replace_re` for it - a <a href="ReExpr.html"><code>ReExpr</code></a>. Both of those match unanchored here, exactly as Ruby’s do.</p>
+
+<p>The <a href="ReExpr.html"><code>Re</code></a> form is only as good as Z3’s support for it, and as of 4.16 that support is “builds the term, decides nothing”: a constraint mentioning ‘str.replace_re` comes back `unknown`, and even a fully constant one doesn’t simplify. So it’s here to build with, not yet to solve with.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-to_i" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-to_i" title="Link to this method">
+                <span class="method-name">to_i</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="to_i-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 156</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_i</span>
+  <span class="ruby-constant">IntSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_str_to_int</span>(<span class="ruby-keyword">self</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Ruby String#to_i, so this is the symbolic ‘str.to_int` - not <a href="IntExpr.html#method-i-to_i"><code>IntExpr#to_i</code></a>, which goes the other way and gives a Ruby Integer. <a href="StringExpr.html#method-i-value"><code>value</code></a> is the one that gives a Ruby object back.</p>
+
+<p>‘str.to_int` isn’t quite Ruby’s String#to_i, though: it takes a non-negative run of digits and answers -1 for anything else, where Ruby skips leading whitespace, takes a sign, parses a digit prefix (‘“12ab”.to_i` is 12) and answers 0 on failure. A prefix scan needs recursive functions the gem doesn’t have, and clamping the -1 to 0 would buy ‘“abc”.to_i == 0` and nothing else while costing the one way to write “this isn’t a number” - so this returns what <a href="../Z3.html"><code>Z3</code></a> returns.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-value" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-value" title="Link to this method">
+                <span class="method-name">value</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="value-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/string_expr.rb, line 166</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">value</span>
+  <span class="ruby-identifier">obj</span> = <span class="ruby-identifier">string_value?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">simplify</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-node">&quot;Can&#39;t convert expression #{self} into String&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">string_value?</span>
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">get_string</span>(<span class="ruby-identifier">obj</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>A Ruby String out of a string value, the way <a href="IntExpr.html#method-i-to_i"><code>IntExpr#to_i</code></a> gives a Ruby Integer.</p>
+
+<p>Deliberately not to_str: that’s Ruby’s implicit conversion protocol, which core methods call on their own whenever they want a String, and this raises for every expression which isn’t a literal. Not <a href="AST.html#method-i-to_s"><code>to_s</code></a> either - that’s the printed form of any <a href="AST.html"><code>AST</code></a>, and it has to work on all of them.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+    </section>
+
+  </section>
+
+</main>
+
+<aside class="table-of-contents" role="complementary" aria-label="Table of Contents">
+  <div class="toc-sticky">
+    <h3 class="toc-heading">On This Page</h3>
+    <nav class="toc-nav" id="toc-nav" aria-label="Page sections">
+      <!-- Generated by JavaScript based on page headings -->
+    </nav>
+  </div>
+</aside>
+
+
+<footer class="site-footer">
+  
+
+  <div class="footer-bottom">
+    <p>
+      Generated by <a href="https://ruby.github.io/rdoc/">RDoc 7.0.1</a>
+      using the Aliki theme by <a href="http://st0012.dev">Stan Lo</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+
