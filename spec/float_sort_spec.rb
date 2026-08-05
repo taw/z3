@@ -116,5 +116,80 @@ module Z3
         expect{ float_single.from_const(nil) }.to raise_error(Z3::Exception, "Can't convert nil into Float(8, 24)")
       end
     end
+
+    # Everything below builds a value of this sort out of some other expression
+    describe "building from other sorts" do
+      let(:ties_even) { RoundingModeSort.new.nearest_ties_even }
+
+      # Reinterprets the bits, so it's FloatExpr#to_ieee_bv backwards
+      it "#from_ieee_bv" do
+        expect(float_single.from_ieee_bv(BitvecSort.new(32).from_const(0x3F800000)).simplify).to stringify("1B+0")
+        expect(float_single.from_ieee_bv(BitvecSort.new(32).from_const(0xC0000000)).simplify).to stringify("-1B+1")
+        expect(float_single.from_ieee_bv(float_single.from_const(-7.25).to_ieee_bv).simplify)
+          .to stringify(float_single.from_const(-7.25).to_s)
+      end
+
+      it "#from_ieee_bv wants a Bitvec of exactly the sort's width" do
+        expect{ float_single.from_ieee_bv(BitvecSort.new(8).from_const(1)) }
+          .to raise_error(Z3::Exception, "Bitvec(32) expected as an IEEE bit pattern, got Bitvec(8)")
+        expect{ float_single.from_ieee_bv(42) }
+          .to raise_error(Z3::Exception, "Bitvec(32) expected as an IEEE bit pattern, got Integer")
+      end
+
+      # The three IEEE fields separately, which is #sign_bv / #exponent_bv /
+      # #significand_bv backwards
+      it "#from_components" do
+        sign = BitvecSort.new(1).from_const(0)
+        # 128 biased is an unbiased exponent of 1, and a zero significand means 1.0
+        exponent = BitvecSort.new(8).from_const(128)
+        significand = BitvecSort.new(23).from_const(0)
+        expect(float_single.from_components(sign, exponent, significand).simplify).to stringify("1B+1")
+
+        original = float_single.from_const(-7.25)
+        expect(float_single.from_components(original.sign_bv, original.exponent_bv(true), original.significand_bv).simplify)
+          .to stringify(original.to_s)
+      end
+
+      it "#from_components checks every width" do
+        ok_sign = BitvecSort.new(1).from_const(0)
+        ok_exponent = BitvecSort.new(8).from_const(128)
+        ok_significand = BitvecSort.new(23).from_const(0)
+        expect{ float_single.from_components(ok_exponent, ok_exponent, ok_significand) }
+          .to raise_error(Z3::Exception, "Bitvec(1) expected as a sign, got Bitvec(8)")
+        expect{ float_single.from_components(ok_sign, ok_sign, ok_significand) }
+          .to raise_error(Z3::Exception, "Bitvec(8) expected as an exponent, got Bitvec(1)")
+        # One narrower than sbits - IEEE doesn't store the leading bit
+        expect{ float_single.from_components(ok_sign, ok_exponent, BitvecSort.new(24).from_const(0)) }
+          .to raise_error(Z3::Exception, "Bitvec(23) expected as a significand, got Bitvec(24)")
+      end
+
+      it "#from_float rounds between float sorts" do
+        expect(float_single.from_float(float_double.from_const(1.5), ties_even).simplify).to stringify("1.5B+0")
+        expect{ float_single.from_float(1.5, ties_even) }.to raise_error(Z3::Exception, "Float expected")
+        expect{ float_single.from_float(float_double.from_const(1.5), :ties_even) }.to raise_error(Z3::Exception, "Mode expected")
+      end
+
+      it "#from_real rounds a Real" do
+        expect(float_double.from_real(Rational(1, 2), ties_even).simplify).to stringify("1B-1")
+        expect(float_double.from_real(Z3.Real("r"), ties_even).sort).to eq(float_double)
+        expect{ float_double.from_real(Rational(1, 2), :ties_even) }.to raise_error(Z3::Exception, "Mode expected")
+      end
+
+      # Reads the Bitvec as a number, where #from_ieee_bv reads the same bits as a
+      # float already - so the same 8 bits give -3.0 signed and 253.0 unsigned
+      it "#from_signed_bv / #from_unsigned_bv" do
+        bits = BitvecSort.new(8).from_const(-3)
+        expect(float_double.from_signed_bv(bits, ties_even).simplify).to stringify("-1.5B+1")
+        expect(float_double.from_unsigned_bv(bits, ties_even).simplify).to stringify("1.9765625B+7")
+        expect{ float_double.from_signed_bv(3, ties_even) }.to raise_error(Z3::Exception, "Bitvec expected")
+        expect{ float_double.from_unsigned_bv(bits, :ties_even) }.to raise_error(Z3::Exception, "Mode expected")
+      end
+
+      it "#from_significand_and_exponent" do
+        expect(float_double.from_significand_and_exponent(Rational(5, 4), 3, ties_even).simplify).to stringify("1.25B+3")
+        expect(float_double.from_significand_and_exponent(1, 0, ties_even).simplify).to stringify("1B+0")
+        expect{ float_double.from_significand_and_exponent(1, 0, :ties_even) }.to raise_error(Z3::Exception, "Mode expected")
+      end
+    end
   end
 end

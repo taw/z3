@@ -45,6 +45,22 @@ module Z3
       FloatExpr.Rem(self, other)
     end
 
+    def sqrt(mode)
+      FloatExpr.Sqrt(self, mode)
+    end
+
+    # Nearest float with no fractional part, rounded `mode`'s way - so which of 2.0
+    # and 3.0 you get for 2.5 is the rounding mode's business, not this method's
+    def round_to_integral(mode)
+      FloatExpr.RoundToIntegral(self, mode)
+    end
+
+    # `(self * other) + addend`, rounded once at the end rather than after the
+    # multiply and again after the add
+    def fused_multiply_add(other, addend, mode)
+      FloatExpr.FusedMultiplyAdd(self, other, addend, mode)
+    end
+
     def abs
       sort.new LowLevel.mk_fpa_abs(self)
     end
@@ -93,12 +109,54 @@ module Z3
       FloatExpr.Min(self, other)
     end
 
+    # Exact - a Real can hold every float value, where the other direction rounds.
+    # Z3 leaves the answer unspecified for NaN and the infinities.
+    def to_real
+      RealSort.new.new(LowLevel.mk_fpa_to_real(self))
+    end
+
+    # The IEEE 754 bits of this float, as one Bitvec of the sort's full width.
+    # NaN has many encodings and Z3 doesn't promise which one you get.
+    def to_ieee_bv
+      BitvecSort.new(sort.ebits + sort.sbits).new(LowLevel.mk_fpa_to_ieee_bv(self))
+    end
+
+    # Rounding to an integer, unlike #to_ieee_bv which reinterprets the bits.
+    # Z3 leaves the answer unspecified when the value doesn't fit in `size` bits.
+    def to_bv(*)
+      raise Z3::Exception, "Use #to_signed_bv or #to_unsigned_bv for Float, not #to_bv"
+    end
+
+    def to_signed_bv(size, mode)
+      BitvecSort.new(size).new(LowLevel.mk_fpa_to_sbv(FloatExpr.coerce_to_mode_sort(mode), self, size))
+    end
+
+    def to_unsigned_bv(size, mode)
+      BitvecSort.new(size).new(LowLevel.mk_fpa_to_ubv(FloatExpr.coerce_to_mode_sort(mode), self, size))
+    end
+
     def exponent_string(biased)
       LowLevel.fpa_get_numeral_exponent_string(self, biased)
     end
 
     def significand_string
       LowLevel.fpa_get_numeral_significand_string(self)
+    end
+
+    # The same three pieces as #exponent_string and #significand_string, but as Bitvec
+    # expressions rather than Ruby Strings. Like those, they only work on a literal.
+    # The significand is one bit narrower than the sort's `sbits` - IEEE doesn't store
+    # the leading bit.
+    def sign_bv
+      BitvecSort.new(1).new(LowLevel.fpa_get_numeral_sign_bv(self))
+    end
+
+    def exponent_bv(biased)
+      BitvecSort.new(sort.ebits).new(LowLevel.fpa_get_numeral_exponent_bv(self, biased))
+    end
+
+    def significand_bv
+      BitvecSort.new(sort.sbits - 1).new(LowLevel.fpa_get_numeral_significand_bv(self))
     end
 
     public_class_method :new
@@ -183,6 +241,22 @@ module Z3
       def Min(a, b)
         a, b = coerce_to_same_float_sort(a, b)
         a.sort.new(LowLevel.mk_fpa_min(a, b))
+      end
+
+      def Sqrt(a, m)
+        m = coerce_to_mode_sort(m)
+        a.sort.new(LowLevel.mk_fpa_sqrt(m, a))
+      end
+
+      def RoundToIntegral(a, m)
+        m = coerce_to_mode_sort(m)
+        a.sort.new(LowLevel.mk_fpa_round_to_integral(m, a))
+      end
+
+      def FusedMultiplyAdd(a, b, c, m)
+        a, b, c = coerce_to_same_float_sort(a, b, c)
+        m = coerce_to_mode_sort(m)
+        a.sort.new(LowLevel.mk_fpa_fma(m, a, b, c))
       end
     end
   end

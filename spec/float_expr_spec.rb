@@ -76,6 +76,87 @@ module Z3
       )
     end
 
+    # These need a concrete rounding mode, unlike `m` which the solver picks
+    let(:ties_even) { mode.nearest_ties_even }
+    let(:to_zero) { mode.towards_zero }
+
+    it "sqrt" do
+      expect([a == 9.0, c == a.sqrt(ties_even)]).to have_solution(
+        c => float_double.from_const(3.0),
+      )
+      expect([a == 2.0, c == a.sqrt(ties_even)]).to have_solution(
+        c => float_double.from_const(Math.sqrt(2)),
+      )
+      expect{ a.sqrt(:nearest_ties_even) }.to raise_error(Z3::Exception, "Mode expected")
+    end
+
+    # Which way a tie goes is the rounding mode's business, not this method's
+    it "round_to_integral" do
+      expect([a ==  2.5, c == a.round_to_integral(ties_even)]).to have_solution(c => float_double.from_const(2.0))
+      expect([a ==  3.5, c == a.round_to_integral(ties_even)]).to have_solution(c => float_double.from_const(4.0))
+      expect([a ==  2.9, c == a.round_to_integral(to_zero)]).to have_solution(c => float_double.from_const(2.0))
+      expect([a == -2.9, c == a.round_to_integral(to_zero)]).to have_solution(c => float_double.from_const(-2.0))
+      expect{ a.round_to_integral(:towards_zero) }.to raise_error(Z3::Exception, "Mode expected")
+    end
+
+    it "fused_multiply_add" do
+      d = float_double.var("d")
+      expect([a == 2.0, b == 3.0, c == 1.0, d == a.fused_multiply_add(b, c, ties_even)]).to have_solution(
+        d => float_double.from_const(7.0),
+      )
+      expect{ a.fused_multiply_add(b, c, :nearest_ties_even) }.to raise_error(Z3::Exception, "Mode expected")
+    end
+
+    # Exact, where the other direction rounds - every float is a Real.
+    #
+    # Simplified rather than solved like everything else in this file, because Z3
+    # 4.16 gets fp.to_real wrong as soon as it meets a Real constraint: asserting
+    # `r == a.to_real` with `a == 0.5` gives a model saying `r = 2`, in which that
+    # same constraint evaluates to false. The term built here is right, and
+    # simplifying it shows that without going near the part Z3 breaks on.
+    it "to_real" do
+      expect(float_double.from_const(2.5).to_real.simplify).to stringify("5/2")
+      expect(float_double.from_const(-0.5).to_real.simplify).to stringify("-1/2")
+      expect(float_double.from_const(-7.25).to_real.simplify).to stringify("-29/4")
+      expect(float_double.from_const(-3.0).to_real.simplify).to stringify("-3")
+      expect(float_double.from_const(0.0).to_real.simplify).to stringify("0")
+      expect(a.to_real.sort).to eq(RealSort.new)
+    end
+
+    it "to_ieee_bv" do
+      f = float_single.var("f")
+      bv = Z3.Bitvec("bv", 32)
+      expect([f == 1.0, bv == f.to_ieee_bv]).to have_solution(bv => 0x3F800000)
+      expect([f == -2.0, bv == f.to_ieee_bv]).to have_solution(bv => 0xC0000000)
+      expect(f.to_ieee_bv.sort).to eq(BitvecSort.new(32))
+      expect(a.to_ieee_bv.sort).to eq(BitvecSort.new(64))
+    end
+
+    # Rounds to an integer, where #to_ieee_bv reinterprets the very same bits
+    it "to_signed_bv / to_unsigned_bv" do
+      bv = Z3.Bitvec("bv", 8)
+      expect([a ==  2.9, bv == a.to_unsigned_bv(8, to_zero)]).to have_solution(bv => 2)
+      expect([a ==  2.9, bv == a.to_signed_bv(8, to_zero)]).to have_solution(bv => 2)
+      expect([a == -2.5, bv == a.to_signed_bv(8, to_zero)]).to have_solution(bv => 254)
+      expect([a ==  2.5, bv == a.to_unsigned_bv(8, ties_even)]).to have_solution(bv => 2)
+      expect(a.to_signed_bv(8, to_zero).sort).to eq(BitvecSort.new(8))
+      expect{ a.to_bv(8, ties_even) }.to raise_error(Z3::Exception, /to_signed_bv/)
+      expect{ a.to_signed_bv(8, :towards_zero) }.to raise_error(Z3::Exception, "Mode expected")
+    end
+
+    # The pieces #exponent_string and #significand_string give as Strings, as Bitvecs.
+    # The significand is one narrower than sbits - IEEE doesn't store the leading bit.
+    it "sign_bv / exponent_bv / significand_bv" do
+      f = float_single.from_const(1.0)
+      expect(f.sign_bv.sort).to eq(BitvecSort.new(1))
+      expect(f.exponent_bv(true).sort).to eq(BitvecSort.new(8))
+      expect(f.significand_bv.sort).to eq(BitvecSort.new(23))
+      expect(f.sign_bv.unsigned_value).to eq(0)
+      expect(f.exponent_bv(true).unsigned_value).to eq(127)
+      expect(f.significand_bv.unsigned_value).to eq(0)
+      expect(float_single.from_const(-1.0).sign_bv.unsigned_value).to eq(1)
+    end
+
     it "comparisons" do
       expect([a == 3.0, b == 3.0, x == (a >= b)]).to have_solution(x => true)
       expect([a == 3.0, b == 3.0, x == (a >  b)]).to have_solution(x => false)
