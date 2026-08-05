@@ -234,9 +234,25 @@ module Z3
       end
 
       it "raises exception for Ruby values with no sort" do
-        expect{Expr.sort_for_const(nil)}.to raise_error(Z3::Exception)
-        expect{Expr.sort_for_const(:abc)}.to raise_error(Z3::Exception)
-        expect{Expr.sort_for_const([1, 2])}.to raise_error(Z3::Exception)
+        expect{Expr.sort_for_const(nil)}.to raise_error(Z3::Exception, "No Z3 sort for nil")
+        expect{Expr.sort_for_const(:abc)}.to raise_error(Z3::Exception, "No Z3 sort for Symbol")
+        expect{Expr.sort_for_const([1, 2])}.to raise_error(Z3::Exception, "No Z3 sort for Array")
+      end
+
+      # Ruby names the receiver when coercion fails - `1 + Object.new` raises
+      # "Object can't be coerced into Integer" - so a failure with a sort in hand
+      # says the same thing about the sort
+      it "reports failures against the sort it was coercing towards" do
+        expect{Z3.Int("a") + :abc}.to raise_error(Z3::Exception, "Symbol can't be coerced into Int")
+        expect{Z3.Int("a") + nil}.to raise_error(Z3::Exception, "nil can't be coerced into Int")
+        expect{Z3.Int("a").coerce(:abc)}.to raise_error(Z3::Exception, "Symbol can't be coerced into Int")
+        expect{Z3.Bitvec("v", 8) + :abc}.to raise_error(Z3::Exception, "Symbol can't be coerced into Bitvec(8)")
+        expect{Z3.String("s") + :abc}.to raise_error(Z3::Exception, "Symbol can't be coerced into String")
+      end
+
+      # With no Expr among the arguments nothing was being coerced towards anything
+      it "reports no sort at all when there's nothing to coerce towards" do
+        expect{Z3.Add(1, :abc)}.to raise_error(Z3::Exception, "No Z3 sort for Symbol")
       end
     end
   end

@@ -160,7 +160,7 @@ module Z3
     # A Ruby String out of a string value, the way IntExpr#to_i gives a Ruby Integer
     def to_str
       obj = string_value? ? self : simplify
-      raise Z3::Exception, "Can't convert expression #{self} to String" unless obj.string_value?
+      raise Z3::Exception, "Can't convert expression #{self} into String" unless obj.string_value?
       LowLevel.get_string(obj)
     end
 

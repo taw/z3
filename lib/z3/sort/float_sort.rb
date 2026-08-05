@@ -37,7 +37,7 @@ module Z3
         raise Z3::Exception, "Out of range" unless val_f == val
         val = val_f
       elsif !val.is_a?(Float)
-        raise Z3::Exception, "Cannot convert #{val.class} to #{self.class}"
+        raise cant_convert(val)
       end
 
       # A Ruby Float is a double, so this is exact for the double sort

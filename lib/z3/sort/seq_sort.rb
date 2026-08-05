@@ -20,7 +20,7 @@ module Z3
     # Z3 has no sequence literals, a sequence value is a concatenation of one element
     # sequences - and it rejects a concatenation of fewer than two of them
     def from_const(val)
-      raise Z3::Exception, "Cannot convert #{val.class} to #{self.class}" unless val.is_a?(Array)
+      raise cant_convert(val) unless val.is_a?(Array)
       units = val.map { |v| new(LowLevel.mk_seq_unit(element_sort.cast(v))) }
       case units.size
       when 0

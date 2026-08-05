@@ -115,7 +115,7 @@ module Z3
 
       it "raises on assumptions which aren't Bool" do
         expect{ solver.check(a) }.to raise_error(Z3::Exception, "Can't convert Int into Bool")
-        expect{ solver.check(42) }.to raise_error(Z3::Exception, "Cannot convert Integer to Z3::BoolSort")
+        expect{ solver.check(42) }.to raise_error(Z3::Exception, "Can't convert Integer into Bool")
       end
 
       # The C API documents assumptions as propositional literals, but Z3 takes any

@@ -14,7 +14,7 @@ module Z3
       elsif val == false
         BoolExpr.new(LowLevel.mk_false, self)
       else
-        raise Z3::Exception, "Cannot convert #{val.class} to #{self.class}"
+        raise cant_convert(val)
       end
     end
 

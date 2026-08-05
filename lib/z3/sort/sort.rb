@@ -83,7 +83,7 @@ module Z3
 
     def from_value(v)
       return v if v.sort == self
-      raise Z3::Exception, "Can't convert #{v.sort} into #{self}"
+      raise cant_convert(v)
     end
 
     def cast(a)
@@ -96,6 +96,12 @@ module Z3
       else
         from_const(a)
       end
+    end
+
+    # Every failed conversion into a sort goes through here, so they're all worded the
+    # way Ruby words its own: `Integer(nil)` says "can't convert nil into Integer"
+    def cant_convert(value)
+      Z3::Exception.new("Can't convert #{AST.describe(value)} into #{self}")
     end
 
     def self.from_pointer(_sort)

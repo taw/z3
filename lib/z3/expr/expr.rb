@@ -22,14 +22,21 @@ module Z3
 
     class << self
       def coerce_to_same_sort(*args)
+        # When coercion fails Ruby names the receiver's class - `1 + Object.new` says
+        # "Object can't be coerced into Integer" - and the first Expr is the nearest
+        # thing to a receiver we have. There may be none, in which case nothing was
+        # being coerced towards anything and #sort_for_const says so instead.
+        toward = args.find { |a| a.is_a?(Expr) }&.sort
         # This will raise exception unless one of the sorts is highest
-        max_sort = args.map { |a| a.is_a?(Expr) ? a.sort : Expr.sort_for_const(a) }.max
+        max_sort = args.map { |a| a.is_a?(Expr) ? a.sort : Expr.sort_for_const(a, toward: toward) }.max
         args.map do |a|
           max_sort.cast(a)
         end
       end
 
-      def sort_for_const(a)
+      # `toward` is the sort the value was being coerced towards, when there is one -
+      # it only changes how a failure is worded
+      def sort_for_const(a, toward: nil)
         case a
         when TrueClass, FalseClass
           BoolSort.new
@@ -42,7 +49,8 @@ module Z3
         when String
           StringSort.new
         else
-          raise Z3::Exception, "No idea how to autoconvert `#{a.class}': `#{a.inspect}'"
+          raise Z3::Exception, "#{AST.describe(a)} can't be coerced into #{toward}" if toward
+          raise Z3::Exception, "No Z3 sort for #{AST.describe(a)}"
         end
       end
 

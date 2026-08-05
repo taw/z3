@@ -20,7 +20,7 @@ module Z3
         if obj.ast_kind == :numeral
           LowLevel.get_numeral_string(obj).to_i
         else
-          raise Z3::Exception, "Can't convert expression #{to_s} to Integer"
+          raise Z3::Exception, "Can't convert expression #{to_s} into Integer"
         end
       end
     end

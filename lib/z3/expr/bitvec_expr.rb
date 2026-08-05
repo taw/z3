@@ -124,7 +124,7 @@ module Z3
       BitvecExpr.SignedAddNoUnderflow(self, other)
     end
     def unsigned_add_no_underflow?(other)
-      raise Z3::Exception, "Unsigned + cannot underflow"
+      raise Z3::Exception, "Unsigned + can't underflow"
     end
 
     def unsigned_neg_no_overflow?
@@ -154,7 +154,7 @@ module Z3
       BitvecExpr.SignedMulNoUnderflow(self, other)
     end
     def unsigned_mul_no_underflow?(other)
-      raise Z3::Exception, "Unsigned * cannot underflow"
+      raise Z3::Exception, "Unsigned * can't underflow"
     end
 
     def div_no_overflow?(other)
@@ -164,7 +164,7 @@ module Z3
       BitvecExpr.SignedDivNoOverflow(self, other)
     end
     def unsigned_div_no_overflow?(other)
-      raise Z3::Exception, "Unsigned / cannot overflow"
+      raise Z3::Exception, "Unsigned / can't overflow"
     end
 
     def >>(other)
@@ -268,7 +268,7 @@ module Z3
     end
 
     def coerce(other)
-      other_sort = Expr.sort_for_const(other)
+      other_sort = Expr.sort_for_const(other, toward: sort)
       max_sort = [sort, other_sort].max
       [max_sort.from_const(other), max_sort.from_value(self)]
     end

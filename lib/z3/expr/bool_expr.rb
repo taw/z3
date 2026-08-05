@@ -42,7 +42,7 @@ module Z3
         if ast_kind == :app and (s == "true" or s == "false")
           s == "true"
         else
-          raise Z3::Exception, "Can't convert expression #{to_s} to Boolean"
+          raise Z3::Exception, "Can't convert expression #{to_s} into Boolean"
         end
       end
     end

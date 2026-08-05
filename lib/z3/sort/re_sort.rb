@@ -22,7 +22,7 @@ module Z3
     # SeqExpr of the basis sort can stand in for a regex too
     def from_value(v)
       return v if v.sort == self
-      raise Z3::Exception, "Can't convert #{v.sort} into #{self}" unless v.sort == seq_sort
+      raise cant_convert(v) unless v.sort == seq_sort
       new(LowLevel.mk_seq_to_re(v))
     end
 

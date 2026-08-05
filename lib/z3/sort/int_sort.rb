@@ -12,7 +12,7 @@ module Z3
       if val.is_a?(Integer)
         new(LowLevel.mk_numeral(val.to_s, self))
       else
-        raise Z3::Exception, "Cannot convert #{val.class} to #{self.class}"
+        raise cant_convert(val)
       end
     end
 

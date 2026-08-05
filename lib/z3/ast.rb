@@ -54,6 +54,21 @@ module Z3
       _ast.address
     end
 
+    # How a value gets named in an error message. Ruby writes nil / true / false
+    # literally and everything else by class - `Integer(nil)` says "can't convert nil
+    # into Integer", not "can't convert NilClass into Integer" - and an Expr goes by
+    # its sort, which is what any mismatch involving one is really about.
+    def self.describe(value)
+      case value
+      when NilClass, TrueClass, FalseClass
+        value.inspect
+      when Expr
+        value.sort
+      else
+        value.class
+      end
+    end
+
     private_class_method :new
   end
 end

@@ -23,7 +23,7 @@ module Z3
         raise Z3::Exception, "Only single character strings can be converted to Char" unless val.size == 1
         from_const(val.ord)
       else
-        raise Z3::Exception, "Cannot convert #{val.class} to #{self.class}"
+        raise cant_convert(val)
       end
     end
 

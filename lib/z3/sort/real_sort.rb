@@ -12,7 +12,7 @@ module Z3
       if val.is_a?(Integer) or (val.is_a?(Float) and val.finite?) or val.is_a?(Rational)
         new LowLevel.mk_numeral(val.to_s, self)
       else
-        raise Z3::Exception, "Cannot convert #{val.class} to #{self.class}"
+        raise cant_convert(val)
       end
     end
 
@@ -22,7 +22,7 @@ module Z3
       elsif val.is_a?(RealExpr)
         val
       else
-        raise Z3::Exception, "Cannot convert #{val.class} to #{self.class}"
+        raise cant_convert(val)
       end
     end
 

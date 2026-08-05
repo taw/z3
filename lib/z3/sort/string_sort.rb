@@ -16,7 +16,7 @@ module Z3
     # A Z3 string is a sequence of code points, so a Ruby String converts character by
     # character, not byte by byte - which means it has to be valid in its own encoding
     def from_const(val)
-      raise Z3::Exception, "Cannot convert #{val.class} to #{self.class}" unless val.is_a?(String)
+      raise cant_convert(val) unless val.is_a?(String)
       raise Z3::Exception, "String is not valid #{val.encoding}" unless val.valid_encoding?
       val.each_codepoint do |code_point|
         next if code_point <= CharSort::MAX_CODE_POINT

@@ -110,9 +110,10 @@ module Z3
       end
 
       it "rejects everything else" do
-        expect{ float_single.from_const("1.5") }.to raise_error(Z3::Exception, /Cannot convert String/)
-        expect{ float_single.from_const(nil) }.to raise_error(Z3::Exception, /Cannot convert NilClass/)
-        expect{ float_single.from_const(Rational(1, 3)) }.to raise_error(Z3::Exception, /Cannot convert Rational/)
+        expect{ float_single.from_const("1.5") }.to raise_error(Z3::Exception, "Can't convert String into Float(8, 24)")
+        expect{ float_single.from_const(Rational(1, 3)) }.to raise_error(Z3::Exception, "Can't convert Rational into Float(8, 24)")
+        # Ruby names nil / true / false rather than their classes, and so do we
+        expect{ float_single.from_const(nil) }.to raise_error(Z3::Exception, "Can't convert nil into Float(8, 24)")
       end
     end
   end
