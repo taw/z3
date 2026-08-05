@@ -32,19 +32,15 @@ module Z3
       BoolExpr.IfThenElse(self, a, b)
     end
 
+    # Z3_lbool - anything else is neither true nor false, so it has no Ruby value
+    BOOL_VALUES = {1 => true, -1 => false}.freeze
+
     def to_b
-      s = to_s
-      if ast_kind == :app and (s == "true" or s == "false")
-        s == "true"
-      else
-        obj = simplify
-        s = obj.to_s
-        if ast_kind == :app and (s == "true" or s == "false")
-          s == "true"
-        else
-          raise Z3::Exception, "Can't convert expression #{to_s} into Boolean"
-        end
-      end
+      value = BOOL_VALUES[LowLevel.get_bool_value(self)]
+      return value unless value.nil?
+      value = BOOL_VALUES[LowLevel.get_bool_value(simplify)]
+      raise Z3::Exception, "Can't convert expression #{to_s} into Boolean" if value.nil?
+      value
     end
 
     # Every sort which can hand back a Ruby object spells it #value

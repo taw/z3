@@ -120,6 +120,15 @@ module Z3
       expect([a == 2, b == 2, c == (a - b).abs]).to have_solution(c => 0)
     end
 
+    # Z3 spells it the other way round, as "3 divides 12"
+    it "divisible_by?" do
+      expect([a == 12, x == a.divisible_by?(3)]).to have_solution(x => true)
+      expect([a == 12, x == a.divisible_by?(5)]).to have_solution(x => false)
+      expect([a == 0, x == a.divisible_by?(7)]).to have_solution(x => true)
+      expect([a == -12, x == a.divisible_by?(3)]).to have_solution(x => true)
+      expect([a.divisible_by?(4), a > 10, a < 15]).to have_solution(a => 12)
+    end
+
     it "simplify" do
       a = Z3.Const(5)
       b = Z3.Const(3)

@@ -45,6 +45,17 @@ module Z3
       expect{ sort.from_const("ab") }.to raise_error(Z3::Exception)
     end
 
+    # The other direction of CharExpr#to_bv
+    it "#from_bv" do
+      expect(sort.from_bv(BitvecSort.new(18).from_const(97))).to be_a(CharExpr)
+      expect([sort.var("c") == sort.from_bv(BitvecSort.new(18).from_const(97))])
+        .to have_solution(sort.var("c") => sort.from_const("a"))
+      expect{ sort.from_bv(BitvecSort.new(8).from_const(97)) }
+        .to raise_error(Z3::Exception, "Bitvec(18) expected, got Bitvec(8)")
+      expect{ sort.from_bv(97) }
+        .to raise_error(Z3::Exception, "Bitvec(18) expected, got Integer")
+    end
+
     it "raises exception when trying to convert constants of wrong type" do
       expect{ sort.from_const(true) }.to raise_error(Z3::Exception)
       expect{ sort.from_const(97.0) }.to raise_error(Z3::Exception)

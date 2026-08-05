@@ -409,6 +409,21 @@ module Z3
       end
     end
 
+    # StringSort#from_code backwards
+    describe "#to_code" do
+      it "is the code point of a one character string" do
+        expect(s.to_code).to be_a(IntExpr)
+        expect([s == "A", s.to_code == 65]).to have_solution(s => %q{"A"})
+        expect([s == "中", s.to_code == 0x4e2d]).to have_solution(s => %q{"中"})
+      end
+
+      # Same -1 convention as #to_i uses for a string that isn't a number
+      it "is -1 for a string of any other length" do
+        expect([s == "ab", s.to_code == -1]).to have_solution(s => %q{"ab"})
+        expect([s == "", s.to_code == -1]).to have_solution(s => %q{""})
+      end
+    end
+
     describe "comparisons" do
       # `str.<` / `str.<=` are lexicographic, and unrelated to `==`
       it "sexpr" do

@@ -157,6 +157,12 @@ module Z3
       IntSort.new.new(LowLevel.mk_str_to_int(self))
     end
 
+    # The code point of a one character string, as a Z3 Int, or -1 for a string of
+    # any other length. StringSort#from_code is this backwards.
+    def to_code
+      IntSort.new.new(LowLevel.mk_string_to_code(self))
+    end
+
     # A Ruby String out of a string value, the way IntExpr#to_i gives a Ruby Integer.
     #
     # Deliberately not #to_str: that's Ruby's implicit conversion protocol, which core

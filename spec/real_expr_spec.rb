@@ -100,5 +100,75 @@ module Z3
       expect([a == 3.5, b == -a]).to have_solution(b => "-7/2")
       expect([a == Rational(4,3), b == -a]).to have_solution(b => "-4/3")
     end
+
+    let(:sort) { RealSort.new }
+
+    # SMT-LIB's to_int rounds towards negative infinity, which is Ruby's Float#floor
+    # and not Ruby's Float#to_i
+    it "floor" do
+      i = Z3.Int("i")
+      expect([i == sort.from_const(2.5).floor]).to have_solution(i => 2)
+      expect([i == sort.from_const(2.0).floor]).to have_solution(i => 2)
+      expect([i == sort.from_const(-2.5).floor]).to have_solution(i => -3)
+      expect([i == sort.from_const(-2.0).floor]).to have_solution(i => -2)
+      expect(sort.from_const(2.5).floor.sort).to eq(IntSort.new)
+    end
+
+    it "integer?" do
+      expect([a == 2.0, x == a.integer?]).to have_solution(x => true)
+      expect([a == -3, x == a.integer?]).to have_solution(x => true)
+      expect([a == 2.5, x == a.integer?]).to have_solution(x => false)
+      expect([a == Rational(1, 3), x == a.integer?]).to have_solution(x => false)
+    end
+
+    # There is no #value on Real - see #to_r and #to_f for why
+    describe "reading a value back into Ruby" do
+      # An irrational root, which Z3 answers with an algebraic number
+      let(:root_two) do
+        solver = Z3::Solver.new
+        solver.assert(a * a == 2)
+        solver.assert(a > 0)
+        solver.satisfiable?
+        solver.model[a]
+      end
+
+      it "#to_r is exact for rationals" do
+        expect(sort.from_const(2.5).to_r).to eq(Rational(5, 2))
+        expect(sort.from_const(Rational(1, 3)).to_r).to eq(Rational(1, 3))
+        expect(sort.from_const(-3).to_r).to eq(Rational(-3, 1))
+        # Simplified first, so it doesn't have to be written as a literal
+        expect((sort.from_const(Rational(1, 3)) + sort.from_const(Rational(1, 6))).to_r).to eq(Rational(1, 2))
+        expect{ a.to_r }.to raise_error(Z3::Exception, "Can't convert expression a into a number")
+      end
+
+      # The whole reason Real has no #value: this one is a perfectly good literal
+      # with no exact Ruby equivalent at all
+      it "#to_r refuses algebraic numbers rather than rounding them" do
+        expect(root_two).to be_algebraic
+        expect(sort.from_const(2.5)).to_not be_algebraic
+        expect{ root_two.to_r }.to raise_error(Z3::Exception, /algebraic number .* exact Rational/)
+      end
+
+      it "#to_f always works, because a Float is allowed to be approximate" do
+        expect(sort.from_const(2.5).to_f).to eq(2.5)
+        expect(sort.from_const(Rational(1, 3)).to_f).to eq(1.0 / 3)
+        expect(root_two.to_f).to eq(Math.sqrt(2))
+      end
+
+      it "#lower_bound / #upper_bound bracket an algebraic number" do
+        expect(root_two.lower_bound(0)).to eq(Rational(11, 8))
+        expect(root_two.upper_bound(0)).to eq(Rational(3, 2))
+        expect(root_two.lower_bound ** 2).to be < 2
+        expect(root_two.upper_bound ** 2).to be > 2
+        # Asking for more precision has to give a tighter bracket, not a looser one
+        expect(root_two.lower_bound(30)).to be > root_two.lower_bound(0)
+        expect(root_two.upper_bound(30)).to be < root_two.upper_bound(0)
+      end
+
+      it "an exact value is its own bound" do
+        expect(sort.from_const(Rational(1, 3)).lower_bound).to eq(Rational(1, 3))
+        expect(sort.from_const(Rational(1, 3)).upper_bound).to eq(Rational(1, 3))
+      end
+    end
   end
 end

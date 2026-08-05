@@ -15,6 +15,11 @@ module Z3
     # Takes the low `size` bits, so it wraps rather than failing on values which
     # don't fit - `Z3.Int("a").to_bv(8)` of 256 is 0. Which Integer comes back out
     # depends on how you read it again: #signed_to_int or #unsigned_to_int.
+    # Z3 spells this the other way round, as "other divides self"
+    def divisible_by?(other)
+      BoolSort.new.new(LowLevel.mk_divides(IntSort.new.cast(other), self))
+    end
+
     def to_bv(size)
       BitvecSort.new(size).new(LowLevel.mk_int2bv(size, self))
     end

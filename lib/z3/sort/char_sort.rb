@@ -27,6 +27,14 @@ module Z3
       end
     end
 
+    # The other direction of CharExpr#to_bv. Z3 wants the full 18 bits, which is as
+    # wide as its alphabet goes.
+    def from_bv(bv)
+      raise Z3::Exception, "Bitvec(18) expected, got #{AST.describe(bv)}" unless
+        bv.is_a?(BitvecExpr) and bv.sort.size == 18
+      new(LowLevel.mk_char_from_bv(bv))
+    end
+
     def to_s
       "Char"
     end
