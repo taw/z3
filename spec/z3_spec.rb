@@ -13,6 +13,29 @@ describe Z3 do
     expect(Z3.version_at_least?(999)).to eq(false)
   end
 
+  # The rewriter's own parameters, nothing to do with the global ones below
+  describe "simplify parameters" do
+    it "#simplify_param_descrs describes what AST#simplify takes" do
+      descrs = Z3.simplify_param_descrs
+      expect(descrs).to be_a(Z3::ParamDescrs)
+      expect(descrs.names).to include("som", "arith_lhs", "blast_distinct", "max_steps")
+      expect(descrs.kind("som")).to eq(:bool)
+      expect(descrs.kind("max_steps")).to eq(:uint)
+      expect(descrs.documentation("som")).to include("sum-of-monomials")
+    end
+
+    # Z3 offers this as one block of text, where ParamDescrs takes them one at a time
+    it "#simplify_help describes the same set" do
+      expect(Z3.simplify_help).to include("som", "arith_lhs")
+      expect(Z3.simplify_help.lines.size).to eq(Z3.simplify_param_descrs.size)
+    end
+
+    it "is not the global parameter set" do
+      expect(Z3.param_descrs.names).to_not include("som")
+      expect(Z3.simplify_param_descrs.names).to_not include("proof")
+    end
+  end
+
   describe "global parameters" do
     # Process wide state, so nothing may leak out of an example
     after { Z3.reset_params }

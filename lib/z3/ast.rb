@@ -42,8 +42,22 @@ module Z3
       LowLevel.ast_to_string(self)
     end
 
-    def simplify
-      sort.new(LowLevel.simplify(self))
+    # Z3's own normal form by default. Parameters change what it rewrites *towards* -
+    # `som: true` puts polynomials into sum-of-monomials form, `arith_lhs: true` moves
+    # everything to the left of a comparison, `blast_distinct: true` expands a
+    # `distinct` into pairwise disequalities. `Z3.simplify_param_descrs` lists all of
+    # them and `Z3.simplify_help` describes them.
+    #
+    # Plenty of them are no-ops on a small term - they only reach something on bigger
+    # input, or Z3 applies them by default already. The one to be careful with is
+    # `max_steps`, which bounds the work: going over it raises rather than handing back
+    # however far it got.
+    def simplify(params = {})
+      # Skipped for the common no-parameters case, as building a Params has to build
+      # the parameter descriptions to check against
+      return sort.new(LowLevel.simplify(self)) if params == {}
+      params = Params.new(params, Z3.simplify_param_descrs) unless params.is_a?(Params)
+      sort.new(LowLevel.simplify_ex(self, params))
     end
 
     def eql?(other)

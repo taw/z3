@@ -27,6 +27,57 @@ module Z3
       expect((e+f).inspect).to eq("Real<e + f>")
     end
 
+    describe "#simplify" do
+      it "rewrites towards Z3's normal form" do
+        expect((a + 1 + 1).simplify).to stringify("2 + a")
+        expect((Z3.Const(5) + Z3.Const(3)).simplify).to stringify("8")
+      end
+
+      # Parameters change what it rewrites towards, and each of these leaves the
+      # default alone - that's the whole point of passing them
+      it "takes parameters" do
+        expect(((a + b) * (a + b)).simplify).to stringify("(a + b) * (a + b)")
+        expect(((a + b) * (a + b)).simplify(som: true)).to stringify("+(a * a, 2 * (a * b), b * b)")
+
+        expect((a + 2 == b).simplify).to stringify("a = ((-2) + b)")
+        expect((a + 2 == b).simplify(arith_lhs: true)).to stringify("(a + ((-1) * b)) = (-2)")
+
+        # Two of them are already a disequality without asking
+        distinct = Z3.Distinct(a, b, Z3.Int("g"))
+        expect(distinct.simplify).to stringify("distinct(a, b, g)")
+        expect(distinct.simplify(blast_distinct: true))
+          .to stringify("and(not(a = b), not(a = g), not(b = g))")
+
+        expect((c & d).simplify).to stringify("and(c, d)")
+        expect((c & d).simplify(elim_and: true)).to stringify("not(or(not(c), not(d)))")
+      end
+
+      it "keeps the sort" do
+        expect(((a + b) * (a + b)).simplify(som: true).sort).to eq(IntSort.new)
+        expect((c & d).simplify(elim_and: true)).to be_a(BoolExpr)
+      end
+
+      # Same convention as Tactic#apply - a Hash is checked against the descriptions,
+      # a Params is taken as it is
+      it "takes a Params, which skips the checks" do
+        expect(((a + b) * (a + b)).simplify(Params.new(som: true)))
+          .to be_same_as(((a + b) * (a + b)).simplify(som: true))
+      end
+
+      it "checks names and types against the parameter descriptions" do
+        expect { a.simplify(no_such_parameter: true) }
+          .to raise_error(Z3::Exception, "Unknown parameter `no_such_parameter'")
+        expect { a.simplify(som: 3) }
+          .to raise_error(Z3::Exception, "Parameter `som' expects bool, got 3")
+      end
+
+      # It bounds the rewriter's work, and going over the bound is an exception
+      # rather than however far it got
+      it "raises when max_steps runs out" do
+        expect { (a + 1 + 1).simplify(max_steps: 0) }.to raise_error(Z3::Exception)
+      end
+    end
+
     # Reachable from Z3.And(*conditions) when the array turns out to be empty
     it "variadic operators reject an empty argument list" do
       %w[And Or Xor Add Sub Mul].each do |op|

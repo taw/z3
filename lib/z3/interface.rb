@@ -180,6 +180,18 @@ module Z3
     ParamDescrs.new(LowLevel.get_global_param_descrs)
   end
 
+  # Every parameter AST#simplify takes, the way Solver and Tactic describe their own.
+  # These are the rewriter's, and they're nothing to do with the global ones above.
+  def simplify_param_descrs
+    ParamDescrs.new(LowLevel.simplify_get_param_descrs)
+  end
+
+  # The same set as one block of text, which is what Z3 offers instead of a
+  # description per parameter - ParamDescrs#documentation takes them one at a time
+  def simplify_help
+    LowLevel.simplify_get_help
+  end
+
   private
 
   # Whether Z3 could have this parameter. Only the unqualified names can be told -
