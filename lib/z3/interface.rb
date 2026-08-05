@@ -54,6 +54,33 @@ module Z3
   end
 
   #--
+  # Quantifiers
+  #++
+
+  # `bound` is the variable, or variables, the quantifier binds - the very same ones
+  # the body was built out of, which Z3 rebinds inside it. Everywhere else they go on
+  # meaning what they always did.
+  #
+  #   Z3.ForAll(x, f[x] > 0)
+  #   Z3.Exists([x, y], f[x] == y)
+  #
+  # A quantified problem is a different kind of problem: `Solver#check` can return
+  # `:unknown`, and on some inputs it doesn't return at all - set `timeout` or
+  # `rlimit` on the solver if that matters.
+  def ForAll(bound, body)
+    Expr.ForAll(bound, body)
+  end
+
+  def Exists(bound, body)
+    Expr.Exists(bound, body)
+  end
+
+  # An anonymous function, which comes back as an Array - `Z3.Lambda(x, x * 2)[3]` is 6
+  def Lambda(bound, body)
+    Expr.Lambda(bound, body)
+  end
+
+  #--
   # Multiargument constructors
   #++
   def Distinct(*args)

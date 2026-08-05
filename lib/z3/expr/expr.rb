@@ -266,6 +266,50 @@ module Z3
           raise Z3::Exception, "Can't perform logic operations on #{args[0].sort} values, only Int/Real/Bitvec"
         end
       end
+
+      # Quantifiers bind ordinary variables rather than de Bruijn indices - you pass
+      # the same `Z3.Int("x")` you built the body out of, and Z3 rebinds it inside.
+      # The variable goes on meaning the outer one everywhere else.
+      def ForAll(bound, body)
+        bound = bound_variables(bound)
+        BoolSort.new.new(LowLevel.mk_forall_const(bound, BoolSort.new.cast(body)))
+      end
+
+      def Exists(bound, body)
+        bound = bound_variables(bound)
+        BoolSort.new.new(LowLevel.mk_exists_const(bound, BoolSort.new.cast(body)))
+      end
+
+      # An anonymous function. Z3 hands it back as an Array, so it indexes with `[]`
+      # like any other - `Z3.Lambda(x, x * 2)[3]` is 6.
+      #
+      # One bound variable only: two would make an `Array(Int, Int, Int)`, and this
+      # gem has no sort for n-ary arrays - `Sort.from_pointer` would report it as
+      # `Array(Int, Int)` and indexing it would fail inside Z3.
+      def Lambda(bound, body)
+        bound = bound_variables(bound)
+        raise Z3::Exception, "Lambda takes one bound variable, got #{bound.size}" unless bound.size == 1
+        body = sort_for_const(body).from_const(body) unless body.is_a?(Expr)
+        ArraySort.new(bound[0].sort, body.sort).new(LowLevel.mk_lambda_const(bound, body))
+      end
+
+      private
+
+      # Bound variables have to be variables - `Z3.Int("x")`, not `x + 1` and not a
+      # literal. Z3 says only "invalid argument" about the difference.
+      def bound_variables(bound)
+        bound = [bound] unless bound.is_a?(Array)
+        raise Z3::Exception, "Quantifier needs at least one bound variable" if bound.empty?
+        bound.each do |var|
+          unless var.is_a?(Expr) and var.ast_kind == :app and var.func_decl.arity == 0 and var.func_decl.num_parameters == 0
+            raise Z3::Exception, "Bound variables must be variables, got #{AST.describe(var)}"
+          end
+        end
+        # Z3 takes a repeat and quietly renames the second to `x!1`, which shadows the
+        # first - so the quantifier binds something the body can't be talking about
+        raise Z3::Exception, "Bound variables must be distinct" unless bound.uniq.size == bound.size
+        bound
+      end
     end
 
   end

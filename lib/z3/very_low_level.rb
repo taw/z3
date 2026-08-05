@@ -62,5 +62,8 @@ module Z3
     # The last two are out params - Z3 segfaults rather than skipping them if either is NULL
     attach_function :Z3_mk_enumeration_sort, [:ctx_pointer, :symbol_pointer, :int, :pointer, :pointer, :pointer], :sort_pointer
     attach_function :Z3_tactic_par_or, [:ctx_pointer, :int, :pointer], :tactic_pointer
+    attach_function :Z3_mk_forall_const, [:ctx_pointer, :uint, :uint, :pointer, :uint, :pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_exists_const, [:ctx_pointer, :uint, :uint, :pointer, :uint, :pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_lambda_const, [:ctx_pointer, :uint, :pointer, :ast_pointer], :ast_pointer
   end
 end

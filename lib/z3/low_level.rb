@@ -186,6 +186,27 @@ module Z3
         Z3::VeryLowLevel.Z3_mk_enumeration_sort(_ctx_pointer, symbol, n, _names, _consts, _testers)
       end
 
+      # Weight is a hint to the instantiation engine rather than part of what the
+      # formula means, but a bad one turns a decidable problem into `:unknown` - the
+      # same unsat query answers at weight 20 and gives up at weight 50 - so it's
+      # pinned to 1. That's what parsing the same formula out of SMT-LIB gives, and
+      # it's the one value Z3 prints without an annotation. (The C header says to pass
+      # 0, and then disagrees with itself in both of those places.) Patterns are the
+      # other half of the same knob, and left out for the same reason.
+      def mk_forall_const(bound, body)
+        Z3::VeryLowLevel.Z3_mk_forall_const(_ctx_pointer, 1, bound.size, asts_vector(bound), 0, nil, body._ast)
+      end
+
+      def mk_exists_const(bound, body)
+        Z3::VeryLowLevel.Z3_mk_exists_const(_ctx_pointer, 1, bound.size, asts_vector(bound), 0, nil, body._ast)
+      end
+
+      # No weight and no patterns on this one - a lambda is a value, not something the
+      # solver has to decide when to instantiate
+      def mk_lambda_const(bound, body)
+        Z3::VeryLowLevel.Z3_mk_lambda_const(_ctx_pointer, bound.size, asts_vector(bound), body._ast)
+      end
+
       # The only tactic combinator taking an array rather than two tactics
       def tactic_par_or(tactics)
         _tactics = FFI::MemoryPointer.new(:pointer, tactics.size)
