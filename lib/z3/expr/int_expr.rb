@@ -12,6 +12,13 @@ module Z3
       IntExpr.Rem(self, other)
     end
 
+    # Takes the low `size` bits, so it wraps rather than failing on values which
+    # don't fit - `Z3.Int("a").to_bv(8)` of 256 is 0. Which Integer comes back out
+    # depends on how you read it again: #signed_to_int or #unsigned_to_int.
+    def to_bv(size)
+      BitvecSort.new(size).new(LowLevel.mk_int2bv(size, self))
+    end
+
     def to_i
       if ast_kind == :numeral
         LowLevel.get_numeral_string(self).to_i

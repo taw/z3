@@ -76,12 +76,17 @@ module Z3
       BitvecExpr.UnsignedRem(self, other)
     end
 
+    # An Integer rotates by a fixed amount, a Bitvec of the same size by whatever it
+    # turns out to be - Z3 has a separate operation for each, and the fixed one gives
+    # the solver much more to work with, so a literal never goes through the other
     def rotate_left(num)
+      return sort.new(LowLevel.mk_ext_rotate_left(self, sort.cast(num))) if num.is_a?(Expr)
       raise Z3::Exception, "Rotation amount must be a nonnegative Integer" unless num.is_a?(Integer) and num >= 0
       sort.new(LowLevel.mk_rotate_left(num, self))
     end
 
     def rotate_right(num)
+      return sort.new(LowLevel.mk_ext_rotate_right(self, sort.cast(num))) if num.is_a?(Expr)
       raise Z3::Exception, "Rotation amount must be a nonnegative Integer" unless num.is_a?(Integer) and num >= 0
       sort.new(LowLevel.mk_rotate_right(num, self))
     end
@@ -94,6 +99,48 @@ module Z3
     def concat(other)
       raise Z3::Exception, "Can only concatenate another Bitvec" unless other.is_a?(BitvecExpr)
       BitvecSort.new(sort.size + other.sort.size).new(LowLevel.mk_concat(self, other))
+    end
+
+    # A single bit, as a Bool. Deliberately not #[] - that would read like #extract
+    # with a one-bit range, which gives a Bitvec(1) instead
+    def bit(index)
+      raise Z3::Exception, "Trying to take a bit out of range" unless index.is_a?(Integer) and index.between?(0, sort.size - 1)
+      BoolSort.new.new(LowLevel.mk_bit2bool(index, self))
+    end
+
+    def repeat(count)
+      raise Z3::Exception, "Repeat count must be a positive Integer" unless count.is_a?(Integer) and count >= 1
+      BitvecSort.new(sort.size * count).new(LowLevel.mk_repeat(count, self))
+    end
+
+    # Z3 answers these with a one-bit Bitvec rather than a Bool, which is what
+    # #all_bits_set? and #any_bits_set? are for
+    def redand
+      BitvecSort.new(1).new(LowLevel.mk_bvredand(self))
+    end
+
+    def redor
+      BitvecSort.new(1).new(LowLevel.mk_bvredor(self))
+    end
+
+    def all_bits_set?
+      redand == 1
+    end
+
+    def any_bits_set?
+      redor == 1
+    end
+
+    def to_i
+      raise Z3::Exception, "Use #signed_to_i or #unsigned_to_i for Bitvec, not #to_i"
+    end
+
+    def signed_to_i
+      IntSort.new.new(LowLevel.mk_bv2int(self, true))
+    end
+
+    def unsigned_to_i
+      IntSort.new.new(LowLevel.mk_bv2int(self, false))
     end
 
     def zero_ext(size)
@@ -125,6 +172,28 @@ module Z3
     end
     def unsigned_add_no_underflow?(other)
       raise Z3::Exception, "Unsigned + can't underflow"
+    end
+
+    # Subtraction is addition's mirror image: only signed can overflow, and both
+    # signs can underflow - so which of these takes a sign is the other way round
+    def sub_no_overflow?(other)
+      BitvecExpr.SignedSubNoOverflow(self, other)
+    end
+    def signed_sub_no_overflow?(other)
+      BitvecExpr.SignedSubNoOverflow(self, other)
+    end
+    def unsigned_sub_no_overflow?(other)
+      raise Z3::Exception, "Unsigned - can't overflow"
+    end
+
+    def sub_no_underflow?(other)
+      raise Z3::Exception, "Use #signed_sub_no_underflow? or #unsigned_sub_no_underflow? for Bitvec, not #sub_no_underflow?"
+    end
+    def signed_sub_no_underflow?(other)
+      BitvecExpr.SignedSubNoUnderflow(self, other)
+    end
+    def unsigned_sub_no_underflow?(other)
+      BitvecExpr.UnsignedSubNoUnderflow(self, other)
     end
 
     def unsigned_neg_no_overflow?
@@ -421,6 +490,21 @@ module Z3
       def SignedDivNoOverflow(a, b)
         a, b = coerce_to_same_bv_sort(a, b)
         BoolSort.new.new(LowLevel.mk_bvsdiv_no_overflow(a, b))
+      end
+
+      def SignedSubNoOverflow(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        BoolSort.new.new(LowLevel.mk_bvsub_no_overflow(a, b))
+      end
+
+      def SignedSubNoUnderflow(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        BoolSort.new.new(LowLevel.mk_bvsub_no_underflow(a, b, true))
+      end
+
+      def UnsignedSubNoUnderflow(a, b)
+        a, b = coerce_to_same_bv_sort(a, b)
+        BoolSort.new.new(LowLevel.mk_bvsub_no_underflow(a, b, false))
       end
     end
   end

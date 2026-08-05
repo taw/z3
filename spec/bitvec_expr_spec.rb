@@ -226,6 +226,28 @@ module Z3
       expect{ a.mul_no_overflow?(b) }.to raise_error(Z3::Exception, /signed_mul_no_overflow/)
     end
 
+    # Subtraction is the mirror image of addition - only signed can overflow here,
+    # so this is the one which doesn't need a sign picking
+    it "signed_sub_no_overflow?" do
+      expect([a ==   50, b ==   50, x == a.sub_no_overflow?(b)]).to have_solution(x => true)
+      expect([a ==  100, b == -100, x == a.sub_no_overflow?(b)]).to have_solution(x => false)
+      expect([a ==  127, b ==   -1, x == a.sub_no_overflow?(b)]).to have_solution(x => false)
+      expect([a == -128, b ==    1, x == a.sub_no_overflow?(b)]).to have_solution(x => true)
+      expect([a ==   50, b ==   50, x == a.signed_sub_no_overflow?(b)]).to have_solution(x => true)
+      expect([a ==  127, b ==   -1, x == a.signed_sub_no_overflow?(b)]).to have_solution(x => false)
+      expect{ a.unsigned_sub_no_overflow?(b) }.to raise_error(Z3::Exception, "Unsigned - can't overflow")
+    end
+
+    # ...and both signs can underflow here, so this is the one which does
+    it "signed_sub_no_underflow? / unsigned_sub_no_underflow?" do
+      expect([a ==  100, b ==   50, x == a.signed_sub_no_underflow?(b)]).to have_solution(x => true)
+      expect([a == -100, b ==  100, x == a.signed_sub_no_underflow?(b)]).to have_solution(x => false)
+      expect([a == -128, b ==    1, x == a.signed_sub_no_underflow?(b)]).to have_solution(x => false)
+      expect([a ==  100, b ==   50, x == a.unsigned_sub_no_underflow?(b)]).to have_solution(x => true)
+      expect([a ==   50, b ==  100, x == a.unsigned_sub_no_underflow?(b)]).to have_solution(x => false)
+      expect{ a.sub_no_underflow?(b) }.to raise_error(Z3::Exception, /signed_sub_no_underflow/)
+    end
+
     it "zero_ext / sign_ext" do
       expect([a ==  100, d ==  a.zero_ext(4)]).to have_solution(d => 100)
       expect([a == -100, d ==  a.zero_ext(4)]).to have_solution(d => 2**8-100)
@@ -246,6 +268,65 @@ module Z3
       expect{ a.rotate_right(-1) }.to raise_error(Z3::Exception)
       expect{ a.rotate_left(1.5) }.to raise_error(Z3::Exception)
       expect{ a.rotate_right(1.5) }.to raise_error(Z3::Exception)
+    end
+
+    # Z3 has a second rotate for amounts it can't know in advance. An Integer still
+    # goes to the fixed one, as that gives the solver more to work with.
+    it "rotate_left / rotate_right by a Bitvec" do
+      expect([a == 0b0101_0110, c == 1, b == a.rotate_left(c)]).to have_solution(b => 0b101_0110_0)
+      expect([a == 0b0101_0110, c == 4, b == a.rotate_left(c)]).to have_solution(b => 0b0110_0101)
+      expect([a == 0b0101_0110, c == 1, b == a.rotate_right(c)]).to have_solution(b => 0b0_0101_011)
+      expect([a == 0b0101_0110, c == 4, b == a.rotate_right(c)]).to have_solution(b => 0b0110_0101)
+      # A rotation Z3 has to solve for, which the fixed version can't express at all
+      expect([a == 0b0000_0001, b == 0b0001_0000, a.rotate_left(c) == b, c.unsigned_lt(8)]).to have_solution(c => 4)
+      expect{ a.rotate_left(d) }.to raise_error(Z3::Exception, "Can't convert Bitvec(12) into Bitvec(8)")
+    end
+
+    it "bit" do
+      # Bit 0 is the low one, so this reads backwards from how the literal is written
+      [true, false, true, false, false, true, false, true].each_with_index do |set, i|
+        expect([a == 0b1010_0101, x == a.bit(i)]).to have_solution(x => set)
+      end
+      expect{ a.bit(8) }.to raise_error(Z3::Exception, "Trying to take a bit out of range")
+      expect{ a.bit(-1) }.to raise_error(Z3::Exception, "Trying to take a bit out of range")
+      expect{ a.bit(1.5) }.to raise_error(Z3::Exception, "Trying to take a bit out of range")
+    end
+
+    it "repeat" do
+      expect([e == 0b1101, a == e.repeat(2)]).to have_solution(a => 0b1101_1101)
+      expect([e == 0b0011, d == e.repeat(3)]).to have_solution(d => 0b0011_0011_0011)
+      expect(e.repeat(3).sort).to eq(BitvecSort.new(12))
+      expect{ a.repeat(0) }.to raise_error(Z3::Exception, "Repeat count must be a positive Integer")
+      expect{ a.repeat(1.5) }.to raise_error(Z3::Exception, "Repeat count must be a positive Integer")
+    end
+
+    # Z3 answers with a one-bit Bitvec, which is why there are Bool versions too
+    it "redand / redor" do
+      expect(a.redand.sort).to eq(BitvecSort.new(1))
+      expect(a.redor.sort).to eq(BitvecSort.new(1))
+      expect([a == 0b1111_1111, x == a.all_bits_set?]).to have_solution(x => true)
+      expect([a == 0b1111_1110, x == a.all_bits_set?]).to have_solution(x => false)
+      expect([a == 0b0000_0000, x == a.any_bits_set?]).to have_solution(x => false)
+      expect([a == 0b0000_0001, x == a.any_bits_set?]).to have_solution(x => true)
+    end
+
+    it "signed_to_i / unsigned_to_i" do
+      int = Z3.Int("i")
+      expect([a == 200, int == a.unsigned_to_i]).to have_solution(int => 200)
+      expect([a == 200, int == a.signed_to_i]).to have_solution(int => -56)
+      expect([a ==   7, int == a.signed_to_i]).to have_solution(int => 7)
+      expect(a.unsigned_to_i.sort).to eq(IntSort.new)
+      expect{ a.to_i }.to raise_error(Z3::Exception, /signed_to_i/)
+    end
+
+    # The other direction lives on IntExpr, and truncates rather than failing
+    it "IntExpr#to_bv" do
+      int = Z3.Int("i")
+      expect([int ==  42, a == int.to_bv(8)]).to have_solution(a => 42)
+      expect([int == 300, a == int.to_bv(8)]).to have_solution(a => 44)
+      expect([int ==  -1, a == int.to_bv(8)]).to have_solution(a => 255)
+      expect(int.to_bv(8).sort).to eq(BitvecSort.new(8))
+      expect{ int.to_bv(0) }.to raise_error(Z3::Exception, "Bitvec width must be a positive Integer")
     end
 
     it "extract" do
