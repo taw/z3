@@ -92,6 +92,16 @@ Z3.Int("a").value                           # raises - "a" is not a literal
 
 A `Bitvec` carries no sign of its own, so it has `#signed_value` and `#unsigned_value` instead - the same eight bits are `200` read one way and `-56` the other. `Real` and `Float` have no `#value`, as their literals don't always have an exact Ruby equivalent.
 
+The container sorts hand back the matching Ruby container, calling `#value` on what's inside, so a `Seq(Seq(Int))` gives nested Arrays:
+
+```ruby
+seq_expr.value     # => [1, 2, 3]
+set_expr.value     # => #<Set: {3, 5}>
+array_expr.value   # => {2 => 7}, with 0 as the Hash default
+```
+
+An `Array` is a total map, so its entries alone can't say what it is - Ruby's Hash default holds `#default`, the answer for every key not listed, the same shape a function interpretation uses. A `Set` is an `Array` to Bool, which means Z3 is just as happy answering "everything except 5" as it is "3 and 5". Ruby has no co-finite set, so that case raises rather than lying about it, and `#complement` is how you ask which elements it leaves out.
+
 Note that `#value` is not the same as `#to_i` and friends. `#value` leaves Z3 and hands you a Ruby object, while `#to_i`, `#to_bv` and so on build a *new Z3 expression* of another sort - `string_expr.to_i` is the symbolic `str.to_int`, not a Ruby Integer. On `Int` the two are the same method, since converting an Int to an Int can't mean anything else.
 
 Ruby's implicit conversion methods - `to_str`, `to_int`, `to_ary`, `to_hash`, `to_proc` - are deliberately **not** defined on expressions. Ruby calls those on its own whenever it wants that exact type, and no Z3 expression can promise to be one.

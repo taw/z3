@@ -1,5 +1,6 @@
 module Z3
   class SetExpr < Expr
+    include ArrayValue
     public_class_method :new
 
     def element_sort
@@ -46,6 +47,22 @@ module Z3
     # Same, without the element. Removing something which was never there is fine.
     def delete(element)
       sort.new(LowLevel.mk_set_del(self, element_sort.cast(element)))
+    end
+
+    # A Ruby Set out of a set value, with #value called on every element.
+    #
+    # A Z3 set is an Array to Bool, so it's just as happy holding everything except a
+    # few elements as it is holding a few - and a solver asked for no more than "3 is
+    # in it, 5 isn't" will quite reasonably answer "everything except 5". Ruby has no
+    # co-finite set, so that case raises rather than lying about what Z3 said, and
+    # #complement is how you ask which elements it leaves out.
+    def value
+      chain = store_chain || simplify.store_chain
+      raise Z3::Exception, "Can't convert expression #{self} into Set" unless chain
+      default, stores = chain
+      raise Z3::Exception, "Can't convert expression #{self} into Set, it holds all but finitely many #{element_sort} values - #complement.value are the ones it leaves out" if default.value
+      members = stores.each_with_object({}) { |(element, member), h| h[element.value] = member.value }
+      Set.new(members.select { |_, member| member }.keys)
     end
 
     class << self

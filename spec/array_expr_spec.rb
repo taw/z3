@@ -38,6 +38,56 @@ module Z3
       end
     end
 
+    describe "#value" do
+      it "gives a Ruby Hash back, with the array's default as the Hash default" do
+        hash = sort.Const(0).store(2, 7).value
+        expect(hash).to eq({2 => 7})
+        expect(hash[2]).to eq(7)
+        # An array is a total map, so the entries alone can't say what it is
+        expect(hash[5]).to eq(0)
+        expect(sort.Const(3).value).to eq({})
+        expect(sort.Const(3).value[5]).to eq(3)
+      end
+
+      it "applies the stores in order, so a later one to the same key wins" do
+        expect(sort.Const(0).store(1, 5).store(1, 7).value).to eq({1 => 7})
+        expect(sort.Const(0).store(1, 5).store(2, 7).value).to eq({1 => 5, 2 => 7})
+      end
+
+      # It reads the term as it stands rather than canonicalising it
+      it "keeps a store of the default value as an entry" do
+        expect(sort.Const(0).store(1, 0).value).to eq({1 => 0})
+      end
+
+      it "simplifies first, like every other #value" do
+        ite = Z3.IfThenElse(BoolSort.new.True, sort.Const(0), sort.Const(1))
+        expect(ite.value).to eq({})
+        expect(ite.value[5]).to eq(0)
+      end
+
+      it "calls #value on keys and values" do
+        strings = ArraySort.new(StringSort.new, IntSort.new)
+        expect(strings.Const(0).store("a", 1).value).to eq({"a" => 1})
+      end
+
+      it "raises exception when there's nothing to convert" do
+        expect { a.value }.to raise_error(Z3::Exception)
+        expect { a.store(1, 2).value }.to raise_error(Z3::Exception)
+        # A lambda is a perfectly good array value, and no finite Hash
+        expect { Z3.Lambda(x, x * 2).value }.to raise_error(Z3::Exception)
+      end
+
+      it "reads a model" do
+        solver = Solver.new
+        solver.assert a[1] == 10
+        solver.assert a[2] == 20
+        expect(solver).to be_satisfiable
+        hash = solver.model[a].value
+        expect(hash[1]).to eq(10)
+        expect(hash[2]).to eq(20)
+      end
+    end
+
     # TODO: Formatting is dreadful
     it "== and !=" do
       expect([a == b, b != c]).to have_solution(

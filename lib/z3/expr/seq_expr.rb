@@ -144,6 +144,18 @@ module Z3
       end
     end
 
+    # A Ruby Array out of a sequence value, with #value called on every element - so a
+    # Seq(Seq(Int)) gives nested Arrays, the way StringExpr#value gives a Ruby String.
+    #
+    # Deliberately not #to_ary: that's Ruby's implicit conversion protocol, and no
+    # expression can promise to be an Array. See StringExpr#value, which says the same
+    # about #to_str.
+    def value
+      elements = seq_elements || simplify.seq_elements
+      raise Z3::Exception, "Can't convert expression #{self} into Array" unless elements
+      elements.map(&:value)
+    end
+
     class << self
       # A one element sequence. Z3 needs these to build any sequence value at all,
       # and they're what makes the element-taking methods above work.
@@ -163,6 +175,27 @@ module Z3
         # Z3 rejects a concatenation of fewer than two sequences
         return args[0] if args.size == 1
         args[0].sort.new(LowLevel.mk_seq_concat(args))
+      end
+    end
+
+    protected
+
+    # The elements of a sequence value, or nil if this isn't one. Z3 has no sequence
+    # literal - a value is `seq.empty`, a one element `seq.unit`, or a concatenation of
+    # those, which models return nested any which way, so the whole spine gets walked.
+    def seq_elements
+      return nil unless ast_kind == :app
+      case func_decl.name
+      when "seq.empty"
+        []
+      when "seq.unit"
+        arguments
+      when "seq.++"
+        arguments.each_with_object([]) do |arg, elements|
+          part = arg.seq_elements
+          return nil unless part
+          elements.concat(part)
+        end
       end
     end
 

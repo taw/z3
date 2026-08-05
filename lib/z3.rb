@@ -1,3 +1,6 @@
+# SetExpr#value gives a Ruby Set, and Ruby only autoloads that from 3.1
+require "set"
+
 module Z3
 end
 
@@ -40,6 +43,7 @@ require_relative "z3/sort/type_variable_sort"
 
 # ASTs
 require_relative "z3/expr/expr"
+require_relative "z3/expr/array_value"
 require_relative "z3/expr/arith_expr"
 require_relative "z3/expr/int_expr"
 require_relative "z3/expr/real_expr"

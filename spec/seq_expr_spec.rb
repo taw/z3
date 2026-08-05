@@ -335,6 +335,49 @@ module Z3
       end
     end
 
+    describe "#value" do
+      it "gives a Ruby Array back, the way StringExpr#value gives a Ruby String" do
+        expect(sort.from_const([]).value).to eq([])
+        expect(sort.from_const([1]).value).to eq([1])
+        expect(sort.from_const([1, 2, 3]).value).to eq([1, 2, 3])
+      end
+
+      # Z3 has no sequence literal - a value is a concatenation of one element
+      # sequences, and models nest those any which way
+      it "walks a concatenation however it's nested" do
+        expect((sort.from_const([1, 2]) + sort.from_const([3])).value).to eq([1, 2, 3])
+        expect((sort.from_const([]) + sort.from_const([1])).value).to eq([1])
+        expect(SeqExpr.Concat(sort.from_const([1]), sort.from_const([2]), sort.from_const([3])).value).to eq([1, 2, 3])
+      end
+
+      it "simplifies first, like StringExpr#value does" do
+        expect((sort.from_const([1, 2, 3]) * 2).value).to eq([1, 2, 3, 1, 2, 3])
+        expect(sort.from_const([1, 2, 3])[1, 2].value).to eq([2, 3])
+      end
+
+      it "calls #value on the elements, so nesting works" do
+        expect(SeqSort.new(sort).from_const([[1], [2, 3]]).value).to eq([[1], [2, 3]])
+        expect(SeqSort.new(StringSort.new).from_const(["ab", "c"]).value).to eq(["ab", "c"])
+        expect(SeqSort.new(BoolSort.new).from_const([true, false]).value).to eq([true, false])
+      end
+
+      it "raises exception when there's nothing to convert" do
+        expect { xs.value }.to raise_error(Z3::Exception)
+        expect { (xs + sort.from_const([1])).value }.to raise_error(Z3::Exception)
+      end
+
+      it "reads a model" do
+        solver = Solver.new
+        solver.assert xs.length == 3
+        solver.assert xs[0] == 7
+        solver.assert xs + sort.from_const([9]) == ys
+        expect(solver).to be_satisfiable
+        expect(solver.model[xs].value.size).to eq(3)
+        expect(solver.model[xs].value[0]).to eq(7)
+        expect(solver.model[ys].value).to eq(solver.model[xs].value + [9])
+      end
+    end
+
     describe ".Unit" do
       it "is a one element sequence" do
         expect(SeqExpr.Unit(IntSort.new.from_const(1)).sexpr).to eq("(seq.unit 1)")
