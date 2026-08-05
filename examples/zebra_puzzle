@@ -5,60 +5,35 @@
 require_relative "../lib/z3"
 
 class ZebraPuzzle
+  TRAITS = {
+    color: [:red, :yellow, :green, :blue, :ivory],
+    nationality: [:Englishman, :Spaniard, :Norwegian, :Ukrainian, :Japanese],
+    drink: [:water, :coffee, :tea, :milk, :"orange juice"],
+    cigarettes: [:Parliaments, :"Old Gold", :"Lucky Strike", :Kools, :Chesterfields],
+    pet: [:zebra, :dog, :snails, :fox, :horse],
+  }
+
   def initialize
     @solver = Z3::Solver.new
+    @sorts = TRAITS.to_h{|trait, values| [trait, Z3::EnumSort.new(trait, values)] }
   end
 
   def traits
-    [:color, :nationality, :drink, :cigarettes, :pet]
-  end
-  
-  def color
-    ["red", "yellow", "green", "blue", "ivory"]
-  end
-  
-  def nationality
-    ["Englishman", "Spaniard", "Norwegian", "Ukrainian", "Japanese"]
-  end
-  
-  def drink
-    ["water", "coffee", "tea", "milk", "orange juice"]
-  end
-  
-  def pet
-    ["zebra", "dog", "snails", "fox", "horse"]
-  end
-  
-  def cigarettes
-    ["Parliaments", "Old Gold", "Lucky Strike", "Kools", "Chesterfields"]
-  end
-  
-  def trait_index(trait, name)
-    send(trait).index(name) or raise "Bad value #{name.inspect} for trait #{trait.inspect}"
-  end
-
-  def trait_value(trait, index)
-    send(trait)[index] or raise "Bad index #{index.inspect} for trait #{trait.inspect}"
+    TRAITS.keys
   end
 
   # House I has TRAIT value X
   def variable(trait, i)
-    Z3.Int("#{trait}-#{i}")
+    @sorts[trait].var("#{trait}-#{i}")
   end
 
+  # Five houses and five values, so all different means every value gets used once
   def setup_variables(trait)
-    vars = (0..4).map{|i| variable(trait, i) }
-    @solver.assert Z3.Distinct(*vars)
-    vars.each do |v|
-      @solver.assert v >= 0
-      @solver.assert v <= 4
-    end
+    @solver.assert Z3.Distinct(*(0..4).map{|i| variable(trait, i) })
   end
-
 
   def house_has_trait_value(i, trait, value)
-    index = trait_index(trait, value)
-    (variable(trait, i) == index)
+    (variable(trait, i) == value)
   end
 
   def same_house(t1,v1,t2,v2)
@@ -66,7 +41,7 @@ class ZebraPuzzle
       @solver.assert house_has_trait_value(i,t1,v1) == house_has_trait_value(i,t2,v2)
     end
   end
-  
+
   def left_rigth_house(t1,v1,t2,v2)
     (0..3).each do |i|
       @solver.assert house_has_trait_value(i,t1,v1) == house_has_trait_value(i+1,t2,v2)
@@ -85,39 +60,37 @@ class ZebraPuzzle
       setup_variables(trait)
     end
 
-    same_house(:nationality, "Englishman", :color, "red")
-    same_house(:nationality, "Spaniard", :pet, "dog")
-    same_house(:drink, "coffee", :color, "green")
-    same_house(:nationality, "Ukrainian", :drink, "tea")
-    same_house(:pet, "snails", :cigarettes, "Old Gold")
-    same_house(:cigarettes, "Kools", :color, "yellow")
-    same_house(:cigarettes, "Lucky Strike", :drink, "orange juice")
-    same_house(:nationality, "Japanese", :cigarettes, "Parliaments")
+    same_house(:nationality, :Englishman, :color, :red)
+    same_house(:nationality, :Spaniard, :pet, :dog)
+    same_house(:drink, :coffee, :color, :green)
+    same_house(:nationality, :Ukrainian, :drink, :tea)
+    same_house(:pet, :snails, :cigarettes, :"Old Gold")
+    same_house(:cigarettes, :Kools, :color, :yellow)
+    same_house(:cigarettes, :"Lucky Strike", :drink, :"orange juice")
+    same_house(:nationality, :Japanese, :cigarettes, :Parliaments)
 
-    next_house(:nationality, "Norwegian", :color, "blue")
-    next_house(:cigarettes, "Chesterfields", :pet, "fox")
-    next_house(:cigarettes, "Kools", :pet, "horse")
+    next_house(:nationality, :Norwegian, :color, :blue)
+    next_house(:cigarettes, :Chesterfields, :pet, :fox)
+    next_house(:cigarettes, :Kools, :pet, :horse)
 
-    left_rigth_house(:color, "ivory", :color, "green")
+    left_rigth_house(:color, :ivory, :color, :green)
 
-    @solver.assert house_has_trait_value(2, :drink, "milk")
-    @solver.assert house_has_trait_value(0, :nationality, "Norwegian")
-    
+    @solver.assert house_has_trait_value(2, :drink, :milk)
+    @solver.assert house_has_trait_value(0, :nationality, :Norwegian)
+
     if @solver.satisfiable?
       print_solution
     else
       puts "No solution"
     end
   end
-  
+
   def print_solution
     model = @solver.model
     (0..4).each do |i|
       print "House #{i}:"
       traits.each do |trait|
-        j = model[variable(trait, i)].to_s.to_i
-        t = trait_value(trait, j)
-        print " #{t}"
+        print " #{model[variable(trait, i)].value}"
       end
       print "\n"
     end
