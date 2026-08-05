@@ -64,6 +64,69 @@ module Z3
       expect(solver.unsat_core.map(&:to_s)).to eq(["p1"])
     end
 
+    describe "#check with assumptions" do
+      let(:p) { Z3.Bool("p") }
+      let(:q) { Z3.Bool("q") }
+
+      it "solves under the assumptions" do
+        solver.assert p.implies(a == 1)
+        solver.assert q.implies(a == 2)
+        expect(solver.check(p)).to eq(:sat)
+        expect(solver.model[a].to_s).to eq("1")
+        expect(solver.check(q)).to eq(:sat)
+        expect(solver.model[a].to_s).to eq("2")
+        expect(solver.check(p, q)).to eq(:unsat)
+      end
+
+      it "leaves no trace on the solver" do
+        solver.assert p.implies(a == 1)
+        expect(solver.check(p, a == 2)).to eq(:unsat)
+        # Neither the assumptions nor a scope to pop them off in
+        expect(solver.check).to eq(:sat)
+        expect(solver.assertions).to be_same_as([p.implies(a == 1)])
+        expect(solver.num_scopes).to eq(0)
+      end
+
+      it "assumptions are what #unsat_core blames" do
+        solver.assert p.implies(a > 5)
+        solver.assert q.implies(a < 2)
+        expect(solver.check(p, q, a == 3)).to eq(:unsat)
+        # Z3 picks the order, and `a == 3` is not part of the contradiction
+        expect(solver.unsat_core.map(&:to_s).sort).to eq(["p", "q"])
+      end
+
+      it "no assumptions is the same as no arguments at all" do
+        solver.assert a == 1
+        expect(solver.check(*[])).to eq(:sat)
+        expect(solver.model[a].to_s).to eq("1")
+      end
+
+      it "#satisfiable? and #unsatisfiable? pass assumptions through" do
+        solver.assert p.implies(a == 1)
+        expect(solver.satisfiable?(p)).to eq(true)
+        expect(solver.unsatisfiable?(p, a == 2)).to eq(true)
+      end
+
+      it "takes true and false" do
+        solver.assert a == 1
+        expect(solver.check(true)).to eq(:sat)
+        expect(solver.check(false)).to eq(:unsat)
+      end
+
+      it "raises on assumptions which aren't Bool" do
+        expect{ solver.check(a) }.to raise_error(Z3::Exception, "Can't convert Int into Bool")
+        expect{ solver.check(42) }.to raise_error(Z3::Exception, "Cannot convert Integer to Z3::BoolSort")
+      end
+
+      # The C API documents assumptions as propositional literals, but Z3 takes any
+      # Bool formula and puts it in the unsat core verbatim
+      it "takes assumptions which aren't literals" do
+        solver.assert a > 0
+        expect(solver.check(p | q, a < 0)).to eq(:unsat)
+        expect(solver.unsat_core.map(&:to_s)).to eq(["a < 0"])
+      end
+    end
+
     describe "#consequences" do
       let(:p) { Z3.Bool("p") }
       let(:q) { Z3.Bool("q") }

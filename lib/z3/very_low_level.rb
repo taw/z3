@@ -54,5 +54,6 @@ module Z3
     attach_function :Z3_mk_set_intersect, [:ctx_pointer, :int, :pointer], :ast_pointer
     attach_function :Z3_mk_distinct, [:ctx_pointer, :int, :pointer], :ast_pointer
     attach_function :Z3_optimize_check, [:ctx_pointer, :optimize_pointer, :int, :pointer], :int
+    attach_function :Z3_solver_check_assumptions, [:ctx_pointer, :solver_pointer, :int, :pointer], :int
   end
 end

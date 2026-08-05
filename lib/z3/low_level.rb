@@ -141,6 +141,10 @@ module Z3
         Z3::VeryLowLevel.Z3_optimize_check(_ctx_pointer, optimize._optimize, asts.size, asts_vector(asts))
       end
 
+      def solver_check_assumptions(solver, asts)
+        Z3::VeryLowLevel.Z3_solver_check_assumptions(_ctx_pointer, solver._solver, asts.size, asts_vector(asts))
+      end
+
       # Should be private
 
       # Every AST_VECTOR parameter in the C API is an `_in` - the ones which act like

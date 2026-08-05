@@ -79,15 +79,25 @@ module Z3
       LowLevel.solver_assert_and_track(self, ast, tracker)
     end
 
-    def check
+    # Assumptions are Bool exprs taken as true for this one check and nothing after
+    # it - unlike #assert they leave no trace on the solver, so there's no #push /
+    # #pop to pair up. They're also what #unsat_core blames, so an :unsat names the
+    # assumptions responsible without any of #assert_and_track's tracker variables.
+    def check(*assumptions)
       reset_model!
-      result = check_sat_results(LowLevel.solver_check(self))
+      result = check_sat_results(
+        if assumptions.empty?
+          LowLevel.solver_check(self)
+        else
+          LowLevel.solver_check_assumptions(self, coerce_assumptions(assumptions))
+        end
+      )
       @has_model = true if result == :sat
       result
     end
 
-    def satisfiable?
-      case check
+    def satisfiable?(*assumptions)
+      case check(*assumptions)
       when :sat
         true
       when :unsat
@@ -97,8 +107,8 @@ module Z3
       end
     end
 
-    def unsatisfiable?
-      case check
+    def unsatisfiable?(*assumptions)
+      case check(*assumptions)
       when :unsat
         true
       when :sat
@@ -240,6 +250,14 @@ module Z3
     end
 
     private
+
+    # Z3 only accepts Bool consts and their negations here, but it raises on the rest
+    # itself - all this has to do is turn `true` / `false` into Bool exprs and give a
+    # decent error for anything that isn't Bool at all
+    def coerce_assumptions(assumptions)
+      bool = BoolSort.new
+      assumptions.map { |assumption| bool.cast(assumption) }
+    end
 
     def reset_model!
       @has_model = false
