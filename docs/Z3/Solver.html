@@ -553,6 +553,8 @@
 
         <li ><a href="#method-i-unsatisfiable-3F">unsatisfiable?</a></li>
 
+        <li ><a href="#method-i-with_simplifier">with_simplifier</a></li>
+
       </ul>
     </details>
   </div>
@@ -570,7 +572,7 @@
       </span>
     </summary>
 
-    <ul class="link-list nav-list"><li><details open><summary><code><a href="../Z3.html">Z3</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/AST.html">AST</a></code></li><li><code><a href="../Z3/ApplyResult.html">ApplyResult</a></code></li><li><code><a href="../Z3/ArithExpr.html">ArithExpr</a></code></li><li><code><a href="../Z3/ArrayExpr.html">ArrayExpr</a></code></li><li><code><a href="../Z3/ArraySort.html">ArraySort</a></code></li><li><code><a href="../Z3/BitvecExpr.html">BitvecExpr</a></code></li><li><code><a href="../Z3/BitvecSort.html">BitvecSort</a></code></li><li><code><a href="../Z3/BoolExpr.html">BoolExpr</a></code></li><li><code><a href="../Z3/BoolSort.html">BoolSort</a></code></li><li><code><a href="../Z3/CharExpr.html">CharExpr</a></code></li><li><code><a href="../Z3/CharSort.html">CharSort</a></code></li><li><code><a href="../Z3/Context.html">Context</a></code></li><li><code><a href="../Z3/EnumExpr.html">EnumExpr</a></code></li><li><code><a href="../Z3/EnumSort.html">EnumSort</a></code></li><li><code><a href="../Z3/Exception.html">Exception</a></code></li><li><code><a href="../Z3/Expr.html">Expr</a></code></li><li><code><a href="../Z3/FiniteDomainExpr.html">FiniteDomainExpr</a></code></li><li><code><a href="../Z3/FiniteDomainSort.html">FiniteDomainSort</a></code></li><li><code><a href="../Z3/FloatExpr.html">FloatExpr</a></code></li><li><code><a href="../Z3/FloatSort.html">FloatSort</a></code></li><li><code><a href="../Z3/FuncDecl.html">FuncDecl</a></code></li><li><code><a href="../Z3/Goal.html">Goal</a></code></li><li><code><a href="../Z3/IntExpr.html">IntExpr</a></code></li><li><code><a href="../Z3/IntSort.html">IntSort</a></code></li><li><code><a href="../Z3/LowLevel.html">LowLevel</a></code></li><li><code><a href="../Z3/Model.html">Model</a></code></li><li><code><a href="../Z3/Optimize.html">Optimize</a></code></li><li><code><a href="../Z3/ParamDescrs.html">ParamDescrs</a></code></li><li><code><a href="../Z3/Params.html">Params</a></code></li><li><details><summary><code><a href="../Z3/Printer.html">Printer</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/Printer/PrintedExpr.html">PrintedExpr</a></code></li></ul></details></li><li><code><a href="../Z3/Probe.html">Probe</a></code></li><li><code><a href="../Z3/ReExpr.html">Re</a></code></li><li><code><a href="../Z3/ReExpr.html">ReExpr</a></code></li><li><code><a href="../Z3/ReSort.html">ReSort</a></code></li><li><code><a href="../Z3/RealExpr.html">RealExpr</a></code></li><li><code><a href="../Z3/RealSort.html">RealSort</a></code></li><li><code><a href="../Z3/ReferenceCounted.html">ReferenceCounted</a></code></li><li><code><a href="../Z3/RoundingModeExpr.html">RoundingModeExpr</a></code></li><li><code><a href="../Z3/RoundingModeSort.html">RoundingModeSort</a></code></li><li><code><a href="../Z3/SeqExpr.html">SeqExpr</a></code></li><li><code><a href="../Z3/SeqSort.html">SeqSort</a></code></li><li><code><a href="../Z3/SetExpr.html">SetExpr</a></code></li><li><code><a href="../Z3/SetSort.html">SetSort</a></code></li><li><code><a href="../Z3/Solver.html">Solver</a></code></li><li><code><a href="../Z3/Sort.html">Sort</a></code></li><li><code><a href="../Z3/StringExpr.html">StringExpr</a></code></li><li><code><a href="../Z3/StringSort.html">StringSort</a></code></li><li><code><a href="../Z3/Tactic.html">Tactic</a></code></li><li><code><a href="../Z3/TypeVariableExpr.html">TypeVariableExpr</a></code></li><li><code><a href="../Z3/TypeVariableSort.html">TypeVariableSort</a></code></li><li><code><a href="../Z3/UninterpretedExpr.html">UninterpretedExpr</a></code></li><li><code><a href="../Z3/UninterpretedSort.html">UninterpretedSort</a></code></li></ul></details></li></ul>
+    <ul class="link-list nav-list"><li><details open><summary><code><a href="../Z3.html">Z3</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/AST.html">AST</a></code></li><li><code><a href="../Z3/ApplyResult.html">ApplyResult</a></code></li><li><code><a href="../Z3/ArithExpr.html">ArithExpr</a></code></li><li><code><a href="../Z3/ArrayExpr.html">ArrayExpr</a></code></li><li><code><a href="../Z3/ArraySort.html">ArraySort</a></code></li><li><code><a href="../Z3/BitvecExpr.html">BitvecExpr</a></code></li><li><code><a href="../Z3/BitvecSort.html">BitvecSort</a></code></li><li><code><a href="../Z3/BoolExpr.html">BoolExpr</a></code></li><li><code><a href="../Z3/BoolSort.html">BoolSort</a></code></li><li><code><a href="../Z3/CharExpr.html">CharExpr</a></code></li><li><code><a href="../Z3/CharSort.html">CharSort</a></code></li><li><code><a href="../Z3/Context.html">Context</a></code></li><li><code><a href="../Z3/EnumExpr.html">EnumExpr</a></code></li><li><code><a href="../Z3/EnumSort.html">EnumSort</a></code></li><li><code><a href="../Z3/Exception.html">Exception</a></code></li><li><code><a href="../Z3/Expr.html">Expr</a></code></li><li><code><a href="../Z3/FiniteDomainExpr.html">FiniteDomainExpr</a></code></li><li><code><a href="../Z3/FiniteDomainSort.html">FiniteDomainSort</a></code></li><li><code><a href="../Z3/FloatExpr.html">FloatExpr</a></code></li><li><code><a href="../Z3/FloatSort.html">FloatSort</a></code></li><li><code><a href="../Z3/FuncDecl.html">FuncDecl</a></code></li><li><code><a href="../Z3/Goal.html">Goal</a></code></li><li><code><a href="../Z3/IntExpr.html">IntExpr</a></code></li><li><code><a href="../Z3/IntSort.html">IntSort</a></code></li><li><code><a href="../Z3/LowLevel.html">LowLevel</a></code></li><li><code><a href="../Z3/Model.html">Model</a></code></li><li><code><a href="../Z3/Optimize.html">Optimize</a></code></li><li><code><a href="../Z3/ParamDescrs.html">ParamDescrs</a></code></li><li><code><a href="../Z3/Params.html">Params</a></code></li><li><details><summary><code><a href="../Z3/Printer.html">Printer</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/Printer/PrintedExpr.html">PrintedExpr</a></code></li></ul></details></li><li><code><a href="../Z3/Probe.html">Probe</a></code></li><li><code><a href="../Z3/ReExpr.html">Re</a></code></li><li><code><a href="../Z3/ReExpr.html">ReExpr</a></code></li><li><code><a href="../Z3/ReSort.html">ReSort</a></code></li><li><code><a href="../Z3/RealExpr.html">RealExpr</a></code></li><li><code><a href="../Z3/RealSort.html">RealSort</a></code></li><li><code><a href="../Z3/ReferenceCounted.html">ReferenceCounted</a></code></li><li><code><a href="../Z3/RoundingModeExpr.html">RoundingModeExpr</a></code></li><li><code><a href="../Z3/RoundingModeSort.html">RoundingModeSort</a></code></li><li><code><a href="../Z3/SeqExpr.html">SeqExpr</a></code></li><li><code><a href="../Z3/SeqSort.html">SeqSort</a></code></li><li><code><a href="../Z3/SetExpr.html">SetExpr</a></code></li><li><code><a href="../Z3/SetSort.html">SetSort</a></code></li><li><code><a href="../Z3/Simplifier.html">Simplifier</a></code></li><li><code><a href="../Z3/Solver.html">Solver</a></code></li><li><code><a href="../Z3/Sort.html">Sort</a></code></li><li><code><a href="../Z3/StringExpr.html">StringExpr</a></code></li><li><code><a href="../Z3/StringSort.html">StringSort</a></code></li><li><code><a href="../Z3/Tactic.html">Tactic</a></code></li><li><code><a href="../Z3/TypeVariableExpr.html">TypeVariableExpr</a></code></li><li><code><a href="../Z3/TypeVariableSort.html">TypeVariableSort</a></code></li><li><code><a href="../Z3/UninterpretedExpr.html">UninterpretedExpr</a></code></li><li><code><a href="../Z3/UninterpretedSort.html">UninterpretedSort</a></code></li></ul></details></li></ul>
   </details>
 </div>
 
@@ -846,7 +848,7 @@
             </details>
           </div>
           <div class="method-source-code" id="assert-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 70</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 82</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">assert</span>(<span class="ruby-identifier">ast</span>)
   <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_assert</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">ast</span>)
@@ -889,7 +891,7 @@
             </details>
           </div>
           <div class="method-source-code" id="assert_and_track-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 77</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 89</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">assert_and_track</span>(<span class="ruby-identifier">ast</span>, <span class="ruby-identifier">tracker</span>)
   <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_assert_and_track</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">ast</span>, <span class="ruby-identifier">tracker</span>)
@@ -932,7 +934,7 @@
             </details>
           </div>
           <div class="method-source-code" id="assertions-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 129</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 141</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">assertions</span>
   <span class="ruby-identifier">_ast_vector</span> = <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_assertions</span>(<span class="ruby-keyword">self</span>)
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">unpack_ast_vector</span>(<span class="ruby-identifier">_ast_vector</span>)
@@ -975,7 +977,7 @@
             </details>
           </div>
           <div class="method-source-code" id="check-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 86</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 98</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">check</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">assumptions</span>)
   <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-identifier">result</span> = <span class="ruby-identifier">check_sat_results</span>(
@@ -1026,7 +1028,7 @@
             </details>
           </div>
           <div class="method-source-code" id="consequences-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 144</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 156</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">consequences</span>(<span class="ruby-identifier">variables</span>, <span class="ruby-identifier">assumptions</span> = [])
   <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">with_ast_vectors</span>(<span class="ruby-identifier">assumptions</span>, <span class="ruby-identifier">variables</span>, []) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">_assumptions</span>, <span class="ruby-identifier">_variables</span>, <span class="ruby-identifier">_consequences</span><span class="ruby-operator">|</span>
@@ -1073,7 +1075,7 @@
             </details>
           </div>
           <div class="method-source-code" id="cube-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 156</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 168</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">cube</span>(<span class="ruby-identifier">variables</span> = [], <span class="ruby-identifier">backtrack_level</span> = <span class="ruby-value">0</span>)
   <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">with_ast_vectors</span>(<span class="ruby-identifier">variables</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">_variables</span><span class="ruby-operator">|</span>
@@ -1118,7 +1120,7 @@
             </details>
           </div>
           <div class="method-source-code" id="from_file-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 200</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 212</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">from_file</span>(<span class="ruby-identifier">path</span>)
   <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_from_file</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">path</span>)
@@ -1162,7 +1164,7 @@
             </details>
           </div>
           <div class="method-source-code" id="from_string-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 194</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 206</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">from_string</span>(<span class="ruby-identifier">str</span>)
   <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_from_string</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">str</span>)
@@ -1206,7 +1208,7 @@
             </details>
           </div>
           <div class="method-source-code" id="help-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 211</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 223</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">help</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_help</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1248,7 +1250,7 @@
             </details>
           </div>
           <div class="method-source-code" id="interrupt-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 185</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 197</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">interrupt</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_interrupt</span>(<span class="ruby-keyword">self</span>)
   <span class="ruby-keyword">self</span>
@@ -1291,7 +1293,7 @@
             </details>
           </div>
           <div class="method-source-code" id="model-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 121</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 133</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">model</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@has_model</span>
     <span class="ruby-ivar">@model</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Model</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_model</span>(<span class="ruby-keyword">self</span>))
@@ -1337,7 +1339,7 @@
             </details>
           </div>
           <div class="method-source-code" id="non_units-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 170</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 182</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">non_units</span>
   <span class="ruby-identifier">_ast_vector</span> = <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_non_units</span>(<span class="ruby-keyword">self</span>)
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">unpack_ast_vector</span>(<span class="ruby-identifier">_ast_vector</span>)
@@ -1380,7 +1382,7 @@
             </details>
           </div>
           <div class="method-source-code" id="num_scopes-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 215</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 227</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">num_scopes</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_num_scopes</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1422,7 +1424,7 @@
             </details>
           </div>
           <div class="method-source-code" id="param_descrs-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 42</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 54</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">param_descrs</span>
   <span class="ruby-constant">ParamDescrs</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_param_descrs</span>(<span class="ruby-keyword">self</span>))
 <span class="ruby-keyword">end</span></pre>
@@ -1464,7 +1466,7 @@
             </details>
           </div>
           <div class="method-source-code" id="pop-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 60</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 72</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">pop</span>(<span class="ruby-identifier">n</span>=<span class="ruby-value">1</span>)
   <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_pop</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">n</span>)
@@ -1507,7 +1509,7 @@
             </details>
           </div>
           <div class="method-source-code" id="prove-21-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 231</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 243</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">prove!</span>(<span class="ruby-identifier">ast</span>)
   <span class="ruby-ivar">@has_model</span> = <span class="ruby-keyword">false</span>
   <span class="ruby-identifier">push</span>
@@ -1566,7 +1568,7 @@
             </details>
           </div>
           <div class="method-source-code" id="push-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 55</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 67</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">push</span>
   <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_push</span>(<span class="ruby-keyword">self</span>)
@@ -1609,7 +1611,7 @@
             </details>
           </div>
           <div class="method-source-code" id="reason_unknown-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 219</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 231</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">reason_unknown</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_reason_unknown</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1651,7 +1653,7 @@
             </details>
           </div>
           <div class="method-source-code" id="reset-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 65</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 77</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">reset</span>
   <span class="ruby-identifier">reset_model!</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_reset</span>(<span class="ruby-keyword">self</span>)
@@ -1694,7 +1696,7 @@
             </details>
           </div>
           <div class="method-source-code" id="satisfiable-3F-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 99</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 111</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">satisfiable?</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">assumptions</span>)
   <span class="ruby-keyword">case</span> <span class="ruby-identifier">check</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">assumptions</span>)
   <span class="ruby-keyword">when</span> <span class="ruby-value">:sat</span>
@@ -1743,7 +1745,7 @@
             </details>
           </div>
           <div class="method-source-code" id="set_params-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 49</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 61</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">set_params</span>(<span class="ruby-identifier">params</span>)
   <span class="ruby-identifier">params</span> = <span class="ruby-constant">Params</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>, <span class="ruby-identifier">param_descrs</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Params</span>)
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_set_params</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">params</span>)
@@ -1787,7 +1789,7 @@
             </details>
           </div>
           <div class="method-source-code" id="statistics-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 206</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 218</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">statistics</span>
   <span class="ruby-identifier">_stats</span> = <span class="ruby-constant">LowLevel</span><span class="ruby-operator">::</span><span class="ruby-identifier">solver_get_statistics</span>(<span class="ruby-keyword">self</span>)
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">unpack_statistics</span>(<span class="ruby-identifier">_stats</span>)
@@ -1830,7 +1832,7 @@
             </details>
           </div>
           <div class="method-source-code" id="to_dimacs-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 227</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 239</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_dimacs</span>(<span class="ruby-identifier">include_names</span>=<span class="ruby-keyword">true</span>)
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_to_dimacs_string</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">include_names</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1872,7 +1874,7 @@
             </details>
           </div>
           <div class="method-source-code" id="to_s-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 223</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 235</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_s</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_to_string</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1914,7 +1916,7 @@
             </details>
           </div>
           <div class="method-source-code" id="trail-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 177</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 189</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">trail</span>
   <span class="ruby-identifier">_ast_vector</span> = <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_trail</span>(<span class="ruby-keyword">self</span>)
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">unpack_ast_vector</span>(<span class="ruby-identifier">_ast_vector</span>)
@@ -1957,7 +1959,7 @@
             </details>
           </div>
           <div class="method-source-code" id="units-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 165</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 177</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">units</span>
   <span class="ruby-identifier">_ast_vector</span> = <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_units</span>(<span class="ruby-keyword">self</span>)
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">unpack_ast_vector</span>(<span class="ruby-identifier">_ast_vector</span>)
@@ -2000,7 +2002,7 @@
             </details>
           </div>
           <div class="method-source-code" id="unsat_core-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 136</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 148</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsat_core</span>
   <span class="ruby-identifier">_ast_vector</span> = <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_get_unsat_core</span>(<span class="ruby-keyword">self</span>)
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">unpack_ast_vector</span>(<span class="ruby-identifier">_ast_vector</span>)
@@ -2043,7 +2045,7 @@
             </details>
           </div>
           <div class="method-source-code" id="unsatisfiable-3F-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 110</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 122</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unsatisfiable?</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">assumptions</span>)
   <span class="ruby-keyword">case</span> <span class="ruby-identifier">check</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">assumptions</span>)
   <span class="ruby-keyword">when</span> <span class="ruby-value">:unsat</span>
@@ -2062,6 +2064,51 @@
 
 
           
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-with_simplifier" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-with_simplifier" title="Link to this method">
+                <span class="method-name">with_simplifier</span>
+                <span class="method-args">(simplifier, params = {})</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="with_simplifier-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/solver.rb, line 47</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">with_simplifier</span>(<span class="ruby-identifier">simplifier</span>, <span class="ruby-identifier">params</span> = {})
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Simplifier required&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">simplifier</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Simplifier</span>)
+  <span class="ruby-constant">Solver</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>, <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">solver_add_simplifier</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">simplifier</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Attaches a simplifier, which the solver then runs over the assertions as incremental preprocessing.</p>
+
+<p><a href="../Z3.html"><code>Z3</code></a> hands back a <strong>different</strong> solver rather than changing this one, so this returns a new <a href="Solver.html"><code>Solver</code></a> and leaves the receiver alone - and it refuses outright once anything has been asserted, so it has to come first. Parameters don’t carry over from the receiver either, as <a href="../Z3.html"><code>Z3</code></a> has no way to read them back.</p>
 
 
         </div>

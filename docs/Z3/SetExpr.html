@@ -479,7 +479,11 @@
       </summary>
       <ul class="nav-list" role="directory">
 
+        <li ><a href="#method-i-add">add</a></li>
+
         <li ><a href="#method-i-complement">complement</a></li>
+
+        <li ><a href="#method-i-delete">delete</a></li>
 
         <li ><a href="#method-i-difference">difference</a></li>
 
@@ -512,7 +516,7 @@
       </span>
     </summary>
 
-    <ul class="link-list nav-list"><li><details open><summary><code><a href="../Z3.html">Z3</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/AST.html">AST</a></code></li><li><code><a href="../Z3/ApplyResult.html">ApplyResult</a></code></li><li><code><a href="../Z3/ArithExpr.html">ArithExpr</a></code></li><li><code><a href="../Z3/ArrayExpr.html">ArrayExpr</a></code></li><li><code><a href="../Z3/ArraySort.html">ArraySort</a></code></li><li><code><a href="../Z3/BitvecExpr.html">BitvecExpr</a></code></li><li><code><a href="../Z3/BitvecSort.html">BitvecSort</a></code></li><li><code><a href="../Z3/BoolExpr.html">BoolExpr</a></code></li><li><code><a href="../Z3/BoolSort.html">BoolSort</a></code></li><li><code><a href="../Z3/CharExpr.html">CharExpr</a></code></li><li><code><a href="../Z3/CharSort.html">CharSort</a></code></li><li><code><a href="../Z3/Context.html">Context</a></code></li><li><code><a href="../Z3/EnumExpr.html">EnumExpr</a></code></li><li><code><a href="../Z3/EnumSort.html">EnumSort</a></code></li><li><code><a href="../Z3/Exception.html">Exception</a></code></li><li><code><a href="../Z3/Expr.html">Expr</a></code></li><li><code><a href="../Z3/FiniteDomainExpr.html">FiniteDomainExpr</a></code></li><li><code><a href="../Z3/FiniteDomainSort.html">FiniteDomainSort</a></code></li><li><code><a href="../Z3/FloatExpr.html">FloatExpr</a></code></li><li><code><a href="../Z3/FloatSort.html">FloatSort</a></code></li><li><code><a href="../Z3/FuncDecl.html">FuncDecl</a></code></li><li><code><a href="../Z3/Goal.html">Goal</a></code></li><li><code><a href="../Z3/IntExpr.html">IntExpr</a></code></li><li><code><a href="../Z3/IntSort.html">IntSort</a></code></li><li><code><a href="../Z3/LowLevel.html">LowLevel</a></code></li><li><code><a href="../Z3/Model.html">Model</a></code></li><li><code><a href="../Z3/Optimize.html">Optimize</a></code></li><li><code><a href="../Z3/ParamDescrs.html">ParamDescrs</a></code></li><li><code><a href="../Z3/Params.html">Params</a></code></li><li><details><summary><code><a href="../Z3/Printer.html">Printer</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/Printer/PrintedExpr.html">PrintedExpr</a></code></li></ul></details></li><li><code><a href="../Z3/Probe.html">Probe</a></code></li><li><code><a href="../Z3/ReExpr.html">Re</a></code></li><li><code><a href="../Z3/ReExpr.html">ReExpr</a></code></li><li><code><a href="../Z3/ReSort.html">ReSort</a></code></li><li><code><a href="../Z3/RealExpr.html">RealExpr</a></code></li><li><code><a href="../Z3/RealSort.html">RealSort</a></code></li><li><code><a href="../Z3/ReferenceCounted.html">ReferenceCounted</a></code></li><li><code><a href="../Z3/RoundingModeExpr.html">RoundingModeExpr</a></code></li><li><code><a href="../Z3/RoundingModeSort.html">RoundingModeSort</a></code></li><li><code><a href="../Z3/SeqExpr.html">SeqExpr</a></code></li><li><code><a href="../Z3/SeqSort.html">SeqSort</a></code></li><li><code><a href="../Z3/SetExpr.html">SetExpr</a></code></li><li><code><a href="../Z3/SetSort.html">SetSort</a></code></li><li><code><a href="../Z3/Solver.html">Solver</a></code></li><li><code><a href="../Z3/Sort.html">Sort</a></code></li><li><code><a href="../Z3/StringExpr.html">StringExpr</a></code></li><li><code><a href="../Z3/StringSort.html">StringSort</a></code></li><li><code><a href="../Z3/Tactic.html">Tactic</a></code></li><li><code><a href="../Z3/TypeVariableExpr.html">TypeVariableExpr</a></code></li><li><code><a href="../Z3/TypeVariableSort.html">TypeVariableSort</a></code></li><li><code><a href="../Z3/UninterpretedExpr.html">UninterpretedExpr</a></code></li><li><code><a href="../Z3/UninterpretedSort.html">UninterpretedSort</a></code></li></ul></details></li></ul>
+    <ul class="link-list nav-list"><li><details open><summary><code><a href="../Z3.html">Z3</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/AST.html">AST</a></code></li><li><code><a href="../Z3/ApplyResult.html">ApplyResult</a></code></li><li><code><a href="../Z3/ArithExpr.html">ArithExpr</a></code></li><li><code><a href="../Z3/ArrayExpr.html">ArrayExpr</a></code></li><li><code><a href="../Z3/ArraySort.html">ArraySort</a></code></li><li><code><a href="../Z3/BitvecExpr.html">BitvecExpr</a></code></li><li><code><a href="../Z3/BitvecSort.html">BitvecSort</a></code></li><li><code><a href="../Z3/BoolExpr.html">BoolExpr</a></code></li><li><code><a href="../Z3/BoolSort.html">BoolSort</a></code></li><li><code><a href="../Z3/CharExpr.html">CharExpr</a></code></li><li><code><a href="../Z3/CharSort.html">CharSort</a></code></li><li><code><a href="../Z3/Context.html">Context</a></code></li><li><code><a href="../Z3/EnumExpr.html">EnumExpr</a></code></li><li><code><a href="../Z3/EnumSort.html">EnumSort</a></code></li><li><code><a href="../Z3/Exception.html">Exception</a></code></li><li><code><a href="../Z3/Expr.html">Expr</a></code></li><li><code><a href="../Z3/FiniteDomainExpr.html">FiniteDomainExpr</a></code></li><li><code><a href="../Z3/FiniteDomainSort.html">FiniteDomainSort</a></code></li><li><code><a href="../Z3/FloatExpr.html">FloatExpr</a></code></li><li><code><a href="../Z3/FloatSort.html">FloatSort</a></code></li><li><code><a href="../Z3/FuncDecl.html">FuncDecl</a></code></li><li><code><a href="../Z3/Goal.html">Goal</a></code></li><li><code><a href="../Z3/IntExpr.html">IntExpr</a></code></li><li><code><a href="../Z3/IntSort.html">IntSort</a></code></li><li><code><a href="../Z3/LowLevel.html">LowLevel</a></code></li><li><code><a href="../Z3/Model.html">Model</a></code></li><li><code><a href="../Z3/Optimize.html">Optimize</a></code></li><li><code><a href="../Z3/ParamDescrs.html">ParamDescrs</a></code></li><li><code><a href="../Z3/Params.html">Params</a></code></li><li><details><summary><code><a href="../Z3/Printer.html">Printer</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/Printer/PrintedExpr.html">PrintedExpr</a></code></li></ul></details></li><li><code><a href="../Z3/Probe.html">Probe</a></code></li><li><code><a href="../Z3/ReExpr.html">Re</a></code></li><li><code><a href="../Z3/ReExpr.html">ReExpr</a></code></li><li><code><a href="../Z3/ReSort.html">ReSort</a></code></li><li><code><a href="../Z3/RealExpr.html">RealExpr</a></code></li><li><code><a href="../Z3/RealSort.html">RealSort</a></code></li><li><code><a href="../Z3/ReferenceCounted.html">ReferenceCounted</a></code></li><li><code><a href="../Z3/RoundingModeExpr.html">RoundingModeExpr</a></code></li><li><code><a href="../Z3/RoundingModeSort.html">RoundingModeSort</a></code></li><li><code><a href="../Z3/SeqExpr.html">SeqExpr</a></code></li><li><code><a href="../Z3/SeqSort.html">SeqSort</a></code></li><li><code><a href="../Z3/SetExpr.html">SetExpr</a></code></li><li><code><a href="../Z3/SetSort.html">SetSort</a></code></li><li><code><a href="../Z3/Simplifier.html">Simplifier</a></code></li><li><code><a href="../Z3/Solver.html">Solver</a></code></li><li><code><a href="../Z3/Sort.html">Sort</a></code></li><li><code><a href="../Z3/StringExpr.html">StringExpr</a></code></li><li><code><a href="../Z3/StringSort.html">StringSort</a></code></li><li><code><a href="../Z3/Tactic.html">Tactic</a></code></li><li><code><a href="../Z3/TypeVariableExpr.html">TypeVariableExpr</a></code></li><li><code><a href="../Z3/TypeVariableSort.html">TypeVariableSort</a></code></li><li><code><a href="../Z3/UninterpretedExpr.html">UninterpretedExpr</a></code></li><li><code><a href="../Z3/UninterpretedSort.html">UninterpretedSort</a></code></li></ul></details></li></ul>
   </details>
 </div>
 
@@ -582,7 +586,7 @@
             </details>
           </div>
           <div class="method-source-code" id="Difference-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/set_expr.rb, line 60</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/set_expr.rb, line 73</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">Difference</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_set_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_set_difference</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
@@ -625,7 +629,7 @@
             </details>
           </div>
           <div class="method-source-code" id="Intersection-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/set_expr.rb, line 55</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/set_expr.rb, line 68</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">Intersection</span>(<span class="ruby-operator">*</span><span class="ruby-identifier ruby-title">args</span>)
   <span class="ruby-identifier">args</span> = <span class="ruby-identifier">coerce_to_same_set_sort</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
   <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_set_intersect</span>(<span class="ruby-identifier">args</span>))
@@ -668,7 +672,7 @@
             </details>
           </div>
           <div class="method-source-code" id="Subset-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/set_expr.rb, line 45</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/set_expr.rb, line 58</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">Subset</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_set_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_set_subset</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
@@ -711,7 +715,7 @@
             </details>
           </div>
           <div class="method-source-code" id="Union-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/set_expr.rb, line 50</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/set_expr.rb, line 63</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">Union</span>(<span class="ruby-operator">*</span><span class="ruby-identifier ruby-title">args</span>)
   <span class="ruby-identifier">args</span> = <span class="ruby-identifier">coerce_to_same_set_sort</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
   <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_set_union</span>(<span class="ruby-identifier">args</span>))
@@ -754,7 +758,7 @@
             </details>
           </div>
           <div class="method-source-code" id="coerce_to_same_set_sort-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/set_expr.rb, line 39</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/set_expr.rb, line 52</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">coerce_to_same_set_sort</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
   <span class="ruby-identifier">args</span> = <span class="ruby-identifier">coerce_to_same_sort</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
   <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Set value with same element sort expected&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">SetExpr</span>)
@@ -836,6 +840,48 @@
        </header>
 
 
+      <div id="method-i-add" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-add" title="Link to this method">
+                <span class="method-name">add</span>
+                <span class="method-args">(element)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="add-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/set_expr.rb, line 42</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">add</span>(<span class="ruby-identifier">element</span>)
+  <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_set_add</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">element_sort</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">element</span>)))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>A new set with the element in it, the way <a href="SetExpr.html#method-i-union"><code>union</code></a> gives a new set - Ruby’s Set#add mutates the receiver, but no <a href="../Z3.html"><code>Z3</code></a> expression is ever mutable. (‘mk_set_add` takes the set first, where `mk_set_member` above takes the element first. Z3’s own inconsistency, not ours.)</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
       <div id="method-i-complement" class="method-detail anchor-link ">
         <div class="method-header">
 
@@ -867,6 +913,48 @@
 
 
           
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-delete" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-delete" title="Link to this method">
+                <span class="method-name">delete</span>
+                <span class="method-args">(element)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="delete-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/set_expr.rb, line 47</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">delete</span>(<span class="ruby-identifier">element</span>)
+  <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_set_del</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">element_sort</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">element</span>)))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Same, without the element. Removing something which was never there is fine.</p>
 
 
         </div>

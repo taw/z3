@@ -456,9 +456,15 @@
 
         <li ><a href="#method-c-Eq">Eq</a></li>
 
+        <li ><a href="#method-c-Exists">Exists</a></li>
+
+        <li ><a href="#method-c-ForAll">ForAll</a></li>
+
         <li ><a href="#method-c-Ge">Ge</a></li>
 
         <li ><a href="#method-c-Gt">Gt</a></li>
+
+        <li ><a href="#method-c-Lambda">Lambda</a></li>
 
         <li ><a href="#method-c-Le">Le</a></li>
 
@@ -526,7 +532,7 @@
       </span>
     </summary>
 
-    <ul class="link-list nav-list"><li><details open><summary><code><a href="../Z3.html">Z3</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/AST.html">AST</a></code></li><li><code><a href="../Z3/ApplyResult.html">ApplyResult</a></code></li><li><code><a href="../Z3/ArithExpr.html">ArithExpr</a></code></li><li><code><a href="../Z3/ArrayExpr.html">ArrayExpr</a></code></li><li><code><a href="../Z3/ArraySort.html">ArraySort</a></code></li><li><code><a href="../Z3/BitvecExpr.html">BitvecExpr</a></code></li><li><code><a href="../Z3/BitvecSort.html">BitvecSort</a></code></li><li><code><a href="../Z3/BoolExpr.html">BoolExpr</a></code></li><li><code><a href="../Z3/BoolSort.html">BoolSort</a></code></li><li><code><a href="../Z3/CharExpr.html">CharExpr</a></code></li><li><code><a href="../Z3/CharSort.html">CharSort</a></code></li><li><code><a href="../Z3/Context.html">Context</a></code></li><li><code><a href="../Z3/EnumExpr.html">EnumExpr</a></code></li><li><code><a href="../Z3/EnumSort.html">EnumSort</a></code></li><li><code><a href="../Z3/Exception.html">Exception</a></code></li><li><code><a href="../Z3/Expr.html">Expr</a></code></li><li><code><a href="../Z3/FiniteDomainExpr.html">FiniteDomainExpr</a></code></li><li><code><a href="../Z3/FiniteDomainSort.html">FiniteDomainSort</a></code></li><li><code><a href="../Z3/FloatExpr.html">FloatExpr</a></code></li><li><code><a href="../Z3/FloatSort.html">FloatSort</a></code></li><li><code><a href="../Z3/FuncDecl.html">FuncDecl</a></code></li><li><code><a href="../Z3/Goal.html">Goal</a></code></li><li><code><a href="../Z3/IntExpr.html">IntExpr</a></code></li><li><code><a href="../Z3/IntSort.html">IntSort</a></code></li><li><code><a href="../Z3/LowLevel.html">LowLevel</a></code></li><li><code><a href="../Z3/Model.html">Model</a></code></li><li><code><a href="../Z3/Optimize.html">Optimize</a></code></li><li><code><a href="../Z3/ParamDescrs.html">ParamDescrs</a></code></li><li><code><a href="../Z3/Params.html">Params</a></code></li><li><details><summary><code><a href="../Z3/Printer.html">Printer</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/Printer/PrintedExpr.html">PrintedExpr</a></code></li></ul></details></li><li><code><a href="../Z3/Probe.html">Probe</a></code></li><li><code><a href="../Z3/ReExpr.html">Re</a></code></li><li><code><a href="../Z3/ReExpr.html">ReExpr</a></code></li><li><code><a href="../Z3/ReSort.html">ReSort</a></code></li><li><code><a href="../Z3/RealExpr.html">RealExpr</a></code></li><li><code><a href="../Z3/RealSort.html">RealSort</a></code></li><li><code><a href="../Z3/ReferenceCounted.html">ReferenceCounted</a></code></li><li><code><a href="../Z3/RoundingModeExpr.html">RoundingModeExpr</a></code></li><li><code><a href="../Z3/RoundingModeSort.html">RoundingModeSort</a></code></li><li><code><a href="../Z3/SeqExpr.html">SeqExpr</a></code></li><li><code><a href="../Z3/SeqSort.html">SeqSort</a></code></li><li><code><a href="../Z3/SetExpr.html">SetExpr</a></code></li><li><code><a href="../Z3/SetSort.html">SetSort</a></code></li><li><code><a href="../Z3/Solver.html">Solver</a></code></li><li><code><a href="../Z3/Sort.html">Sort</a></code></li><li><code><a href="../Z3/StringExpr.html">StringExpr</a></code></li><li><code><a href="../Z3/StringSort.html">StringSort</a></code></li><li><code><a href="../Z3/Tactic.html">Tactic</a></code></li><li><code><a href="../Z3/TypeVariableExpr.html">TypeVariableExpr</a></code></li><li><code><a href="../Z3/TypeVariableSort.html">TypeVariableSort</a></code></li><li><code><a href="../Z3/UninterpretedExpr.html">UninterpretedExpr</a></code></li><li><code><a href="../Z3/UninterpretedSort.html">UninterpretedSort</a></code></li></ul></details></li></ul>
+    <ul class="link-list nav-list"><li><details open><summary><code><a href="../Z3.html">Z3</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/AST.html">AST</a></code></li><li><code><a href="../Z3/ApplyResult.html">ApplyResult</a></code></li><li><code><a href="../Z3/ArithExpr.html">ArithExpr</a></code></li><li><code><a href="../Z3/ArrayExpr.html">ArrayExpr</a></code></li><li><code><a href="../Z3/ArraySort.html">ArraySort</a></code></li><li><code><a href="../Z3/BitvecExpr.html">BitvecExpr</a></code></li><li><code><a href="../Z3/BitvecSort.html">BitvecSort</a></code></li><li><code><a href="../Z3/BoolExpr.html">BoolExpr</a></code></li><li><code><a href="../Z3/BoolSort.html">BoolSort</a></code></li><li><code><a href="../Z3/CharExpr.html">CharExpr</a></code></li><li><code><a href="../Z3/CharSort.html">CharSort</a></code></li><li><code><a href="../Z3/Context.html">Context</a></code></li><li><code><a href="../Z3/EnumExpr.html">EnumExpr</a></code></li><li><code><a href="../Z3/EnumSort.html">EnumSort</a></code></li><li><code><a href="../Z3/Exception.html">Exception</a></code></li><li><code><a href="../Z3/Expr.html">Expr</a></code></li><li><code><a href="../Z3/FiniteDomainExpr.html">FiniteDomainExpr</a></code></li><li><code><a href="../Z3/FiniteDomainSort.html">FiniteDomainSort</a></code></li><li><code><a href="../Z3/FloatExpr.html">FloatExpr</a></code></li><li><code><a href="../Z3/FloatSort.html">FloatSort</a></code></li><li><code><a href="../Z3/FuncDecl.html">FuncDecl</a></code></li><li><code><a href="../Z3/Goal.html">Goal</a></code></li><li><code><a href="../Z3/IntExpr.html">IntExpr</a></code></li><li><code><a href="../Z3/IntSort.html">IntSort</a></code></li><li><code><a href="../Z3/LowLevel.html">LowLevel</a></code></li><li><code><a href="../Z3/Model.html">Model</a></code></li><li><code><a href="../Z3/Optimize.html">Optimize</a></code></li><li><code><a href="../Z3/ParamDescrs.html">ParamDescrs</a></code></li><li><code><a href="../Z3/Params.html">Params</a></code></li><li><details><summary><code><a href="../Z3/Printer.html">Printer</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/Printer/PrintedExpr.html">PrintedExpr</a></code></li></ul></details></li><li><code><a href="../Z3/Probe.html">Probe</a></code></li><li><code><a href="../Z3/ReExpr.html">Re</a></code></li><li><code><a href="../Z3/ReExpr.html">ReExpr</a></code></li><li><code><a href="../Z3/ReSort.html">ReSort</a></code></li><li><code><a href="../Z3/RealExpr.html">RealExpr</a></code></li><li><code><a href="../Z3/RealSort.html">RealSort</a></code></li><li><code><a href="../Z3/ReferenceCounted.html">ReferenceCounted</a></code></li><li><code><a href="../Z3/RoundingModeExpr.html">RoundingModeExpr</a></code></li><li><code><a href="../Z3/RoundingModeSort.html">RoundingModeSort</a></code></li><li><code><a href="../Z3/SeqExpr.html">SeqExpr</a></code></li><li><code><a href="../Z3/SeqSort.html">SeqSort</a></code></li><li><code><a href="../Z3/SetExpr.html">SetExpr</a></code></li><li><code><a href="../Z3/SetSort.html">SetSort</a></code></li><li><code><a href="../Z3/Simplifier.html">Simplifier</a></code></li><li><code><a href="../Z3/Solver.html">Solver</a></code></li><li><code><a href="../Z3/Sort.html">Sort</a></code></li><li><code><a href="../Z3/StringExpr.html">StringExpr</a></code></li><li><code><a href="../Z3/StringSort.html">StringSort</a></code></li><li><code><a href="../Z3/Tactic.html">Tactic</a></code></li><li><code><a href="../Z3/TypeVariableExpr.html">TypeVariableExpr</a></code></li><li><code><a href="../Z3/TypeVariableSort.html">TypeVariableSort</a></code></li><li><code><a href="../Z3/UninterpretedExpr.html">UninterpretedExpr</a></code></li><li><code><a href="../Z3/UninterpretedSort.html">UninterpretedSort</a></code></li></ul></details></li></ul>
   </details>
 </div>
 
@@ -793,6 +799,92 @@
       </div>
 
 
+      <div id="method-c-Exists" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-Exists" title="Link to this method">
+                <span class="method-name">Exists</span>
+                <span class="method-args">(bound, body)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="Exists-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/expr.rb, line 278</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">Exists</span>(<span class="ruby-identifier ruby-title">bound</span>, <span class="ruby-identifier">body</span>)
+  <span class="ruby-identifier">bound</span> = <span class="ruby-identifier">bound_variables</span>(<span class="ruby-identifier">bound</span>)
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_exists_const</span>(<span class="ruby-identifier">bound</span>, <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">body</span>)))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-ForAll" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-ForAll" title="Link to this method">
+                <span class="method-name">ForAll</span>
+                <span class="method-args">(bound, body)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="ForAll-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/expr.rb, line 273</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">ForAll</span>(<span class="ruby-identifier ruby-title">bound</span>, <span class="ruby-identifier">body</span>)
+  <span class="ruby-identifier">bound</span> = <span class="ruby-identifier">bound_variables</span>(<span class="ruby-identifier">bound</span>)
+  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_forall_const</span>(<span class="ruby-identifier">bound</span>, <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">body</span>)))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Quantifiers bind ordinary variables rather than de Bruijn indices - you pass the same ‘Z3.Int(“x”)` you built the body out of, and <a href="../Z3.html"><code>Z3</code></a> rebinds it inside. The variable goes on meaning the outer one everywhere else.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
       <div id="method-c-Ge" class="method-detail anchor-link ">
         <div class="method-header">
 
@@ -882,6 +974,53 @@
 
 
           
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-Lambda" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-Lambda" title="Link to this method">
+                <span class="method-name">Lambda</span>
+                <span class="method-args">(bound, body)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="Lambda-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/expr.rb, line 289</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">Lambda</span>(<span class="ruby-identifier ruby-title">bound</span>, <span class="ruby-identifier">body</span>)
+  <span class="ruby-identifier">bound</span> = <span class="ruby-identifier">bound_variables</span>(<span class="ruby-identifier">bound</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-node">&quot;Lambda takes one bound variable, got #{bound.size}&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">bound</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+  <span class="ruby-identifier">body</span> = <span class="ruby-identifier">sort_for_const</span>(<span class="ruby-identifier">body</span>).<span class="ruby-identifier">from_const</span>(<span class="ruby-identifier">body</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">body</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Expr</span>)
+  <span class="ruby-constant">ArraySort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">bound</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">sort</span>, <span class="ruby-identifier">body</span>.<span class="ruby-identifier">sort</span>).<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_lambda_const</span>(<span class="ruby-identifier">bound</span>, <span class="ruby-identifier">body</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>An anonymous function. <a href="../Z3.html"><code>Z3</code></a> hands it back as an Array, so it indexes with ‘[]` like any other - `Z3.Lambda(x, x * <a href="3">2)</a>` is 6.</p>
+
+<p>One bound variable only: two would make an ‘Array(Int, Int, Int)`, and this gem has no sort for n-ary arrays - `Sort.from_pointer` would report it as `Array(Int, Int)` and indexing it would fail inside <a href="../Z3.html"><code>Z3</code></a>.</p>
 
 
         </div>

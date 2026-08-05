@@ -5,17 +5,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>class Z3::ArraySort - RDoc Documentation</title>
+<title>class Z3::Simplifier - RDoc Documentation</title>
 
 
   <meta
     name="keywords"
-    content="ruby,class,Z3::ArraySort"
+    content="ruby,class,Z3::Simplifier"
   >
 
     <meta
       name="description"
-      content="Documentation for the Z3::ArraySort class"
+      content="class Z3::Simplifier: Incremental preprocessing for a Solver. Where a Tactic transforms a Goal into subgoals you can look at, a Simplifier has nothing you can apply it to -"
     >
 
 
@@ -24,14 +24,11 @@
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="class Z3::ArraySort - RDoc Documentation">
+<meta property="og:title" content="class Z3::Simplifier - RDoc Documentation">
 
 
 
-    <meta
-      property="og:description"
-      content="Documentation for Z3::ArraySort class - API reference and code examples"
-    >
+    <meta property="og:description" content="Incremental preprocessing for a Solver. Where a Tactic transforms a Goal into subgoals you can look at, a Simplifier has nothing you can apply it to -">
 
 
 
@@ -39,14 +36,11 @@
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="class Z3::ArraySort - RDoc Documentation">
+<meta name="twitter:title" content="class Z3::Simplifier - RDoc Documentation">
 
 
 
-    <meta
-      name="twitter:description"
-      content="Documentation for Z3::ArraySort class - API reference and code examples"
-    >
+    <meta name="twitter:description" content="Incremental preprocessing for a Solver. Where a Tactic transforms a Goal into subgoals you can look at, a Simplifier has nothing you can apply it to -">
 
 
 
@@ -425,12 +419,34 @@
         <svg><use href="#icon-chevron"></use></svg>
       </span>
     </summary>
-    <ul><li>Sort</li></ul>
+    <ul><li>Object</li></ul>
   </details>
 </div>
 
 
   
+<div id="includes-section" class="nav-section">
+  <details class="nav-section-collapsible" open>
+    <summary class="nav-section-header">
+      <span class="nav-section-icon">
+        <svg><use href="#icon-includes"></use></svg>
+      </span>
+      <span class="nav-section-title">Included Modules</span>
+      <span class="nav-section-chevron">
+        <svg><use href="#icon-chevron"></use></svg>
+      </span>
+    </summary>
+
+    <ul class="nav-list">
+
+
+      <li><a class="include" href="ReferenceCounted.html">Z3::ReferenceCounted</a></li>
+
+
+    </ul>
+  </details>
+</div>
+
 
   
 
@@ -448,7 +464,13 @@
       </summary>
       <ul class="nav-list" role="directory">
 
-        <li class="calls-super" ><a href="#method-c-new">new</a></li>
+        <li ><a href="#method-c-description">description</a></li>
+
+        <li ><a href="#method-c-named">named</a></li>
+
+        <li ><a href="#method-c-names">names</a></li>
+
+        <li ><a href="#method-c-new">new</a></li>
 
       </ul>
     </details>
@@ -469,13 +491,13 @@
       </summary>
       <ul class="nav-list" role="directory">
 
-        <li ><a href="#method-i-Const">Const</a></li>
+        <li ><a href="#method-i-and_then">and_then</a></li>
 
-        <li ><a href="#method-i-expr_class">expr_class</a></li>
+        <li ><a href="#method-i-help">help</a></li>
 
-        <li ><a href="#method-i-inspect">inspect</a></li>
+        <li ><a href="#method-i-param_descrs">param_descrs</a></li>
 
-        <li ><a href="#method-i-to_s">to_s</a></li>
+        <li ><a href="#method-i-using_params">using_params</a></li>
 
       </ul>
     </details>
@@ -500,7 +522,7 @@
 
 </nav>
 
-<main role="main" aria-labelledby="class-Z3::ArraySort">
+<main role="main" aria-labelledby="class-Z3::Simplifier">
   
   
     <ol role="navigation" aria-label="Breadcrumb navigation" class="breadcrumb">
@@ -513,19 +535,23 @@
       
       <li>
         
-        <span>ArraySort</span>
+        <span>Simplifier</span>
         
       </li>
       
     </ol>
   
 
-  <h1 id="class-Z3::ArraySort" class="anchor-link class">
-    class Z3::ArraySort
+  <h1 id="class-Z3::Simplifier" class="anchor-link class">
+    class Z3::Simplifier
   </h1>
 
   <section class="description">
     
+<p>Incremental preprocessing for a <a href="Solver.html"><code>Solver</code></a>.</p>
+
+<p>Where a <a href="Tactic.html"><code>Tactic</code></a> transforms a <a href="Goal.html"><code>Goal</code></a> into subgoals you can look at, a <a href="Simplifier.html"><code>Simplifier</code></a> has nothing you can apply it to - attaching it to a solver with ‘Solver#with_simplifier` is the only way to use one - and `#and_then` is its only combinator.</p>
+
   </section>
 
 
@@ -535,6 +561,23 @@
 
 
 
+    <section class="constants-list">
+      <header>
+        <h3 id="constants"><a href="#constants">Constants</a></h3>
+      </header>
+      <dl>
+
+        <dt id="UNSOUND">UNSOUND</dt>
+
+        <dd>
+
+          <p>Simplifiers we refuse to build, because <a href="../Z3.html"><code>Z3</code></a> gets them wrong. Pinned down in ‘spec/upstream_bugs_spec.rb`, which reaches past this class to reproduce the bug - when that spec starts failing, <a href="../Z3.html"><code>Z3</code></a> has fixed it and the entry here can go.</p>
+        </dd>
+
+
+      </dl>
+    </section>
+
 
 
     <section class="attribute-method-details method-section">
@@ -543,26 +586,10 @@
       </header>
 
 
-      <div id="attribute-i-key_sort" class="method-detail anchor-link">
+      <div id="attribute-i-_simplifier" class="method-detail anchor-link">
         <div class="method-heading attribute-method-heading">
-          <a href="#attribute-i-key_sort" title="Link to this attribute">
-            <span class="method-name">key_sort</span>
-            <span class="attribute-access-type">[R]</span>
-          </a>
-        </div>
-
-        <div class="method-description">
-
-
-        
-
-        </div>
-      </div>
-
-      <div id="attribute-i-value_sort" class="method-detail anchor-link">
-        <div class="method-heading attribute-method-heading">
-          <a href="#attribute-i-value_sort" title="Link to this attribute">
-            <span class="method-name">value_sort</span>
+          <a href="#attribute-i-_simplifier" title="Link to this attribute">
+            <span class="method-name">_simplifier</span>
             <span class="attribute-access-type">[R]</span>
           </a>
         </div>
@@ -585,13 +612,140 @@
        </header>
 
 
+      <div id="method-c-description" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-description" title="Link to this method">
+                <span class="method-name">description</span>
+                <span class="method-args">(name)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="description-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/simplifier.rb, line 70</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">description</span>(<span class="ruby-identifier">name</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-node">&quot;#{name} not on list of known simplifiers, available: #{names.join(&quot; &quot;)}&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">names</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">name</span>)
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">simplifier_get_descr</span>(<span class="ruby-identifier">name</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-named" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-named" title="Link to this method">
+                <span class="method-name">named</span>
+                <span class="method-args">(str)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="named-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/simplifier.rb, line 75</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">named</span>(<span class="ruby-identifier">str</span>)
+  <span class="ruby-identifier">new</span> <span class="ruby-identifier">str</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-names" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-names" title="Link to this method">
+                <span class="method-name">names</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="names-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/simplifier.rb, line 66</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">names</span>
+  (<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">get_num_simplifiers</span>).<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">get_simplifier_name</span>(<span class="ruby-identifier">i</span>) }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Z3’s whole list, including anything in <a href="Simplifier.html#UNSOUND"><code>UNSOUND</code></a> - named is where those get turned down, so this stays a faithful report of what <a href="../Z3.html"><code>Z3</code></a> has</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
       <div id="method-c-new" class="method-detail anchor-link ">
         <div class="method-header">
 
             <div class="method-heading">
               <a href="#method-c-new" title="Link to this method">
                 <span class="method-name">new</span>
-                <span class="method-args">(key_sort, value_sort)</span>
+                <span class="method-args">(_simplifier)</span>
               </a>
             </div>
 
@@ -604,11 +758,23 @@
             </details>
           </div>
           <div class="method-source-code" id="new-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/array_sort.rb, line 4</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">key_sort</span>, <span class="ruby-identifier">value_sort</span>)
-  <span class="ruby-ivar">@key_sort</span> = <span class="ruby-identifier">key_sort</span>
-  <span class="ruby-ivar">@value_sort</span> = <span class="ruby-identifier">value_sort</span>
-  <span class="ruby-keyword">super</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_array_sort</span>(<span class="ruby-identifier">key_sort</span>, <span class="ruby-identifier">value_sort</span>)
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/simplifier.rb, line 21</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">_simplifier</span>)
+  <span class="ruby-keyword">case</span> <span class="ruby-identifier">_simplifier</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-constant">String</span>
+    <span class="ruby-identifier">names</span> = <span class="ruby-constant">Simplifier</span>.<span class="ruby-identifier">names</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-node">&quot;#{_simplifier} not on list of known simplifiers, available: #{names.join(&quot; &quot;)}&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">names</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">_simplifier</span>)
+    <span class="ruby-keyword">if</span> (<span class="ruby-identifier">reason</span> = <span class="ruby-constant">UNSOUND</span>[<span class="ruby-identifier">_simplifier</span>])
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-node">&quot;#{_simplifier} is unsound in Z3 #{Z3.version} - #{reason}&quot;</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">_simplifier</span> = <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_simplifier</span>(<span class="ruby-identifier">_simplifier</span>)
+  <span class="ruby-keyword">when</span> <span class="ruby-constant">FFI</span><span class="ruby-operator">::</span><span class="ruby-constant">Pointer</span>
+    <span class="ruby-comment"># Nothing to do</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-node">&quot;Simplifier name or pointer expected, got #{_simplifier.class}&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@_simplifier</span> = <span class="ruby-identifier">_simplifier</span>
+  <span class="ruby-identifier">inc_ref!</span> <span class="ruby-value">:simplifier</span>, <span class="ruby-identifier">_simplifier</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -617,13 +783,8 @@
         <div class="method-description">
 
 
-          
+          <p>Takes either a simplifier name, or a pointer from the low level API</p>
 
-
-            <div class="method-calls-super">
-              Calls superclass method
-              
-            </div>
 
         </div>
 
@@ -642,13 +803,13 @@
        </header>
 
 
-      <div id="method-i-Const" class="method-detail anchor-link ">
+      <div id="method-i-and_then" class="method-detail anchor-link ">
         <div class="method-header">
 
             <div class="method-heading">
-              <a href="#method-i-Const" title="Link to this method">
-                <span class="method-name">Const</span>
-                <span class="method-args">(value)</span>
+              <a href="#method-i-and_then" title="Link to this method">
+                <span class="method-name">and_then</span>
+                <span class="method-args">(other)</span>
               </a>
             </div>
 
@@ -660,10 +821,11 @@
               <summary>Source</summary>
             </details>
           </div>
-          <div class="method-source-code" id="Const-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/array_sort.rb, line 24</span>
-<span class="ruby-keyword">def</span> <span class="ruby-constant">Const</span>(<span class="ruby-identifier ruby-title">value</span>)
-  <span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_const_array</span>(<span class="ruby-identifier">key_sort</span>, <span class="ruby-identifier">value_sort</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">value</span>)))
+          <div class="method-source-code" id="and_then-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/simplifier.rb, line 45</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">and_then</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Simplifier required&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">other</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Simplifier</span>)
+  <span class="ruby-constant">Simplifier</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">simplifier_and_then</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -672,7 +834,7 @@
         <div class="method-description">
 
 
-          <p>The array which maps every key to the same value. ‘SetSort#Empty` and `#Full` are this with `false` and `true` - a Set is an Array with a Bool value sort.</p>
+          <p>The only combinator <a href="../Z3.html"><code>Z3</code></a> gives simplifiers - there’s no or_else, cond, or repeat the way there is for <a href="Tactic.html"><code>Tactic</code></a>, because a simplifier can’t fail</p>
 
 
         </div>
@@ -684,12 +846,12 @@
       </div>
 
 
-      <div id="method-i-expr_class" class="method-detail anchor-link ">
+      <div id="method-i-help" class="method-detail anchor-link ">
         <div class="method-header">
 
             <div class="method-heading">
-              <a href="#method-i-expr_class" title="Link to this method">
-                <span class="method-name">expr_class</span>
+              <a href="#method-i-help" title="Link to this method">
+                <span class="method-name">help</span>
                 <span class="method-args">()</span>
               </a>
             </div>
@@ -702,10 +864,10 @@
               <summary>Source</summary>
             </details>
           </div>
-          <div class="method-source-code" id="expr_class-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/array_sort.rb, line 10</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">expr_class</span>
-  <span class="ruby-constant">ArrayExpr</span>
+          <div class="method-source-code" id="help-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/simplifier.rb, line 39</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">help</span>
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">simplifier_get_help</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -726,12 +888,12 @@
       </div>
 
 
-      <div id="method-i-inspect" class="method-detail anchor-link ">
+      <div id="method-i-param_descrs" class="method-detail anchor-link ">
         <div class="method-header">
 
             <div class="method-heading">
-              <a href="#method-i-inspect" title="Link to this method">
-                <span class="method-name">inspect</span>
+              <a href="#method-i-param_descrs" title="Link to this method">
+                <span class="method-name">param_descrs</span>
                 <span class="method-args">()</span>
               </a>
             </div>
@@ -744,10 +906,10 @@
               <summary>Source</summary>
             </details>
           </div>
-          <div class="method-source-code" id="inspect-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/array_sort.rb, line 18</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inspect</span>
-  <span class="ruby-node">&quot;ArraySort(#{key_sort}, #{value_sort})&quot;</span>
+          <div class="method-source-code" id="param_descrs-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/simplifier.rb, line 52</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">param_descrs</span>
+  <span class="ruby-constant">ParamDescrs</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">simplifier_get_param_descrs</span>(<span class="ruby-keyword">self</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -756,7 +918,7 @@
         <div class="method-description">
 
 
-          
+          <p>‘Z3_simplifier_get_param_descrs` lists every parameter the simplifier takes, `#help` describes them</p>
 
 
         </div>
@@ -768,13 +930,13 @@
       </div>
 
 
-      <div id="method-i-to_s" class="method-detail anchor-link ">
+      <div id="method-i-using_params" class="method-detail anchor-link ">
         <div class="method-header">
 
             <div class="method-heading">
-              <a href="#method-i-to_s" title="Link to this method">
-                <span class="method-name">to_s</span>
-                <span class="method-args">()</span>
+              <a href="#method-i-using_params" title="Link to this method">
+                <span class="method-name">using_params</span>
+                <span class="method-args">(params)</span>
               </a>
             </div>
 
@@ -786,10 +948,11 @@
               <summary>Source</summary>
             </details>
           </div>
-          <div class="method-source-code" id="to_s-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/array_sort.rb, line 14</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_s</span>
-  <span class="ruby-node">&quot;Array(#{key_sort}, #{value_sort})&quot;</span>
+          <div class="method-source-code" id="using_params-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/simplifier.rb, line 58</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">using_params</span>(<span class="ruby-identifier">params</span>)
+  <span class="ruby-identifier">params</span> = <span class="ruby-constant">Params</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>, <span class="ruby-identifier">param_descrs</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Params</span>)
+  <span class="ruby-constant">Simplifier</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">simplifier_using_params</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">params</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -798,7 +961,7 @@
         <div class="method-description">
 
 
-          
+          <p>Simplifiers are immutable, so this is a new one with the parameters baked into it rather than a change to this one</p>
 
 
         </div>
