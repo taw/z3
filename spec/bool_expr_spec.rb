@@ -93,6 +93,16 @@ module Z3
       expect{ Z3.Exactly([], 0) }.to raise_error(Z3::Exception)
     end
 
+    # #value is the name every sort uses for "the Ruby object behind this literal",
+    # and on Bool it's the same method as #to_b
+    it "value" do
+      expect{Z3.Bool("a").value}.to raise_error(Z3::Exception, "Can't convert expression a into Boolean")
+      expect(Z3.Const(true).value).to eq(true)
+      expect(Z3.Const(false).value).to eq(false)
+      expect((Z3.Const(true) & Z3.Const(false)).value).to eq(false)
+      expect(Z3.Const(true).method(:value).original_name).to eq(:to_b)
+    end
+
     it "to_b" do
       expect{Z3.Bool("a").to_b}.to raise_error(Z3::Exception)
       expect(Z3.Const(true).to_b).to eq(true)

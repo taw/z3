@@ -310,6 +310,26 @@ module Z3
       expect([a == 0b0000_0001, x == a.any_bits_set?]).to have_solution(x => true)
     end
 
+    # #value leaves Z3 for a Ruby Integer, where #to_i builds a Z3 Int expression -
+    # the two families are named alike but they are not the same thing
+    it "signed_value / unsigned_value" do
+      bv = BitvecSort.new(8)
+      expect(bv.from_const(200).unsigned_value).to eq(200)
+      expect(bv.from_const(200).signed_value).to eq(-56)
+      expect(bv.from_const(7).signed_value).to eq(7)
+      expect(bv.from_const(-1).unsigned_value).to eq(255)
+      # The boundary the sign flips at
+      expect(bv.from_const(127).signed_value).to eq(127)
+      expect(bv.from_const(128).signed_value).to eq(-128)
+      # One bit wide, where the only two values are 0 and -1 signed
+      expect(BitvecSort.new(1).from_const(1).signed_value).to eq(-1)
+      expect(BitvecSort.new(1).from_const(1).unsigned_value).to eq(1)
+      # Simplified first, so it doesn't have to be written as a literal
+      expect((bv.from_const(200) + 1).unsigned_value).to eq(201)
+      expect{ a.unsigned_value }.to raise_error(Z3::Exception, "Can't convert expression a into Integer")
+      expect{ a.value }.to raise_error(Z3::Exception, /signed_value/)
+    end
+
     it "signed_to_i / unsigned_to_i" do
       int = Z3.Int("i")
       expect([a == 200, int == a.unsigned_to_i]).to have_solution(int => 200)

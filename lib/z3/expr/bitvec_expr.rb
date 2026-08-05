@@ -131,6 +131,10 @@ module Z3
       redor == 1
     end
 
+    # #to_i and friends build a Z3 Int expression out of this one. #value and friends
+    # leave Z3 and give back a Ruby Integer, which only works on a literal. Both come
+    # in pairs because a Bitvec carries no sign of its own - the same eight bits are
+    # 200 read one way and -56 read the other.
     def to_i
       raise Z3::Exception, "Use #signed_to_i or #unsigned_to_i for Bitvec, not #to_i"
     end
@@ -141,6 +145,22 @@ module Z3
 
     def unsigned_to_i
       IntSort.new.new(LowLevel.mk_bv2int(self, false))
+    end
+
+    def value
+      raise Z3::Exception, "Use #signed_value or #unsigned_value for Bitvec, not #value"
+    end
+
+    def signed_value
+      v = unsigned_value
+      v >= (1 << (sort.size - 1)) ? v - (1 << sort.size) : v
+    end
+
+    # Z3 prints a Bitvec numeral as its unsigned value, so this is the one it gives us
+    def unsigned_value
+      obj = ast_kind == :numeral ? self : simplify
+      raise Z3::Exception, "Can't convert expression #{self} into Integer" unless obj.ast_kind == :numeral
+      LowLevel.get_numeral_string(obj).to_i
     end
 
     def zero_ext(size)

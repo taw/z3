@@ -127,6 +127,15 @@ module Z3
       expect((a+b).simplify.inspect).to eq("Int<8>")
     end
 
+    # #value is the name every sort uses for "the Ruby object behind this literal",
+    # and on Int it's the same method as #to_i
+    it "value" do
+      expect{Z3.Int("a").value}.to raise_error(Z3::Exception, "Can't convert expression a into Integer")
+      expect(Z3.Const(2).value).to eq(2)
+      expect((Z3.Const(2) + Z3.Const(40)).value).to eq(42)
+      expect(Z3.Const(2).method(:value).original_name).to eq(:to_i)
+    end
+
     it "to_i" do
       expect{Z3.Int("a").to_i}.to raise_error(Z3::Exception)
       expect(Z3.Const(2).to_i).to eq(2)

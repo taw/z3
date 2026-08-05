@@ -32,6 +32,12 @@ module Z3
       end
     end
 
+    # Every sort which can hand back a Ruby object spells it #value. On Int the two
+    # are the same method - converting an Int to an Int is nothing, so #to_i can only
+    # ever have meant this - but on the other sorts #to_i builds a Z3 Int expression
+    # and it's #value which leaves Z3 entirely.
+    alias_method :value, :to_i
+
     public_class_method :new
     class << self
       def coerce_to_same_int_sort(*args)

@@ -34,7 +34,7 @@ if solver.satisfiable?
 
   # convert z3 model to ruby types
   hash = model.to_h do |zvar, zvalue|
-    [zvar.to_s, zvalue.to_i]
+    [zvar.to_s, zvalue.value]
   end
 
   p hash
@@ -49,6 +49,21 @@ The public interface is various methods in `Z3` module, and on objects created b
 The [`examples/`](https://github.com/taw/z3/blob/master/examples) directory is probably the best place to start.
 
 You can use most Ruby operators to construct Z3 expressions, but use `| &` instead of `|| &&` for boolean operators. They unfortunately have wrong operator precedence so you'll need to use some extra parentheses.
+
+To get a Ruby object back out of a Z3 expression, use `#value`. It works on any expression Z3 can reduce to a literal - most usefully the ones you get out of a model - and raises otherwise:
+
+```ruby
+Z3.Const(42).value                          # 42
+Z3.Const(true).value                        # true
+Z3::StringSort.new.from_const("hi").value   # "hi"
+Z3.Int("a").value                           # raises - "a" is not a literal
+```
+
+A `Bitvec` carries no sign of its own, so it has `#signed_value` and `#unsigned_value` instead - the same eight bits are `200` read one way and `-56` the other. `Real` and `Float` have no `#value`, as their literals don't always have an exact Ruby equivalent.
+
+Note that `#value` is not the same as `#to_i` and friends. `#value` leaves Z3 and hands you a Ruby object, while `#to_i`, `#to_bv` and so on build a *new Z3 expression* of another sort - `string_expr.to_i` is the symbolic `str.to_int`, not a Ruby Integer. On `Int` the two are the same method, since converting an Int to an Int can't mean anything else.
+
+Ruby's implicit conversion methods - `to_str`, `to_int`, `to_ary`, `to_hash`, `to_proc` - are deliberately **not** defined on expressions. Ruby calls those on its own whenever it wants that exact type, and no Z3 expression can promise to be one.
 
 The interface is potentially unstable, and can change in the future.
 

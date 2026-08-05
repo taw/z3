@@ -47,6 +47,9 @@ module Z3
       end
     end
 
+    # Every sort which can hand back a Ruby object spells it #value
+    alias_method :value, :to_b
+
     public_class_method :new
 
     class << self

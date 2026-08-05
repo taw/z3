@@ -144,7 +144,7 @@ module Z3
     end
 
     # Ruby String#to_i, so this is the symbolic `str.to_int` - not IntExpr#to_i, which
-    # goes the other way and gives a Ruby Integer. #to_str is the one that gives a Ruby
+    # goes the other way and gives a Ruby Integer. #value is the one that gives a Ruby
     # object back.
     #
     # `str.to_int` isn't quite Ruby's String#to_i, though: it takes a non-negative run
@@ -157,8 +157,13 @@ module Z3
       IntSort.new.new(LowLevel.mk_str_to_int(self))
     end
 
-    # A Ruby String out of a string value, the way IntExpr#to_i gives a Ruby Integer
-    def to_str
+    # A Ruby String out of a string value, the way IntExpr#to_i gives a Ruby Integer.
+    #
+    # Deliberately not #to_str: that's Ruby's implicit conversion protocol, which core
+    # methods call on their own whenever they want a String, and this raises for every
+    # expression which isn't a literal. Not #to_s either - that's the printed form of
+    # any AST, and it has to work on all of them.
+    def value
       obj = string_value? ? self : simplify
       raise Z3::Exception, "Can't convert expression #{self} into String" unless obj.string_value?
       LowLevel.get_string(obj)

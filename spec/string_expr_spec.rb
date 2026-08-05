@@ -64,27 +64,27 @@ module Z3
       end
     end
 
-    describe "#to_str" do
+    describe "#value" do
       it "gives a Ruby String back, the way IntExpr#to_i gives a Ruby Integer" do
-        expect(sort.from_const("hello").to_str).to eq("hello")
-        expect(sort.from_const("").to_str).to eq("")
-        expect(sort.from_const("héllo 中😀").to_str).to eq("héllo 中😀")
+        expect(sort.from_const("hello").value).to eq("hello")
+        expect(sort.from_const("").value).to eq("")
+        expect(sort.from_const("héllo 中😀").value).to eq("héllo 中😀")
       end
 
       it "simplifies first, like IntExpr#to_i does" do
-        expect((sort.from_const("ab") + "cd").to_str).to eq("abcd")
+        expect((sort.from_const("ab") + "cd").value).to eq("abcd")
       end
 
       it "raises exception when there's nothing to convert" do
-        expect { s.to_str }.to raise_error(Z3::Exception)
-        expect { (s + "!").to_str }.to raise_error(Z3::Exception)
+        expect { s.value }.to raise_error(Z3::Exception)
+        expect { (s + "!").value }.to raise_error(Z3::Exception)
       end
 
       it "reads a model" do
         solver = Solver.new
         solver.assert s + "!" == "hello!"
         expect(solver).to be_satisfiable
-        expect(solver.model[s].to_str).to eq("hello")
+        expect(solver.model[s].value).to eq("hello")
       end
     end
 
@@ -111,7 +111,7 @@ module Z3
       it "repeats, like Ruby String#*" do
         expect((s * 3).sexpr).to eq("(str.++ s s s)")
         expect(s * 1).to be_same_as(s)
-        expect((s * 0).to_str).to eq("")
+        expect((s * 0).value).to eq("")
         expect([s == "ab", s * 3 == "ababab"]).to have_solution(s => %q{"ab"})
       end
 
@@ -381,7 +381,7 @@ module Z3
         solver.assert ("/srv/" + s.sub("../", "")).include?("../")
         solver.assert s.length <= 8
         expect(solver).to be_satisfiable
-        value = solver.model[s].to_str
+        value = solver.model[s].value
         expect(value.sub("../", "")).to include("../")
       end
     end
@@ -444,7 +444,7 @@ module Z3
         solver.assert s < "apply"
         solver.assert s.length == 5
         expect(solver).to be_satisfiable
-        expect(solver.model[s].to_str).to be_between("apple", "apply").exclusive
+        expect(solver.model[s].value).to be_between("apple", "apply").exclusive
       end
     end
 
