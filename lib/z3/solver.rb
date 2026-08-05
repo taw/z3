@@ -37,6 +37,18 @@ module Z3
       end
     end
 
+    # Attaches a simplifier, which the solver then runs over the assertions as
+    # incremental preprocessing.
+    #
+    # Z3 hands back a *different* solver rather than changing this one, so this returns
+    # a new Solver and leaves the receiver alone - and it refuses outright once
+    # anything has been asserted, so it has to come first. Parameters don't carry over
+    # from the receiver either, as Z3 has no way to read them back.
+    def with_simplifier(simplifier, params = {})
+      raise Z3::Exception, "Simplifier required" unless simplifier.is_a?(Simplifier)
+      Solver.new(params, LowLevel.solver_add_simplifier(self, simplifier))
+    end
+
     # `Z3_solver_get_param_descrs` lists every parameter the solver takes,
     # `#help` describes them
     def param_descrs

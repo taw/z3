@@ -57,8 +57,9 @@ module Z3
     # all round-trip this problem correctly. The `z3` binary on the same problem
     # answers x=4.
     #
-    # This is why Simplifier isn't wired up as a class yet, so the reproduction has to
-    # go through LowLevel.
+    # `Simplifier::UNSOUND` refuses to build this one because of it, so the
+    # reproduction has to go through LowLevel to get past that guard. When this example
+    # fails, drop the entry there too.
     #
     # Correct: a model in which `x` is `y + 3`.
     it "the elim-unconstrained simplifier returns a model which fails its assertions" do
