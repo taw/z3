@@ -573,6 +573,10 @@ module Z3
         VeryLowLevel.Z3_get_error_msg(_ctx_pointer, error_code)
       end
 
+      def get_estimated_alloc_size #=> :uint64
+        VeryLowLevel.Z3_get_estimated_alloc_size()
+      end
+
       def get_full_version #=> :string
         VeryLowLevel.Z3_get_full_version()
       end
@@ -887,6 +891,10 @@ module Z3
 
       def mk_array_default(ast) #=> :ast_pointer
         VeryLowLevel.Z3_mk_array_default(_ctx_pointer, ast._ast)
+      end
+
+      def mk_array_ext(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_array_ext(_ctx_pointer, ast1._ast, ast2._ast)
       end
 
       def mk_array_sort(sort1, sort2) #=> :sort_pointer
@@ -1979,6 +1987,10 @@ module Z3
 
       def param_descrs_dec_ref(param_descrs) #=> :void
         VeryLowLevel.Z3_param_descrs_dec_ref(_ctx_pointer, param_descrs._param_descrs)
+      end
+
+      def param_descrs_get_documentation(param_descrs, sym) #=> :string
+        VeryLowLevel.Z3_param_descrs_get_documentation(_ctx_pointer, param_descrs._param_descrs, sym)
       end
 
       def param_descrs_get_kind(param_descrs, sym) #=> :uint

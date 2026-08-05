@@ -35,12 +35,6 @@ class GenerateAPI
   def definitions_to_skip
     @definitions_to_skip ||= begin
       [
-        # Not in library according to FFI. Recheck before trusting this - all three
-        # symbols are present in Z3 4.16, so whatever build this was true of is gone.
-        "get_estimated_alloc_size",
-        "mk_array_ext",
-        "param_descrs_get_documentation",
-
         # Only meaningful with more than one context, and one context is all there is -
         # `Context` is a hard-coded singleton and multiple contexts are explicitly out
         # of scope. `translate` and friends move an object between two of them,

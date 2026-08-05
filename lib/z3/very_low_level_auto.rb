@@ -143,6 +143,7 @@ module Z3
     attach_function :Z3_get_domain, [:ctx_pointer, :func_decl_pointer, :uint], :sort_pointer
     attach_function :Z3_get_error_code, [:ctx_pointer], :uint
     attach_function :Z3_get_error_msg, [:ctx_pointer, :int], :string
+    attach_function :Z3_get_estimated_alloc_size, [], :uint64
     attach_function :Z3_get_full_version, [], :string
     attach_function :Z3_get_func_decl_id, [:ctx_pointer, :func_decl_pointer], :uint
     attach_function :Z3_get_global_param_descrs, [:ctx_pointer], :param_descrs_pointer
@@ -222,6 +223,7 @@ module Z3
     attach_function :Z3_is_well_sorted, [:ctx_pointer, :ast_pointer], :bool
     attach_function :Z3_mk_abs, [:ctx_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_array_default, [:ctx_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_array_ext, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_array_sort, [:ctx_pointer, :sort_pointer, :sort_pointer], :sort_pointer
     attach_function :Z3_mk_as_array, [:ctx_pointer, :func_decl_pointer], :ast_pointer
     attach_function :Z3_mk_ast_map, [:ctx_pointer], :ast_map_pointer
@@ -495,6 +497,7 @@ module Z3
     attach_function :Z3_optimize_set_params, [:ctx_pointer, :optimize_pointer, :params_pointer], :void
     attach_function :Z3_optimize_to_string, [:ctx_pointer, :optimize_pointer], :string
     attach_function :Z3_param_descrs_dec_ref, [:ctx_pointer, :param_descrs_pointer], :void
+    attach_function :Z3_param_descrs_get_documentation, [:ctx_pointer, :param_descrs_pointer, :symbol_pointer], :string
     attach_function :Z3_param_descrs_get_kind, [:ctx_pointer, :param_descrs_pointer, :symbol_pointer], :uint
     attach_function :Z3_param_descrs_get_name, [:ctx_pointer, :param_descrs_pointer, :uint], :symbol_pointer
     attach_function :Z3_param_descrs_inc_ref, [:ctx_pointer, :param_descrs_pointer], :void
