@@ -57,10 +57,12 @@ module Z3
     # How a value gets named in an error message. Ruby writes nil / true / false
     # literally and everything else by class - `Integer(nil)` says "can't convert nil
     # into Integer", not "can't convert NilClass into Integer" - and an Expr goes by
-    # its sort, which is what any mismatch involving one is really about.
+    # its sort, which is what any mismatch involving one is really about. A Symbol
+    # joins the literal group: it's an enum value, and which one it was is the whole
+    # of what went wrong.
     def self.describe(value)
       case value
-      when NilClass, TrueClass, FalseClass
+      when NilClass, TrueClass, FalseClass, Symbol
         value.inspect
       when Expr
         value.sort

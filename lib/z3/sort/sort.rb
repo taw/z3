@@ -139,6 +139,9 @@ module Z3
         else
           ArraySort.new(domain, range)
         end
+      when 6
+        # Rebuilt rather than redeclared - see EnumSort.from_pointer
+        EnumSort.from_pointer(_sort)
       when 8
         FiniteDomainSort.new(
           name_from_pointer(_sort),

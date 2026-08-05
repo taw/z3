@@ -162,6 +162,18 @@ module Z3
         expect{s == true}.to raise_error(ArgumentError)
       end
 
+      # Sorts are only partially ordered, so the failure has to name them itself -
+      # Array#max would answer with Ruby class names, and two enums are both EnumSort
+      it "names both sorts when neither can be cast to the other" do
+        red = EnumSort.new("MismatchRed", %i[x y]).var("r")
+        blue = EnumSort.new("MismatchBlue", %i[x y]).var("b")
+        expect{a == c}.to raise_error(ArgumentError, "Can't convert Bool into Int")
+        expect{c == 42}.to raise_error(ArgumentError, "Can't convert Int into Bool")
+        expect{s == 42}.to raise_error(ArgumentError, "Can't convert Int into String")
+        expect{red == blue}.to raise_error(ArgumentError, "Can't convert MismatchBlue into MismatchRed")
+        expect{blue == red}.to raise_error(ArgumentError, "Can't convert MismatchRed into MismatchBlue")
+      end
+
       # Ruby has no character type, so a String is always a String, never a Char -
       # `CharSort.new.from_const("a")` is how you say that
       it "does not autoconvert Strings to Chars" do
@@ -176,6 +188,15 @@ module Z3
         expect("abc" == "abd").to be false
         expect("abc" == 42).to be false
         expect("abc" != "abd").to be true
+      end
+
+      # Same for Symbol#==, which we prepend to for `:red == color_var`
+      it "leaves == of Symbols which aren't exprs alone" do
+        expect(:abc == :abc).to be true
+        expect(:abc == :abd).to be false
+        expect(:abc == "abc").to be false
+        expect(:abc != :abd).to be true
+        expect({abc: 1}[:abc]).to eq 1
       end
     end
 
@@ -287,7 +308,7 @@ module Z3
         expect{ (a + b).substitute(a => c) }
           .to raise_error(Z3::Exception, "Can't convert Bool into Int")
         expect{ (a + b).substitute(a => :abc) }
-          .to raise_error(Z3::Exception, "Can't convert Symbol into Int")
+          .to raise_error(Z3::Exception, "Can't convert :abc into Int")
       end
 
       it "raises unless given a Hash" do
@@ -309,7 +330,6 @@ module Z3
 
       it "raises exception for Ruby values with no sort" do
         expect{Expr.sort_for_const(nil)}.to raise_error(Z3::Exception, "No Z3 sort for nil")
-        expect{Expr.sort_for_const(:abc)}.to raise_error(Z3::Exception, "No Z3 sort for Symbol")
         expect{Expr.sort_for_const([1, 2])}.to raise_error(Z3::Exception, "No Z3 sort for Array")
       end
 
@@ -317,16 +337,34 @@ module Z3
       # "Object can't be coerced into Integer" - so a failure with a sort in hand
       # says the same thing about the sort
       it "reports failures against the sort it was coercing towards" do
-        expect{Z3.Int("a") + :abc}.to raise_error(Z3::Exception, "Symbol can't be coerced into Int")
+        expect{Z3.Int("a") + :abc}.to raise_error(Z3::Exception, ":abc can't be coerced into Int")
         expect{Z3.Int("a") + nil}.to raise_error(Z3::Exception, "nil can't be coerced into Int")
-        expect{Z3.Int("a").coerce(:abc)}.to raise_error(Z3::Exception, "Symbol can't be coerced into Int")
-        expect{Z3.Bitvec("v", 8) + :abc}.to raise_error(Z3::Exception, "Symbol can't be coerced into Bitvec(8)")
-        expect{Z3.String("s") + :abc}.to raise_error(Z3::Exception, "Symbol can't be coerced into String")
+        expect{Z3.Int("a").coerce(:abc)}.to raise_error(Z3::Exception, ":abc can't be coerced into Int")
+        expect{Z3.Bitvec("v", 8) + :abc}.to raise_error(Z3::Exception, ":abc can't be coerced into Bitvec(8)")
+        expect{Z3.String("s") + :abc}.to raise_error(Z3::Exception, ":abc can't be coerced into String")
       end
 
       # With no Expr among the arguments nothing was being coerced towards anything
       it "reports no sort at all when there's nothing to coerce towards" do
-        expect{Z3.Add(1, :abc)}.to raise_error(Z3::Exception, "No Z3 sort for Symbol")
+        expect{Z3.Add(1, nil)}.to raise_error(Z3::Exception, "No Z3 sort for nil")
+      end
+
+      # "No Z3 sort for :red" would be true but unhelpful - a Symbol does have a sort,
+      # it's just that only the enum it belongs to knows which, and nothing here names one
+      it "says which way round a bare Symbol has to be built" do
+        message = "Can't tell which enum :red belongs to, ask the sort for it instead - `enum_sort[:red]`"
+        expect{Expr.sort_for_const(:red)}.to raise_error(Z3::Exception, message)
+        expect{Z3.Const(:red)}.to raise_error(Z3::Exception, message)
+        expect{Z3.Add(1, :red)}.to raise_error(Z3::Exception, message)
+      end
+
+      # A Symbol is the one value whose sort comes from the other side rather than
+      # from itself - it's an enum value, and enums don't share a namespace
+      it "gives a Symbol the enum sort it's being coerced towards" do
+        sort = EnumSort.new("SortForConst", %i[a b])
+        expect(Expr.sort_for_const(:a, toward: sort)).to eq(sort)
+        expect(Expr.sort_for_const(:nope, toward: sort)).to eq(sort)
+        expect{Expr.sort_for_const(:a, toward: IntSort.new)}.to raise_error(Z3::Exception, ":a can't be coerced into Int")
       end
     end
   end

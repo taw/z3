@@ -163,6 +163,19 @@ module Z3
         Z3::VeryLowLevel.Z3_mk_app(_ctx_pointer, func_decl._ast, args.size, asts_vector(args))
       end
 
+      # Z3 fills in a constructor and a tester func decl for every value. Both are
+      # recoverable from the sort afterwards - get_datatype_sort_constructor and
+      # friends - so the arrays are thrown away, but they still have to be allocated
+      # rather than passed as NULL, which segfaults.
+      def mk_enumeration_sort(symbol, value_symbols)
+        n = value_symbols.size
+        _names = FFI::MemoryPointer.new(:pointer, n)
+        _names.write_array_of_pointer(value_symbols)
+        _consts = FFI::MemoryPointer.new(:pointer, n)
+        _testers = FFI::MemoryPointer.new(:pointer, n)
+        Z3::VeryLowLevel.Z3_mk_enumeration_sort(_ctx_pointer, symbol, n, _names, _consts, _testers)
+      end
+
       # Should be private
 
       # Every AST_VECTOR parameter in the C API is an `_in` - the ones which act like

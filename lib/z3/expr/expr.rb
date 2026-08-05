@@ -45,8 +45,14 @@ module Z3
         # thing to a receiver we have. There may be none, in which case nothing was
         # being coerced towards anything and #sort_for_const says so instead.
         toward = args.find { |a| a.is_a?(Expr) }&.sort
-        # This will raise exception unless one of the sorts is highest
-        max_sort = args.map { |a| a.is_a?(Expr) ? a.sort : Expr.sort_for_const(a, toward: toward) }.max
+        sorts = args.map { |a| a.is_a?(Expr) ? a.sort : Expr.sort_for_const(a, toward: toward) }
+        # Sorts are only partially ordered, and #max answers an unordered pair with a
+        # bare ArgumentError naming Ruby classes - which says nothing whatsoever when
+        # both sides are EnumSorts. Folding by hand lets the sorts name themselves.
+        max_sort = sorts.reduce do |a, b|
+          comparison = (a <=> b) or raise ArgumentError, "Can't convert #{b} into #{a}"
+          comparison >= 0 ? a : b
+        end
         args.map do |a|
           max_sort.cast(a)
         end
@@ -55,6 +61,16 @@ module Z3
       # `toward` is the sort the value was being coerced towards, when there is one -
       # it only changes how a failure is worded
       def sort_for_const(a, toward: nil)
+        # A Symbol is an enum value and nothing else, and it has no sort of its own.
+        # Two enums are free to use the same value name, so the only thing that says
+        # which enum `:red` belongs to is the sort on the other side of the operation.
+        if a.is_a?(Symbol)
+          return toward if toward.is_a?(EnumSort)
+          # With no enum anywhere in sight there's nothing to resolve it against -
+          # `Z3.Const(:red)` can't know whether that's a Color or a Squirrel. Falling
+          # through would say "No Z3 sort for :red", which is true but unhelpful.
+          raise Z3::Exception, "Can't tell which enum #{a.inspect} belongs to, ask the sort for it instead - `enum_sort[#{a.inspect}]`" unless toward
+        end
         case a
         when TrueClass, FalseClass
           BoolSort.new

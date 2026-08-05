@@ -115,6 +115,12 @@ class String
   prepend StringHacks
 end
 
+# A Symbol is an enum value, so `:red == color_var` needs to build an expression the
+# same way `color_var == :red` does. Not CompareHacks - enum values are unordered.
+class Symbol
+  prepend EqualityHacks
+end
+
 class Rational
   prepend CompareHacks
 end

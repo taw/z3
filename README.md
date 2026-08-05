@@ -58,7 +58,19 @@ solver.assert f[f[x]] == x
 solver.assert f[x] != x
 ```
 
-A model reports one as a Hash from argument lists to values, with Ruby's Hash default holding Z3's `else` branch - the answer for every argument the solver never had to pin down. Z3 picks one of the values as that fallback, so the entries are only the exceptions to it:
+`Z3::EnumSort` declares an enumeration - a sort whose values are a fixed list of names, and nothing else. The values are Symbols, and they work anywhere that sort is expected:
+
+```ruby
+color = Z3::EnumSort.new("Color", %i[red green blue])
+x, y = color.var("x"), color.var("y")
+solver.assert x != y
+solver.assert x != :red
+solver.model[x].value   # => :green
+```
+
+Enums don't share a namespace, so `Color` and `Squirrel` can both have a `:red` and the two are different values of different sorts, which Z3 won't compare. Unlike every other sort an enumeration can only be declared once - Z3 rejects a second declaration of the same name - so asking for the same one again gives back the sort you already have, and asking for the same name with different values raises.
+
+A model reports an uninterpreted function as a Hash from argument lists to values, with Ruby's Hash default holding Z3's `else` branch - the answer for every argument the solver never had to pin down. Z3 picks one of the values as that fallback, so the entries are only the exceptions to it:
 
 ```ruby
 # after asserting f[1] == 10 and f[2] == 20
