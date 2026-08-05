@@ -145,6 +145,11 @@ module Z3
         Z3::VeryLowLevel.Z3_solver_check_assumptions(_ctx_pointer, solver._solver, asts.size, asts_vector(asts))
       end
 
+      # `from` and `to` are parallel, and Z3 requires them to be the same length
+      def substitute(ast, from_asts, to_asts)
+        Z3::VeryLowLevel.Z3_substitute(_ctx_pointer, ast._ast, from_asts.size, asts_vector(from_asts), asts_vector(to_asts))
+      end
+
       # Should be private
 
       # Every AST_VECTOR parameter in the C API is an `_in` - the ones which act like

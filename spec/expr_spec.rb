@@ -222,6 +222,80 @@ module Z3
       end
     end
 
+    describe "#substitute" do
+      let(:x) { Z3.Int("x") }
+
+      it "replaces a variable" do
+        expect((a + b).substitute(a => x)).to stringify("x + b")
+      end
+
+      it "replaces every occurrence of it" do
+        expect(((a + b) * (a - b)).substitute(a => x)).to stringify("(x + b) * (x - b)")
+      end
+
+      it "replaces more than one thing at a time" do
+        expect((a + b).substitute(a => x, b => 2)).to stringify("x + 2")
+      end
+
+      # Doing them one after another would leave `b - b` or `a - a` instead
+      it "replaces everything simultaneously" do
+        expect((a - b).substitute(a => b, b => a)).to stringify("b - a")
+      end
+
+      # Keys match whole subterms, so they don't have to be variables
+      it "replaces compound subterms" do
+        expect(((a + b) * 2).substitute((a + b) => x)).to stringify("x * 2")
+      end
+
+      it "coerces each replacement to the sort of what it replaces" do
+        expect((a + b).substitute(a => 5)).to stringify("5 + b")
+        expect((s + t).substitute(s => "hello")).to stringify(%q{"hello" + t})
+      end
+
+      it "does nothing when nothing matches" do
+        expect((a + b).substitute(x => a)).to stringify("a + b")
+      end
+
+      it "works on any sort" do
+        expect((c | d).substitute(c => (a > 1))).to stringify("or(a > 1, d)")
+        expect((s + t).substitute(s => "hello")).to stringify(%q{"hello" + t})
+      end
+
+      it "keeps the sort of the expression it rewrote" do
+        expect((a + b).substitute(a => x).sort).to eq(IntSort.new)
+        expect((c | d).substitute(c => (a > 1)).sort).to eq(BoolSort.new)
+        expect((s + t).substitute(s => "x").sort).to eq(StringSort.new)
+      end
+
+      it "returns the expression itself when there's nothing to replace" do
+        expr = a + b
+        expect(expr.substitute({})).to equal(expr)
+      end
+
+      it "returns something the solver can use" do
+        expect([(a + b == 10).substitute(b => x), x == 4]).to have_solution(a => 6)
+      end
+
+      it "raises unless every key is an expr" do
+        expect{ (a + b).substitute(1 => 2) }
+          .to raise_error(Z3::Exception, "Can't substitute for Integer, only for exprs")
+        expect{ (a + b).substitute(nil => 2) }
+          .to raise_error(Z3::Exception, "Can't substitute for nil, only for exprs")
+      end
+
+      it "raises when a replacement doesn't fit what it replaces" do
+        expect{ (a + b).substitute(a => c) }
+          .to raise_error(Z3::Exception, "Can't convert Bool into Int")
+        expect{ (a + b).substitute(a => :abc) }
+          .to raise_error(Z3::Exception, "Can't convert Symbol into Int")
+      end
+
+      it "raises unless given a Hash" do
+        expect{ (a + b).substitute([[a, x]]) }
+          .to raise_error(Z3::Exception, "Hash of replacements required")
+      end
+    end
+
     describe ".sort_for_const" do
       it "knows the sorts Ruby values map to" do
         expect(Expr.sort_for_const(true)).to eq(BoolSort.new)

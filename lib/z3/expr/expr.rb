@@ -20,6 +20,24 @@ module Z3
       Expr.Distinct(self, other)
     end
 
+    # Rewrites the expression, replacing each key with its value. Keys are matched as
+    # whole subterms, not just as variables, so `(a + b)` is as substitutable as `a`.
+    #
+    # Every replacement happens at once rather than one after another, so
+    # `substitute(a => b, b => a)` swaps the two instead of turning every `a` into `b`.
+    # A key which doesn't occur simply doesn't match anything, which is not an error.
+    def substitute(replacements)
+      raise Z3::Exception, "Hash of replacements required" unless replacements.is_a?(Hash)
+      return self if replacements.empty?
+      replacements.each_key do |from|
+        raise Z3::Exception, "Can't substitute for #{AST.describe(from)}, only for exprs" unless from.is_a?(Expr)
+      end
+      # Z3 wants both sides of a replacement to have the same sort, so `to` is cast
+      # towards `from` and not the other way round
+      to = replacements.map { |from, replacement| from.sort.cast(replacement) }
+      sort.new(LowLevel.substitute(self, replacements.keys, to))
+    end
+
     class << self
       def coerce_to_same_sort(*args)
         # When coercion fails Ruby names the receiver's class - `1 + Object.new` says
