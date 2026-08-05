@@ -21,5 +21,12 @@ module Z3
     def [](key)
       select(key)
     end
+
+    # The array's fallback - what it answers for keys nothing has stored to. It's the
+    # same idea as the Hash default a model reports for a function, and #store leaves
+    # it alone, so `ArraySort#Const(0).store(7, 1).default` is still 0.
+    def default
+      value_sort.new(LowLevel.mk_array_default(self))
+    end
   end
 end

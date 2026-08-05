@@ -8,6 +8,36 @@ module Z3
     let(:y) { Z3::Int("y") }
     let(:z) { Z3::Int("z") }
 
+    describe "#default" do
+      it "is what a Const array answers everywhere" do
+        expect([sort.Const(0).default != 0]).to have_no_solution
+      end
+
+      # It's the fallback, not the value everywhere - #store doesn't touch it
+      it "survives a store" do
+        expect([sort.Const(0).store(7, 1).default != 0]).to have_no_solution
+        expect([sort.Const(0).store(7, 1)[7] != 1]).to have_no_solution
+      end
+
+      # The default is the fallback, so it says nothing about keys which were written.
+      # Only assertable, not readable - Z3 solves with it but won't reduce
+      # `default(store(const(9), 0, 1))` to a numeral, in a model or under #simplify.
+      it "can be constrained on a free array" do
+        solver = Solver.new
+        solver.assert a.default == 9
+        solver.assert a[0] == 1
+        solver.assert a[1] == 2
+        expect(solver).to be_satisfiable
+
+        expect([a.default == 9, a.default == 8]).to have_no_solution
+      end
+
+      it "has the array's value sort" do
+        expect(a.default.sort).to eq(IntSort.new)
+        expect(ArraySort.new(IntSort.new, BoolSort.new).var("d").default.sort).to eq(BoolSort.new)
+      end
+    end
+
     # TODO: Formatting is dreadful
     it "== and !=" do
       expect([a == b, b != c]).to have_solution(

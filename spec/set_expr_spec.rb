@@ -8,6 +8,38 @@ module Z3
     let(:c) { sort.var("c") }
     let(:x) { Z3::Bool("x") }
 
+    # Both give a new set, the way #union does - no Z3 expression is mutable, so
+    # unlike Ruby's Set#add the receiver is left alone
+    describe "#add / #delete" do
+      it "add puts an element in" do
+        expect([sort.Empty.add(3).include?(3)]).to have_solution({})
+        expect([~sort.Empty.add(3).include?(4)]).to have_solution({})
+        expect([~sort.Empty.add(3).include?(3)]).to have_no_solution
+      end
+
+      it "delete takes one out" do
+        expect([~sort.Full.delete(3).include?(3)]).to have_solution({})
+        expect([sort.Full.delete(3).include?(4)]).to have_solution({})
+        expect([sort.Full.delete(3).include?(3)]).to have_no_solution
+      end
+
+      it "leaves the set it was called on alone" do
+        expect([a == sort.Empty, a.add(3).include?(3), ~a.include?(3)]).to have_solution({})
+      end
+
+      it "deleting something which was never there is fine" do
+        expect([~sort.Empty.delete(3).include?(3)]).to have_solution({})
+      end
+
+      it "casts Ruby values into the element sort" do
+        expect(sort.Empty.add(3)).to be_a SetExpr
+        expect{ sort.Empty.add("nope") }
+          .to raise_error(Z3::Exception, "Can't convert String into Int")
+        expect{ sort.Empty.delete("nope") }
+          .to raise_error(Z3::Exception, "Can't convert String into Int")
+      end
+    end
+
     # TODO: Formatting is dreadful
     it "== and !=" do
       expect([a == b, b != c]).to have_solution(

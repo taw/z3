@@ -19,6 +19,12 @@ module Z3
       "ArraySort(#{key_sort}, #{value_sort})"
     end
 
+    # The array which maps every key to the same value. `SetSort#Empty` and `#Full`
+    # are this with `false` and `true` - a Set is an Array with a Bool value sort.
+    def Const(value)
+      new(LowLevel.mk_const_array(key_sort, value_sort.cast(value)))
+    end
+
     public_class_method :new
   end
 end

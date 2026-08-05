@@ -35,6 +35,19 @@ module Z3
       BoolSort.new.new(LowLevel.mk_set_member(element, self))
     end
 
+    # A new set with the element in it, the way #union gives a new set - Ruby's
+    # Set#add mutates the receiver, but no Z3 expression is ever mutable.
+    # (`mk_set_add` takes the set first, where `mk_set_member` above takes the element
+    # first. Z3's own inconsistency, not ours.)
+    def add(element)
+      sort.new(LowLevel.mk_set_add(self, element_sort.cast(element)))
+    end
+
+    # Same, without the element. Removing something which was never there is fine.
+    def delete(element)
+      sort.new(LowLevel.mk_set_del(self, element_sort.cast(element)))
+    end
+
     class << self
       def coerce_to_same_set_sort(*args)
         args = coerce_to_same_sort(*args)
