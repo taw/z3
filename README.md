@@ -1,5 +1,9 @@
 # Ruby bindings for Z3
 
+<!-- hy-mt2-i18n:start -->
+**English** · [中文](./README_zh-CN.md) · [日本語](./README_ja.md) · [Español](./README_es.md)
+<!-- hy-mt2-i18n:end -->
+
 This is a Ruby interface for [Z3](https://github.com/Z3Prover/z3).
 
 Recommended [Z3](https://github.com/Z3Prover/z3) version is 4.16 or newer. Make sure you have it first (e.g. `brew install z3` on MacOS).
