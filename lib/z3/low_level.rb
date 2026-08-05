@@ -12,6 +12,14 @@ module Z3
         [a.get_uint(0), b.get_uint(0), c.get_uint(0), d.get_uint(0)]
       end
 
+      # nil for a parameter Z3 doesn't have. Z3 keeps the string in a buffer it reuses
+      # on the next call, so it's copied out here rather than handed on.
+      def global_param_get(name)
+        value_ptr = FFI::MemoryPointer.new(:pointer)
+        return nil unless Z3::VeryLowLevel.Z3_global_param_get(name, value_ptr)
+        value_ptr.get_pointer(0).read_string
+      end
+
       def set_error_handler(&block)
         # Z3 keeps the native trampoline FFI builds for this block, and that
         # trampoline dies with the Proc - so we must hold onto it forever

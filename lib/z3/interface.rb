@@ -142,9 +142,58 @@ module Z3
     (LowLevel.get_version <=> [a, b, c, d]) >= 0
   end
 
-  def set_param(k,v)
-    LowLevel.global_param_set(k,v)
+  # Z3's global parameters, the ones the `z3` binary takes on its command line. Names
+  # are case insensitive, and the ones belonging to a module are qualified with it -
+  # `smt.qi.cost`, `pp.decimal`. Everything is a String in both directions, which is
+  # Z3's own interface to these and not a choice made here.
+  #
+  # Z3 doesn't raise on a name it doesn't have, it prints a warning and carries on,
+  # so the name is checked here first - the same reason Params checks its own against
+  # a ParamDescrs. A value it can't use is only warned about too, and can't be checked
+  # in the same way, so #get_param is how to see whether one took.
+  def set_param(name, value)
+    name = name.to_s
+    raise Z3::Exception, "Unknown parameter `#{name}'" unless known_global_param?(name)
+    LowLevel.global_param_set(name, value.to_s)
+    value
   end
+
+  # nil for a parameter Z3 doesn't have. Note that the module qualified ones only
+  # answer once the module has been loaded, which for most of them means after the
+  # first solve.
+  def get_param(name)
+    name = name.to_s
+    return nil unless known_global_param?(name)
+    LowLevel.global_param_get(name)
+  end
+
+  # Puts every global parameter back to its default
+  def reset_params
+    LowLevel.global_param_reset_all
+    nil
+  end
+
+  # The global parameters, the way Solver and Tactic each describe their own. Only the
+  # unqualified ones are in here - the modules describe theirs separately, and Z3
+  # offers no way to reach those.
+  def param_descrs
+    ParamDescrs.new(LowLevel.get_global_param_descrs)
+  end
+
+  private
+
+  # Whether Z3 could have this parameter. Only the unqualified names can be told -
+  # a module qualified one isn't in the descriptions and there's no way to ask the
+  # module for its own, so those are taken at face value. Z3 lowercases a name on the
+  # way in, while the descriptions keep them as they were declared.
+  #
+  # Worth the lookup because Z3's answer to an unknown name is a warning followed by
+  # every legal parameter, all of it on stderr, and none of it an error.
+  def known_global_param?(name)
+    name.include?(".") or param_descrs.include?(name.downcase)
+  end
+
+  public
 
   # This is only so these can be called as `Z3.Int("x")`. Including Z3 into your own
   # code is not supported - `Z3#String` shadows the private `Kernel#String`, and the

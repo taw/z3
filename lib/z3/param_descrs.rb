@@ -44,6 +44,14 @@ module Z3
       kind(name) != :invalid
     end
 
+    # What Z3 says the parameter is for. Z3 looks it up by the name's position rather
+    # than by the name, so an unknown one is a bare Z3_IOB instead of nothing - hence
+    # the check, which words it the way Params words the same mistake.
+    def documentation(name)
+      raise Z3::Exception, "Unknown parameter `#{name}'" unless include?(name)
+      LowLevel.param_descrs_get_documentation(self, LowLevel.mk_string_symbol(name.to_s))
+    end
+
     def to_s
       LowLevel.param_descrs_to_string(self)
     end

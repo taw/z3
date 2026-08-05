@@ -32,6 +32,21 @@ module Z3
       expect(descrs).to_not include("no_such_parameter")
     end
 
+    it "#documentation" do
+      expect(descrs.documentation("timeout")).to include("timeout")
+      expect(descrs.documentation("random_seed")).to include("random seed")
+    end
+
+    it "#documentation takes Symbols too" do
+      expect(descrs.documentation(:timeout)).to eq(descrs.documentation("timeout"))
+    end
+
+    # Z3 looks it up by the name's position, so an unknown one is a bare Z3_IOB
+    it "#documentation of a parameter that does not exist" do
+      expect { descrs.documentation("no_such_parameter") }
+        .to raise_error(Z3::Exception, "Unknown parameter `no_such_parameter'")
+    end
+
     it "#to_s" do
       expect(descrs.to_s).to include("timeout")
     end

@@ -31,6 +31,8 @@ module Z3
     # callback :error_handler, [:ctx_pointer, :int], :void
     callback :error_handler, [:pointer, :int], :void
     attach_function :Z3_get_version, [:pointer, :pointer, :pointer, :pointer], :void
+    # Answers whether the parameter exists, and hands the value over in an out param
+    attach_function :Z3_global_param_get, [:string, :pointer], :bool
     attach_function :Z3_set_error_handler, [:ctx_pointer, :error_handler], :void
     attach_function :Z3_mk_context, [:config_pointer], :ctx_pointer
     attach_function :Z3_model_eval, [:ctx_pointer, :model_pointer, :ast_pointer, :bool, :pointer], :int
