@@ -204,9 +204,6 @@ class KinematicsProblem10 < KinematicsProblem
   end
 end
 
-# This is actually param for Python Z3 printer, can't work until we get that
-# Z3.set_param("rational_to_decimal", true)
-
 KinematicsProblem01.new.call
 KinematicsProblem02.new.call
 KinematicsProblem03.new.call
