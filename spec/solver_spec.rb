@@ -210,6 +210,103 @@ module Z3
       expect{ solver.trail }.to raise_error(Z3::Exception)
     end
 
+    describe "#simple?" do
+      it "is only true for the plain SMT core" do
+        expect(Solver.simple).to be_simple
+        expect(Solver.new).to_not be_simple
+        expect(Solver.for_logic("QF_LIA")).to_not be_simple
+        expect(Solver.from_tactic(Tactic.named("smt"))).to_not be_simple
+      end
+
+      # A simplifier is preprocessing bolted on, the solver underneath is unchanged
+      it "survives #with_simplifier" do
+        simplifier = Simplifier.named("solve-eqs")
+        expect(Solver.simple.with_simplifier(simplifier)).to be_simple
+        expect(Solver.new.with_simplifier(simplifier)).to_not be_simple
+      end
+    end
+
+    describe "#set_initial_value" do
+      let(:simple) { Solver.simple }
+      let(:x) { Z3.Int("x") }
+
+      # The value Z3 picks unhinted is 0, so every one of these is the hint landing
+      it "is the value the solver tries first" do
+        simple.assert x >= 0
+        simple.assert x <= 100
+        simple.set_initial_value(x, 42)
+        expect(simple).to be_satisfiable
+        expect(simple.model[x].value).to eq(42)
+      end
+
+      it "returns the solver, so it chains" do
+        expect(simple.set_initial_value(x, 42)).to equal(simple)
+      end
+
+      it "casts the value into the variable's sort" do
+        c = Z3.Bool("c")
+        expect(simple.set_initial_value(c, true)).to equal(simple)
+        expect { simple.set_initial_value(x, "nope") }
+          .to raise_error(Z3::Exception, "Can't convert String into Int")
+        expect { simple.set_initial_value(x, true) }
+          .to raise_error(Z3::Exception, "Can't convert true into Int")
+      end
+
+      # A hint and nothing more - it can't make a wrong answer right. Which of the
+      # legal values Z3 falls back to isn't its own promise, so only the promise is
+      # checked here
+      it "is overridden when it doesn't fit the assertions" do
+        simple.assert x >= 0
+        simple.assert x <= 10
+        simple.set_initial_value(x, 42)
+        expect(simple).to be_satisfiable
+        expect(simple.model[x].value).to be_between(0, 10)
+      end
+
+      it "can't make an unsatisfiable problem satisfiable" do
+        simple.assert x > 5
+        simple.assert x < 3
+        simple.set_initial_value(x, 4)
+        expect(simple).to be_unsatisfiable
+      end
+
+      it "survives repeated checks and push/pop" do
+        simple.assert x >= 0
+        simple.assert x <= 100
+        simple.set_initial_value(x, 77)
+        expect(simple).to be_satisfiable
+        expect(simple.model[x].value).to eq(77)
+        simple.push
+        simple.assert x >= 10
+        expect(simple).to be_satisfiable
+        expect(simple.model[x].value).to eq(77)
+        simple.pop
+        expect(simple).to be_satisfiable
+        expect(simple.model[x].value).to eq(77)
+      end
+
+      # Every other solver takes the call and quietly does nothing with it, which is
+      # worse than refusing, so we refuse for them
+      it "raises on any solver which would ignore it" do
+        [solver, Solver.for_logic("QF_LIA"), Solver.from_tactic(Tactic.named("smt"))].each do |s|
+          expect { s.set_initial_value(x, 42) }.to raise_error(
+            Z3::Exception,
+            "Only Solver.simple takes initial values, every other solver ignores them",
+          )
+        end
+      end
+
+      # Z3 accepts a compound expression here and then ignores it
+      it "raises on anything which isn't a variable" do
+        expect { simple.set_initial_value(x + 1, 42) }
+          .to raise_error(Z3::Exception, "Initial values are for variables, and Int<x + 1> is not one")
+        expect { simple.set_initial_value(Z3.Const(5), 42) }
+          .to raise_error(Z3::Exception, "Initial values are for variables, and Int<5> is not one")
+        expect { simple.set_initial_value(42, 42) }
+          .to raise_error(Z3::Exception, "Initial values are for variables, and 42 is not one")
+      end
+    end
+
     # Cancelling a #check in progress needs another thread, which FFI won't give us
     # here, so this only pins down that an unused interrupt disturbs nothing
     it "#interrupt" do

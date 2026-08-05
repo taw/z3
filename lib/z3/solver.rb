@@ -4,8 +4,13 @@ module Z3
 
     attr_reader :_solver
     # `_solver` is how the alternative constructors below pass in their own solver;
-    # `Solver.new` is the general purpose one and you almost always want it
-    def initialize(params = {}, _solver = LowLevel.mk_solver)
+    # `Solver.new` is the general purpose one and you almost always want it. `simple`
+    # says which kind `_solver` is, because Z3 offers no way to ask one - see #simple?
+    #
+    # All three are positional on purpose: a keyword here would make Ruby read
+    # `Solver.new(rlimit: 1)` as keywords rather than as the parameters Hash it is.
+    def initialize(params = {}, _solver = LowLevel.mk_solver, simple = false)
+      @simple = simple
       @_solver = _solver
       inc_ref! :solver, @_solver
       reset_model!
@@ -19,7 +24,7 @@ module Z3
       # This one is just the incremental SMT core, which is usually weaker - but it's
       # the only solver which implements #trail.
       def simple(params = {})
-        new(params, LowLevel.mk_simple_solver)
+        new(params, LowLevel.mk_simple_solver, true)
       end
 
       # Specializes the solver for one SMT-LIB2 logic ("QF_LIA", "QF_BV", ...), which
@@ -46,7 +51,20 @@ module Z3
     # from the receiver either, as Z3 has no way to read them back.
     def with_simplifier(simplifier, params = {})
       raise Z3::Exception, "Simplifier required" unless simplifier.is_a?(Simplifier)
-      Solver.new(params, LowLevel.solver_add_simplifier(self, simplifier))
+      # A simplifier is preprocessing bolted onto whatever this already is, so the
+      # solver underneath is still the same kind - a simple one stays simple
+      Solver.new(params, LowLevel.solver_add_simplifier(self, simplifier), simple?)
+    end
+
+    # Whether this is the plain incremental SMT core - `Solver.simple`, or a simplifier
+    # bolted onto one - rather than a solver built out of tactics, which is what
+    # `Solver.new`, `.for_logic` and `.from_tactic` all give.
+    #
+    # It matters because two Z3 features are implemented by that solver and no other:
+    # #trail and #set_initial_value. Z3 won't say which kind a solver is, so this is
+    # remembered from however it was built.
+    def simple?
+      @simple
     end
 
     # `Z3_solver_get_param_descrs` lists every parameter the solver takes,
@@ -189,6 +207,28 @@ module Z3
     def trail
       _ast_vector = LowLevel.solver_get_trail(self)
       LowLevel.unpack_ast_vector(_ast_vector)
+    end
+
+    # A hint at which value to try for a variable first - a warm start, for feeding a
+    # known-good solution back in. It stays a hint: an impossible one is overridden
+    # rather than believed, and it can't make an unsat problem sat. It survives #check
+    # and #push / #pop, and setting it again replaces it.
+    #
+    # Only Solver.simple implements it. Every other kind takes the call and silently
+    # ignores it, which is worse than refusing, so this refuses on their behalf.
+    #
+    # Z3 acts on it for Bool (the initial phase), Int and Real (the Simplex tableau is
+    # calibrated towards it) and Bitvec (a phase per bit). Other sorts - String and Seq
+    # among them - it accepts and ignores, and there's no way to be told which is which.
+    def set_initial_value(var, value)
+      unless simple?
+        raise Z3::Exception, "Only Solver.simple takes initial values, every other solver ignores them"
+      end
+      unless var.is_a?(Expr) and var.ast_kind == :app and var.func_decl.arity == 0
+        raise Z3::Exception, "Initial values are for variables, and #{var.inspect} is not one"
+      end
+      LowLevel.solver_set_initial_value(self, var, var.sort.cast(value))
+      self
     end
 
     # Cancels a #check in progress, so it returns :unknown instead of an answer.
