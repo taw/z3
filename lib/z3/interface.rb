@@ -42,12 +42,15 @@ module Z3
   # SMT-LIB's `declare-fun` uses, so `Z3.Function("f", Int, Int, Bool)` is a two
   # argument predicate. Apply it with `f[x, y]`.
   def Function(name, *sorts)
-    raise Z3::Exception, "Function needs at least a range sort" if sorts.empty?
-    sorts.each do |sort|
-      raise Z3::Exception, "Sort expected, got #{AST.describe(sort)}" unless sort.is_a?(Sort)
-    end
-    range = sorts.pop
-    FuncDecl.new(LowLevel.mk_func_decl(LowLevel.mk_symbol(name), sorts, range))
+    FuncDecl.declare(name, *sorts)
+  end
+
+  # Same, but Z3 picks a name nothing has used yet by appending a number to `prefix` -
+  # for helper functions which shouldn't collide with whatever the caller has named.
+  # The number comes from a counter shared by the whole context, so don't count on
+  # getting any particular one.
+  def FreshFunction(prefix, *sorts)
+    FuncDecl.declare_fresh(prefix, *sorts)
   end
 
   #--

@@ -45,6 +45,37 @@ module Z3
       end
     end
 
+    # Z3 appends a number from a counter shared by the whole context - and shared
+    # with FuncDecl.declare_fresh - so nothing here may assert which one it gets
+    describe "#fresh_var" do
+      it "works on every sort" do
+        all_sorts.each do |sort|
+          fresh = sort.fresh_var("v")
+          expect(fresh).to be_a(sort.expr_class)
+          expect(fresh.sort).to eq(sort)
+          expect(fresh.to_s).to start_with("v")
+        end
+      end
+
+      it "picks a different name every time" do
+        names = 3.times.map { IntSort.new.fresh_var("v").to_s }
+        expect(names.uniq.size).to eq(3)
+      end
+
+      it "takes a Symbol prefix too" do
+        expect(IntSort.new.fresh_var(:tmp).to_s).to start_with("tmp")
+      end
+
+      # Which is the point - two of them are unrelated variables, where #var with
+      # one name twice is the same variable twice
+      it "is a different variable each time, not just a different name" do
+        a = IntSort.new.fresh_var("v")
+        b = IntSort.new.fresh_var("v")
+        expect([a == 1, b == 2]).to have_solution({})
+        expect([IntSort.new.var("same") == 1, IntSort.new.var("same") == 2]).to have_no_solution
+      end
+    end
+
     # Nothing returns one any more, so it's abstract like ArithExpr
     it "Expr itself is abstract" do
       expect{ Expr.new(nil, nil) }.to raise_error(NoMethodError)

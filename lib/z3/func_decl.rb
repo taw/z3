@@ -66,12 +66,47 @@ module Z3
       self[*args]
     end
 
+    # Z3 hash-conses declarations, so two decls of the same name and signature are
+    # one and the same. AST already gives us #eql? and #hash on the pointer; without
+    # this they'd disagree with ==, which would be an odd thing for a Hash key to do.
+    # (Expr overrides == to build an expression instead - a FuncDecl is not a value,
+    # so there's nothing to build.)
+    def ==(other)
+      eql?(other)
+    end
+
     def to_s
       name
     end
 
     def inspect
       "Z3::FuncDecl<#{name}/#{arity}>"
+    end
+
+    class << self
+      def declare(name, *sorts)
+        domain, range = split_signature(sorts)
+        new(LowLevel.mk_func_decl(LowLevel.mk_symbol(name), domain, range))
+      end
+
+      # Z3 appends a number to `prefix`, picking one no declaration is using yet.
+      # It's only unused as of now though - nothing stops a later #declare from
+      # claiming the same name and getting this very same func decl back.
+      def declare_fresh(prefix, *sorts)
+        domain, range = split_signature(sorts)
+        new(LowLevel.mk_fresh_func_decl(prefix.to_s, domain, range))
+      end
+
+      private
+
+      # Last sort is the range, the ones before it are the domain
+      def split_signature(sorts)
+        raise Z3::Exception, "Function needs at least a range sort" if sorts.empty?
+        sorts.each do |sort|
+          raise Z3::Exception, "Sort expected, got #{AST.describe(sort)}" unless sort.is_a?(Sort)
+        end
+        [sorts[0..-2], sorts[-1]]
+      end
     end
 
     public_class_method :new

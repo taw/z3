@@ -72,6 +72,19 @@ module Z3
       end
     end
 
+    # A variable Z3 names for you, by appending a number to `prefix` - for the ones
+    # you need but don't want to have to name, and which mustn't collide with
+    # anything the caller has named.
+    #
+    # `Z3.Const` is a different thing entirely: that's a literal built from a Ruby
+    # value, where this is a variable, which is what Z3 calls a const.
+    #
+    # The number comes from a counter shared by the whole context, and by
+    # FuncDecl.declare_fresh too, so don't count on getting any particular one.
+    def fresh_var(prefix)
+      new(LowLevel.mk_fresh_const(prefix.to_s, self))
+    end
+
     # We pretend to be a class, sort of
     def new(_ast)
       expr_class.new(_ast, self)

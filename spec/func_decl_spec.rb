@@ -8,6 +8,15 @@ module Z3
     let(:y) { Z3.Int("y") }
 
     describe "Z3.Function" do
+      # Z3 hash-conses them, so redeclaring is the same function, not a second one
+      it "is a value object" do
+        expect(Z3.Function("f", int, int)).to eq(f)
+        expect(Z3.Function("f", int, int).hash).to eq(f.hash)
+        expect(Z3.Function("other", int, int)).to_not eq(f)
+        # Same name, different signature is a different function
+        expect(Z3.Function("f", int, bool)).to_not eq(f)
+      end
+
       it "declares a function, last sort being the range" do
         expect(f).to be_a(FuncDecl)
         expect(f.name).to eq("f")
@@ -37,6 +46,51 @@ module Z3
       end
     end
 
+    describe "Z3.FreshFunction" do
+      # The number Z3 appends comes from a counter shared by the whole context -
+      # shared across prefixes, and with mk_fresh_const too - so which one this gets
+      # depends on every other example that ran first. Nothing here may assert it.
+      it "names itself after the prefix" do
+        expect(Z3.FreshFunction("f", int, int).name).to start_with("f")
+        expect(Z3.FreshFunction("helper", int, int).name).to start_with("helper")
+      end
+
+      it "picks a different name every time" do
+        names = 3.times.map { Z3.FreshFunction("f", int, int).name }
+        expect(names.uniq.size).to eq(3)
+      end
+
+      it "has the signature it was given" do
+        f = Z3.FreshFunction("f", int, bool)
+        expect(f.arity).to eq(1)
+        expect(f.domain(0)).to eq(int)
+        expect(f.range).to eq(bool)
+        expect(Z3.FreshFunction("k", int).arity).to eq(0)
+      end
+
+      # The point of it - two of these are genuinely unrelated functions, where two
+      # Z3.Function calls with one name would be the same function twice
+      it "is a different function each time, not just a different name" do
+        a = Z3.FreshFunction("f", int, int)
+        b = Z3.FreshFunction("f", int, int)
+        expect([a[1] == 1, b[1] == 2]).to have_solution({})
+        named = Z3.Function("same", int, int)
+        expect([named[1] == 1, Z3.Function("same", int, int)[1] == 2]).to have_no_solution
+      end
+
+      it "rejects a bad signature the same way Z3.Function does" do
+        expect{ Z3.FreshFunction("f") }.to raise_error(Z3::Exception, "Function needs at least a range sort")
+        expect{ Z3.FreshFunction("f", int, 42) }.to raise_error(Z3::Exception, "Sort expected, got Integer")
+      end
+
+      # "Fresh" means unused as of now, not reserved - worth knowing before relying
+      # on it for anything but convenience
+      it "does not reserve the name against a later declaration" do
+        fresh = Z3.FreshFunction("f", int, int)
+        expect(Z3.Function(fresh.name, int, int)).to eq(fresh)
+      end
+    end
+
     describe "#[]" do
       it "applies the function" do
         expect(f[x]).to stringify("f(x)")
@@ -55,7 +109,7 @@ module Z3
       end
 
       it "#call is the same thing" do
-        expect(f.call(x)).to eq(f[x])
+        expect(f.call(x)).to be_same_as(f[x])
       end
 
       it "raises on the wrong number of arguments" do

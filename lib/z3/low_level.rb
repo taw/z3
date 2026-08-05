@@ -154,6 +154,11 @@ module Z3
         Z3::VeryLowLevel.Z3_mk_func_decl(_ctx_pointer, symbol, domain_sorts.size, asts_vector(domain_sorts), range_sort._ast)
       end
 
+      # Takes a plain String prefix rather than a symbol, and Z3 appends a number
+      def mk_fresh_func_decl(prefix, domain_sorts, range_sort)
+        Z3::VeryLowLevel.Z3_mk_fresh_func_decl(_ctx_pointer, prefix, domain_sorts.size, asts_vector(domain_sorts), range_sort._ast)
+      end
+
       def mk_app(func_decl, args)
         Z3::VeryLowLevel.Z3_mk_app(_ctx_pointer, func_decl._ast, args.size, asts_vector(args))
       end
