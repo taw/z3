@@ -35,12 +35,25 @@ class GenerateAPI
   def definitions_to_skip
     @definitions_to_skip ||= begin
       [
-        # Not in library according to FFI
+        # Not in library according to FFI. Recheck before trusting this - all three
+        # symbols are present in Z3 4.16, so whatever build this was true of is gone.
         "get_estimated_alloc_size",
         "mk_array_ext",
-        "solver_translate",
         "param_descrs_get_documentation",
-        "mk_context",
+
+        # Only meaningful with more than one context, and one context is all there is -
+        # `Context` is a hard-coded singleton and multiple contexts are explicitly out
+        # of scope. `translate` and friends move an object between two of them,
+        # `import_model_converter` is how a translated solver carries its model
+        # conversion across, and `mk_context_rc` builds the other kind of context.
+        "ast_vector_translate",
+        "goal_translate",
+        "mk_context_rc",
+        "model_translate",
+        "optimize_translate",
+        "solver_import_model_converter",
+        "solver_translate",
+        "translate",
 
         # Sort predicates - `Sort.from_pointer` dispatches on the sort kind instead
         "is_string_sort",
@@ -55,35 +68,38 @@ class GenerateAPI
         "sort_to_ast",
         "func_decl_to_ast",
         "app_to_ast",
-        # Aliases
+
+        # Aliases, so we keep whichever spelling the object layer already uses.
+        # Pattern, Sort and FuncDecl are all ASTs to the C API, so the three
+        # `*_to_string` are `ast_to_string` with a differently typed pointer; the header
+        # says outright that `get_arity` is an alias for `get_domain_size`; and the
+        # `mk_fpa_r*` five are the short spellings of `mk_fpa_round_*`.
         "func_decl_to_string",
-        "sort_to_string",
-
-        # We just unpack and throw away, so we shouldn't need these
-        "Z3_stats_inc_ref",
-        "Z3_stats_dec_ref",
-        "Z3_stats_to_string",
-
-        # Extra constructors we'll never need
-        "mk_fpa_numeral_float",
-
-        # Aliases
+        "get_domain_size",
         "mk_fpa_rna",
         "mk_fpa_rne",
         "mk_fpa_rtn",
         "mk_fpa_rtp",
         "mk_fpa_rtz",
+        "pattern_to_string",
+        "sort_to_string",
 
-        # Removed in 4.6.0
-        "get_smtlib_assumption",
-        "get_smtlib_decl",
-        "get_smtlib_error",
-        "get_smtlib_formula",
-        "get_smtlib_num_assumptions",
-        "get_smtlib_num_decls",
-        "get_smtlib_num_formulas",
-        "get_smtlib_num_sorts",
-        "get_smtlib_sort",
+        # We just unpack and throw away, so we shouldn't need these. Statistics become
+        # a Hash, an AstVector becomes an Array, and a FuncInterp becomes a Hash whose
+        # keys are argument lists - so nothing here ever holds one of these objects,
+        # prints it, or writes back into it.
+        # (`func_interp_add_entry` and `func_interp_set_else` are deliberately absent:
+        # those build a model rather than read one, which is a feature we don't have yet.)
+        "ast_vector_resize",
+        "ast_vector_set",
+        "ast_vector_to_string",
+        "func_interp_get_arity",
+        "stats_dec_ref",
+        "stats_inc_ref",
+        "stats_to_string",
+
+        # Extra constructors we'll never need
+        "mk_fpa_numeral_float",
 
         # Hand-coded
         "mk_add",

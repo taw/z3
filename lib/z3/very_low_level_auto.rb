@@ -41,11 +41,7 @@ module Z3
     attach_function :Z3_ast_vector_get, [:ctx_pointer, :ast_vector_pointer, :uint], :ast_pointer
     attach_function :Z3_ast_vector_inc_ref, [:ctx_pointer, :ast_vector_pointer], :void
     attach_function :Z3_ast_vector_push, [:ctx_pointer, :ast_vector_pointer, :ast_pointer], :void
-    attach_function :Z3_ast_vector_resize, [:ctx_pointer, :ast_vector_pointer, :uint], :void
-    attach_function :Z3_ast_vector_set, [:ctx_pointer, :ast_vector_pointer, :uint, :ast_pointer], :void
     attach_function :Z3_ast_vector_size, [:ctx_pointer, :ast_vector_pointer], :uint
-    attach_function :Z3_ast_vector_to_string, [:ctx_pointer, :ast_vector_pointer], :string
-    attach_function :Z3_ast_vector_translate, [:ctx_pointer, :ast_vector_pointer, :ctx_pointer], :ast_vector_pointer
     attach_function :Z3_constructor_num_fields, [:ctx_pointer, :constructor_pointer], :uint
     attach_function :Z3_datatype_update_field, [:ctx_pointer, :func_decl_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_dec_ref, [:ctx_pointer, :ast_pointer], :void
@@ -106,7 +102,6 @@ module Z3
     attach_function :Z3_func_entry_inc_ref, [:ctx_pointer, :func_entry_pointer], :void
     attach_function :Z3_func_interp_add_entry, [:ctx_pointer, :func_interp_pointer, :ast_vector_pointer, :ast_pointer], :void
     attach_function :Z3_func_interp_dec_ref, [:ctx_pointer, :func_interp_pointer], :void
-    attach_function :Z3_func_interp_get_arity, [:ctx_pointer, :func_interp_pointer], :uint
     attach_function :Z3_func_interp_get_else, [:ctx_pointer, :func_interp_pointer], :ast_pointer
     attach_function :Z3_func_interp_get_entry, [:ctx_pointer, :func_interp_pointer, :uint], :func_entry_pointer
     attach_function :Z3_func_interp_get_num_entries, [:ctx_pointer, :func_interp_pointer], :uint
@@ -146,7 +141,6 @@ module Z3
     attach_function :Z3_get_denominator, [:ctx_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_get_depth, [:ctx_pointer, :ast_pointer], :uint
     attach_function :Z3_get_domain, [:ctx_pointer, :func_decl_pointer, :uint], :sort_pointer
-    attach_function :Z3_get_domain_size, [:ctx_pointer, :func_decl_pointer], :uint
     attach_function :Z3_get_error_code, [:ctx_pointer], :uint
     attach_function :Z3_get_error_msg, [:ctx_pointer, :int], :string
     attach_function :Z3_get_full_version, [], :string
@@ -210,7 +204,6 @@ module Z3
     attach_function :Z3_goal_size, [:ctx_pointer, :goal_pointer], :uint
     attach_function :Z3_goal_to_dimacs_string, [:ctx_pointer, :goal_pointer, :bool], :string
     attach_function :Z3_goal_to_string, [:ctx_pointer, :goal_pointer], :string
-    attach_function :Z3_goal_translate, [:ctx_pointer, :goal_pointer, :ctx_pointer], :goal_pointer
     attach_function :Z3_inc_ref, [:ctx_pointer, :ast_pointer], :void
     attach_function :Z3_interrupt, [:ctx_pointer], :void
     attach_function :Z3_is_algebraic_number, [:ctx_pointer, :ast_pointer], :bool
@@ -286,7 +279,6 @@ module Z3
     attach_function :Z3_mk_config, [], :config_pointer
     attach_function :Z3_mk_const, [:ctx_pointer, :symbol_pointer, :sort_pointer], :ast_pointer
     attach_function :Z3_mk_const_array, [:ctx_pointer, :sort_pointer, :ast_pointer], :ast_pointer
-    attach_function :Z3_mk_context_rc, [:config_pointer], :ctx_pointer
     attach_function :Z3_mk_div, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_divides, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_empty_set, [:ctx_pointer, :sort_pointer], :ast_pointer
@@ -476,7 +468,6 @@ module Z3
     attach_function :Z3_model_has_interp, [:ctx_pointer, :model_pointer, :func_decl_pointer], :bool
     attach_function :Z3_model_inc_ref, [:ctx_pointer, :model_pointer], :void
     attach_function :Z3_model_to_string, [:ctx_pointer, :model_pointer], :string
-    attach_function :Z3_model_translate, [:ctx_pointer, :model_pointer, :ctx_pointer], :model_pointer
     attach_function :Z3_optimize_assert, [:ctx_pointer, :optimize_pointer, :ast_pointer], :void
     attach_function :Z3_optimize_assert_and_track, [:ctx_pointer, :optimize_pointer, :ast_pointer, :ast_pointer], :void
     attach_function :Z3_optimize_assert_soft, [:ctx_pointer, :optimize_pointer, :ast_pointer, :string, :symbol_pointer], :uint
@@ -503,7 +494,6 @@ module Z3
     attach_function :Z3_optimize_set_initial_value, [:ctx_pointer, :optimize_pointer, :ast_pointer, :ast_pointer], :void
     attach_function :Z3_optimize_set_params, [:ctx_pointer, :optimize_pointer, :params_pointer], :void
     attach_function :Z3_optimize_to_string, [:ctx_pointer, :optimize_pointer], :string
-    attach_function :Z3_optimize_translate, [:ctx_pointer, :optimize_pointer, :ctx_pointer], :optimize_pointer
     attach_function :Z3_param_descrs_dec_ref, [:ctx_pointer, :param_descrs_pointer], :void
     attach_function :Z3_param_descrs_get_kind, [:ctx_pointer, :param_descrs_pointer, :symbol_pointer], :uint
     attach_function :Z3_param_descrs_get_name, [:ctx_pointer, :param_descrs_pointer, :uint], :symbol_pointer
@@ -523,7 +513,6 @@ module Z3
     attach_function :Z3_parser_context_dec_ref, [:ctx_pointer, :parser_context_pointer], :void
     attach_function :Z3_parser_context_from_string, [:ctx_pointer, :parser_context_pointer, :string], :ast_vector_pointer
     attach_function :Z3_parser_context_inc_ref, [:ctx_pointer, :parser_context_pointer], :void
-    attach_function :Z3_pattern_to_string, [:ctx_pointer, :pattern_pointer], :string
     attach_function :Z3_polynomial_subresultants, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_vector_pointer
     attach_function :Z3_probe_and, [:ctx_pointer, :probe_pointer, :probe_pointer], :probe_pointer
     attach_function :Z3_probe_apply, [:ctx_pointer, :probe_pointer, :goal_pointer], :double
@@ -612,12 +601,10 @@ module Z3
     attach_function :Z3_solver_get_trail, [:ctx_pointer, :solver_pointer], :ast_vector_pointer
     attach_function :Z3_solver_get_units, [:ctx_pointer, :solver_pointer], :ast_vector_pointer
     attach_function :Z3_solver_get_unsat_core, [:ctx_pointer, :solver_pointer], :ast_vector_pointer
-    attach_function :Z3_solver_import_model_converter, [:ctx_pointer, :solver_pointer, :solver_pointer], :void
     attach_function :Z3_solver_inc_ref, [:ctx_pointer, :solver_pointer], :void
     attach_function :Z3_solver_interrupt, [:ctx_pointer, :solver_pointer], :void
     attach_function :Z3_solver_pop, [:ctx_pointer, :solver_pointer, :uint], :void
     attach_function :Z3_solver_propagate_register, [:ctx_pointer, :solver_pointer, :ast_pointer], :void
-    attach_function :Z3_solver_push, [:ctx_pointer, :solver_pointer], :void
     attach_function :Z3_solver_push, [:ctx_pointer, :solver_pointer], :void
     attach_function :Z3_solver_reset, [:ctx_pointer, :solver_pointer], :void
     attach_function :Z3_solver_set_initial_value, [:ctx_pointer, :solver_pointer, :ast_pointer, :ast_pointer], :void
@@ -625,15 +612,12 @@ module Z3
     attach_function :Z3_solver_solve_for, [:ctx_pointer, :solver_pointer, :ast_vector_pointer, :ast_vector_pointer, :ast_vector_pointer], :void
     attach_function :Z3_solver_to_dimacs_string, [:ctx_pointer, :solver_pointer, :bool], :string
     attach_function :Z3_solver_to_string, [:ctx_pointer, :solver_pointer], :string
-    attach_function :Z3_stats_dec_ref, [:ctx_pointer, :stats_pointer], :void
     attach_function :Z3_stats_get_double_value, [:ctx_pointer, :stats_pointer, :uint], :double
     attach_function :Z3_stats_get_key, [:ctx_pointer, :stats_pointer, :uint], :string
     attach_function :Z3_stats_get_uint_value, [:ctx_pointer, :stats_pointer, :uint], :uint
-    attach_function :Z3_stats_inc_ref, [:ctx_pointer, :stats_pointer], :void
     attach_function :Z3_stats_is_double, [:ctx_pointer, :stats_pointer, :uint], :bool
     attach_function :Z3_stats_is_uint, [:ctx_pointer, :stats_pointer, :uint], :bool
     attach_function :Z3_stats_size, [:ctx_pointer, :stats_pointer], :uint
-    attach_function :Z3_stats_to_string, [:ctx_pointer, :stats_pointer], :string
     attach_function :Z3_tactic_and_then, [:ctx_pointer, :tactic_pointer, :tactic_pointer], :tactic_pointer
     attach_function :Z3_tactic_apply, [:ctx_pointer, :tactic_pointer, :goal_pointer], :apply_result_pointer
     attach_function :Z3_tactic_apply_ex, [:ctx_pointer, :tactic_pointer, :goal_pointer, :params_pointer], :apply_result_pointer
@@ -654,7 +638,6 @@ module Z3
     attach_function :Z3_tactic_using_params, [:ctx_pointer, :tactic_pointer, :params_pointer], :tactic_pointer
     attach_function :Z3_tactic_when, [:ctx_pointer, :probe_pointer, :tactic_pointer], :tactic_pointer
     attach_function :Z3_toggle_warning_messages, [:bool], :void
-    attach_function :Z3_translate, [:ctx_pointer, :ast_pointer, :ctx_pointer], :ast_pointer
     attach_function :Z3_update_param_value, [:ctx_pointer, :string, :string], :void
   end
 end

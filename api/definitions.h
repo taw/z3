@@ -731,7 +731,6 @@ def_API('Z3_solver_propagate_on_binding', VOID, (_in(CONTEXT), _in(SOLVER), _fnp
 def_API('Z3_solver_propagate_register', VOID, (_in(CONTEXT), _in(SOLVER), _in(AST)))
 def_API('Z3_solver_propagate_register_cb', VOID, (_in(CONTEXT), _in(SOLVER_CALLBACK), _in(AST)))
 def_API('Z3_solver_push', VOID, (_in(CONTEXT), _in(SOLVER)))
-def_API('Z3_solver_push', VOID, (_in(CONTEXT), _in(SOLVER)))
 def_API('Z3_solver_register_on_clause', VOID, (_in(CONTEXT), _in(SOLVER), _in(VOID_PTR), _fnptr(Z3_on_clause_eh)))
 def_API('Z3_solver_reset', VOID, (_in(CONTEXT), _in(SOLVER)))
 def_API('Z3_solver_set_initial_value', VOID, (_in(CONTEXT), _in(SOLVER), _in(AST), _in(AST)))

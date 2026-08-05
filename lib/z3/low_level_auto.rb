@@ -165,24 +165,8 @@ module Z3
         VeryLowLevel.Z3_ast_vector_push(_ctx_pointer, ast_vector, ast._ast)
       end
 
-      def ast_vector_resize(ast_vector, num) #=> :void
-        VeryLowLevel.Z3_ast_vector_resize(_ctx_pointer, ast_vector, num)
-      end
-
-      def ast_vector_set(ast_vector, num, ast) #=> :void
-        VeryLowLevel.Z3_ast_vector_set(_ctx_pointer, ast_vector, num, ast._ast)
-      end
-
       def ast_vector_size(ast_vector) #=> :uint
         VeryLowLevel.Z3_ast_vector_size(_ctx_pointer, ast_vector)
-      end
-
-      def ast_vector_to_string(ast_vector) #=> :string
-        VeryLowLevel.Z3_ast_vector_to_string(_ctx_pointer, ast_vector)
-      end
-
-      def ast_vector_translate(ast_vector, context) #=> :ast_vector_pointer
-        VeryLowLevel.Z3_ast_vector_translate(_ctx_pointer, ast_vector, context._context)
       end
 
       def constructor_num_fields(constructor) #=> :uint
@@ -425,10 +409,6 @@ module Z3
         VeryLowLevel.Z3_func_interp_dec_ref(_ctx_pointer, func_interp)
       end
 
-      def func_interp_get_arity(func_interp) #=> :uint
-        VeryLowLevel.Z3_func_interp_get_arity(_ctx_pointer, func_interp)
-      end
-
       def func_interp_get_else(func_interp) #=> :ast_pointer
         VeryLowLevel.Z3_func_interp_get_else(_ctx_pointer, func_interp)
       end
@@ -583,10 +563,6 @@ module Z3
 
       def get_domain(func_decl, num) #=> :sort_pointer
         VeryLowLevel.Z3_get_domain(_ctx_pointer, func_decl._ast, num)
-      end
-
-      def get_domain_size(func_decl) #=> :uint
-        VeryLowLevel.Z3_get_domain_size(_ctx_pointer, func_decl._ast)
       end
 
       def get_error_code #=> :uint
@@ -839,10 +815,6 @@ module Z3
 
       def goal_to_string(goal) #=> :string
         VeryLowLevel.Z3_goal_to_string(_ctx_pointer, goal._goal)
-      end
-
-      def goal_translate(goal, context) #=> :goal_pointer
-        VeryLowLevel.Z3_goal_translate(_ctx_pointer, goal._goal, context._context)
       end
 
       def inc_ref(ast) #=> :void
@@ -1143,10 +1115,6 @@ module Z3
 
       def mk_const_array(sort, ast) #=> :ast_pointer
         VeryLowLevel.Z3_mk_const_array(_ctx_pointer, sort._ast, ast._ast)
-      end
-
-      def mk_context_rc(config) #=> :ctx_pointer
-        VeryLowLevel.Z3_mk_context_rc(config._config)
       end
 
       def mk_div(ast1, ast2) #=> :ast_pointer
@@ -1905,10 +1873,6 @@ module Z3
         VeryLowLevel.Z3_model_to_string(_ctx_pointer, model._model)
       end
 
-      def model_translate(model, context) #=> :model_pointer
-        VeryLowLevel.Z3_model_translate(_ctx_pointer, model._model, context._context)
-      end
-
       def optimize_assert(optimize, ast) #=> :void
         VeryLowLevel.Z3_optimize_assert(_ctx_pointer, optimize._optimize, ast._ast)
       end
@@ -2013,10 +1977,6 @@ module Z3
         VeryLowLevel.Z3_optimize_to_string(_ctx_pointer, optimize._optimize)
       end
 
-      def optimize_translate(optimize, context) #=> :optimize_pointer
-        VeryLowLevel.Z3_optimize_translate(_ctx_pointer, optimize._optimize, context._context)
-      end
-
       def param_descrs_dec_ref(param_descrs) #=> :void
         VeryLowLevel.Z3_param_descrs_dec_ref(_ctx_pointer, param_descrs._param_descrs)
       end
@@ -2091,10 +2051,6 @@ module Z3
 
       def parser_context_inc_ref(parser_context) #=> :void
         VeryLowLevel.Z3_parser_context_inc_ref(_ctx_pointer, parser_context._parser_context)
-      end
-
-      def pattern_to_string(pattern) #=> :string
-        VeryLowLevel.Z3_pattern_to_string(_ctx_pointer, pattern._ast)
       end
 
       def polynomial_subresultants(ast1, ast2, ast3) #=> :ast_vector_pointer
@@ -2449,10 +2405,6 @@ module Z3
         VeryLowLevel.Z3_solver_get_unsat_core(_ctx_pointer, solver._solver)
       end
 
-      def solver_import_model_converter(solver1, solver2) #=> :void
-        VeryLowLevel.Z3_solver_import_model_converter(_ctx_pointer, solver1._solver, solver2._solver)
-      end
-
       def solver_inc_ref(solver) #=> :void
         VeryLowLevel.Z3_solver_inc_ref(_ctx_pointer, solver._solver)
       end
@@ -2467,10 +2419,6 @@ module Z3
 
       def solver_propagate_register(solver, ast) #=> :void
         VeryLowLevel.Z3_solver_propagate_register(_ctx_pointer, solver._solver, ast._ast)
-      end
-
-      def solver_push(solver) #=> :void
-        VeryLowLevel.Z3_solver_push(_ctx_pointer, solver._solver)
       end
 
       def solver_push(solver) #=> :void
@@ -2501,10 +2449,6 @@ module Z3
         VeryLowLevel.Z3_solver_to_string(_ctx_pointer, solver._solver)
       end
 
-      def stats_dec_ref(stats) #=> :void
-        VeryLowLevel.Z3_stats_dec_ref(_ctx_pointer, stats)
-      end
-
       def stats_get_double_value(stats, num) #=> :double
         VeryLowLevel.Z3_stats_get_double_value(_ctx_pointer, stats, num)
       end
@@ -2517,10 +2461,6 @@ module Z3
         VeryLowLevel.Z3_stats_get_uint_value(_ctx_pointer, stats, num)
       end
 
-      def stats_inc_ref(stats) #=> :void
-        VeryLowLevel.Z3_stats_inc_ref(_ctx_pointer, stats)
-      end
-
       def stats_is_double(stats, num) #=> :bool
         VeryLowLevel.Z3_stats_is_double(_ctx_pointer, stats, num)
       end
@@ -2531,10 +2471,6 @@ module Z3
 
       def stats_size(stats) #=> :uint
         VeryLowLevel.Z3_stats_size(_ctx_pointer, stats)
-      end
-
-      def stats_to_string(stats) #=> :string
-        VeryLowLevel.Z3_stats_to_string(_ctx_pointer, stats)
       end
 
       def tactic_and_then(tactic1, tactic2) #=> :tactic_pointer
@@ -2615,10 +2551,6 @@ module Z3
 
       def toggle_warning_messages(bool) #=> :void
         VeryLowLevel.Z3_toggle_warning_messages(bool)
-      end
-
-      def translate(ast, context) #=> :ast_pointer
-        VeryLowLevel.Z3_translate(_ctx_pointer, ast._ast, context._context)
       end
 
       def update_param_value(str1, str2) #=> :void
