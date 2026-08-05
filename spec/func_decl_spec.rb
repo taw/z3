@@ -7,6 +7,72 @@ module Z3
     let(:x) { Z3.Int("x") }
     let(:y) { Z3.Int("y") }
 
+    # An indexed decl carries its indices as parameters rather than in its name -
+    # `(_ extract 7 0)` and `(_ extract 3 2)` are both called "extract", so the
+    # parameters are the only place the 7 and the 0 exist
+    describe "#parameter" do
+      let(:bv) { Z3.Bitvec("bv", 16) }
+
+      it "reads Integer parameters" do
+        extract = bv.extract(7, 0).func_decl
+        expect(extract.name).to eq("extract")
+        expect(extract.num_parameters).to eq(2)
+        expect(extract.parameter(0)).to eq(7)
+        expect(extract.parameter(1)).to eq(0)
+
+        expect(bv.zero_ext(8).func_decl.parameter(0)).to eq(8)
+        expect(bv.rotate_left(3).func_decl.parameter(0)).to eq(3)
+        expect(x.to_bv(8).func_decl.parameter(0)).to eq(8)
+        # A Char literal is `(_ Char 97)`, so the code point is a parameter
+        expect(CharSort.new.from_const("a").func_decl.parameter(0)).to eq(97)
+      end
+
+      # Set values come back from a model as `((as const (Array Int Bool)) false)`
+      it "reads Sort parameters" do
+        solver = Solver.new
+        solver.assert SetSort.new(int).var("a").complement.include?(3)
+        expect(solver.check).to eq(:sat)
+        decl = solver.model.each.first[1].func_decl
+        expect(decl.parameter_kind(0)).to eq(:sort)
+        expect(decl.parameter(0)).to eq(SetSort.new(int))
+      end
+
+      # Enum recognizers are `(_ is red)` - every one of them is named "is", and which
+      # value it tests for is a parameter
+      it "reads FuncDecl parameters" do
+        sort = EnumSort.new("ParameterDemo", %i[red green])
+        recognizer = FuncDecl.new(LowLevel.get_datatype_sort_recognizer(sort, 0))
+        expect(recognizer.name).to eq("is")
+        expect(recognizer.parameter(0)).to eq(recognizer.func_decl_parameter(0))
+        expect(recognizer.parameter(0).name).to eq("red")
+      end
+
+      # Two of the nine kinds have nothing behind them: Z3 has no
+      # `get_decl_zstring_parameter` at all, and `:internal` is opaque by definition
+      it "raises for the kinds Z3 won't hand back" do
+        expect{ StringSort.new.from_const("abc").func_decl.parameter(0) }
+          .to raise_error(Z3::Exception, /\AParameter 0 is a string, and Z3 offers no way to read one back/)
+        expect{ FloatSort.new(11, 53).from_const(2.5).func_decl.parameter(0) }
+          .to raise_error(Z3::Exception, "Parameter 0 is internal, which Z3 keeps to itself")
+      end
+
+      it "raises for an index which isn't there" do
+        expect{ bv.extract(7, 0).func_decl.parameter(2) }
+          .to raise_error(Z3::Exception, "Trying to access parameter 2 but decl has 2 parameters")
+        expect{ bv.extract(7, 0).func_decl.parameter(-1) }
+          .to raise_error(Z3::Exception, "Trying to access parameter -1 but decl has 2 parameters")
+        expect{ (x + 1).func_decl.parameter(0) }
+          .to raise_error(Z3::Exception, "Trying to access parameter 0 but decl has 0 parameters")
+      end
+
+      # :double, :rational and :symbol are implemented by the book, but nothing this
+      # gem can build produces a decl carrying one, so they go untested
+      it "covers every parameter kind which has a producer here" do
+        expect(FuncDecl::PARAMETER_KINDS.values)
+          .to match_array(%i[int double rational symbol sort ast func_decl internal zstring])
+      end
+    end
+
     describe "Z3.Function" do
       # Z3 hash-conses them, so redeclaring is the same function, not a second one
       it "is a value object" do

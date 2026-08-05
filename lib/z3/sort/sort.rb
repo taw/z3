@@ -168,14 +168,10 @@ module Z3
       end
     end
 
-    # Sorts with a name (uninterpreted, finite domain, type variable) need it to be rebuilt
+    # Sorts with a name (uninterpreted, finite domain, enum, type variable) need it to
+    # be rebuilt. Takes a raw pointer, as from_pointer needs it before there's a Sort.
     def self.name_from_pointer(_sort)
-      _symbol = VeryLowLevel.Z3_get_sort_name(LowLevel._ctx_pointer, _sort)
-      if VeryLowLevel.Z3_get_symbol_kind(LowLevel._ctx_pointer, _symbol) == 0
-        VeryLowLevel.Z3_get_symbol_int(LowLevel._ctx_pointer, _symbol)
-      else
-        VeryLowLevel.Z3_get_symbol_string(LowLevel._ctx_pointer, _symbol)
-      end
+      LowLevel.symbol_value(VeryLowLevel.Z3_get_sort_name(LowLevel._ctx_pointer, _sort))
     end
   end
 end

@@ -77,6 +77,16 @@ module Z3
         end
       end
 
+      # The other direction. Takes a raw symbol pointer, as symbols are passed around
+      # unwrapped - which kind it is has to be asked before it can be read.
+      def symbol_value(_symbol)
+        if get_symbol_kind(_symbol) == 0
+          get_symbol_int(_symbol)
+        else
+          get_symbol_string(_symbol)
+        end
+      end
+
       def mk_and(asts)
         Z3::VeryLowLevel.Z3_mk_and(_ctx_pointer, asts.size, asts_vector(asts))
       end

@@ -307,7 +307,7 @@ module Z3
           return PrintedExpr.new(LowLevel.get_string(a).inspect)
         end
         if char_value?(decl)
-          return PrintedExpr.new("Char(#{[LowLevel.get_decl_int_parameter(decl, 0)].pack("U").inspect})")
+          return PrintedExpr.new("Char(#{[decl.parameter(0)].pack("U").inspect})")
         end
 
         # Sequence values, as Ruby array literals

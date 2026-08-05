@@ -48,6 +48,37 @@ module Z3
       PARAMETER_KINDS.fetch(k) { raise Z3::Exception, "Unknown decl parameter kind #{k}" }
     end
 
+    # What the decl is indexed *by*, as an ordinary Ruby object. The decl name is the
+    # same for every extract - `(_ extract 7 0)` and `(_ extract 3 2)` are both called
+    # "extract" - so the parameters are the only place the 7 and the 0 exist.
+    #
+    # Two of the nine kinds can't be read back: `:zstring` has no accessor in the C API
+    # at all (use `Expr#value` on the literal instead), and `:internal` is opaque by
+    # definition.
+    def parameter(i)
+      case (kind = parameter_kind(i))
+      when :int
+        LowLevel.get_decl_int_parameter(self, i)
+      when :double
+        LowLevel.get_decl_double_parameter(self, i)
+      when :rational
+        # Z3 hands this one over as a string, in Ruby's own `3/4` spelling
+        Rational(LowLevel.get_decl_rational_parameter(self, i))
+      when :symbol
+        LowLevel.symbol_value(LowLevel.get_decl_symbol_parameter(self, i))
+      when :sort
+        Sort.from_pointer(LowLevel.get_decl_sort_parameter(self, i))
+      when :ast
+        Expr.new_from_pointer(LowLevel.get_decl_ast_parameter(self, i))
+      when :func_decl
+        func_decl_parameter(i)
+      when :zstring
+        raise Z3::Exception, "Parameter #{i} is a string, and Z3 offers no way to read one back - use Expr#value on the literal instead"
+      else
+        raise Z3::Exception, "Parameter #{i} is #{kind}, which Z3 keeps to itself"
+      end
+    end
+
     def func_decl_parameter(i)
       raise Z3::Exception, "Parameter #{i} is a #{parameter_kind(i)}, not a func decl" unless parameter_kind(i) == :func_decl
       FuncDecl.new(LowLevel.get_decl_func_decl_parameter(self, i))
