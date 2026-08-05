@@ -5,17 +5,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>class Z3::RealExpr - RDoc Documentation</title>
+<title>class Z3::EnumSort - RDoc Documentation</title>
 
 
   <meta
     name="keywords"
-    content="ruby,class,Z3::RealExpr"
+    content="ruby,class,Z3::EnumSort"
   >
 
     <meta
       name="description"
-      content="Documentation for the Z3::RealExpr class"
+      content="class Z3::EnumSort: An enumeration - a sort whose values are a fixed, finite list of names, and nothing else. red]` are different values of different sorts, and Z3 refuse"
     >
 
 
@@ -24,14 +24,11 @@
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="class Z3::RealExpr - RDoc Documentation">
+<meta property="og:title" content="class Z3::EnumSort - RDoc Documentation">
 
 
 
-    <meta
-      property="og:description"
-      content="Documentation for Z3::RealExpr class - API reference and code examples"
-    >
+    <meta property="og:description" content="An enumeration - a sort whose values are a fixed, finite list of names, and nothing else. red]` are different values of different sorts, and Z3 refuse">
 
 
 
@@ -39,14 +36,11 @@
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="class Z3::RealExpr - RDoc Documentation">
+<meta name="twitter:title" content="class Z3::EnumSort - RDoc Documentation">
 
 
 
-    <meta
-      name="twitter:description"
-      content="Documentation for Z3::RealExpr class - API reference and code examples"
-    >
+    <meta name="twitter:description" content="An enumeration - a sort whose values are a fixed, finite list of names, and nothing else. red]` are different values of different sorts, and Z3 refuse">
 
 
 
@@ -425,7 +419,7 @@
         <svg><use href="#icon-chevron"></use></svg>
       </span>
     </summary>
-    <ul><li><a href="ArithExpr.html">Z3::ArithExpr</a><ul><li>Expr</li></ul></li></ul>
+    <ul><li>Sort</li></ul>
   </details>
 </div>
 
@@ -435,6 +429,29 @@
   
 
   
+  <div class="nav-section">
+    <details class="nav-section-collapsible" open>
+      <summary class="nav-section-header">
+        <span class="nav-section-icon">
+          <svg><use href="#icon-class-methods"></use></svg>
+        </span>
+        <span class="nav-section-title">Class Methods</span>
+        <span class="nav-section-chevron">
+          <svg><use href="#icon-chevron"></use></svg>
+        </span>
+      </summary>
+      <ul class="nav-list" role="directory">
+
+        <li ><a href="#method-c-from_pointer">from_pointer</a></li>
+
+        <li class="calls-super" ><a href="#method-c-new">new</a></li>
+
+        <li ><a href="#method-c-new">new</a></li>
+
+      </ul>
+    </details>
+  </div>
+
 
 
   <div class="nav-section">
@@ -450,19 +467,15 @@
       </summary>
       <ul class="nav-list" role="directory">
 
-        <li ><a href="#method-i-algebraic-3F">algebraic?</a></li>
+        <li ><a href="#method-i-5B-5D">[]</a></li>
 
-        <li ><a href="#method-i-floor">floor</a></li>
+        <li ><a href="#method-i-constructors">constructors</a></li>
 
-        <li ><a href="#method-i-integer-3F">integer?</a></li>
+        <li ><a href="#method-i-expr_class">expr_class</a></li>
 
-        <li ><a href="#method-i-lower_bound">lower_bound</a></li>
+        <li ><a href="#method-i-from_const">from_const</a></li>
 
-        <li ><a href="#method-i-to_f">to_f</a></li>
-
-        <li ><a href="#method-i-to_r">to_r</a></li>
-
-        <li ><a href="#method-i-upper_bound">upper_bound</a></li>
+        <li ><a href="#method-i-inspect">inspect</a></li>
 
       </ul>
     </details>
@@ -487,7 +500,7 @@
 
 </nav>
 
-<main role="main" aria-labelledby="class-Z3::RealExpr">
+<main role="main" aria-labelledby="class-Z3::EnumSort">
   
   
     <ol role="navigation" aria-label="Breadcrumb navigation" class="breadcrumb">
@@ -500,19 +513,21 @@
       
       <li>
         
-        <span>RealExpr</span>
+        <span>EnumSort</span>
         
       </li>
       
     </ol>
   
 
-  <h1 id="class-Z3::RealExpr" class="anchor-link class">
-    class Z3::RealExpr
+  <h1 id="class-Z3::EnumSort" class="anchor-link class">
+    class Z3::EnumSort
   </h1>
 
   <section class="description">
     
+<p>An enumeration - a sort whose values are a fixed, finite list of names, and nothing else. Values are Symbols, and every enum has its own: ‘<a href=":red">Color</a>` and `<a href=":red">Squirrel</a>` are different values of different sorts, and <a href="../Z3.html"><code>Z3</code></a> refuses to compare them.</p>
+
   </section>
 
 
@@ -524,7 +539,202 @@
 
 
 
+    <section class="attribute-method-details method-section">
+      <header>
+        <h3 id="attributes"><a href="#attributes">Attributes</a></h3>
+      </header>
 
+
+      <div id="attribute-i-name" class="method-detail anchor-link">
+        <div class="method-heading attribute-method-heading">
+          <a href="#attribute-i-name" title="Link to this attribute">
+            <span class="method-name">name</span>
+            <span class="attribute-access-type">[R]</span>
+          </a>
+        </div>
+
+        <div class="method-description">
+
+
+        
+
+        </div>
+      </div>
+
+      <div id="attribute-i-values" class="method-detail anchor-link">
+        <div class="method-heading attribute-method-heading">
+          <a href="#attribute-i-values" title="Link to this attribute">
+            <span class="method-name">values</span>
+            <span class="attribute-access-type">[R]</span>
+          </a>
+        </div>
+
+        <div class="method-description">
+
+
+        
+
+        </div>
+      </div>
+
+    </section>
+
+
+
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section anchor-link">
+       <header>
+         <h3 id="public-class-methods"><a href="#public-class-methods">Public Class Methods</a></h3>
+       </header>
+
+
+      <div id="method-c-from_pointer" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-from_pointer" title="Link to this method">
+                <span class="method-name">from_pointer</span>
+                <span class="method-args">(_sort)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="from_pointer-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/enum_sort.rb, line 68</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">from_pointer</span>(<span class="ruby-identifier">_sort</span>)
+  <span class="ruby-identifier">name</span> = <span class="ruby-constant">Sort</span>.<span class="ruby-identifier">name_from_pointer</span>(<span class="ruby-identifier">_sort</span>)
+  <span class="ruby-identifier">registry</span>[<span class="ruby-identifier">name</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">build</span>(<span class="ruby-identifier">_sort</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">values_from_pointer</span>(<span class="ruby-identifier">_sort</span>, <span class="ruby-identifier">name</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Takes a raw sort pointer, as <a href="Sort.html#method-c-from_pointer"><code>Sort.from_pointer</code></a> needs it before there’s any <a href="Sort.html"><code>Sort</code></a> object. Rebuilds rather than redeclares, so it works for a sort <a href="../Z3.html"><code>Z3</code></a> handed us - out of a model, or parsed from a file - and not just for ones this process declared.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-new" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-new" title="Link to this method">
+                <span class="method-name">new</span>
+                <span class="method-args">(_sort, name, values)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="new-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/enum_sort.rb, line 11</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">_sort</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">values</span>)
+  <span class="ruby-ivar">@name</span> = <span class="ruby-identifier">name</span>
+  <span class="ruby-ivar">@values</span> = <span class="ruby-identifier">values</span>
+  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">_sort</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Both ways in already have the sort in hand - <a href="EnumSort.html#method-c-new"><code>::new</code></a> declares it, <a href="EnumSort.html#method-c-from_pointer"><code>::from_pointer</code></a> gets it back from <a href="../Z3.html"><code>Z3</code></a> - so this only ever wraps one</p>
+
+
+            <div class="method-calls-super">
+              Calls superclass method
+              
+            </div>
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-new" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-new" title="Link to this method">
+                <span class="method-name">new</span>
+                <span class="method-args">(name, values)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="new-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/enum_sort.rb, line 47</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">new</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">values</span>)
+  <span class="ruby-identifier">name</span> = <span class="ruby-identifier">normalize_name</span>(<span class="ruby-identifier">name</span>)
+  <span class="ruby-identifier">values</span> = <span class="ruby-identifier">normalize_values</span>(<span class="ruby-identifier">values</span>)
+  <span class="ruby-identifier">already_declared</span> = <span class="ruby-identifier">registry</span>[<span class="ruby-identifier">name</span>]
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">already_declared</span>
+    <span class="ruby-keyword">unless</span> <span class="ruby-identifier">already_declared</span>.<span class="ruby-identifier">values</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">values</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-node">&quot;Enum sort #{name} is already declared, with values #{already_declared.values.inspect}&quot;</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">already_declared</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">_sort</span> = <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_enumeration_sort</span>(
+    <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_symbol</span>(<span class="ruby-identifier">name</span>),
+    <span class="ruby-identifier">values</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">value</span><span class="ruby-operator">|</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_symbol</span>(<span class="ruby-identifier">value</span>) },
+  )
+  <span class="ruby-identifier">registry</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">build</span>(<span class="ruby-identifier">_sort</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">values</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Every other named sort can be rebuilt just by calling its maker again, since <a href="../Z3.html"><code>Z3</code></a> hash-conses them. Enumerations are the one exception - declaring the same name twice is an error rather than the sort you already had - so they’re memoized by name here, and asking for the same one twice gives it back.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+    </section>
 
      <section id="public-instance-5Buntitled-5D-method-details" class="method-section anchor-link">
        <header>
@@ -532,12 +742,56 @@
        </header>
 
 
-      <div id="method-i-algebraic-3F" class="method-detail anchor-link ">
+      <div id="method-i-5B-5D" class="method-detail anchor-link ">
         <div class="method-header">
 
             <div class="method-heading">
-              <a href="#method-i-algebraic-3F" title="Link to this method">
-                <span class="method-name">algebraic?</span>
+              <a href="#method-i-5B-5D" title="Link to this method">
+                <span class="method-name">[]</span>
+                <span class="method-args">(value)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="5B-5D-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/enum_sort.rb, line 28</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">[]</span>(<span class="ruby-identifier">value</span>)
+  <span class="ruby-identifier">i</span> = <span class="ruby-identifier">values</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">value</span>.<span class="ruby-identifier">to_sym</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>) <span class="ruby-keyword">or</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-identifier">cant_convert</span>(<span class="ruby-identifier">value</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">i</span>
+  <span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_app</span>(<span class="ruby-identifier">constructors</span>[<span class="ruby-identifier">i</span>], []))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-constructors" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-constructors" title="Link to this method">
+                <span class="method-name">constructors</span>
                 <span class="method-args">()</span>
               </a>
             </div>
@@ -550,10 +804,10 @@
               <summary>Source</summary>
             </details>
           </div>
-          <div class="method-source-code" id="algebraic-3F-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/real_expr.rb, line 29</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">algebraic?</span>
-  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">is_algebraic_number</span>(<span class="ruby-keyword">self</span>)
+          <div class="method-source-code" id="constructors-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/enum_sort.rb, line 24</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">constructors</span>
+  <span class="ruby-ivar">@constructors</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">values</span>.<span class="ruby-identifier">size</span>.<span class="ruby-identifier">times</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-constant">FuncDecl</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">get_datatype_sort_constructor</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">i</span>)) }
 <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -562,7 +816,7 @@
         <div class="method-description">
 
 
-          <p><a href="../Z3.html"><code>Z3</code></a> answers an irrational root with an algebraic number rather than giving up, and those are ‘:app` rather than `:numeral`, so ast_kind won’t spot them</p>
+          <p>The nullary constructor behind each value, in declaration order. Memoized because <a href="EnumSort.html#method-i-5B-5D"><code>[]</code></a> and <a href="EnumExpr.html#method-i-value"><code>EnumExpr#value</code></a> both go through it, and sorts are memoized too, so there’s exactly one of these per enum.</p>
 
 
         </div>
@@ -574,12 +828,12 @@
       </div>
 
 
-      <div id="method-i-floor" class="method-detail anchor-link ">
+      <div id="method-i-expr_class" class="method-detail anchor-link ">
         <div class="method-header">
 
             <div class="method-heading">
-              <a href="#method-i-floor" title="Link to this method">
-                <span class="method-name">floor</span>
+              <a href="#method-i-expr_class" title="Link to this method">
+                <span class="method-name">expr_class</span>
                 <span class="method-args">()</span>
               </a>
             </div>
@@ -592,10 +846,10 @@
               <summary>Source</summary>
             </details>
           </div>
-          <div class="method-source-code" id="floor-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/real_expr.rb, line 50</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">floor</span>
-  <span class="ruby-constant">IntSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_real2int</span>(<span class="ruby-keyword">self</span>))
+          <div class="method-source-code" id="expr_class-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/enum_sort.rb, line 17</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">expr_class</span>
+  <span class="ruby-constant">EnumExpr</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -604,7 +858,7 @@
         <div class="method-description">
 
 
-          <p>SMT-LIB’s ‘to_int` rounds towards negative infinity, so this is Ruby’s Float#floor. Deliberately not to_i, which truncates towards zero instead - ‘(-2.5).to_i` is -2 in Ruby, but this is -3.</p>
+          
 
 
         </div>
@@ -616,12 +870,54 @@
       </div>
 
 
-      <div id="method-i-integer-3F" class="method-detail anchor-link ">
+      <div id="method-i-from_const" class="method-detail anchor-link ">
         <div class="method-header">
 
             <div class="method-heading">
-              <a href="#method-i-integer-3F" title="Link to this method">
-                <span class="method-name">integer?</span>
+              <a href="#method-i-from_const" title="Link to this method">
+                <span class="method-name">from_const</span>
+                <span class="method-args">(value)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="from_const-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/enum_sort.rb, line 34</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">from_const</span>(<span class="ruby-identifier">value</span>)
+  <span class="ruby-keyword">self</span>[<span class="ruby-identifier">value</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-inspect" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-inspect" title="Link to this method">
+                <span class="method-name">inspect</span>
                 <span class="method-args">()</span>
               </a>
             </div>
@@ -634,193 +930,10 @@
               <summary>Source</summary>
             </details>
           </div>
-          <div class="method-source-code" id="integer-3F-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/real_expr.rb, line 55</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">integer?</span>
-  <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_is_int</span>(<span class="ruby-keyword">self</span>))
-<span class="ruby-keyword">end</span></pre>
-          </div>
-
-
-
-        <div class="method-description">
-
-
-          <p>A <a href="../Z3.html"><code>Z3</code></a> Bool, like <a href="ArithExpr.html#method-i-zero-3F"><code>zero?</code></a> and the other predicates, not a Ruby one</p>
-
-
-        </div>
-
-
-
-
-
-      </div>
-
-
-      <div id="method-i-lower_bound" class="method-detail anchor-link ">
-        <div class="method-header">
-
-            <div class="method-heading">
-              <a href="#method-i-lower_bound" title="Link to this method">
-                <span class="method-name">lower_bound</span>
-                <span class="method-args">(precision = 20)</span>
-              </a>
-            </div>
-
-        </div>
-
-
-          <div class="method-controls">
-            <details class="method-source-toggle">
-              <summary>Source</summary>
-            </details>
-          </div>
-          <div class="method-source-code" id="lower_bound-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/real_expr.rb, line 35</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">lower_bound</span>(<span class="ruby-identifier">precision</span> = <span class="ruby-value">20</span>)
-  <span class="ruby-identifier">value</span> = <span class="ruby-identifier">as_literal</span>
-  <span class="ruby-keyword">return</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">to_r</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">algebraic?</span>
-  <span class="ruby-constant">Expr</span>.<span class="ruby-identifier">new_from_pointer</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">get_algebraic_number_lower</span>(<span class="ruby-identifier">value</span>, <span class="ruby-identifier">precision</span>)).<span class="ruby-identifier">to_r</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-
-
-
-        <div class="method-description">
-
-
-          <p>Rationals bracketing the value, as tightly as ‘precision` asks for. An exact value is its own bound.</p>
-
-
-        </div>
-
-
-
-
-
-      </div>
-
-
-      <div id="method-i-to_f" class="method-detail anchor-link ">
-        <div class="method-header">
-
-            <div class="method-heading">
-              <a href="#method-i-to_f" title="Link to this method">
-                <span class="method-name">to_f</span>
-                <span class="method-args">()</span>
-              </a>
-            </div>
-
-        </div>
-
-
-          <div class="method-controls">
-            <details class="method-source-toggle">
-              <summary>Source</summary>
-            </details>
-          </div>
-          <div class="method-source-code" id="to_f-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/real_expr.rb, line 19</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_f</span>
-  <span class="ruby-identifier">value</span> = <span class="ruby-identifier">as_literal</span>
-  <span class="ruby-keyword">return</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">get_numeral_double</span>(<span class="ruby-identifier">value</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">algebraic?</span>
-  <span class="ruby-comment"># Far more precision than a Float can hold, so both ends of the interval round</span>
-  <span class="ruby-comment"># to the same double and it doesn&#39;t matter which one we take</span>
-  <span class="ruby-identifier">value</span>.<span class="ruby-identifier">lower_bound</span>.<span class="ruby-identifier">to_f</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-
-
-
-        <div class="method-description">
-
-
-          <p>Always available, because a Float is allowed to be approximate</p>
-
-
-        </div>
-
-
-
-
-
-      </div>
-
-
-      <div id="method-i-to_r" class="method-detail anchor-link ">
-        <div class="method-header">
-
-            <div class="method-heading">
-              <a href="#method-i-to_r" title="Link to this method">
-                <span class="method-name">to_r</span>
-                <span class="method-args">()</span>
-              </a>
-            </div>
-
-        </div>
-
-
-          <div class="method-controls">
-            <details class="method-source-toggle">
-              <summary>Source</summary>
-            </details>
-          </div>
-          <div class="method-source-code" id="to_r-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/real_expr.rb, line 7</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_r</span>
-  <span class="ruby-identifier">value</span> = <span class="ruby-identifier">as_literal</span>
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">algebraic?</span>
-    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-node">&quot;Can&#39;t convert algebraic number #{value} into an exact Rational, use #to_f or #lower_bound / #upper_bound&quot;</span>
-  <span class="ruby-keyword">end</span>
-  <span class="ruby-constant">Rational</span>(
-    <span class="ruby-constant">Expr</span>.<span class="ruby-identifier">new_from_pointer</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">get_numerator</span>(<span class="ruby-identifier">value</span>)).<span class="ruby-identifier">to_i</span>,
-    <span class="ruby-constant">Expr</span>.<span class="ruby-identifier">new_from_pointer</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">get_denominator</span>(<span class="ruby-identifier">value</span>)).<span class="ruby-identifier">to_i</span>,
-  )
-<span class="ruby-keyword">end</span></pre>
-          </div>
-
-
-
-        <div class="method-description">
-
-
-          <p>There’s no value here, unlike every other sort which can hand back a Ruby object. Z3’s Reals include the algebraic numbers, and √2 has no exact Ruby equivalent at all - so instead there’s <a href="RealExpr.html#method-i-to_r"><code>to_r</code></a>, which is exact and refuses when it can’t be, and <a href="RealExpr.html#method-i-to_f"><code>to_f</code></a>, which is an approximation and says so by being a Float.</p>
-
-
-        </div>
-
-
-
-
-
-      </div>
-
-
-      <div id="method-i-upper_bound" class="method-detail anchor-link ">
-        <div class="method-header">
-
-            <div class="method-heading">
-              <a href="#method-i-upper_bound" title="Link to this method">
-                <span class="method-name">upper_bound</span>
-                <span class="method-args">(precision = 20)</span>
-              </a>
-            </div>
-
-        </div>
-
-
-          <div class="method-controls">
-            <details class="method-source-toggle">
-              <summary>Source</summary>
-            </details>
-          </div>
-          <div class="method-source-code" id="upper_bound-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/real_expr.rb, line 41</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">upper_bound</span>(<span class="ruby-identifier">precision</span> = <span class="ruby-value">20</span>)
-  <span class="ruby-identifier">value</span> = <span class="ruby-identifier">as_literal</span>
-  <span class="ruby-keyword">return</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">to_r</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">algebraic?</span>
-  <span class="ruby-constant">Expr</span>.<span class="ruby-identifier">new_from_pointer</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">get_algebraic_number_upper</span>(<span class="ruby-identifier">value</span>, <span class="ruby-identifier">precision</span>)).<span class="ruby-identifier">to_r</span>
+          <div class="method-source-code" id="inspect-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/enum_sort.rb, line 38</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inspect</span>
+  <span class="ruby-node">&quot;EnumSort(#{name}, #{values.inspect})&quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
 

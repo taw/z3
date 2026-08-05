@@ -61,5 +61,6 @@ module Z3
     attach_function :Z3_mk_fresh_func_decl, [:ctx_pointer, :string, :int, :pointer, :sort_pointer], :func_decl_pointer
     # The last two are out params - Z3 segfaults rather than skipping them if either is NULL
     attach_function :Z3_mk_enumeration_sort, [:ctx_pointer, :symbol_pointer, :int, :pointer, :pointer, :pointer], :sort_pointer
+    attach_function :Z3_tactic_par_or, [:ctx_pointer, :int, :pointer], :tactic_pointer
   end
 end

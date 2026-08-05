@@ -5,17 +5,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>module Z3::ReferenceCounted - RDoc Documentation</title>
+<title>class Z3::ApplyResult - RDoc Documentation</title>
 
 
   <meta
     name="keywords"
-    content="ruby,module,Z3::ReferenceCounted"
+    content="ruby,class,Z3::ApplyResult"
   >
 
     <meta
       name="description"
-      content="module Z3::ReferenceCounted: Z3 objects other than ASTs are reference counted, even when the context is not (Z3_mk_context vs Z3_mk_context_rc only changes how ASTs are managed). "
+      content="class Z3::ApplyResult: the subgoals it broke that goal into. The original goal is satisfiable exactly when one of the subgoals is, so no subgoals at all means the tactic dec"
     >
 
 
@@ -24,11 +24,11 @@
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="module Z3::ReferenceCounted - RDoc Documentation">
+<meta property="og:title" content="class Z3::ApplyResult - RDoc Documentation">
 
 
 
-    <meta property="og:description" content="Z3 objects other than ASTs are reference counted, even when the context is not (Z3_mk_context vs Z3_mk_context_rc only changes how ASTs are managed). ">
+    <meta property="og:description" content="the subgoals it broke that goal into. The original goal is satisfiable exactly when one of the subgoals is, so no subgoals at all means the tactic dec">
 
 
 
@@ -36,11 +36,11 @@
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="module Z3::ReferenceCounted - RDoc Documentation">
+<meta name="twitter:title" content="class Z3::ApplyResult - RDoc Documentation">
 
 
 
-    <meta name="twitter:description" content="Z3 objects other than ASTs are reference counted, even when the context is not (Z3_mk_context vs Z3_mk_context_rc only changes how ASTs are managed). ">
+    <meta name="twitter:description" content="the subgoals it broke that goal into. The original goal is satisfiable exactly when one of the subgoals is, so no subgoals at all means the tactic dec">
 
 
 
@@ -91,7 +91,7 @@
 
 
 
-<body role="document" class="module has-toc">
+<body role="document" class="class has-toc">
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <!-- Chevron (right arrow) - used for expand/collapse -->
   <symbol
@@ -408,8 +408,49 @@
   
 
   
+<div id="parent-class-section" class="nav-section">
+  <details class="nav-section-collapsible" open>
+    <summary class="nav-section-header">
+      <span class="nav-section-icon">
+        <svg><use href="#icon-ancestors"></use></svg>
+      </span>
+      <span class="nav-section-title">Ancestors</span>
+      <span class="nav-section-chevron">
+        <svg><use href="#icon-chevron"></use></svg>
+      </span>
+    </summary>
+    <ul><li>Object</li></ul>
+  </details>
+</div>
+
 
   
+<div id="includes-section" class="nav-section">
+  <details class="nav-section-collapsible" open>
+    <summary class="nav-section-header">
+      <span class="nav-section-icon">
+        <svg><use href="#icon-includes"></use></svg>
+      </span>
+      <span class="nav-section-title">Included Modules</span>
+      <span class="nav-section-chevron">
+        <svg><use href="#icon-chevron"></use></svg>
+      </span>
+    </summary>
+
+    <ul class="nav-list">
+
+
+      <li><a class="include" href="ReferenceCounted.html">Z3::ReferenceCounted</a></li>
+
+
+
+      <li><span class="include">Enumerable</span></li>
+
+
+    </ul>
+  </details>
+</div>
+
 
   
 
@@ -427,13 +468,40 @@
       </summary>
       <ul class="nav-list" role="directory">
 
-        <li ><a href="#method-c-finalizer">finalizer</a></li>
+        <li ><a href="#method-c-new">new</a></li>
 
       </ul>
     </details>
   </div>
 
 
+
+  <div class="nav-section">
+    <details class="nav-section-collapsible" open>
+      <summary class="nav-section-header">
+        <span class="nav-section-icon">
+          <svg><use href="#icon-instance-methods"></use></svg>
+        </span>
+        <span class="nav-section-title">Instance Methods</span>
+        <span class="nav-section-chevron">
+          <svg><use href="#icon-chevron"></use></svg>
+        </span>
+      </summary>
+      <ul class="nav-list" role="directory">
+
+        <li ><a href="#method-i-5B-5D">[]</a></li>
+
+        <li ><a href="#method-i-each">each</a></li>
+
+        <li ><a href="#method-i-inspect">inspect</a></li>
+
+        <li ><a href="#method-i-size">size</a></li>
+
+        <li ><a href="#method-i-to_s">to_s</a></li>
+
+      </ul>
+    </details>
+  </div>
 
 
   <div id="classindex-section" class="nav-section">
@@ -454,7 +522,7 @@
 
 </nav>
 
-<main role="main" aria-labelledby="module-Z3::ReferenceCounted">
+<main role="main" aria-labelledby="class-Z3::ApplyResult">
   
   
     <ol role="navigation" aria-label="Breadcrumb navigation" class="breadcrumb">
@@ -467,22 +535,22 @@
       
       <li>
         
-        <span>ReferenceCounted</span>
+        <span>ApplyResult</span>
         
       </li>
       
     </ol>
   
 
-  <h1 id="module-Z3::ReferenceCounted" class="anchor-link module">
-    module Z3::ReferenceCounted
+  <h1 id="class-Z3::ApplyResult" class="anchor-link class">
+    class Z3::ApplyResult
   </h1>
 
   <section class="description">
     
-<p><a href="../Z3.html"><code>Z3</code></a> objects other than ASTs are reference counted, even when the context is not (Z3_mk_context vs Z3_mk_context_rc only changes how ASTs are managed).</p>
+<p>What a <a href="Tactic.html"><code>Tactic</code></a> made of a Goal: the subgoals it broke that goal into.</p>
 
-<p>Every wrapper must claim the object it holds, and release it once the wrapper is garbage collected. Without the release the native object stays alive at a nonzero refcount until the process exits.</p>
+<p>The original goal is satisfiable exactly when one of the subgoals is, so no subgoals at all means the tactic decided the goal is unsatisfiable, and a single subgoal which is ‘decided_sat?` means it decided the other way.</p>
 
   </section>
 
@@ -495,6 +563,30 @@
 
 
 
+    <section class="attribute-method-details method-section">
+      <header>
+        <h3 id="attributes"><a href="#attributes">Attributes</a></h3>
+      </header>
+
+
+      <div id="attribute-i-_apply_result" class="method-detail anchor-link">
+        <div class="method-heading attribute-method-heading">
+          <a href="#attribute-i-_apply_result" title="Link to this attribute">
+            <span class="method-name">_apply_result</span>
+            <span class="attribute-access-type">[R]</span>
+          </a>
+        </div>
+
+        <div class="method-description">
+
+
+        
+
+        </div>
+      </div>
+
+    </section>
+
 
 
      <section id="public-class-5Buntitled-5D-method-details" class="method-section anchor-link">
@@ -503,13 +595,13 @@
        </header>
 
 
-      <div id="method-c-finalizer" class="method-detail anchor-link ">
+      <div id="method-c-new" class="method-detail anchor-link ">
         <div class="method-header">
 
             <div class="method-heading">
-              <a href="#method-c-finalizer" title="Link to this method">
-                <span class="method-name">finalizer</span>
-                <span class="method-args">(kind, pointer)</span>
+              <a href="#method-c-new" title="Link to this method">
+                <span class="method-name">new</span>
+                <span class="method-args">(_apply_result)</span>
               </a>
             </div>
 
@@ -521,10 +613,11 @@
               <summary>Source</summary>
             </details>
           </div>
-          <div class="method-source-code" id="finalizer-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/reference_counted.rb, line 11</span>
-<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">finalizer</span>(<span class="ruby-identifier">kind</span>, <span class="ruby-identifier">pointer</span>)
-  <span class="ruby-identifier">proc</span> { <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">dec_ref_pointer</span>(<span class="ruby-identifier">kind</span>, <span class="ruby-identifier">pointer</span>) }
+          <div class="method-source-code" id="new-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/apply_result.rb, line 12</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">_apply_result</span>)
+  <span class="ruby-ivar">@_apply_result</span> = <span class="ruby-identifier">_apply_result</span>
+  <span class="ruby-identifier">inc_ref!</span> <span class="ruby-value">:apply_result</span>, <span class="ruby-identifier">_apply_result</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -533,7 +626,228 @@
         <div class="method-description">
 
 
-          <p>Must not close over the wrapper, or the wrapper would never become unreachable, the finalizer would never run, and the object would leak anyway</p>
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+    </section>
+
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section anchor-link">
+       <header>
+         <h3 id="public-instance-methods"><a href="#public-instance-methods">Public Instance Methods</a></h3>
+       </header>
+
+
+      <div id="method-i-5B-5D" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-5B-5D" title="Link to this method">
+                <span class="method-name">[]</span>
+                <span class="method-args">(num)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="5B-5D-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/apply_result.rb, line 21</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">[]</span>(<span class="ruby-identifier">num</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Out of range&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">num</span>.<span class="ruby-identifier">between?</span>(<span class="ruby-value">0</span>, <span class="ruby-identifier">size</span><span class="ruby-value">-1</span>)
+  <span class="ruby-constant">Goal</span>.<span class="ruby-identifier">from_pointer</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">apply_result_get_subgoal</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">num</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-each" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-each" title="Link to this method">
+                <span class="method-name">each</span>
+                <span class="method-args">() { |self| ... }</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="each-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/apply_result.rb, line 26</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">each</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">to_enum</span>(<span class="ruby-value">:each</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">block_given?</span>
+  <span class="ruby-identifier">size</span>.<span class="ruby-identifier">times</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-keyword">yield</span> <span class="ruby-keyword">self</span>[<span class="ruby-identifier">i</span>] }
+  <span class="ruby-keyword">self</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-inspect" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-inspect" title="Link to this method">
+                <span class="method-name">inspect</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="inspect-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/apply_result.rb, line 36</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inspect</span>
+  <span class="ruby-node">&quot;Z3::ApplyResult&lt;#{size} subgoal#{&quot;s&quot; unless size == 1}&gt;&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-size" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-size" title="Link to this method">
+                <span class="method-name">size</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="size-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/apply_result.rb, line 17</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">size</span>
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">apply_result_get_num_subgoals</span>(<span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-to_s" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-to_s" title="Link to this method">
+                <span class="method-name">to_s</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="to_s-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/apply_result.rb, line 32</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_s</span>
+  <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">apply_result_to_string</span>(<span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
 
 
         </div>

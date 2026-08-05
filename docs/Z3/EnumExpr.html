@@ -5,17 +5,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>module Z3::ReferenceCounted - RDoc Documentation</title>
+<title>class Z3::EnumExpr - RDoc Documentation</title>
 
 
   <meta
     name="keywords"
-    content="ruby,module,Z3::ReferenceCounted"
+    content="ruby,class,Z3::EnumExpr"
   >
 
     <meta
       name="description"
-      content="module Z3::ReferenceCounted: Z3 objects other than ASTs are reference counted, even when the context is not (Z3_mk_context vs Z3_mk_context_rc only changes how ASTs are managed). "
+      content="Documentation for the Z3::EnumExpr class"
     >
 
 
@@ -24,11 +24,14 @@
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="module Z3::ReferenceCounted - RDoc Documentation">
+<meta property="og:title" content="class Z3::EnumExpr - RDoc Documentation">
 
 
 
-    <meta property="og:description" content="Z3 objects other than ASTs are reference counted, even when the context is not (Z3_mk_context vs Z3_mk_context_rc only changes how ASTs are managed). ">
+    <meta
+      property="og:description"
+      content="Documentation for Z3::EnumExpr class - API reference and code examples"
+    >
 
 
 
@@ -36,11 +39,14 @@
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="module Z3::ReferenceCounted - RDoc Documentation">
+<meta name="twitter:title" content="class Z3::EnumExpr - RDoc Documentation">
 
 
 
-    <meta name="twitter:description" content="Z3 objects other than ASTs are reference counted, even when the context is not (Z3_mk_context vs Z3_mk_context_rc only changes how ASTs are managed). ">
+    <meta
+      name="twitter:description"
+      content="Documentation for Z3::EnumExpr class - API reference and code examples"
+    >
 
 
 
@@ -91,7 +97,7 @@
 
 
 
-<body role="document" class="module has-toc">
+<body role="document" class="class has-toc">
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <!-- Chevron (right arrow) - used for expand/collapse -->
   <symbol
@@ -408,32 +414,49 @@
   
 
   
+<div id="parent-class-section" class="nav-section">
+  <details class="nav-section-collapsible" open>
+    <summary class="nav-section-header">
+      <span class="nav-section-icon">
+        <svg><use href="#icon-ancestors"></use></svg>
+      </span>
+      <span class="nav-section-title">Ancestors</span>
+      <span class="nav-section-chevron">
+        <svg><use href="#icon-chevron"></use></svg>
+      </span>
+    </summary>
+    <ul><li>Expr</li></ul>
+  </details>
+</div>
+
 
   
 
   
 
   
+
+
   <div class="nav-section">
     <details class="nav-section-collapsible" open>
       <summary class="nav-section-header">
         <span class="nav-section-icon">
-          <svg><use href="#icon-class-methods"></use></svg>
+          <svg><use href="#icon-instance-methods"></use></svg>
         </span>
-        <span class="nav-section-title">Class Methods</span>
+        <span class="nav-section-title">Instance Methods</span>
         <span class="nav-section-chevron">
           <svg><use href="#icon-chevron"></use></svg>
         </span>
       </summary>
       <ul class="nav-list" role="directory">
 
-        <li ><a href="#method-c-finalizer">finalizer</a></li>
+        <li ><a href="#method-i-value">value</a></li>
+
+        <li ><a href="#method-i-value_index">value_index</a></li>
 
       </ul>
     </details>
   </div>
-
-
 
 
   <div id="classindex-section" class="nav-section">
@@ -454,7 +477,7 @@
 
 </nav>
 
-<main role="main" aria-labelledby="module-Z3::ReferenceCounted">
+<main role="main" aria-labelledby="class-Z3::EnumExpr">
   
   
     <ol role="navigation" aria-label="Breadcrumb navigation" class="breadcrumb">
@@ -467,23 +490,19 @@
       
       <li>
         
-        <span>ReferenceCounted</span>
+        <span>EnumExpr</span>
         
       </li>
       
     </ol>
   
 
-  <h1 id="module-Z3::ReferenceCounted" class="anchor-link module">
-    module Z3::ReferenceCounted
+  <h1 id="class-Z3::EnumExpr" class="anchor-link class">
+    class Z3::EnumExpr
   </h1>
 
   <section class="description">
     
-<p><a href="../Z3.html"><code>Z3</code></a> objects other than ASTs are reference counted, even when the context is not (Z3_mk_context vs Z3_mk_context_rc only changes how ASTs are managed).</p>
-
-<p>Every wrapper must claim the object it holds, and release it once the wrapper is garbage collected. Without the release the native object stays alive at a nonzero refcount until the process exits.</p>
-
   </section>
 
 
@@ -497,19 +516,19 @@
 
 
 
-     <section id="public-class-5Buntitled-5D-method-details" class="method-section anchor-link">
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section anchor-link">
        <header>
-         <h3 id="public-class-methods"><a href="#public-class-methods">Public Class Methods</a></h3>
+         <h3 id="public-instance-methods"><a href="#public-instance-methods">Public Instance Methods</a></h3>
        </header>
 
 
-      <div id="method-c-finalizer" class="method-detail anchor-link ">
+      <div id="method-i-value" class="method-detail anchor-link ">
         <div class="method-header">
 
             <div class="method-heading">
-              <a href="#method-c-finalizer" title="Link to this method">
-                <span class="method-name">finalizer</span>
-                <span class="method-args">(kind, pointer)</span>
+              <a href="#method-i-value" title="Link to this method">
+                <span class="method-name">value</span>
+                <span class="method-args">()</span>
               </a>
             </div>
 
@@ -521,10 +540,12 @@
               <summary>Source</summary>
             </details>
           </div>
-          <div class="method-source-code" id="finalizer-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/reference_counted.rb, line 11</span>
-<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">finalizer</span>(<span class="ruby-identifier">kind</span>, <span class="ruby-identifier">pointer</span>)
-  <span class="ruby-identifier">proc</span> { <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">dec_ref_pointer</span>(<span class="ruby-identifier">kind</span>, <span class="ruby-identifier">pointer</span>) }
+          <div class="method-source-code" id="value-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/enum_expr.rb, line 5</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">value</span>
+  <span class="ruby-identifier">i</span> = <span class="ruby-identifier">value_index</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">simplify</span>.<span class="ruby-identifier">value_index</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-node">&quot;Can&#39;t convert expression #{self} into Symbol&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">i</span>
+  <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">values</span>[<span class="ruby-identifier">i</span>]
 <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -533,7 +554,58 @@
         <div class="method-description">
 
 
-          <p>Must not close over the wrapper, or the wrapper would never become unreachable, the finalizer would never run, and the object would leak anyway</p>
+          <p>The Ruby Symbol behind an enum literal. Two enums are free to use the same value name, so this only says anything together with the expression’s sort.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+    </section>
+
+     <section id="protected-instance-5Buntitled-5D-method-details" class="method-section anchor-link">
+       <header>
+         <h3 id="protected-instance-methods"><a href="#protected-instance-methods">Protected Instance Methods</a></h3>
+       </header>
+
+
+      <div id="method-i-value_index" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-value_index" title="Link to this method">
+                <span class="method-name">value_index</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="value_index-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/enum_expr.rb, line 16</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">value_index</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">nil</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">ast_kind</span> <span class="ruby-operator">==</span> <span class="ruby-value">:app</span>
+  <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">constructors</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">func_decl</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Which of the sort’s values this is, or nil if it isn’t one of them. A variable is an app too, and nothing stops one being named after a value, so matching the decl itself is the only way to tell the value ‘red` from a variable called `red`.</p>
 
 
         </div>

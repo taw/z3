@@ -454,6 +454,8 @@
 
         <li ><a href="#method-c-Eq">Eq</a></li>
 
+        <li ><a href="#method-c-FusedMultiplyAdd">FusedMultiplyAdd</a></li>
+
         <li ><a href="#method-c-Ge">Ge</a></li>
 
         <li ><a href="#method-c-Gt">Gt</a></li>
@@ -471,6 +473,10 @@
         <li ><a href="#method-c-Ne">Ne</a></li>
 
         <li ><a href="#method-c-Rem">Rem</a></li>
+
+        <li ><a href="#method-c-RoundToIntegral">RoundToIntegral</a></li>
+
+        <li ><a href="#method-c-Sqrt">Sqrt</a></li>
 
         <li ><a href="#method-c-Sub">Sub</a></li>
 
@@ -519,7 +525,11 @@
 
         <li ><a href="#method-i-div">div</a></li>
 
+        <li ><a href="#method-i-exponent_bv">exponent_bv</a></li>
+
         <li ><a href="#method-i-exponent_string">exponent_string</a></li>
+
+        <li ><a href="#method-i-fused_multiply_add">fused_multiply_add</a></li>
 
         <li ><a href="#method-i-infinite-3F">infinite?</a></li>
 
@@ -541,11 +551,29 @@
 
         <li ><a href="#method-i-rem">rem</a></li>
 
+        <li ><a href="#method-i-round_to_integral">round_to_integral</a></li>
+
+        <li ><a href="#method-i-sign_bv">sign_bv</a></li>
+
+        <li ><a href="#method-i-significand_bv">significand_bv</a></li>
+
         <li ><a href="#method-i-significand_string">significand_string</a></li>
+
+        <li ><a href="#method-i-sqrt">sqrt</a></li>
 
         <li ><a href="#method-i-sub">sub</a></li>
 
         <li ><a href="#method-i-subnormal-3F">subnormal?</a></li>
+
+        <li ><a href="#method-i-to_bv">to_bv</a></li>
+
+        <li ><a href="#method-i-to_ieee_bv">to_ieee_bv</a></li>
+
+        <li ><a href="#method-i-to_real">to_real</a></li>
+
+        <li ><a href="#method-i-to_signed_bv">to_signed_bv</a></li>
+
+        <li ><a href="#method-i-to_unsigned_bv">to_unsigned_bv</a></li>
 
         <li ><a href="#method-i-zero-3F">zero?</a></li>
 
@@ -566,7 +594,7 @@
       </span>
     </summary>
 
-    <ul class="link-list nav-list"><li><details open><summary><code><a href="../Z3.html">Z3</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/AST.html">AST</a></code></li><li><code><a href="../Z3/ArithExpr.html">ArithExpr</a></code></li><li><code><a href="../Z3/ArrayExpr.html">ArrayExpr</a></code></li><li><code><a href="../Z3/ArraySort.html">ArraySort</a></code></li><li><code><a href="../Z3/BitvecExpr.html">BitvecExpr</a></code></li><li><code><a href="../Z3/BitvecSort.html">BitvecSort</a></code></li><li><code><a href="../Z3/BoolExpr.html">BoolExpr</a></code></li><li><code><a href="../Z3/BoolSort.html">BoolSort</a></code></li><li><code><a href="../Z3/CharExpr.html">CharExpr</a></code></li><li><code><a href="../Z3/CharSort.html">CharSort</a></code></li><li><code><a href="../Z3/Context.html">Context</a></code></li><li><code><a href="../Z3/Exception.html">Exception</a></code></li><li><code><a href="../Z3/Expr.html">Expr</a></code></li><li><code><a href="../Z3/FiniteDomainExpr.html">FiniteDomainExpr</a></code></li><li><code><a href="../Z3/FiniteDomainSort.html">FiniteDomainSort</a></code></li><li><code><a href="../Z3/FloatExpr.html">FloatExpr</a></code></li><li><code><a href="../Z3/FloatSort.html">FloatSort</a></code></li><li><code><a href="../Z3/FuncDecl.html">FuncDecl</a></code></li><li><code><a href="../Z3/Goal.html">Goal</a></code></li><li><code><a href="../Z3/IntExpr.html">IntExpr</a></code></li><li><code><a href="../Z3/IntSort.html">IntSort</a></code></li><li><code><a href="../Z3/LowLevel.html">LowLevel</a></code></li><li><code><a href="../Z3/Model.html">Model</a></code></li><li><code><a href="../Z3/Optimize.html">Optimize</a></code></li><li><code><a href="../Z3/ParamDescrs.html">ParamDescrs</a></code></li><li><code><a href="../Z3/Params.html">Params</a></code></li><li><details><summary><code><a href="../Z3/Printer.html">Printer</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/Printer/PrintedExpr.html">PrintedExpr</a></code></li></ul></details></li><li><code><a href="../Z3/Probe.html">Probe</a></code></li><li><code><a href="../Z3/ReExpr.html">Re</a></code></li><li><code><a href="../Z3/ReExpr.html">ReExpr</a></code></li><li><code><a href="../Z3/ReSort.html">ReSort</a></code></li><li><code><a href="../Z3/RealExpr.html">RealExpr</a></code></li><li><code><a href="../Z3/RealSort.html">RealSort</a></code></li><li><code><a href="../Z3/ReferenceCounted.html">ReferenceCounted</a></code></li><li><code><a href="../Z3/RoundingModeExpr.html">RoundingModeExpr</a></code></li><li><code><a href="../Z3/RoundingModeSort.html">RoundingModeSort</a></code></li><li><code><a href="../Z3/SeqExpr.html">SeqExpr</a></code></li><li><code><a href="../Z3/SeqSort.html">SeqSort</a></code></li><li><code><a href="../Z3/SetExpr.html">SetExpr</a></code></li><li><code><a href="../Z3/SetSort.html">SetSort</a></code></li><li><code><a href="../Z3/Solver.html">Solver</a></code></li><li><code><a href="../Z3/Sort.html">Sort</a></code></li><li><code><a href="../Z3/StringExpr.html">StringExpr</a></code></li><li><code><a href="../Z3/StringSort.html">StringSort</a></code></li><li><code><a href="../Z3/Tactic.html">Tactic</a></code></li><li><code><a href="../Z3/TypeVariableExpr.html">TypeVariableExpr</a></code></li><li><code><a href="../Z3/TypeVariableSort.html">TypeVariableSort</a></code></li><li><code><a href="../Z3/UninterpretedExpr.html">UninterpretedExpr</a></code></li><li><code><a href="../Z3/UninterpretedSort.html">UninterpretedSort</a></code></li></ul></details></li></ul>
+    <ul class="link-list nav-list"><li><details open><summary><code><a href="../Z3.html">Z3</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/AST.html">AST</a></code></li><li><code><a href="../Z3/ApplyResult.html">ApplyResult</a></code></li><li><code><a href="../Z3/ArithExpr.html">ArithExpr</a></code></li><li><code><a href="../Z3/ArrayExpr.html">ArrayExpr</a></code></li><li><code><a href="../Z3/ArraySort.html">ArraySort</a></code></li><li><code><a href="../Z3/BitvecExpr.html">BitvecExpr</a></code></li><li><code><a href="../Z3/BitvecSort.html">BitvecSort</a></code></li><li><code><a href="../Z3/BoolExpr.html">BoolExpr</a></code></li><li><code><a href="../Z3/BoolSort.html">BoolSort</a></code></li><li><code><a href="../Z3/CharExpr.html">CharExpr</a></code></li><li><code><a href="../Z3/CharSort.html">CharSort</a></code></li><li><code><a href="../Z3/Context.html">Context</a></code></li><li><code><a href="../Z3/EnumExpr.html">EnumExpr</a></code></li><li><code><a href="../Z3/EnumSort.html">EnumSort</a></code></li><li><code><a href="../Z3/Exception.html">Exception</a></code></li><li><code><a href="../Z3/Expr.html">Expr</a></code></li><li><code><a href="../Z3/FiniteDomainExpr.html">FiniteDomainExpr</a></code></li><li><code><a href="../Z3/FiniteDomainSort.html">FiniteDomainSort</a></code></li><li><code><a href="../Z3/FloatExpr.html">FloatExpr</a></code></li><li><code><a href="../Z3/FloatSort.html">FloatSort</a></code></li><li><code><a href="../Z3/FuncDecl.html">FuncDecl</a></code></li><li><code><a href="../Z3/Goal.html">Goal</a></code></li><li><code><a href="../Z3/IntExpr.html">IntExpr</a></code></li><li><code><a href="../Z3/IntSort.html">IntSort</a></code></li><li><code><a href="../Z3/LowLevel.html">LowLevel</a></code></li><li><code><a href="../Z3/Model.html">Model</a></code></li><li><code><a href="../Z3/Optimize.html">Optimize</a></code></li><li><code><a href="../Z3/ParamDescrs.html">ParamDescrs</a></code></li><li><code><a href="../Z3/Params.html">Params</a></code></li><li><details><summary><code><a href="../Z3/Printer.html">Printer</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/Printer/PrintedExpr.html">PrintedExpr</a></code></li></ul></details></li><li><code><a href="../Z3/Probe.html">Probe</a></code></li><li><code><a href="../Z3/ReExpr.html">Re</a></code></li><li><code><a href="../Z3/ReExpr.html">ReExpr</a></code></li><li><code><a href="../Z3/ReSort.html">ReSort</a></code></li><li><code><a href="../Z3/RealExpr.html">RealExpr</a></code></li><li><code><a href="../Z3/RealSort.html">RealSort</a></code></li><li><code><a href="../Z3/ReferenceCounted.html">ReferenceCounted</a></code></li><li><code><a href="../Z3/RoundingModeExpr.html">RoundingModeExpr</a></code></li><li><code><a href="../Z3/RoundingModeSort.html">RoundingModeSort</a></code></li><li><code><a href="../Z3/SeqExpr.html">SeqExpr</a></code></li><li><code><a href="../Z3/SeqSort.html">SeqSort</a></code></li><li><code><a href="../Z3/SetExpr.html">SetExpr</a></code></li><li><code><a href="../Z3/SetSort.html">SetSort</a></code></li><li><code><a href="../Z3/Solver.html">Solver</a></code></li><li><code><a href="../Z3/Sort.html">Sort</a></code></li><li><code><a href="../Z3/StringExpr.html">StringExpr</a></code></li><li><code><a href="../Z3/StringSort.html">StringSort</a></code></li><li><code><a href="../Z3/Tactic.html">Tactic</a></code></li><li><code><a href="../Z3/TypeVariableExpr.html">TypeVariableExpr</a></code></li><li><code><a href="../Z3/TypeVariableSort.html">TypeVariableSort</a></code></li><li><code><a href="../Z3/UninterpretedExpr.html">UninterpretedExpr</a></code></li><li><code><a href="../Z3/UninterpretedSort.html">UninterpretedSort</a></code></li></ul></details></li></ul>
   </details>
 </div>
 
@@ -636,7 +664,7 @@
             </details>
           </div>
           <div class="method-source-code" id="Add-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 147</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 205</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">Add</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-identifier">m</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">m</span> = <span class="ruby-identifier">coerce_to_mode_sort</span>(<span class="ruby-identifier">m</span>)
@@ -680,7 +708,7 @@
             </details>
           </div>
           <div class="method-source-code" id="Div-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 165</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 223</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">Div</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-identifier">m</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">m</span> = <span class="ruby-identifier">coerce_to_mode_sort</span>(<span class="ruby-identifier">m</span>)
@@ -724,10 +752,54 @@
             </details>
           </div>
           <div class="method-source-code" id="Eq-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 118</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 176</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">Eq</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_eq</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-FusedMultiplyAdd" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-FusedMultiplyAdd" title="Link to this method">
+                <span class="method-name">FusedMultiplyAdd</span>
+                <span class="method-args">(a, b, c, m)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="FusedMultiplyAdd-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 256</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">FusedMultiplyAdd</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-identifier">c</span>, <span class="ruby-identifier">m</span>)
+  <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-identifier">c</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-identifier">c</span>)
+  <span class="ruby-identifier">m</span> = <span class="ruby-identifier">coerce_to_mode_sort</span>(<span class="ruby-identifier">m</span>)
+  <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_fma</span>(<span class="ruby-identifier">m</span>, <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-identifier">c</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -767,7 +839,7 @@
             </details>
           </div>
           <div class="method-source-code" id="Ge-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 137</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 195</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">Ge</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_geq</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
@@ -810,7 +882,7 @@
             </details>
           </div>
           <div class="method-source-code" id="Gt-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 127</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 185</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">Gt</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_gt</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
@@ -853,7 +925,7 @@
             </details>
           </div>
           <div class="method-source-code" id="Le-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 142</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 200</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">Le</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_leq</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
@@ -896,7 +968,7 @@
             </details>
           </div>
           <div class="method-source-code" id="Lt-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 132</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 190</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">Lt</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_lt</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
@@ -939,7 +1011,7 @@
             </details>
           </div>
           <div class="method-source-code" id="Max-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 178</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 236</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">Max</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_max</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
@@ -982,7 +1054,7 @@
             </details>
           </div>
           <div class="method-source-code" id="Min-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 183</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 241</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">Min</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_min</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
@@ -1025,7 +1097,7 @@
             </details>
           </div>
           <div class="method-source-code" id="Mul-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 159</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 217</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">Mul</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-identifier">m</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">m</span> = <span class="ruby-identifier">coerce_to_mode_sort</span>(<span class="ruby-identifier">m</span>)
@@ -1069,7 +1141,7 @@
             </details>
           </div>
           <div class="method-source-code" id="Ne-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 123</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 181</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">Ne</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-operator">~</span><span class="ruby-constant">Eq</span>(<span class="ruby-identifier">a</span>,<span class="ruby-identifier">b</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1111,10 +1183,96 @@
             </details>
           </div>
           <div class="method-source-code" id="Rem-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 171</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 229</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">Rem</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_rem</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-RoundToIntegral" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-RoundToIntegral" title="Link to this method">
+                <span class="method-name">RoundToIntegral</span>
+                <span class="method-args">(a, m)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="RoundToIntegral-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 251</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">RoundToIntegral</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">m</span>)
+  <span class="ruby-identifier">m</span> = <span class="ruby-identifier">coerce_to_mode_sort</span>(<span class="ruby-identifier">m</span>)
+  <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_round_to_integral</span>(<span class="ruby-identifier">m</span>, <span class="ruby-identifier">a</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-Sqrt" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-Sqrt" title="Link to this method">
+                <span class="method-name">Sqrt</span>
+                <span class="method-args">(a, m)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="Sqrt-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 246</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">Sqrt</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">m</span>)
+  <span class="ruby-identifier">m</span> = <span class="ruby-identifier">coerce_to_mode_sort</span>(<span class="ruby-identifier">m</span>)
+  <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_sqrt</span>(<span class="ruby-identifier">m</span>, <span class="ruby-identifier">a</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -1154,7 +1312,7 @@
             </details>
           </div>
           <div class="method-source-code" id="Sub-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 153</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 211</span>
 <span class="ruby-keyword">def</span> <span class="ruby-constant">Sub</span>(<span class="ruby-identifier ruby-title">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-identifier">m</span>)
   <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span> = <span class="ruby-identifier">coerce_to_same_float_sort</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)
   <span class="ruby-identifier">m</span> = <span class="ruby-identifier">coerce_to_mode_sort</span>(<span class="ruby-identifier">m</span>)
@@ -1198,7 +1356,7 @@
             </details>
           </div>
           <div class="method-source-code" id="coerce_to_mode_sort-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 113</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 171</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">coerce_to_mode_sort</span>(<span class="ruby-identifier">m</span>)
   <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Mode expected&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">RoundingModeExpr</span>)
   <span class="ruby-identifier">m</span>
@@ -1241,7 +1399,7 @@
             </details>
           </div>
           <div class="method-source-code" id="coerce_to_same_float_sort-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 107</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 165</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">coerce_to_same_float_sort</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
   <span class="ruby-identifier">args</span> = <span class="ruby-identifier">coerce_to_same_sort</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
   <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Float value with same sizes expected&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">FloatExpr</span>)
@@ -1384,7 +1542,7 @@
             </details>
           </div>
           <div class="method-source-code" id="2D-40-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 52</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 68</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">-@</span>
   <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_neg</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1636,7 +1794,7 @@
             </details>
           </div>
           <div class="method-source-code" id="abs-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 48</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 64</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">abs</span>
   <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_abs</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1743,6 +1901,48 @@
       </div>
 
 
+      <div id="method-i-exponent_bv" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-exponent_bv" title="Link to this method">
+                <span class="method-name">exponent_bv</span>
+                <span class="method-args">(biased)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="exponent_bv-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 154</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">exponent_bv</span>(<span class="ruby-identifier">biased</span>)
+  <span class="ruby-constant">BitvecSort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">ebits</span>).<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">fpa_get_numeral_exponent_bv</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">biased</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
       <div id="method-i-exponent_string" class="method-detail anchor-link ">
         <div class="method-header">
 
@@ -1762,7 +1962,7 @@
             </details>
           </div>
           <div class="method-source-code" id="exponent_string-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 96</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 138</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">exponent_string</span>(<span class="ruby-identifier">biased</span>)
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">fpa_get_numeral_exponent_string</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">biased</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1774,6 +1974,48 @@
 
 
           
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-fused_multiply_add" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-fused_multiply_add" title="Link to this method">
+                <span class="method-name">fused_multiply_add</span>
+                <span class="method-args">(other, addend, mode)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="fused_multiply_add-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 60</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">fused_multiply_add</span>(<span class="ruby-identifier">other</span>, <span class="ruby-identifier">addend</span>, <span class="ruby-identifier">mode</span>)
+  <span class="ruby-constant">FloatExpr</span>.<span class="ruby-constant">FusedMultiplyAdd</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>, <span class="ruby-identifier">addend</span>, <span class="ruby-identifier">mode</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>‘(self * other) + addend`, rounded once at the end rather than after the multiply and again after the add</p>
 
 
         </div>
@@ -1804,7 +2046,7 @@
             </details>
           </div>
           <div class="method-source-code" id="infinite-3F-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 56</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 72</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">infinite?</span>
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_is_infinite</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1846,7 +2088,7 @@
             </details>
           </div>
           <div class="method-source-code" id="max-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 88</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 104</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">max</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">FloatExpr</span>.<span class="ruby-constant">Max</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1888,7 +2130,7 @@
             </details>
           </div>
           <div class="method-source-code" id="min-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 92</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 108</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">min</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">FloatExpr</span>.<span class="ruby-constant">Min</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1972,7 +2214,7 @@
             </details>
           </div>
           <div class="method-source-code" id="nan-3F-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 60</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 76</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">nan?</span>
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_is_nan</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -2014,7 +2256,7 @@
             </details>
           </div>
           <div class="method-source-code" id="negative-3F-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 64</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 80</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">negative?</span>
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_is_negative</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -2056,7 +2298,7 @@
             </details>
           </div>
           <div class="method-source-code" id="nonzero-3F-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 84</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 100</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">nonzero?</span>
   <span class="ruby-constant">Z3</span>.<span class="ruby-constant">And</span>(<span class="ruby-operator">~</span><span class="ruby-identifier">zero?</span>, <span class="ruby-operator">~</span><span class="ruby-identifier">nan?</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -2098,7 +2340,7 @@
             </details>
           </div>
           <div class="method-source-code" id="normal-3F-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 68</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 84</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">normal?</span>
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_is_normal</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -2140,7 +2382,7 @@
             </details>
           </div>
           <div class="method-source-code" id="positive-3F-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 72</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 88</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">positive?</span>
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_is_positive</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -2205,6 +2447,132 @@
       </div>
 
 
+      <div id="method-i-round_to_integral" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-round_to_integral" title="Link to this method">
+                <span class="method-name">round_to_integral</span>
+                <span class="method-args">(mode)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="round_to_integral-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 54</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">round_to_integral</span>(<span class="ruby-identifier">mode</span>)
+  <span class="ruby-constant">FloatExpr</span>.<span class="ruby-constant">RoundToIntegral</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">mode</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Nearest float with no fractional part, rounded ‘mode`’s way - so which of 2.0 and 3.0 you get for 2.5 is the rounding mode’s business, not this method’s</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-sign_bv" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-sign_bv" title="Link to this method">
+                <span class="method-name">sign_bv</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="sign_bv-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 150</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">sign_bv</span>
+  <span class="ruby-constant">BitvecSort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">1</span>).<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">fpa_get_numeral_sign_bv</span>(<span class="ruby-keyword">self</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>The same three pieces as <a href="FloatExpr.html#method-i-exponent_string"><code>exponent_string</code></a> and <a href="FloatExpr.html#method-i-significand_string"><code>significand_string</code></a>, but as Bitvec expressions rather than Ruby Strings. Like those, they only work on a literal. The significand is one bit narrower than the sort’s ‘sbits` - IEEE doesn’t store the leading bit.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-significand_bv" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-significand_bv" title="Link to this method">
+                <span class="method-name">significand_bv</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="significand_bv-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 158</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">significand_bv</span>
+  <span class="ruby-constant">BitvecSort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">sbits</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>).<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">fpa_get_numeral_significand_bv</span>(<span class="ruby-keyword">self</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
       <div id="method-i-significand_string" class="method-detail anchor-link ">
         <div class="method-header">
 
@@ -2224,9 +2592,51 @@
             </details>
           </div>
           <div class="method-source-code" id="significand_string-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 100</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 142</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">significand_string</span>
   <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">fpa_get_numeral_significand_string</span>(<span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-sqrt" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-sqrt" title="Link to this method">
+                <span class="method-name">sqrt</span>
+                <span class="method-args">(mode)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="sqrt-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 48</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">sqrt</span>(<span class="ruby-identifier">mode</span>)
+  <span class="ruby-constant">FloatExpr</span>.<span class="ruby-constant">Sqrt</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">mode</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -2308,9 +2718,219 @@
             </details>
           </div>
           <div class="method-source-code" id="subnormal-3F-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 76</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 92</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">subnormal?</span>
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_is_subnormal</span>(<span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-to_bv" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-to_bv" title="Link to this method">
+                <span class="method-name">to_bv</span>
+                <span class="method-args">(*)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="to_bv-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 126</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_bv</span>(<span class="ruby-operator">*</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>, <span class="ruby-string">&quot;Use #to_signed_bv or #to_unsigned_bv for Float, not #to_bv&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Rounding to an integer, unlike <a href="FloatExpr.html#method-i-to_ieee_bv"><code>to_ieee_bv</code></a> which reinterprets the bits. <a href="../Z3.html"><code>Z3</code></a> leaves the answer unspecified when the value doesn’t fit in ‘size` bits.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-to_ieee_bv" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-to_ieee_bv" title="Link to this method">
+                <span class="method-name">to_ieee_bv</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="to_ieee_bv-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 120</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_ieee_bv</span>
+  <span class="ruby-constant">BitvecSort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">ebits</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">sbits</span>).<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_to_ieee_bv</span>(<span class="ruby-keyword">self</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>The IEEE 754 bits of this float, as one Bitvec of the sort’s full width. NaN has many encodings and <a href="../Z3.html"><code>Z3</code></a> doesn’t promise which one you get.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-to_real" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-to_real" title="Link to this method">
+                <span class="method-name">to_real</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="to_real-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 114</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_real</span>
+  <span class="ruby-constant">RealSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_to_real</span>(<span class="ruby-keyword">self</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Exact - a Real can hold every float value, where the other direction rounds. <a href="../Z3.html"><code>Z3</code></a> leaves the answer unspecified for NaN and the infinities.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-to_signed_bv" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-to_signed_bv" title="Link to this method">
+                <span class="method-name">to_signed_bv</span>
+                <span class="method-args">(size, mode)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="to_signed_bv-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 130</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_signed_bv</span>(<span class="ruby-identifier">size</span>, <span class="ruby-identifier">mode</span>)
+  <span class="ruby-constant">BitvecSort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">size</span>).<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_to_sbv</span>(<span class="ruby-constant">FloatExpr</span>.<span class="ruby-identifier">coerce_to_mode_sort</span>(<span class="ruby-identifier">mode</span>), <span class="ruby-keyword">self</span>, <span class="ruby-identifier">size</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-i-to_unsigned_bv" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-to_unsigned_bv" title="Link to this method">
+                <span class="method-name">to_unsigned_bv</span>
+                <span class="method-args">(size, mode)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="to_unsigned_bv-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 134</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_unsigned_bv</span>(<span class="ruby-identifier">size</span>, <span class="ruby-identifier">mode</span>)
+  <span class="ruby-constant">BitvecSort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">size</span>).<span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_to_ubv</span>(<span class="ruby-constant">FloatExpr</span>.<span class="ruby-identifier">coerce_to_mode_sort</span>(<span class="ruby-identifier">mode</span>), <span class="ruby-keyword">self</span>, <span class="ruby-identifier">size</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -2350,7 +2970,7 @@
             </details>
           </div>
           <div class="method-source-code" id="zero-3F-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 80</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/expr/float_expr.rb, line 96</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">zero?</span>
   <span class="ruby-constant">BoolSort</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fpa_is_zero</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>

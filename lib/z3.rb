@@ -62,6 +62,7 @@ require_relative "z3/expr/type_variable_expr"
 require_relative "z3/tactic"
 require_relative "z3/probe"
 require_relative "z3/goal"
+require_relative "z3/apply_result"
 
 # Python-style interface
 require_relative "z3/interface"

@@ -513,6 +513,8 @@
 
         <li ><a href="#method-i-eql-3F">eql?</a></li>
 
+        <li ><a href="#method-i-fresh_var">fresh_var</a></li>
+
         <li ><a href="#method-i-from_value">from_value</a></li>
 
         <li ><a href="#method-i-hash">hash</a></li>
@@ -544,7 +546,7 @@
       </span>
     </summary>
 
-    <ul class="link-list nav-list"><li><details open><summary><code><a href="../Z3.html">Z3</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/AST.html">AST</a></code></li><li><code><a href="../Z3/ArithExpr.html">ArithExpr</a></code></li><li><code><a href="../Z3/ArrayExpr.html">ArrayExpr</a></code></li><li><code><a href="../Z3/ArraySort.html">ArraySort</a></code></li><li><code><a href="../Z3/BitvecExpr.html">BitvecExpr</a></code></li><li><code><a href="../Z3/BitvecSort.html">BitvecSort</a></code></li><li><code><a href="../Z3/BoolExpr.html">BoolExpr</a></code></li><li><code><a href="../Z3/BoolSort.html">BoolSort</a></code></li><li><code><a href="../Z3/CharExpr.html">CharExpr</a></code></li><li><code><a href="../Z3/CharSort.html">CharSort</a></code></li><li><code><a href="../Z3/Context.html">Context</a></code></li><li><code><a href="../Z3/Exception.html">Exception</a></code></li><li><code><a href="../Z3/Expr.html">Expr</a></code></li><li><code><a href="../Z3/FiniteDomainExpr.html">FiniteDomainExpr</a></code></li><li><code><a href="../Z3/FiniteDomainSort.html">FiniteDomainSort</a></code></li><li><code><a href="../Z3/FloatExpr.html">FloatExpr</a></code></li><li><code><a href="../Z3/FloatSort.html">FloatSort</a></code></li><li><code><a href="../Z3/FuncDecl.html">FuncDecl</a></code></li><li><code><a href="../Z3/Goal.html">Goal</a></code></li><li><code><a href="../Z3/IntExpr.html">IntExpr</a></code></li><li><code><a href="../Z3/IntSort.html">IntSort</a></code></li><li><code><a href="../Z3/LowLevel.html">LowLevel</a></code></li><li><code><a href="../Z3/Model.html">Model</a></code></li><li><code><a href="../Z3/Optimize.html">Optimize</a></code></li><li><code><a href="../Z3/ParamDescrs.html">ParamDescrs</a></code></li><li><code><a href="../Z3/Params.html">Params</a></code></li><li><details><summary><code><a href="../Z3/Printer.html">Printer</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/Printer/PrintedExpr.html">PrintedExpr</a></code></li></ul></details></li><li><code><a href="../Z3/Probe.html">Probe</a></code></li><li><code><a href="../Z3/ReExpr.html">Re</a></code></li><li><code><a href="../Z3/ReExpr.html">ReExpr</a></code></li><li><code><a href="../Z3/ReSort.html">ReSort</a></code></li><li><code><a href="../Z3/RealExpr.html">RealExpr</a></code></li><li><code><a href="../Z3/RealSort.html">RealSort</a></code></li><li><code><a href="../Z3/ReferenceCounted.html">ReferenceCounted</a></code></li><li><code><a href="../Z3/RoundingModeExpr.html">RoundingModeExpr</a></code></li><li><code><a href="../Z3/RoundingModeSort.html">RoundingModeSort</a></code></li><li><code><a href="../Z3/SeqExpr.html">SeqExpr</a></code></li><li><code><a href="../Z3/SeqSort.html">SeqSort</a></code></li><li><code><a href="../Z3/SetExpr.html">SetExpr</a></code></li><li><code><a href="../Z3/SetSort.html">SetSort</a></code></li><li><code><a href="../Z3/Solver.html">Solver</a></code></li><li><code><a href="../Z3/Sort.html">Sort</a></code></li><li><code><a href="../Z3/StringExpr.html">StringExpr</a></code></li><li><code><a href="../Z3/StringSort.html">StringSort</a></code></li><li><code><a href="../Z3/Tactic.html">Tactic</a></code></li><li><code><a href="../Z3/TypeVariableExpr.html">TypeVariableExpr</a></code></li><li><code><a href="../Z3/TypeVariableSort.html">TypeVariableSort</a></code></li><li><code><a href="../Z3/UninterpretedExpr.html">UninterpretedExpr</a></code></li><li><code><a href="../Z3/UninterpretedSort.html">UninterpretedSort</a></code></li></ul></details></li></ul>
+    <ul class="link-list nav-list"><li><details open><summary><code><a href="../Z3.html">Z3</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/AST.html">AST</a></code></li><li><code><a href="../Z3/ApplyResult.html">ApplyResult</a></code></li><li><code><a href="../Z3/ArithExpr.html">ArithExpr</a></code></li><li><code><a href="../Z3/ArrayExpr.html">ArrayExpr</a></code></li><li><code><a href="../Z3/ArraySort.html">ArraySort</a></code></li><li><code><a href="../Z3/BitvecExpr.html">BitvecExpr</a></code></li><li><code><a href="../Z3/BitvecSort.html">BitvecSort</a></code></li><li><code><a href="../Z3/BoolExpr.html">BoolExpr</a></code></li><li><code><a href="../Z3/BoolSort.html">BoolSort</a></code></li><li><code><a href="../Z3/CharExpr.html">CharExpr</a></code></li><li><code><a href="../Z3/CharSort.html">CharSort</a></code></li><li><code><a href="../Z3/Context.html">Context</a></code></li><li><code><a href="../Z3/EnumExpr.html">EnumExpr</a></code></li><li><code><a href="../Z3/EnumSort.html">EnumSort</a></code></li><li><code><a href="../Z3/Exception.html">Exception</a></code></li><li><code><a href="../Z3/Expr.html">Expr</a></code></li><li><code><a href="../Z3/FiniteDomainExpr.html">FiniteDomainExpr</a></code></li><li><code><a href="../Z3/FiniteDomainSort.html">FiniteDomainSort</a></code></li><li><code><a href="../Z3/FloatExpr.html">FloatExpr</a></code></li><li><code><a href="../Z3/FloatSort.html">FloatSort</a></code></li><li><code><a href="../Z3/FuncDecl.html">FuncDecl</a></code></li><li><code><a href="../Z3/Goal.html">Goal</a></code></li><li><code><a href="../Z3/IntExpr.html">IntExpr</a></code></li><li><code><a href="../Z3/IntSort.html">IntSort</a></code></li><li><code><a href="../Z3/LowLevel.html">LowLevel</a></code></li><li><code><a href="../Z3/Model.html">Model</a></code></li><li><code><a href="../Z3/Optimize.html">Optimize</a></code></li><li><code><a href="../Z3/ParamDescrs.html">ParamDescrs</a></code></li><li><code><a href="../Z3/Params.html">Params</a></code></li><li><details><summary><code><a href="../Z3/Printer.html">Printer</a></code></summary><ul class="link-list nav-list"><li><code><a href="../Z3/Printer/PrintedExpr.html">PrintedExpr</a></code></li></ul></details></li><li><code><a href="../Z3/Probe.html">Probe</a></code></li><li><code><a href="../Z3/ReExpr.html">Re</a></code></li><li><code><a href="../Z3/ReExpr.html">ReExpr</a></code></li><li><code><a href="../Z3/ReSort.html">ReSort</a></code></li><li><code><a href="../Z3/RealExpr.html">RealExpr</a></code></li><li><code><a href="../Z3/RealSort.html">RealSort</a></code></li><li><code><a href="../Z3/ReferenceCounted.html">ReferenceCounted</a></code></li><li><code><a href="../Z3/RoundingModeExpr.html">RoundingModeExpr</a></code></li><li><code><a href="../Z3/RoundingModeSort.html">RoundingModeSort</a></code></li><li><code><a href="../Z3/SeqExpr.html">SeqExpr</a></code></li><li><code><a href="../Z3/SeqSort.html">SeqSort</a></code></li><li><code><a href="../Z3/SetExpr.html">SetExpr</a></code></li><li><code><a href="../Z3/SetSort.html">SetSort</a></code></li><li><code><a href="../Z3/Solver.html">Solver</a></code></li><li><code><a href="../Z3/Sort.html">Sort</a></code></li><li><code><a href="../Z3/StringExpr.html">StringExpr</a></code></li><li><code><a href="../Z3/StringSort.html">StringSort</a></code></li><li><code><a href="../Z3/Tactic.html">Tactic</a></code></li><li><code><a href="../Z3/TypeVariableExpr.html">TypeVariableExpr</a></code></li><li><code><a href="../Z3/TypeVariableSort.html">TypeVariableSort</a></code></li><li><code><a href="../Z3/UninterpretedExpr.html">UninterpretedExpr</a></code></li><li><code><a href="../Z3/UninterpretedSort.html">UninterpretedSort</a></code></li></ul></details></li></ul>
   </details>
 </div>
 
@@ -614,7 +616,7 @@
             </details>
           </div>
           <div class="method-source-code" id="from_pointer-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/sort.rb, line 107</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/sort.rb, line 120</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">from_pointer</span>(<span class="ruby-identifier">_sort</span>)
   <span class="ruby-identifier">kind</span> = <span class="ruby-constant">VeryLowLevel</span>.<span class="ruby-constant">Z3_get_sort_kind</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">_ctx_pointer</span>, <span class="ruby-identifier">_sort</span>)
   <span class="ruby-keyword">case</span> <span class="ruby-identifier">kind</span>
@@ -637,6 +639,9 @@
     <span class="ruby-keyword">else</span>
       <span class="ruby-constant">ArraySort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">domain</span>, <span class="ruby-identifier">range</span>)
     <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-value">6</span>
+    <span class="ruby-comment"># Rebuilt rather than redeclared - see EnumSort.from_pointer</span>
+    <span class="ruby-constant">EnumSort</span>.<span class="ruby-identifier">from_pointer</span>(<span class="ruby-identifier">_sort</span>)
   <span class="ruby-keyword">when</span> <span class="ruby-value">8</span>
     <span class="ruby-constant">FiniteDomainSort</span>.<span class="ruby-identifier">new</span>(
       <span class="ruby-identifier">name_from_pointer</span>(<span class="ruby-identifier">_sort</span>),
@@ -700,7 +705,7 @@
             </details>
           </div>
           <div class="method-source-code" id="name_from_pointer-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/sort.rb, line 156</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/sort.rb, line 172</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">name_from_pointer</span>(<span class="ruby-identifier">_sort</span>)
   <span class="ruby-identifier">_symbol</span> = <span class="ruby-constant">VeryLowLevel</span>.<span class="ruby-constant">Z3_get_sort_name</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">_ctx_pointer</span>, <span class="ruby-identifier">_sort</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-constant">VeryLowLevel</span>.<span class="ruby-constant">Z3_get_symbol_kind</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">_ctx_pointer</span>, <span class="ruby-identifier">_symbol</span>) <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
@@ -1063,7 +1068,7 @@
             </details>
           </div>
           <div class="method-source-code" id="cant_convert-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/sort.rb, line 103</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/sort.rb, line 116</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">cant_convert</span>(<span class="ruby-identifier">value</span>)
   <span class="ruby-constant">Z3</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Can&#39;t convert #{AST.describe(value)} into #{self}&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1105,7 +1110,7 @@
             </details>
           </div>
           <div class="method-source-code" id="cast-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/sort.rb, line 89</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/sort.rb, line 102</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">cast</span>(<span class="ruby-identifier">a</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Expr</span>)
     <span class="ruby-keyword">if</span>  <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">self</span>
@@ -1178,6 +1183,52 @@
       </div>
 
 
+      <div id="method-i-fresh_var" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-i-fresh_var" title="Link to this method">
+                <span class="method-name">fresh_var</span>
+                <span class="method-args">(prefix)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="fresh_var-source">
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/sort.rb, line 84</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">fresh_var</span>(<span class="ruby-identifier">prefix</span>)
+  <span class="ruby-identifier">new</span>(<span class="ruby-constant">LowLevel</span>.<span class="ruby-identifier">mk_fresh_const</span>(<span class="ruby-identifier">prefix</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-keyword">self</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>A variable <a href="../Z3.html"><code>Z3</code></a> names for you, by appending a number to ‘prefix` - for the ones you need but don’t want to have to name, and which mustn’t collide with anything the caller has named.</p>
+
+<p>‘Z3.Const` is a different thing entirely: that’s a literal built from a Ruby value, where this is a variable, which is what <a href="../Z3.html"><code>Z3</code></a> calls a const.</p>
+
+<p>The number comes from a counter shared by the whole context, and by <a href="FuncDecl.html#method-c-declare_fresh"><code>FuncDecl.declare_fresh</code></a> too, so don’t count on getting any particular one.</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
       <div id="method-i-from_value" class="method-detail anchor-link ">
         <div class="method-header">
 
@@ -1197,7 +1248,7 @@
             </details>
           </div>
           <div class="method-source-code" id="from_value-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/sort.rb, line 84</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/sort.rb, line 97</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">from_value</span>(<span class="ruby-identifier">v</span>)
   <span class="ruby-keyword">return</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">sort</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">self</span>
   <span class="ruby-identifier">raise</span> <span class="ruby-identifier">cant_convert</span>(<span class="ruby-identifier">v</span>)
@@ -1328,7 +1379,7 @@
             </details>
           </div>
           <div class="method-source-code" id="new-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/sort.rb, line 76</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/sort.rb, line 89</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">new</span>(<span class="ruby-identifier">_ast</span>)
   <span class="ruby-identifier">expr_class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">_ast</span>, <span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1412,7 +1463,7 @@
             </details>
           </div>
           <div class="method-source-code" id="value_class-source">
-            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/sort.rb, line 80</span>
+            <pre class="ruby" data-language="ruby"><span class="ruby-comment"># File lib/z3/sort/sort.rb, line 93</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">value_class</span>
   <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;SubclassResponsibility&quot;</span>
 <span class="ruby-keyword">end</span></pre>

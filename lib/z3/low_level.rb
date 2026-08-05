@@ -176,6 +176,13 @@ module Z3
         Z3::VeryLowLevel.Z3_mk_enumeration_sort(_ctx_pointer, symbol, n, _names, _consts, _testers)
       end
 
+      # The only tactic combinator taking an array rather than two tactics
+      def tactic_par_or(tactics)
+        _tactics = FFI::MemoryPointer.new(:pointer, tactics.size)
+        _tactics.write_array_of_pointer(tactics.map(&:_tactic))
+        Z3::VeryLowLevel.Z3_tactic_par_or(_ctx_pointer, tactics.size, _tactics)
+      end
+
       # Should be private
 
       # Every AST_VECTOR parameter in the C API is an `_in` - the ones which act like
