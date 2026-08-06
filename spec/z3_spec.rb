@@ -64,6 +64,25 @@ describe Z3 do
       expect(Z3.set_param("smt.qi.cost", "(+ weight generation)")).to eq("(+ weight generation)")
     end
 
+    # The one parameter Z3 reads only while creating the context, and the context is
+    # already there by the time `require "z3"` has returned. Setting it is harmless,
+    # and #get_param reports it as set, which is why it's worth saying out loud that
+    # proofs stay off. Nothing else on the list has this problem.
+    it "#set_param warns that `proof' can't work, and sets it anyway" do
+      expect { Z3.set_param("proof", true) }
+        .to output(/has no effect.*before the context is created/m).to_stderr
+      expect(Z3.get_param("proof")).to eq("true")
+    end
+
+    it "#set_param warns about `proof' whatever case it's spelled in" do
+      expect { Z3.set_param(:PROOF, true) }.to output(/has no effect/).to_stderr
+    end
+
+    it "#set_param says nothing about any other parameter" do
+      expect { Z3.set_param("well_sorted_check", true) }.to_not output.to_stderr
+      expect { Z3.set_param("timeout", 5000) }.to_not output.to_stderr
+    end
+
     it "#set_param round trips through #get_param" do
       expect(Z3.set_param("well_sorted_check", true)).to eq(true)
       expect(Z3.get_param("well_sorted_check")).to eq("true")

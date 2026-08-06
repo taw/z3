@@ -167,6 +167,7 @@ module Z3
   def set_param(name, value)
     name = name.to_s
     raise Z3::Exception, "Unknown parameter `#{name}'" unless known_global_param?(name)
+    warn_about_proof_param if name.downcase == "proof"
     LowLevel.global_param_set(name, value.to_s)
     value
   end
@@ -216,6 +217,19 @@ module Z3
   # every legal parameter, all of it on stderr, and none of it an error.
   def known_global_param?(name)
     name.include?(".") or param_descrs.include?(name.downcase)
+  end
+
+  # `proof` is the one global parameter Z3 reads only while creating the context -
+  # its own description says "it must be enabled when the Z3 context is created" -
+  # and the context is created while `z3` is being required, so by the time anyone
+  # can call #set_param it's far too late. Setting it is harmless, and #get_param
+  # will report it as set, which is exactly the problem worth warning about: Z3
+  # goes on refusing to produce proofs. Every other global parameter, `timeout` and
+  # `encoding` included, takes effect whenever it's set.
+  def warn_about_proof_param
+    warn "Z3.set_param(\"proof\", ...) has no effect - proofs must be enabled before " \
+         "the context is created, which happens while `z3` is being required. " \
+         "Z3_solver_get_proof will keep saying there is no current proof."
   end
 
   public
