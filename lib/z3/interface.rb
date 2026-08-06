@@ -119,6 +119,19 @@ module Z3
     BoolExpr.IfThenElse(a,b,c)
   end
 
+  # Cardinality constraints, which Z3 solves natively instead of unfolding into
+  # arithmetic. A list bounds how many of the Bools are true:
+  #
+  #   Z3.AtMost([a, b, c], 2)
+  #
+  # An `expr => weight` Hash bounds the total weight of the true ones instead, which
+  # is the knapsack shape - `a` costs 3, `b` costs 2, `c` costs 5, spend at most 7:
+  #
+  #   Z3.AtMost({a => 3, b => 2, c => 5}, 7)
+  #
+  # Weights are Integers and may be negative or zero, and so may the bound in the
+  # weighted form - a total, unlike a count, has no floor at 0. All weights being 1
+  # builds the very same term the list form builds.
   def AtMost(args, k)
     BoolExpr.AtMost(args, k)
   end

@@ -111,8 +111,19 @@ module Z3
         Z3::VeryLowLevel.Z3_mk_atleast(_ctx_pointer, asts.size, asts_vector(asts), k)
       end
 
+      # `coeffs` is parallel to `asts`, and Z3 reads exactly as many as there are
+      # asts - a short array is silently padded with zeroes rather than refused, so
+      # the caller has to have checked the lengths already
       def mk_pbeq(asts, coeffs, k)
         Z3::VeryLowLevel.Z3_mk_pbeq(_ctx_pointer, asts.size, asts_vector(asts), ints_vector(coeffs), k)
+      end
+
+      def mk_pble(asts, coeffs, k)
+        Z3::VeryLowLevel.Z3_mk_pble(_ctx_pointer, asts.size, asts_vector(asts), ints_vector(coeffs), k)
+      end
+
+      def mk_pbge(asts, coeffs, k)
+        Z3::VeryLowLevel.Z3_mk_pbge(_ctx_pointer, asts.size, asts_vector(asts), ints_vector(coeffs), k)
       end
 
       def mk_seq_concat(asts)

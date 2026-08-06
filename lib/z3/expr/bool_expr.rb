@@ -71,30 +71,64 @@ module Z3
         b.sort.new(LowLevel.mk_ite(a, b, c))
       end
 
-      # Native cardinality constraint: at most k of the given Bool exprs are true
+      # Native cardinality constraint: at most k of the given Bool exprs are true.
+      # An `expr => weight` Hash weighs them instead, so `AtMost({a => 3, b => 2}, 4)`
+      # allows either one but not both.
       def AtMost(args, k)
-        args = cardinality_args(args, k)
-        BoolSort.new.new(LowLevel.mk_atmost(args, k))
+        args, weights, k = pseudo_boolean_args(args, k)
+        if weights
+          BoolSort.new.new(LowLevel.mk_pble(args, weights, k))
+        else
+          BoolSort.new.new(LowLevel.mk_atmost(args, k))
+        end
       end
 
-      # Native cardinality constraint: at least k of the given Bool exprs are true
+      # Native cardinality constraint: at least k of the given Bool exprs are true,
+      # or at least k units of weight when given an `expr => weight` Hash
       def AtLeast(args, k)
-        args = cardinality_args(args, k)
-        BoolSort.new.new(LowLevel.mk_atleast(args, k))
+        args, weights, k = pseudo_boolean_args(args, k)
+        if weights
+          BoolSort.new.new(LowLevel.mk_pbge(args, weights, k))
+        else
+          BoolSort.new.new(LowLevel.mk_atleast(args, k))
+        end
       end
 
-      # Native cardinality constraint: exactly k of the given Bool exprs are true
+      # Native cardinality constraint: exactly k of the given Bool exprs are true,
+      # or exactly k units of weight when given an `expr => weight` Hash
       def Exactly(args, k)
-        args = cardinality_args(args, k)
-        BoolSort.new.new(LowLevel.mk_pbeq(args, [1] * args.size, k))
+        args, weights, k = pseudo_boolean_args(args, k)
+        BoolSort.new.new(LowLevel.mk_pbeq(args, weights || [1] * args.size, k))
       end
 
       private
 
-      def cardinality_args(args, k)
-        raise Z3::Exception, "Cardinality bound must be a non-negative Integer" unless k.is_a?(Integer) and k >= 0
+      # Coefficients and bounds are C ints, and FFI's own complaint about an
+      # oversized one names neither the method nor the value
+      INT_RANGE = (-2**31)...(2**31)
+
+      # Two spellings of one constraint: a list counts how many of the exprs are true,
+      # an `expr => weight` Hash adds up the weights of the true ones. Z3 normalises a
+      # weighted constraint whose weights are all 1 back into the unweighted term, so
+      # `AtMost([a, b], 1)` and `AtMost({a => 1, b => 1}, 1)` are not merely equivalent,
+      # they're the same AST. Returns nil weights for the unweighted spelling, because
+      # only Exactly has to make up the 1s (Z3 has no unweighted `pbeq`).
+      def pseudo_boolean_args(args, k)
+        weights = nil
+        if args.is_a?(Hash)
+          args, weights = args.keys, args.values
+          weights.each do |weight|
+            raise Z3::Exception, "Pseudo-boolean weights must be Integers, got #{weight.inspect}" unless weight.is_a?(Integer)
+            raise Z3::Exception, "Pseudo-boolean weight #{weight} is too big for Z3, which counts in 32 bit ints" unless INT_RANGE.include?(weight)
+          end
+          # A weighted total can go negative, so unlike a count it has no natural floor
+          raise Z3::Exception, "Pseudo-boolean bound must be an Integer" unless k.is_a?(Integer)
+        else
+          raise Z3::Exception, "Cardinality bound must be a non-negative Integer" unless k.is_a?(Integer) and k >= 0
+        end
+        raise Z3::Exception, "Cardinality bound #{k} is too big for Z3, which counts in 32 bit ints" unless INT_RANGE.include?(k)
         raise Z3::Exception, "Cardinality constraint requires at least one argument" if args.empty?
-        coerce_to_same_bool_sort(*args)
+        [coerce_to_same_bool_sort(*args), weights, k]
       end
     end
   end

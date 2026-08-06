@@ -49,6 +49,8 @@ module Z3
     attach_function :Z3_mk_atmost, [:ctx_pointer, :int, :pointer, :int], :ast_pointer
     attach_function :Z3_mk_atleast, [:ctx_pointer, :int, :pointer, :int], :ast_pointer
     attach_function :Z3_mk_pbeq, [:ctx_pointer, :int, :pointer, :pointer, :int], :ast_pointer
+    attach_function :Z3_mk_pble, [:ctx_pointer, :int, :pointer, :pointer, :int], :ast_pointer
+    attach_function :Z3_mk_pbge, [:ctx_pointer, :int, :pointer, :pointer, :int], :ast_pointer
     attach_function :Z3_mk_add, [:ctx_pointer, :int, :pointer], :ast_pointer
     attach_function :Z3_mk_sub, [:ctx_pointer, :int, :pointer], :ast_pointer
     attach_function :Z3_mk_mul, [:ctx_pointer, :int, :pointer], :ast_pointer

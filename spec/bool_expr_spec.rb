@@ -91,6 +91,47 @@ module Z3
       expect{ Z3.AtLeast([], 1) }.to raise_error(Z3::Exception)
       expect{ Z3.AtMost([a, b], 1.5) }.to raise_error(Z3::Exception)
       expect{ Z3.Exactly([], 0) }.to raise_error(Z3::Exception)
+      expect{ Z3.AtMost([a, b], 2**40) }.to raise_error(Z3::Exception)
+    end
+
+    it "AtMost with weights" do
+      expect([a, c, Z3.AtMost({a => 3, b => 2, c => 5}, 7)]).to have_no_solution
+      expect([a, b, Z3.AtMost({a => 3, b => 2, c => 5}, 7)]).to have_solution(c => false)
+      expect([a, b, c, Z3.AtMost({a => 3, b => 2, c => 5}, 10)]).to have_solution(a => true, b => true, c => true)
+    end
+
+    it "AtLeast with weights" do
+      expect([~c, Z3.AtLeast({a => 3, b => 2, c => 5}, 5)]).to have_solution(a => true, b => true)
+      expect([~a, ~b, Z3.AtLeast({a => 3, b => 2, c => 5}, 6)]).to have_no_solution
+    end
+
+    it "Exactly with weights" do
+      expect([Z3.Exactly({a => 3, b => 2, c => 5}, 5)]).to have_solution(a => true, b => true, c => false)
+      expect([~a, ~b, Z3.Exactly({a => 3, b => 2, c => 5}, 4)]).to have_no_solution
+    end
+
+    # A count is between 0 and n, so a negative bound on one is a mistake. A weighted
+    # total isn't, so the same bound has to be allowed there.
+    it "weighted constraints allow negative weights and bounds" do
+      expect([b, Z3.AtMost({a => -3, b => 2}, 0)]).to have_solution(a => true)
+      expect([~b, Z3.AtMost({a => -3, b => 2}, -1)]).to have_solution(a => true, b => false)
+      expect([~a, Z3.AtMost({a => -3, b => 2}, -1)]).to have_no_solution
+      expect([~b, Z3.AtLeast({a => 1, b => 0}, 1)]).to have_solution(a => true, b => false)
+    end
+
+    # All weights 1 isn't merely equivalent to the list form, it's the same AST
+    it "unit weights build the unweighted term" do
+      expect(Z3.AtMost({a => 1, b => 1, c => 1}, 2)).to eql(Z3.AtMost([a, b, c], 2))
+      expect(Z3.AtLeast({a => 1, b => 1, c => 1}, 2)).to eql(Z3.AtLeast([a, b, c], 2))
+      expect(Z3.Exactly({a => 1, b => 1, c => 1}, 2)).to eql(Z3.Exactly([a, b, c], 2))
+    end
+
+    it "weighted constraints reject bad weights" do
+      expect{ Z3.AtMost({a => 1.5, b => 2}, 3) }.to raise_error(Z3::Exception, /weights must be Integers/)
+      expect{ Z3.AtMost({a => "3", b => 2}, 3) }.to raise_error(Z3::Exception, /weights must be Integers/)
+      expect{ Z3.AtLeast({a => 2**40}, 3) }.to raise_error(Z3::Exception, /32 bit ints/)
+      expect{ Z3.Exactly({a => 1}, 1.5) }.to raise_error(Z3::Exception, /bound must be an Integer/)
+      expect{ Z3.AtMost({}, 0) }.to raise_error(Z3::Exception, /at least one argument/)
     end
 
     # #value is the name every sort uses for "the Ruby object behind this literal",
