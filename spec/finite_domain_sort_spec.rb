@@ -60,8 +60,8 @@ module Z3
       # coerced into this sort - values have to be asked for by name
       it "is how a value gets into an expression, a bare Integer being a sort mismatch" do
         x = sort.var("x")
-        expect([x == sort.from_const(1)]).to have_solution(x => 1)
-        expect([Z3.Distinct(x, sort.from_const(1))]).to have_solution(x => 0)
+        expect([x == sort.from_const(1)]).to have_solution(x => sort.from_const(1))
+        expect([Z3.Distinct(x, sort.from_const(1))]).to have_solution(x => sort.from_const(0))
         expect { x == 1 }.to raise_error(ArgumentError, "Can't convert Int into FD")
       end
     end

@@ -47,7 +47,7 @@ module Z3
       end
 
       it "constrains the solution" do
-        expect([xs.length == 3, xs == sort.from_const([1, 2, 3])]).to have_solution(xs => "[1, 2, 3]")
+        expect([xs.length == 3, xs == sort.from_const([1, 2, 3])]).to have_solution(xs => sort.from_const([1, 2, 3]))
         expect([xs.length == 3, xs == sort.from_const([1, 2])]).to have_no_solution
       end
 
@@ -71,7 +71,7 @@ module Z3
       end
 
       it "constrains the solution" do
-        expect([xs.empty?]).to have_solution(xs => "[]")
+        expect([xs.empty?]).to have_solution(xs => sort.from_const([]))
         expect([xs.empty?, xs.length == 1]).to have_no_solution
       end
     end
@@ -87,7 +87,7 @@ module Z3
       end
 
       it "constrains the solution" do
-        expect([xs + sort.from_const([3]) == sort.from_const([1, 2, 3])]).to have_solution(xs => "[1, 2]")
+        expect([xs + sort.from_const([3]) == sort.from_const([1, 2, 3])]).to have_solution(xs => sort.from_const([1, 2]))
       end
     end
 
@@ -95,7 +95,7 @@ module Z3
       it "repeats, like Ruby Array#*" do
         expect((xs * 3).sexpr).to eq("(seq.++ xs xs xs)")
         expect(xs * 1).to be_same_as(xs)
-        expect([xs * 2 == sort.from_const([1, 2, 1, 2])]).to have_solution(xs => "[1, 2]")
+        expect([xs * 2 == sort.from_const([1, 2, 1, 2])]).to have_solution(xs => sort.from_const([1, 2]))
       end
 
       # Array#*(String) is #join, which a Seq of arbitrary element sort can't do
@@ -129,20 +129,20 @@ module Z3
 
       it "indexes" do
         value = sort.from_const([10, 20, 30])
-        expect([xs == value, xs[1] == 20]).to have_solution(xs => "[10, 20, 30]")
+        expect([xs == value, xs[1] == 20]).to have_solution(xs => sort.from_const([10, 20, 30]))
         expect([xs == value, xs[1] == 99]).to have_no_solution
       end
 
       it "takes subsequences" do
         value = sort.from_const([10, 20, 30, 40])
-        expect([xs == value, xs[1, 2] == sort.from_const([20, 30])]).to have_solution(xs => "[10, 20, 30, 40]")
-        expect([xs == value, xs[1..2] == sort.from_const([20, 30])]).to have_solution(xs => "[10, 20, 30, 40]")
-        expect([xs == value, xs[1...3] == sort.from_const([20, 30])]).to have_solution(xs => "[10, 20, 30, 40]")
-        expect([xs == value, xs[2..] == sort.from_const([30, 40])]).to have_solution(xs => "[10, 20, 30, 40]")
+        expect([xs == value, xs[1, 2] == sort.from_const([20, 30])]).to have_solution(xs => sort.from_const([10, 20, 30, 40]))
+        expect([xs == value, xs[1..2] == sort.from_const([20, 30])]).to have_solution(xs => sort.from_const([10, 20, 30, 40]))
+        expect([xs == value, xs[1...3] == sort.from_const([20, 30])]).to have_solution(xs => sort.from_const([10, 20, 30, 40]))
+        expect([xs == value, xs[2..] == sort.from_const([30, 40])]).to have_solution(xs => sort.from_const([10, 20, 30, 40]))
       end
 
       it "is empty out of range" do
-        expect([xs == sort.from_const([10]), xs[5, 2].empty?]).to have_solution(xs => "[10]")
+        expect([xs == sort.from_const([10]), xs[5, 2].empty?]).to have_solution(xs => sort.from_const([10]))
       end
 
       # An index is an offset however it's spelled, so a literal -1 and an IntExpr
@@ -158,20 +158,20 @@ module Z3
         value = sort.from_const([10, 20, 30])
         # An out of range element is unspecified, so both of these are satisfiable
         # with any value at all rather than with the last one
-        expect([xs == value, xs[-1] == 99]).to have_solution(xs => "[10, 20, 30]")
-        expect([xs == value, i == -1, xs[i] == 99]).to have_solution(xs => "[10, 20, 30]")
+        expect([xs == value, xs[-1] == 99]).to have_solution(xs => sort.from_const([10, 20, 30]))
+        expect([xs == value, i == -1, xs[i] == 99]).to have_solution(xs => sort.from_const([10, 20, 30]))
         # An out of range subsequence is empty, and that one does have a value to read
-        expect([xs == value, ys == xs[-2, 2]]).to have_solution(ys => "[]")
-        expect([xs == value, i == -1, ys == xs[i, 2]]).to have_solution(ys => "[]")
-        expect([xs == value, ys == xs[0..-1]]).to have_solution(ys => "[]")
-        expect([xs == value, i == -1, ys == xs[0..i]]).to have_solution(ys => "[]")
+        expect([xs == value, ys == xs[-2, 2]]).to have_solution(ys => sort.from_const([]))
+        expect([xs == value, i == -1, ys == xs[i, 2]]).to have_solution(ys => sort.from_const([]))
+        expect([xs == value, ys == xs[0..-1]]).to have_solution(ys => sort.from_const([]))
+        expect([xs == value, i == -1, ys == xs[0..i]]).to have_solution(ys => sort.from_const([]))
       end
 
       # Counting from the end is spelled out, and #last is exactly that
       it "counts from the end when told to" do
         value = sort.from_const([10, 20, 30])
-        expect([xs == value, n == xs[xs.length - 1]]).to have_solution(n => "30")
-        expect([xs == value, ys == xs[xs.length - 2, 2]]).to have_solution(ys => "[20, 30]")
+        expect([xs == value, n == xs[xs.length - 1]]).to have_solution(n => 30)
+        expect([xs == value, ys == xs[xs.length - 2, 2]]).to have_solution(ys => sort.from_const([20, 30]))
       end
 
       # #at is Ruby Array#at and #slice is Ruby Array#slice - both are #[]
@@ -183,7 +183,7 @@ module Z3
 
       it "takes symbolic indices" do
         i = IntSort.new.var("i")
-        expect([xs == sort.from_const([10, 20, 30]), xs[i] == 30, i == 2]).to have_solution(xs => "[10, 20, 30]")
+        expect([xs == sort.from_const([10, 20, 30]), xs[i] == 30, i == 2]).to have_solution(xs => sort.from_const([10, 20, 30]))
       end
 
       # Both ends of a Range can be symbolic too, open ends included
@@ -191,10 +191,10 @@ module Z3
         i = IntSort.new.var("i")
         j = IntSort.new.var("j")
         value = sort.from_const([10, 20, 30, 40])
-        expect([xs == value, i == 1, j == 2, ys == xs[i..j]]).to have_solution(ys => "[20, 30]")
-        expect([xs == value, i == 1, j == 3, ys == xs[i...j]]).to have_solution(ys => "[20, 30]")
-        expect([xs == value, i == 2, ys == xs[i..]]).to have_solution(ys => "[30, 40]")
-        expect([xs == value, i == 1, ys == xs[..i]]).to have_solution(ys => "[10, 20]")
+        expect([xs == value, i == 1, j == 2, ys == xs[i..j]]).to have_solution(ys => sort.from_const([20, 30]))
+        expect([xs == value, i == 1, j == 3, ys == xs[i...j]]).to have_solution(ys => sort.from_const([20, 30]))
+        expect([xs == value, i == 2, ys == xs[i..]]).to have_solution(ys => sort.from_const([30, 40]))
+        expect([xs == value, i == 1, ys == xs[..i]]).to have_solution(ys => sort.from_const([10, 20]))
       end
     end
 
@@ -208,9 +208,9 @@ module Z3
 
       it "constrains the solution" do
         value = sort.from_const([10, 20, 30])
-        expect([xs == value, xs.first == 10, xs.last == 30]).to have_solution(xs => "[10, 20, 30]")
-        expect([xs == value, xs.first(2) == sort.from_const([10, 20])]).to have_solution(xs => "[10, 20, 30]")
-        expect([xs == value, xs.last(2) == sort.from_const([20, 30])]).to have_solution(xs => "[10, 20, 30]")
+        expect([xs == value, xs.first == 10, xs.last == 30]).to have_solution(xs => sort.from_const([10, 20, 30]))
+        expect([xs == value, xs.first(2) == sort.from_const([10, 20])]).to have_solution(xs => sort.from_const([10, 20, 30]))
+        expect([xs == value, xs.last(2) == sort.from_const([20, 30])]).to have_solution(xs => sort.from_const([10, 20, 30]))
       end
     end
 
@@ -229,9 +229,9 @@ module Z3
 
       it "constrains the solution" do
         value = sort.from_const([10, 20, 30])
-        expect([xs == value, xs.include?(20)]).to have_solution(xs => "[10, 20, 30]")
+        expect([xs == value, xs.include?(20)]).to have_solution(xs => sort.from_const([10, 20, 30]))
         expect([xs == value, xs.include?(99)]).to have_no_solution
-        expect([xs == value, xs.include?([20, 30])]).to have_solution(xs => "[10, 20, 30]")
+        expect([xs == value, xs.include?([20, 30])]).to have_solution(xs => sort.from_const([10, 20, 30]))
         expect([xs == value, xs.include?([10, 30])]).to have_no_solution
       end
 
@@ -255,11 +255,11 @@ module Z3
 
       it "constrains the solution" do
         value = sort.from_const([10, 20, 30])
-        expect([xs == value, xs.start_with?(10)]).to have_solution(xs => "[10, 20, 30]")
+        expect([xs == value, xs.start_with?(10)]).to have_solution(xs => sort.from_const([10, 20, 30]))
         expect([xs == value, xs.start_with?(20)]).to have_no_solution
-        expect([xs == value, xs.end_with?([20, 30])]).to have_solution(xs => "[10, 20, 30]")
+        expect([xs == value, xs.end_with?([20, 30])]).to have_solution(xs => sort.from_const([10, 20, 30]))
         expect([xs == value, xs.end_with?(10)]).to have_no_solution
-        expect([xs == value, xs.start_with?(99, 10)]).to have_solution(xs => "[10, 20, 30]")
+        expect([xs == value, xs.start_with?(99, 10)]).to have_solution(xs => sort.from_const([10, 20, 30]))
       end
     end
 
@@ -275,9 +275,9 @@ module Z3
 
       it "constrains the solution" do
         value = sort.from_const([10, 20, 10])
-        expect([xs == value, xs.index(10) == 0]).to have_solution(xs => "[10, 20, 10]")
-        expect([xs == value, xs.index(10, 1) == 2]).to have_solution(xs => "[10, 20, 10]")
-        expect([xs == value, xs.index(99) == -1]).to have_solution(xs => "[10, 20, 10]")
+        expect([xs == value, xs.index(10) == 0]).to have_solution(xs => sort.from_const([10, 20, 10]))
+        expect([xs == value, xs.index(10, 1) == 2]).to have_solution(xs => sort.from_const([10, 20, 10]))
+        expect([xs == value, xs.index(99) == -1]).to have_solution(xs => sort.from_const([10, 20, 10]))
       end
     end
 
@@ -309,8 +309,8 @@ module Z3
 
       it "replaces the first occurrence, or all of them" do
         value = sort.from_const([1, 2, 1])
-        expect([xs == value, xs.sub(1, 9) == sort.from_const([9, 2, 1])]).to have_solution(xs => "[1, 2, 1]")
-        expect([xs == value, xs.gsub(1, 9) == sort.from_const([9, 2, 9])]).to have_solution(xs => "[1, 2, 1]")
+        expect([xs == value, xs.sub(1, 9) == sort.from_const([9, 2, 1])]).to have_solution(xs => sort.from_const([1, 2, 1]))
+        expect([xs == value, xs.gsub(1, 9) == sort.from_const([9, 2, 9])]).to have_solution(xs => sort.from_const([1, 2, 1]))
       end
 
       # A ReExpr is the one argument here that isn't read as an element-or-subsequence.
@@ -333,7 +333,7 @@ module Z3
       end
 
       it "matches the whole sequence" do
-        expect([xs.matches?(Re.Of([1], sort).plus), xs == sort.from_const([1, 1])]).to have_solution(xs => "[1, 1]")
+        expect([xs.matches?(Re.Of([1], sort).plus), xs == sort.from_const([1, 1])]).to have_solution(xs => sort.from_const([1, 1]))
         expect([xs.matches?(Re.Of([1], sort).plus), xs == sort.from_const([1, 2])]).to have_no_solution
       end
 

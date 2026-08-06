@@ -200,12 +200,12 @@ module Z3
       let(:p2) { sort.var("p2") }
 
       it "solves for fields" do
-        expect([p1.x == 3, p1.y == p1.x * 2]).to have_solution(p1 => "Point.mk(3, 6)")
+        expect([p1.x == 3, p1.y == p1.x * 2]).to have_solution(p1 => sort.mk(3, 6))
       end
 
       it "solves for whole tuples" do
         expect([p1 == sort.mk(3, 4), p2 == sort.mk(p1.y, p1.x)])
-          .to have_solution(p2 => "Point.mk(4, 3)")
+          .to have_solution(p2 => sort.mk(4, 3))
       end
 
       # Tuples are extensional - two of them with equal fields are equal, and Z3
@@ -220,7 +220,7 @@ module Z3
 
       it "keys arrays" do
         grid = ArraySort.new(sort, int).var("grid")
-        expect([grid[[1, 2]] == 42]).to have_solution(grid[sort.mk(1, 2)] => "42")
+        expect([grid[[1, 2]] == 42]).to have_solution(grid[sort.mk(1, 2)] => 42)
       end
 
       it "is a domain and a range for uninterpreted functions" do

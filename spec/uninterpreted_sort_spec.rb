@@ -29,9 +29,21 @@ module Z3
       expect(UninterpretedSort.new(5)).to_not eq(UninterpretedSort.new(6))
     end
 
+    # The elements Z3 invents for the sort carry no value to check against, and their
+    # names are Z3's own business - all the model promises is three different ones,
+    # drawn from the universe it built for U. eql? is what asks that, as == on two
+    # elements builds an expression rather than answering.
     it "elements have no interpretation, they can only be equal or distinct" do
       a, b, c = u.var("a"), u.var("b"), u.var("c")
-      expect([a != b, b != c, a != c]).to have_solution(a => "U!val!0", b => "U!val!1", c => "U!val!2")
+      solver = Solver.new
+      solver.assert a != b
+      solver.assert b != c
+      solver.assert a != c
+      expect(solver).to be_satisfiable
+      elements = [a, b, c].map{|var| solver.model[var]}
+      expect(elements).to be_all_different
+      universe = solver.model.sort_universe(u)
+      expect(elements.all?{|element| universe.any?{|known| known.eql?(element)}}).to eq(true)
       expect([a != b, b != c, a == c, a != c]).to have_no_solution
     end
 

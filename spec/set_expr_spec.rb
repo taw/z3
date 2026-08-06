@@ -108,12 +108,11 @@ module Z3
       end
     end
 
-    # TODO: Formatting is dreadful
     it "== and !=" do
       expect([a == b, b != c]).to have_solution(
-        a => "store(const(false), 0, true)",
-        b => "store(const(false), 0, true)",
-        c => "const(false)",
+        a => sort.Empty.add(0),
+        b => sort.Empty.add(0),
+        c => sort.Empty,
       )
     end
 
@@ -129,9 +128,9 @@ module Z3
           b.include?(3),
           c == a.union(b),
         ]).to have_solution(
-          a => "store(const(true), 3, false)",
-          b => "store(const(true), 1, false)",
-          c => "map(or, store(const(true), 3, false), store(const(true), 1, false))",
+          a => sort.Full.delete(3),
+          b => sort.Full.delete(1),
+          c => sort.Full,
         )
       end
 
@@ -145,10 +144,10 @@ module Z3
           b.include?(3),
           c == a.difference(b),
         ]).to have_solution(
-          a => "store(const(true), 3, false)",
-          b => "store(const(true), 1, false)",
+          a => sort.Full.delete(3),
+          b => sort.Full.delete(1),
           # a & !b
-          c => "map(and, store(const(true), 3, false), store(const(false), 1, true))",
+          c => sort.Empty.add(1),
         )
       end
 
@@ -162,9 +161,9 @@ module Z3
           b.include?(3),
           c == a.intersection(b),
         ]).to have_solution(
-          a => "store(const(true), 3, false)",
-          b => "store(const(true), 1, false)",
-          c => "map(and, store(const(true), 3, false), store(const(true), 1, false))",
+          a => sort.Full.delete(3),
+          b => sort.Full.delete(1),
+          c => sort.Full.delete(1).delete(3),
         )
       end
     end

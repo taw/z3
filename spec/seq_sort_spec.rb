@@ -51,7 +51,7 @@ module Z3
 
     it "values can be used in constraints" do
       xs = int_seq.var("xs")
-      expect([xs == int_seq.from_const([3, 1, 4])]).to have_solution(xs => "[3, 1, 4]")
+      expect([xs == int_seq.from_const([3, 1, 4])]).to have_solution(xs => int_seq.from_const([3, 1, 4]))
     end
 
     # Z3 has no String sort of its own, String is just Seq(Char)

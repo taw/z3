@@ -76,14 +76,14 @@ module Z3
 
     it "values can be used in constraints" do
       s = sort.var("s")
-      expect([s == sort.from_const("héllo")]).to have_solution(s => %q{"héllo"})
+      expect([s == sort.from_const("héllo")]).to have_solution(s => "héllo")
     end
 
     # Expr.sort_for_const knows about String, so no explicit from_const is needed
     it "Ruby Strings autoconvert in constraints" do
       s = sort.var("s")
-      expect([s == "héllo"]).to have_solution(s => %q{"héllo"})
-      expect([s != "a", s != "b", s.sort.from_const("") != s, "c" == s]).to have_solution(s => %q{"c"})
+      expect([s == "héllo"]).to have_solution(s => "héllo")
+      expect([s != "a", s != "b", s.sort.from_const("") != s, "c" == s]).to have_solution(s => "c")
       expect([s == "a", s == "b"]).to have_no_solution
     end
 
@@ -93,24 +93,24 @@ module Z3
       let(:s) { sort.var("s") }
 
       it "#from_int" do
-        expect([s == sort.from_int(42)]).to have_solution(s => %q{"42"})
-        expect([s == sort.from_int(0)]).to have_solution(s => %q{"0"})
+        expect([s == sort.from_int(42)]).to have_solution(s => "42")
+        expect([s == sort.from_int(0)]).to have_solution(s => "0")
         # SMT-LIB gives a negative number no string form at all, rather than "-1"
-        expect([s == sort.from_int(-1)]).to have_solution(s => %q{""})
-        expect([s == sort.from_int(Z3.Int("i")), Z3.Int("i") == 7]).to have_solution(s => %q{"7"})
+        expect([s == sort.from_int(-1)]).to have_solution(s => "")
+        expect([s == sort.from_int(Z3.Int("i")), Z3.Int("i") == 7]).to have_solution(s => "7")
       end
 
       # StringExpr#to_code backwards
       it "#from_code" do
-        expect([s == sort.from_code(65)]).to have_solution(s => %q{"A"})
-        expect([s == sort.from_code(0x4e2d)]).to have_solution(s => %q{"中"})
+        expect([s == sort.from_code(65)]).to have_solution(s => "A")
+        expect([s == sort.from_code(0x4e2d)]).to have_solution(s => "中")
       end
 
       # The same eight bits read either way
       it "#from_unsigned_bv / #from_signed_bv" do
         bits = BitvecSort.new(8).from_const(-3)
-        expect([s == sort.from_unsigned_bv(bits)]).to have_solution(s => %q{"253"})
-        expect([s == sort.from_signed_bv(bits)]).to have_solution(s => %q{"-3"})
+        expect([s == sort.from_unsigned_bv(bits)]).to have_solution(s => "253")
+        expect([s == sort.from_signed_bv(bits)]).to have_solution(s => "-3")
         expect{ sort.from_signed_bv(42) }.to raise_error(Z3::Exception, "Bitvec expected, got Integer")
         expect{ sort.from_unsigned_bv(nil) }.to raise_error(Z3::Exception, "Bitvec expected, got nil")
       end

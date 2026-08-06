@@ -43,7 +43,7 @@ module Z3
       end
 
       it "matches only that one string" do
-        expect([s.matches?(Re.Of("ab"))]).to have_solution(s => %q{"ab"})
+        expect([s.matches?(Re.Of("ab"))]).to have_solution(s => "ab")
         expect([s.matches?(Re.Of("ab")), s != "ab"]).to have_no_solution
       end
     end
@@ -55,7 +55,7 @@ module Z3
       end
 
       it "matches single characters in the range" do
-        expect([s.matches?(lower), s == "q"]).to have_solution(s => %q{"q"})
+        expect([s.matches?(lower), s == "q"]).to have_solution(s => "q")
         expect([s.matches?(lower), s == "Q"]).to have_no_solution
         expect([s.matches?(lower), s == "ab"]).to have_no_solution
       end
@@ -71,8 +71,8 @@ module Z3
       end
 
       it "matches any number of repetitions, including none" do
-        expect([s.matches?(lower.star), s == ""]).to have_solution(s => %q{""})
-        expect([s.matches?(lower.star), s == "abc"]).to have_solution(s => %q{"abc"})
+        expect([s.matches?(lower.star), s == ""]).to have_solution(s => "")
+        expect([s.matches?(lower.star), s == "abc"]).to have_solution(s => "abc")
         expect([s.matches?(lower.star), s == "aBc"]).to have_no_solution
       end
 
@@ -87,7 +87,7 @@ module Z3
       end
 
       it "needs at least one repetition" do
-        expect([s.matches?(lower.plus), s == "a"]).to have_solution(s => %q{"a"})
+        expect([s.matches?(lower.plus), s == "a"]).to have_solution(s => "a")
         expect([s.matches?(lower.plus), s == ""]).to have_no_solution
       end
 
@@ -102,8 +102,8 @@ module Z3
       end
 
       it "matches zero or one" do
-        expect([s.matches?(lower.option), s == ""]).to have_solution(s => %q{""})
-        expect([s.matches?(lower.option), s == "a"]).to have_solution(s => %q{"a"})
+        expect([s.matches?(lower.option), s == ""]).to have_solution(s => "")
+        expect([s.matches?(lower.option), s == "a"]).to have_solution(s => "a")
         expect([s.matches?(lower.option), s == "ab"]).to have_no_solution
       end
 
@@ -122,7 +122,7 @@ module Z3
       end
 
       it "constrains the solution" do
-        expect([s.matches?(lower + Re.Of("!")), s == "z!"]).to have_solution(s => %q{"z!"})
+        expect([s.matches?(lower + Re.Of("!")), s == "z!"]).to have_solution(s => "z!")
         expect([s.matches?(lower + Re.Of("!")), s == "!z"]).to have_no_solution
       end
 
@@ -139,7 +139,7 @@ module Z3
       end
 
       it "constrains the solution" do
-        expect([s.matches?(Re.Union("cat", "dog")), s == "cat"]).to have_solution(s => %q{"cat"})
+        expect([s.matches?(Re.Union("cat", "dog")), s == "cat"]).to have_solution(s => "cat")
         expect([s.matches?(Re.Union("cat", "dog")), s == "cow"]).to have_no_solution
       end
 
@@ -158,7 +158,7 @@ module Z3
       it "constrains the solution" do
         three_lower = lower * 3
         has_q = Re.Full + Re.Of("q") + Re.Full
-        expect([s.matches?(three_lower & has_q), s == "aqb"]).to have_solution(s => %q{"aqb"})
+        expect([s.matches?(three_lower & has_q), s == "aqb"]).to have_solution(s => "aqb")
         expect([s.matches?(three_lower & has_q), s == "abc"]).to have_no_solution
       end
 
@@ -175,7 +175,7 @@ module Z3
       end
 
       it "constrains the solution" do
-        expect([s.matches?(lower - Re.Of("q")), s == "a"]).to have_solution(s => %q{"a"})
+        expect([s.matches?(lower - Re.Of("q")), s == "a"]).to have_solution(s => "a")
         expect([s.matches?(lower - Re.Of("q")), s == "q"]).to have_no_solution
       end
     end
@@ -187,7 +187,7 @@ module Z3
       end
 
       it "constrains the solution" do
-        expect([s.matches?(~lower.star), s == "aBc"]).to have_solution(s => %q{"aBc"})
+        expect([s.matches?(~lower.star), s == "aBc"]).to have_solution(s => "aBc")
         expect([s.matches?(~lower.star), s == "abc"]).to have_no_solution
       end
     end
@@ -219,16 +219,16 @@ module Z3
 
       # ...which is why `re * (0..0)` can't go through `re.loop` at all
       it "zero to zero is the empty string, not everything" do
-        expect([s.matches?(Re.Of("a") * (0..0)), s == ""]).to have_solution(s => %q{""})
+        expect([s.matches?(Re.Of("a") * (0..0)), s == ""]).to have_solution(s => "")
         expect([s.matches?(Re.Of("a") * (0..0)), s == "a"]).to have_no_solution
       end
 
       it "constrains the solution" do
-        expect([s.matches?(lower * 3), s == "abc"]).to have_solution(s => %q{"abc"})
+        expect([s.matches?(lower * 3), s == "abc"]).to have_solution(s => "abc")
         expect([s.matches?(lower * 3), s.length == 4]).to have_no_solution
-        expect([s.matches?(lower * (2..4)), s == "abcd"]).to have_solution(s => %q{"abcd"})
+        expect([s.matches?(lower * (2..4)), s == "abcd"]).to have_solution(s => "abcd")
         expect([s.matches?(lower * (2..4)), s.length == 5]).to have_no_solution
-        expect([s.matches?(lower * (2..)), s == "abcdefghi"]).to have_solution(s => %q{"abcdefghi"})
+        expect([s.matches?(lower * (2..)), s == "abcdefghi"]).to have_solution(s => "abcdefghi")
         expect([s.matches?(lower * (2..)), s.length == 1]).to have_no_solution
       end
 
@@ -254,8 +254,8 @@ module Z3
 
       it "constrains the solution" do
         expect([s.matches?(Re.Empty)]).to have_no_solution
-        expect([s.matches?(Re.Full), s == "anything at all"]).to have_solution(s => %q{"anything at all"})
-        expect([s.matches?(Re.AllChar), s == "a"]).to have_solution(s => %q{"a"})
+        expect([s.matches?(Re.Full), s == "anything at all"]).to have_solution(s => "anything at all")
+        expect([s.matches?(Re.AllChar), s == "a"]).to have_solution(s => "a")
         expect([s.matches?(Re.AllChar), s == "ab"]).to have_no_solution
       end
 
@@ -312,7 +312,7 @@ module Z3
 
     describe "sequence regexes" do
       it "work the same way" do
-        expect([xs.matches?(Re.Of([1, 2], int_seq) * (2..2))]).to have_solution(xs => "[1, 2, 1, 2]")
+        expect([xs.matches?(Re.Of([1, 2], int_seq) * (2..2))]).to have_solution(xs => int_seq.from_const([1, 2, 1, 2]))
       end
     end
   end

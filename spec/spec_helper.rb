@@ -89,10 +89,30 @@ RSpec::Matchers.define :stringify do |expected|
   end
 end
 
+# Expectations are checked by asking the model whether `var == val` holds, not by
+# comparing printed forms. Stringifying both sides went through the printer, which
+# drops the sort - an Int `1` and a Real `1` print the same, so do bitvectors of
+# different widths - and it forced expectations to be written in printer syntax.
+# `model_eval` with completion answers the question actually being asked: does this
+# model give the variable this value.
 RSpec::Matchers.define :have_solution do |expected|
   match do |asts|
     solver = setup_solver(asts)
-    solver.satisfiable? and expected.all?{|var,val| solver.model[var].to_s == val.to_s}
+    solver.satisfiable? and expected.all?{|var,val| model_says_equal?(solver.model, var, val)}
+  end
+
+  # Model evaluation normally comes back as a literal true or false. Arrays and sets
+  # are the exception - Z3's evaluator won't decide extensional equality, so it hands
+  # back the equality term unreduced, and the simplifier won't either, so #value
+  # refuses it. Everything in the term is ground by then, so a solver settles it:
+  # equal exactly when the negation can't be satisfied.
+  def model_says_equal?(model, var, val)
+    result = model.model_eval(var == val, true)
+    begin
+      result.value == true
+    rescue Z3::Exception
+      !setup_solver([~result]).satisfiable?
+    end
   end
 
   failure_message do |asts|
@@ -119,8 +139,32 @@ end
 
 RSpec::Matchers.define :have_solutions do |expected|
   match do |asts|
-    solutions = get_all_solutions(asts)
-    solutions == expected
+    same_solutions?(get_all_solutions(asts), expected)
+  end
+
+  # Comparing the two Arrays of Hashes with == checked far less than it looked like.
+  # Hash#== compares values with ==, and == on two Exprs builds an expression instead
+  # of answering - a truthy one, so any pair of values passed. Only the keys were ever
+  # really checked, as Hash looks those up through hash and eql?. Both sides hold
+  # concrete model values here, so eql? is what decides them.
+  #
+  # Order isn't part of the claim either - the solver hands its solutions back in
+  # whatever order it found them, which is its own business and moves between Z3
+  # versions - so each expected solution has to pair off against one that turned up.
+  def same_solutions?(got, expected)
+    unmatched = got.dup
+    expected.each do |wanted|
+      found = unmatched.index{|solution| same_solution?(solution, wanted)}
+      return false unless found
+      unmatched.delete_at(found)
+    end
+    unmatched.empty?
+  end
+
+  def same_solution?(got, expected)
+    got.size == expected.size and got.all? do |var, value|
+      expected.key?(var) and value.eql?(expected[var])
+    end
   end
 
   failure_message do |asts|

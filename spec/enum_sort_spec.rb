@@ -148,7 +148,7 @@ module Z3
 
       it "solves for enum values" do
         expect([Z3.Distinct(a, b, c), a == :red, b == :blue])
-          .to have_solution(a => "red", b => "blue", c => "green")
+          .to have_solution(a => :red, b => :blue, c => :green)
       end
 
       # Enum values are exactly the values there are, so the solver counts them

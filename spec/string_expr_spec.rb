@@ -35,14 +35,14 @@ module Z3
       end
 
       it "constrains the solution" do
-        expect([s.length == 5, s == "hello"]).to have_solution(s => %q{"hello"})
+        expect([s.length == 5, s == "hello"]).to have_solution(s => "hello")
         expect([s.length == 5, s == "abc"]).to have_no_solution
       end
 
       # It's an ordinary IntExpr, so all of ArithExpr works on it
       it "does arithmetic" do
-        expect([s.length + 1 == 4, s == "abc"]).to have_solution(s => %q{"abc"})
-        expect([s.length >= 2, s.length <= 2, s == "ab"]).to have_solution(s => %q{"ab"})
+        expect([s.length + 1 == 4, s == "abc"]).to have_solution(s => "abc")
+        expect([s.length >= 2, s.length <= 2, s == "ab"]).to have_solution(s => "ab")
       end
 
       it "is zero for the empty string" do
@@ -59,7 +59,7 @@ module Z3
       end
 
       it "constrains the solution" do
-        expect([s.empty?]).to have_solution(s => %q{""})
+        expect([s.empty?]).to have_solution(s => "")
         expect([s.empty?, s.length == 1]).to have_no_solution
       end
     end
@@ -103,7 +103,7 @@ module Z3
       end
 
       it "constrains the solution" do
-        expect(["he" + s + "!" == "hello!"]).to have_solution(s => %q{"llo"})
+        expect(["he" + s + "!" == "hello!"]).to have_solution(s => "llo")
       end
     end
 
@@ -112,7 +112,7 @@ module Z3
         expect((s * 3).sexpr).to eq("(str.++ s s s)")
         expect(s * 1).to be_same_as(s)
         expect((s * 0).value).to eq("")
-        expect([s == "ab", s * 3 == "ababab"]).to have_solution(s => %q{"ab"})
+        expect([s == "ab", s * 3 == "ababab"]).to have_solution(s => "ab")
       end
 
       # Z3 has no repetition operator, so the count can't be symbolic
@@ -143,20 +143,20 @@ module Z3
       end
 
       it "indexes" do
-        expect([s == "hello", s[1] == "e"]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", s[1] == "e"]).to have_solution(s => "hello")
         expect([s == "hello", s[1] == "x"]).to have_no_solution
       end
 
       it "takes substrings" do
-        expect([s == "hello", s[1, 3] == "ell"]).to have_solution(s => %q{"hello"})
-        expect([s == "hello", s[1..3] == "ell"]).to have_solution(s => %q{"hello"})
-        expect([s == "hello", s[1...3] == "el"]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", s[1, 3] == "ell"]).to have_solution(s => "hello")
+        expect([s == "hello", s[1..3] == "ell"]).to have_solution(s => "hello")
+        expect([s == "hello", s[1...3] == "el"]).to have_solution(s => "hello")
       end
 
       # An open ended range runs to the end of the string, so it needs the length
       it "takes substrings with open ended ranges" do
-        expect([s == "hello", s[2..] == "llo"]).to have_solution(s => %q{"hello"})
-        expect([s == "hello", s[..2] == "hel"]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", s[2..] == "llo"]).to have_solution(s => "hello")
+        expect([s == "hello", s[..2] == "hel"]).to have_solution(s => "hello")
       end
 
       # An index is an offset however it's spelled, so a literal -1 and an IntExpr
@@ -164,12 +164,12 @@ module Z3
       # recognized as negative, so neither counts from the end - `t` is what Z3
       # answers, rather than an answer proposed to it.
       it "means the same by a literal index and a symbolic one" do
-        expect([s == "hello", x == -1, t == s[-1]]).to have_solution(t => %q{""})
-        expect([s == "hello", x == -1, t == s[x]]).to have_solution(t => %q{""})
-        expect([s == "hello", x == -1, t == s[-1, 2]]).to have_solution(t => %q{""})
-        expect([s == "hello", x == -1, t == s[x, 2]]).to have_solution(t => %q{""})
-        expect([s == "hello", x == -1, t == s[0..-1]]).to have_solution(t => %q{""})
-        expect([s == "hello", x == -1, t == s[0..x]]).to have_solution(t => %q{""})
+        expect([s == "hello", x == -1, t == s[-1]]).to have_solution(t => "")
+        expect([s == "hello", x == -1, t == s[x]]).to have_solution(t => "")
+        expect([s == "hello", x == -1, t == s[-1, 2]]).to have_solution(t => "")
+        expect([s == "hello", x == -1, t == s[x, 2]]).to have_solution(t => "")
+        expect([s == "hello", x == -1, t == s[0..-1]]).to have_solution(t => "")
+        expect([s == "hello", x == -1, t == s[0..x]]).to have_solution(t => "")
       end
 
       it "passes a negative index through as an offset" do
@@ -180,17 +180,17 @@ module Z3
       # Counting from the end is spelled out, and then it works for a symbolic offset
       # too, which is the whole point of not emulating it
       it "counts from the end when told to" do
-        expect([s == "hello", t == s[s.length - 1]]).to have_solution(t => %q{"o"})
-        expect([s == "hello", x == 1, t == s[s.length - x]]).to have_solution(t => %q{"o"})
-        expect([s == "hello", t == s[s.length - 2, 2]]).to have_solution(t => %q{"lo"})
+        expect([s == "hello", t == s[s.length - 1]]).to have_solution(t => "o")
+        expect([s == "hello", x == 1, t == s[s.length - x]]).to have_solution(t => "o")
+        expect([s == "hello", t == s[s.length - 2, 2]]).to have_solution(t => "lo")
       end
 
       # This denotes a String wherever it appears, so `nil` was never one of its
       # options - out of range is simply whatever Z3 says, and Z3 says ""
       it "is whatever Z3 says out of range, where Ruby is nil" do
-        expect([s == "hello", s[10] == ""]).to have_solution(s => %q{"hello"})
-        expect([s == "hello", s[-10] == ""]).to have_solution(s => %q{"hello"})
-        expect([s == "hello", s[3, 100] == "lo"]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", s[10] == ""]).to have_solution(s => "hello")
+        expect([s == "hello", s[-10] == ""]).to have_solution(s => "hello")
+        expect([s == "hello", s[3, 100] == "lo"]).to have_solution(s => "hello")
       end
 
       it "#slice is #[], like Ruby's" do
@@ -201,8 +201,8 @@ module Z3
 
       it "takes symbolic indices" do
         i = IntSort.new.var("i")
-        expect([s == "hello", s[i] == "l", i == 2]).to have_solution(s => %q{"hello"})
-        expect([s == "hello", s[i, 2] == "lo", i == 3]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", s[i] == "l", i == 2]).to have_solution(s => "hello")
+        expect([s == "hello", s[i, 2] == "lo", i == 3]).to have_solution(s => "hello")
       end
 
       # Both ends of a Range can be symbolic too, open ends included - it's all Ruby
@@ -210,19 +210,19 @@ module Z3
       it "takes symbolic ranges" do
         i = IntSort.new.var("i")
         j = IntSort.new.var("j")
-        expect([s == "hello", i == 1, j == 3, t == s[i..j]]).to have_solution(t => %q{"ell"})
-        expect([s == "hello", i == 1, j == 3, t == s[i...j]]).to have_solution(t => %q{"el"})
-        expect([s == "hello", i == 2, t == s[i..]]).to have_solution(t => %q{"llo"})
-        expect([s == "hello", i == 2, t == s[..i]]).to have_solution(t => %q{"hel"})
-        expect([s == "hello", i == 2, t == s[i..3]]).to have_solution(t => %q{"ll"})
-        expect([s == "hello", i == 3, t == s[1..i]]).to have_solution(t => %q{"ell"})
+        expect([s == "hello", i == 1, j == 3, t == s[i..j]]).to have_solution(t => "ell")
+        expect([s == "hello", i == 1, j == 3, t == s[i...j]]).to have_solution(t => "el")
+        expect([s == "hello", i == 2, t == s[i..]]).to have_solution(t => "llo")
+        expect([s == "hello", i == 2, t == s[..i]]).to have_solution(t => "hel")
+        expect([s == "hello", i == 2, t == s[i..3]]).to have_solution(t => "ll")
+        expect([s == "hello", i == 3, t == s[1..i]]).to have_solution(t => "ell")
       end
 
       it "means the same by a literal range end and a symbolic one" do
         expect(s[..x]).to be_same_as(s[0..x])
         [2, 0, -1, 10].each do |v|
-          expect([s == "hello", x == v, s[x..] == s[v..]]).to have_solution(s => %q{"hello"})
-          expect([s == "hello", x == v, s[..x] == s[..v]]).to have_solution(s => %q{"hello"})
+          expect([s == "hello", x == v, s[x..] == s[v..]]).to have_solution(s => "hello")
+          expect([s == "hello", x == v, s[..x] == s[..v]]).to have_solution(s => "hello")
           expect([s == "hello", x == v, s[x..] != s[v..]]).to have_no_solution
           expect([s == "hello", x == v, s[..x] != s[..v]]).to have_no_solution
         end
@@ -249,7 +249,7 @@ module Z3
       end
 
       it "constrains the solution" do
-        expect([s == "hello", s.include?("ell")]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", s.include?("ell")]).to have_solution(s => "hello")
         expect([s == "hello", s.include?("xyz")]).to have_no_solution
         expect([s == "hello", ~s.include?("ell")]).to have_no_solution
       end
@@ -268,17 +268,17 @@ module Z3
       end
 
       it "constrains the solution" do
-        expect([s == "hello", s.start_with?("he")]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", s.start_with?("he")]).to have_solution(s => "hello")
         expect([s == "hello", s.start_with?("lo")]).to have_no_solution
-        expect([s == "hello", s.end_with?("lo")]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", s.end_with?("lo")]).to have_solution(s => "hello")
         expect([s == "hello", s.end_with?("he")]).to have_no_solution
       end
 
       # Ruby's take any number of candidates and are true if any matches
       it "takes multiple candidates" do
-        expect([s == "hello", s.start_with?("xy", "he")]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", s.start_with?("xy", "he")]).to have_solution(s => "hello")
         expect([s == "hello", s.start_with?("xy", "zw")]).to have_no_solution
-        expect([s == "hello", s.end_with?("xy", "lo")]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", s.end_with?("xy", "lo")]).to have_solution(s => "hello")
       end
 
       it "is false with no candidates at all, like Ruby's" do
@@ -305,14 +305,14 @@ module Z3
       end
 
       it "finds the first and the last occurrence" do
-        expect([s == "hello", s.index("l") == 2]).to have_solution(s => %q{"hello"})
-        expect([s == "hello", s.index("l", 3) == 3]).to have_solution(s => %q{"hello"})
-        expect([s == "hello", s.rindex("l") == 3]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", s.index("l") == 2]).to have_solution(s => "hello")
+        expect([s == "hello", s.index("l", 3) == 3]).to have_solution(s => "hello")
+        expect([s == "hello", s.rindex("l") == 3]).to have_solution(s => "hello")
       end
 
       # This denotes an Int, so there's no `nil` for it to be - Z3 answers -1
       it "is -1 with no match, not nil" do
-        expect([s == "hello", s.index("z") == -1]).to have_solution(s => %q{"hello"})
+        expect([s == "hello", s.index("z") == -1]).to have_solution(s => "hello")
       end
     end
 
@@ -326,10 +326,10 @@ module Z3
       end
 
       it "matches the whole string, not a substring" do
-        expect([s.matches?(Re.Range("a", "z").plus), s == "abc"]).to have_solution(s => %q{"abc"})
+        expect([s.matches?(Re.Range("a", "z").plus), s == "abc"]).to have_solution(s => "abc")
         expect([s.matches?(Re.Range("a", "z").plus), s == "ab1"]).to have_no_solution
         # Ruby's String#match? would search - that's spelled out here
-        expect([s.matches?(Re.Full + Re.Of("b") + Re.Full), s == "ab1"]).to have_solution(s => %q{"ab1"})
+        expect([s.matches?(Re.Full + Re.Of("b") + Re.Full), s == "ab1"]).to have_solution(s => "ab1")
       end
 
       # Everywhere else a Ruby String converts to the regex matching exactly it, but
@@ -357,8 +357,8 @@ module Z3
       end
 
       it "replaces the first occurrence, or all of them" do
-        expect([s == "banana", s.sub("a", "!") == "b!nana"]).to have_solution(s => %q{"banana"})
-        expect([s == "banana", s.gsub("a", "!") == "b!n!n!"]).to have_solution(s => %q{"banana"})
+        expect([s == "banana", s.sub("a", "!") == "b!nana"]).to have_solution(s => "banana")
+        expect([s == "banana", s.gsub("a", "!") == "b!n!n!"]).to have_solution(s => "banana")
       end
 
       # `str.replace_re` / `str.replace_re_all`, and unanchored like Ruby's are.
@@ -398,14 +398,14 @@ module Z3
       end
 
       it "parses digits" do
-        expect([s == "42", s.to_i == 42]).to have_solution(s => %q{"42"})
-        expect([s.to_i == 42, s.length == 2]).to have_solution(s => %q{"42"})
+        expect([s == "42", s.to_i == 42]).to have_solution(s => "42")
+        expect([s.to_i == 42, s.length == 2]).to have_solution(s => "42")
       end
 
       # Ruby answers 0 for "abc" and 12 for "12ab"; Z3 answers -1 for both
       it "is -1 for anything that isn't all digits" do
-        expect([s == "abc", s.to_i == -1]).to have_solution(s => %q{"abc"})
-        expect([s == "12ab", s.to_i == -1]).to have_solution(s => %q{"12ab"})
+        expect([s == "abc", s.to_i == -1]).to have_solution(s => "abc")
+        expect([s == "12ab", s.to_i == -1]).to have_solution(s => "12ab")
       end
     end
 
@@ -413,14 +413,14 @@ module Z3
     describe "#to_code" do
       it "is the code point of a one character string" do
         expect(s.to_code).to be_a(IntExpr)
-        expect([s == "A", s.to_code == 65]).to have_solution(s => %q{"A"})
-        expect([s == "中", s.to_code == 0x4e2d]).to have_solution(s => %q{"中"})
+        expect([s == "A", s.to_code == 65]).to have_solution(s => "A")
+        expect([s == "中", s.to_code == 0x4e2d]).to have_solution(s => "中")
       end
 
       # Same -1 convention as #to_i uses for a string that isn't a number
       it "is -1 for a string of any other length" do
-        expect([s == "ab", s.to_code == -1]).to have_solution(s => %q{"ab"})
-        expect([s == "", s.to_code == -1]).to have_solution(s => %q{""})
+        expect([s == "ab", s.to_code == -1]).to have_solution(s => "ab")
+        expect([s == "", s.to_code == -1]).to have_solution(s => "")
       end
     end
 
@@ -446,9 +446,9 @@ module Z3
       end
 
       it "orders lexicographically, not by length" do
-        expect([s == "abc", s < "abd"]).to have_solution(s => %q{"abc"})
+        expect([s == "abc", s < "abd"]).to have_solution(s => "abc")
         expect([s == "abc", s < "ab"]).to have_no_solution
-        expect([s == "abc", s <= "abc"]).to have_solution(s => %q{"abc"})
+        expect([s == "abc", s <= "abc"]).to have_solution(s => "abc")
         expect([s == "abc", s < "abc"]).to have_no_solution
       end
 

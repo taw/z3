@@ -88,28 +88,27 @@ module Z3
       end
     end
 
-    # TODO: Formatting is dreadful
     it "== and !=" do
       expect([a == b, b != c]).to have_solution(
-        a => "store(const(0), 0, 1)",
-        b => "store(const(0), 0, 1)",
-        c => "const(0)",
+        a => sort.Const(0).store(0, 1),
+        b => sort.Const(0).store(0, 1),
+        c => sort.Const(0),
       )
     end
 
     it "select" do
       expect([a.select(10) == 20]).to have_solution(
-        a => "const(20)",
+        a => sort.Const(20),
       )
       expect([a[10] == 20]).to have_solution(
-        a => "const(20)",
+        a => sort.Const(20),
       )
       # Forced x and y to specific values, otherwise this spec fails between versions
       expect([a[x] == 10, a[y] == 20, x == 30, y == 40]).to have_solution(
-        a => "store(const(20), 30, 10)",
-        #    "store(const(10), 40, 20)" would also work
-        x => "30",
-        y => "40",
+        a => sort.Const(20).store(30, 10),
+        #    sort.Const(10).store(40, 20) would also work
+        x => 30,
+        y => 40,
       )
     end
 

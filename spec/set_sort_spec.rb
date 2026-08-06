@@ -35,8 +35,8 @@ module Z3
     it "empty and full sets can be used in constraints" do
       a = int_set.var("a")
       expect([a == int_set.Empty, a.include?(1)]).to have_no_solution
-      expect([a == int_set.Full]).to have_solution(a => "const(true)")
-      expect([a == int_set.Empty, !a.include?(1)]).to have_solution(a => "const(false)")
+      expect([a == int_set.Full]).to have_solution(a => int_set.Full)
+      expect([a == int_set.Empty, !a.include?(1)]).to have_solution(a => int_set.Empty)
     end
   end
 end
