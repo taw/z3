@@ -29,19 +29,17 @@ class Nonogram
     if @solver.satisfiable?
       @model = @solver.model
       print_answer!
-      current_solution = []
-      # TODO: Model API doesn't currently have functionality necessary
-      #       to make uniqueness checks work
-      # @model.each do |var, val|
-      #   current_solution << (@model[var] != val)
-      # end
-      # @solver.assert Z3.Or(*current_solution)
-      # if @solver.satisfiable?
-      #   puts "solution is not unique"
-      #   print_answer!
-      # else
-      #   puts "solution is unique"
-      # end
+      # `!model` is "any variable differs from what it is here", which is exactly
+      # the constraint a uniqueness check needs. The group start/end variables are
+      # determined by the picture, so a second model would be a second picture.
+      @solver.assert !@model
+      if @solver.satisfiable?
+        puts "solution is not unique"
+        @model = @solver.model
+        print_answer!
+      else
+        puts "solution is unique"
+      end
     else
       puts "failed to solve"
     end

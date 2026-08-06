@@ -110,10 +110,8 @@ class LetterConnections
     (0...@ysize).each do |y|
       (0...@xsize).each do |x|
         next if @special_starts.has_key?([x,y])
-        potential_incoming = potential_incoming(x,y)
-        condition_exactly_one(
-          potential_incoming.map{|i,j,d| @dir[[i,j]] == d}
-        )
+        incoming = potential_incoming(x,y).map{|i,j,d| @dir[[i,j]] == d}
+        @solver.assert Z3.Exactly(incoming, 1)
       end
     end
     if @solver.satisfiable?
@@ -152,18 +150,6 @@ class LetterConnections
       [x0,y0-1,3],
     ].select do |x,y,d|
       @dir.has_key?([x,y]) and not @special_ends.has_key?([x,y])
-    end
-  end
-
-  # Surely Z3 must have a thing for it
-  def condition_exactly_one(conds)
-    @solver.assert Z3.Or(*conds)
-    (0...conds.size).each do |ci|
-      (0...conds.size).each do |cj|
-        if ci < cj
-          @solver.assert ~conds[ci] | ~conds[cj]
-        end
-      end
     end
   end
 

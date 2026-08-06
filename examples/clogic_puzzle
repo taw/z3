@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# NOTE: This is not part of integration test suite as it's fairly slow (30s or so on my machine)
+# NOTE: This is not part of integration test suite as it's very slow
 
 require_relative "../lib/z3"
 
@@ -89,7 +89,7 @@ class CLogicPuzzleSolver
       model = solver.model
       model_vars = {}
       model.each do |k,v|
-        v = v.to_s.to_i
+        v = v.unsigned_value
         model_vars[k.to_s] = v
         puts "#{k}=#{v}"
       end

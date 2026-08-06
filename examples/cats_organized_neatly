@@ -108,7 +108,6 @@ class CatsOrganizedNeatly
       @model = @solver.model
       print_answer!
     else
-      binding.pry
       puts "failed to solve"
     end
   end

@@ -21,6 +21,7 @@ describe "Nonogram" do
 ·······███····███···
 ······███···········
 ······██·█··········
+solution is unique
 EOF
   end
 end

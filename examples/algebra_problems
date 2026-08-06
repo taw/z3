@@ -30,19 +30,12 @@ class AlgebraProblem01 < AlgebraProblem
 end
 
 class AlgebraProblem03 < AlgebraProblem
-  def declare_abs(var, expr)
-    solver.assert Z3.Or(
-      Z3.And(var == expr,  expr >= 0),
-      Z3.And(var == -expr, expr <= 0)
-    )
-  end
-
   def call
     x = Z3.Real("x")
     xm2abs = Z3.Real("|x-2|")
-    declare_abs(xm2abs, x-2)
+    solver.assert xm2abs == (x-2).abs
     m6abs = Z3.Real("|-6|")
-    declare_abs(m6abs, -6)
+    solver.assert m6abs == Z3.Const(-6).abs
     solver.assert x < 2
     solver.assert xm2abs == 4*m6abs
     print_solution! "03"
@@ -101,17 +94,10 @@ class AlgebraProblem06 < AlgebraProblem
 end
 
 class AlgebraProblem10 < AlgebraProblem
-  def declare_abs(var, expr)
-    solver.assert Z3.Or(
-      Z3.And(var == expr,  expr >= 0),
-      Z3.And(var == -expr, expr <= 0)
-    )
-  end
-
   def call
     x = Z3.Real("x")
     y = Z3.Real("|-2x + 2|")
-    declare_abs(y, -2*x + 2)
+    solver.assert y == (-2*x + 2).abs
     solver.assert y - 3 == -3
     print_solution! "10"
   end

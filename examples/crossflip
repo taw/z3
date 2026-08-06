@@ -68,7 +68,7 @@ class CrossFlipSolver
 
     @ysize.times do |y|
       @xsize.times do |x|
-        clicked = (model[click(x,y)].to_s == "true")
+        clicked = model[click(x,y)].to_b
         print clicked ? "[x] " : "[ ] "
       end
       print "\n"

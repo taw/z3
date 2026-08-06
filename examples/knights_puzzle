@@ -93,10 +93,6 @@ class KnightsPuzzle
     end
   end
 
-  def abs(t)
-    Z3::IfThenElse(t >= 0, t, -t)
-  end
-
   def move(t)
     move_start_x = Z3::Int("move_start_x_#{t}")
     move_start_y = Z3::Int("move_start_y_#{t}")
@@ -110,9 +106,11 @@ class KnightsPuzzle
     @solver.assert (move_end_y >= 0) & (move_end_y < @y_size)
 
     # 8 possible moves
+    dx = (move_start_x - move_end_x).abs
+    dy = (move_start_y - move_end_y).abs
     @solver.assert (
-      ((abs(move_start_x - move_end_x) == 2) & (abs(move_start_y - move_end_y) == 1)) |
-      ((abs(move_start_x - move_end_x) == 1) & (abs(move_start_y - move_end_y) == 2))
+      ((dx == 2) & (dy == 1)) |
+      ((dx == 1) & (dy == 2))
     )
 
     {start_x: move_start_x, start_y: move_start_y, end_x: move_end_x, end_y: move_end_y, figure: figure}
