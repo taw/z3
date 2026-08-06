@@ -186,7 +186,10 @@ module Z3
 
       it "lets a rebuilt sort be used from Ruby afterwards" do
         solver.check
-        solver.model
+        # Asking a const for its sort is what rebuilds it - the model on its own
+        # doesn't, and without the rebuild this would declare Pair a second time,
+        # replacing the parsed sort's constructor and accessors
+        solver.model.each_const.first[0].sort
         pair = TupleSort.new("Pair", fst: int, snd: BoolSort.new)
         expect(pair.mk(1, true)).to stringify("Pair.mk(1, true)")
       end

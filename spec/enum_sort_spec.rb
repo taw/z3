@@ -119,7 +119,9 @@ module Z3
 
       it "lets a rebuilt sort be declared from Ruby afterwards" do
         solver.check
-        solver.model
+        # Asking a const for its sort is what rebuilds it - the model on its own
+        # doesn't, and without the rebuild this would be a second declaration
+        solver.model.each_const.first[0].sort
         suit = EnumSort.new("Suit", %i[hearts spades clubs diamonds])
         expect(suit[:diamonds].inspect).to eq("Suit<diamonds>")
       end

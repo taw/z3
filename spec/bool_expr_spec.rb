@@ -105,8 +105,11 @@ module Z3
       expect([~a, ~b, Z3.AtLeast({a => 3, b => 2, c => 5}, 6)]).to have_no_solution
     end
 
+    # A weighted total of 5 is reachable two ways here, a+b or c on its own, and Z3
+    # is free to return either - so each way is pinned down to a single solution
     it "Exactly with weights" do
-      expect([Z3.Exactly({a => 3, b => 2, c => 5}, 5)]).to have_solution(a => true, b => true, c => false)
+      expect([~c, Z3.Exactly({a => 3, b => 2, c => 5}, 5)]).to have_solution(a => true, b => true)
+      expect([c, Z3.Exactly({a => 3, b => 2, c => 5}, 5)]).to have_solution(a => false, b => false)
       expect([~a, ~b, Z3.Exactly({a => 3, b => 2, c => 5}, 4)]).to have_no_solution
     end
 

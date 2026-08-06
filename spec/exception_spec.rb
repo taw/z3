@@ -19,10 +19,14 @@ module Z3
         .to raise_error(Z3::Exception, /\AZ3 library failed with error Z3_PARSER_ERROR: .*line 1 column \d+/)
     end
 
-    # Parsing doesn't stop at the first problem, and all of them are worth reporting
+    # Parsing doesn't stop at the first problem, and all of them are worth reporting.
+    # The names have to be ones nothing else in the suite declares - enum values are
+    # constants in the same namespace the parser resolves against, and they outlive
+    # the example which declared them, so a plain `a` here would resolve to one of
+    # those instead of being the unknown constant this is about
     it "includes every parser error, one per line" do
-      expect{ solver.from_string("(declare-const a Foo)(assert (> a b))") }
-        .to raise_error(Z3::Exception, /unknown sort 'Foo'.*\n.*unknown constant a/)
+      expect{ solver.from_string("(declare-const parser_error_a NoSuchSort)(assert (> parser_error_a parser_error_b))") }
+        .to raise_error(Z3::Exception, /unknown sort 'NoSuchSort'.*\n.*unknown constant parser_error_a/)
     end
 
     # Z3 has nothing to add for some errors, and the message just restates the code
