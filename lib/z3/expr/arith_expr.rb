@@ -57,7 +57,7 @@ module Z3
     end
 
     def abs
-      (self < 0).ite(-self, self)
+      sort.new(LowLevel.mk_abs(self))
     end
 
     # Recast so 1 + x:Float

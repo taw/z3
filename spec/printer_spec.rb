@@ -295,6 +295,17 @@ module Z3
         expect(-(a + b)).to stringify("-(a + b)")
         expect((-a) + (-b)).to stringify("(-a) + (-b)")
       end
+
+      # `abs` is a Z3 operation of its own, so it prints as a call like `mod` and `rem`
+      # do, and like them it's atomic - only its argument can need parentheses
+      it "abs" do
+        expect(a.abs).to stringify("abs(a)")
+        expect(Z3.Real("r").abs).to stringify("abs(r)")
+        expect((a - b).abs).to stringify("abs(a - b)")
+        expect(a.abs + b.abs).to stringify("abs(a) + abs(b)")
+        expect(-(a.abs)).to stringify("-abs(a)")
+        expect(a.abs.abs).to stringify("abs(abs(a))")
+      end
     end
 
     describe "bitvector operations" do
