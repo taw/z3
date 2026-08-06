@@ -12,6 +12,8 @@ module Z3
   # into a one element sequence, while a SeqExpr of this very sort or a Ruby Array is
   # taken as the subsequence it already is.
   class SeqExpr < Expr
+    include SeqMapFold
+
     public_class_method :new
 
     def element_sort

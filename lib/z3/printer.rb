@@ -176,6 +176,32 @@ module Z3
       PrintedExpr.new("#{args[1].enforce_parentheses}.#{method}(#{args[0]})")
     end
 
+    # The map and fold family, which needs its own shape: Z3 takes the sequence
+    # *last* and the rest in an order the Ruby methods don't share, so
+    # `(seq.fold_left f a xs)` is `xs.inject(a, f)`. The Ruby names are the primary
+    # ones - #mapi, #fold_left and #fold_lefti exist as aliases, but nothing prints
+    # as them. Z3 uses the `seq.` names for Strings too, so this covers both.
+    def format_seq_map_fold(name, args)
+      case name
+      when "seq.map"
+        seq_map_fold_call(args[1], "map", [args[0]]) if args.size == 2
+      when "seq.mapi"
+        seq_map_fold_call(args[2], "map_with_index", [args[0]], args[1]) if args.size == 3
+      when "seq.fold_left"
+        seq_map_fold_call(args[2], "inject", [args[1], args[0]]) if args.size == 3
+      when "seq.fold_lefti"
+        seq_map_fold_call(args[3], "inject_with_index", [args[2], args[0]], args[1]) if args.size == 4
+      end
+    end
+
+    # `from:` is 0 by default on the Ruby side, so it prints only when it isn't -
+    # the same reason `seq.indexof`'s trailing 0 doesn't print
+    def seq_map_fold_call(receiver, method, rest, from = nil)
+      rest = rest.map(&:to_s)
+      rest << "from: #{from}" unless from.nil? or from.to_s == "0"
+      PrintedExpr.new("#{receiver.enforce_parentheses}.#{method}(#{rest.join(", ")})")
+    end
+
     # Ruby indexing. `str.at` gives a one character String, so it's `s[i]` - but
     # `seq.at` gives a one element Seq, which in Ruby is `xs[i, 1]`, because `xs[i]`
     # on a Seq is the element itself (`seq.nth`).
@@ -375,6 +401,10 @@ module Z3
         # ...and the ones where the receiver is the second argument instead
         flipped_call = format_flipped_method_call(name, args)
         return flipped_call if flipped_call
+
+        # ...and the map/fold family, where it's the last one
+        map_fold = format_seq_map_fold(name, args)
+        return map_fold if map_fold
 
         index = format_index(a, name, args)
         return index if index

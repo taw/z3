@@ -191,6 +191,44 @@ module Z3
         concat = parse_expr("(Seq Int)", "(seq.++ r (seq.unit 1))")
         expect(int_seq.var("q") == concat).to stringify("q = (r + [1])")
       end
+
+      # Z3 takes the sequence last and the rest in an order the Ruby methods don't
+      # share, so these are reordered rather than just renamed. Parsed from SMT-LIB
+      # so the lambda's bound variable has a name worth printing - the block form
+      # makes a fresh one, `x!42`.
+      #
+      # The Ruby names are the primary ones: #mapi, #fold_left and #fold_lefti exist
+      # as aliases for Z3's spellings, but nothing prints as them.
+      it "map and fold as Ruby" do
+        double = "(lambda ((x Int)) (* x 2))"
+        add = "(lambda ((a Int) (x Int)) (+ a x))"
+        expect(parse_expr("(Seq Int)", "(seq.map #{double} r)", "(Seq Int)"))
+          .to stringify("r.map((lambda ((x Int)) (* x 2)))")
+        expect(parse_expr("(Seq Int)", "(seq.mapi #{add} 0 r)", "(Seq Int)"))
+          .to stringify("r.map_with_index((lambda ((a Int) (x Int)) (+ a x)))")
+        expect(parse_expr("Int", "(seq.fold_left #{add} 0 r)", "(Seq Int)"))
+          .to stringify("r.inject(0, (lambda ((a Int) (x Int)) (+ a x)))")
+      end
+
+      # `from:` defaults to 0 on the Ruby side, so a 0 there is noise - the same
+      # reason `seq.indexof`'s trailing 0 doesn't print
+      it "map and fold print a non-zero starting index as `from:`" do
+        add = "(lambda ((a Int) (x Int)) (+ a x))"
+        addi = "(lambda ((i Int) (a Int) (x Int)) (+ a x i))"
+        expect(parse_expr("(Seq Int)", "(seq.mapi #{add} 5 r)", "(Seq Int)"))
+          .to stringify("r.map_with_index((lambda ((a Int) (x Int)) (+ a x)), from: 5)")
+        expect(parse_expr("Int", "(seq.fold_lefti #{addi} 0 100 r)", "(Seq Int)"))
+          .to stringify("r.inject_with_index(100, (lambda ((i Int) (a Int) (x Int)) (+ a x i)))")
+        expect(parse_expr("Int", "(seq.fold_lefti #{addi} 5 100 r)", "(Seq Int)"))
+          .to stringify("r.inject_with_index(100, (lambda ((i Int) (a Int) (x Int)) (+ a x i)), from: 5)")
+      end
+
+      # The receiver is a subexpression like any other
+      it "map and fold parenthesize their receiver" do
+        double = "(lambda ((x Int)) (* x 2))"
+        expect(parse_expr("(Seq Int)", "(seq.map #{double} (seq.++ r (seq.unit 1)))", "(Seq Int)"))
+          .to stringify("(r + [1]).map((lambda ((x Int)) (* x 2)))")
+      end
     end
 
     # Regexes have no Ruby literal at all, so they print as the constructor calls and

@@ -5,6 +5,15 @@ module Z3
     let(:ys) { sort.var("ys") }
     let(:n) { Z3.Int("n") }
 
+    # Pins the sequence down, then reads the term back out of the model - everything
+    # the map and fold groups check is a value rather than a printed term
+    def value_of(term, *assertions)
+      solver = Solver.new
+      assertions.each { |a| solver.assert a }
+      raise "unsat" unless solver.satisfiable?
+      solver.model[term].value
+    end
+
     it "#element_sort" do
       expect(xs.element_sort).to eq(IntSort.new)
       expect(SeqSort.new(StringSort.new).var("q").element_sort).to eq(StringSort.new)
@@ -375,6 +384,169 @@ module Z3
         expect(solver.model[xs].value.size).to eq(3)
         expect(solver.model[xs].value[0]).to eq(7)
         expect(solver.model[ys].value).to eq(solver.model[xs].value + [9])
+      end
+    end
+
+    # `seq.map` / `seq.mapi` / `seq.fold_left` / `seq.fold_lefti`. The block form
+    # conjures its own bound variables, so nothing here has to name them.
+    describe "#map" do
+      it "maps a block over the elements" do
+        expect(value_of(xs.map { |x| x * 2 }, xs == sort.from_const([1, 2, 3]))).to eq([2, 4, 6])
+        expect(value_of(xs.map { |x| x + 1 }, xs == sort.from_const([]))).to eq([])
+      end
+
+      it "changes the element sort to whatever the block returns" do
+        expect(xs.map { |x| x > 1 }.sort).to eq(SeqSort.new(BoolSort.new))
+        expect(value_of(xs.map { |x| x > 1 }, xs == sort.from_const([1, 2]))).to eq([false, true])
+      end
+
+      # The same casting `Z3.Lambda` does for a literal body
+      it "takes a Ruby literal as the block's result" do
+        expect(value_of(xs.map { |_x| 7 }, xs == sort.from_const([1, 2]))).to eq([7, 7])
+      end
+
+      it "chains" do
+        expect(value_of(xs.map { |x| x * 2 }.map { |x| x + 1 }, xs == sort.from_const([1, 2]))).to eq([3, 5])
+      end
+
+      # A unary function is an ordinary lambda, so no SeqFunction is needed. To Bool
+      # it's a Set, to anything else an Array, and #map takes either.
+      it "takes a Lambda instead of a block" do
+        x = Z3.Int("x")
+        expect(Z3.Lambda(x, x * 2)).to be_a(ArrayExpr)
+        expect(Z3.Lambda(x, x > 0)).to be_a(SetExpr)
+        expect(value_of(xs.map(Z3.Lambda(x, x * 2)), xs == sort.from_const([1, 2]))).to eq([2, 4])
+        expect(value_of(xs.map(Z3.Lambda(x, x > 1)), xs == sort.from_const([1, 2]))).to eq([false, true])
+      end
+
+      it "raises without a function, with both, or with the wrong one" do
+        expect { xs.map }.to raise_error(Z3::Exception, "#map needs a function or a block")
+        expect { xs.map(Z3.Lambda(Z3.Int("x"), 1)) { |x| x } }
+          .to raise_error(Z3::Exception, "Pass a function or a block, not both")
+        expect { xs.map(Z3.Lambda(Z3.Bool("b"), 1)) }
+          .to raise_error(Z3::Exception, "#map wants a one argument function over Int, got Array(Bool, Int)")
+        expect { xs.map(SeqFunction.from_block(IntSort.new, IntSort.new) { |a, b| a + b }) }
+          .to raise_error(Z3::Exception, /#map wants a one argument function over Int/)
+      end
+    end
+
+    describe "#map_with_index" do
+      # Z3's argument order, which is index first
+      it "gives the block the index and the element" do
+        expect(value_of(xs.map_with_index { |i, x| x * 10 + i }, xs == sort.from_const([1, 2, 3])))
+          .to eq([10, 21, 32])
+      end
+
+      # Z3 lets the index start anywhere, which Ruby has no spelling for
+      it "starts the index at `from:`" do
+        expect(value_of(xs.map_with_index(from: 5) { |i, _x| i }, xs == sort.from_const([1, 2, 3])))
+          .to eq([5, 6, 7])
+      end
+
+      it "takes a SeqFunction instead of a block" do
+        f = SeqFunction.from_block(IntSort.new, IntSort.new) { |i, x| x - i }
+        expect(value_of(xs.map_with_index(f), xs == sort.from_const([10, 20, 30]))).to eq([10, 19, 28])
+      end
+
+      it "is aliased as #mapi, Z3's own name" do
+        expect(SeqExpr.instance_method(:mapi)).to eq(SeqExpr.instance_method(:map_with_index))
+      end
+    end
+
+    describe "#inject" do
+      it "folds from the initial value, left to right" do
+        expect(value_of(xs.inject(0) { |a, x| a + x }, xs == sort.from_const([1, 2, 3]))).to eq(6)
+        expect(value_of(xs.inject(1) { |a, x| a * x }, xs == sort.from_const([2, 3, 4]))).to eq(24)
+        expect(value_of(xs.inject(0) { |a, x| a + x }, xs == sort.from_const([]))).to eq(0)
+      end
+
+      # Non-commutative, so this pins the argument order down: left to right is 97,
+      # right to left would be -97 and (acc, element) swapped would be 1
+      it "gives the block the accumulator first" do
+        expect(value_of(xs.inject(100) { |a, x| a - x }, xs == sort.from_const([1, 2]))).to eq(97)
+      end
+
+      it "accumulates into a different sort than the elements" do
+        term = xs.inject(Z3.Const(true)) { |a, x| a & (x > 0) }
+        expect(term.sort).to eq(BoolSort.new)
+        expect(value_of(term, xs == sort.from_const([1, 2, 3]))).to eq(true)
+        expect(value_of(term, xs == sort.from_const([1, -2]))).to eq(false)
+      end
+
+      it "takes a SeqFunction instead of a block" do
+        f = SeqFunction.from_block(IntSort.new, IntSort.new) { |a, x| a + x }
+        expect(value_of(xs.inject(0, f), xs == sort.from_const([1, 2, 3]))).to eq(6)
+      end
+
+      it "is aliased as #reduce and as Z3's #fold_left" do
+        expect(SeqExpr.instance_method(:reduce)).to eq(SeqExpr.instance_method(:inject))
+        expect(SeqExpr.instance_method(:fold_left)).to eq(SeqExpr.instance_method(:inject))
+      end
+
+      it "raises without a function, with both, or with the wrong one" do
+        expect { xs.inject(0) }.to raise_error(Z3::Exception, "Needs a function or a block")
+        expect { xs.inject(0) { |a| a } }
+          .to raise_error(Z3::Exception, "Block takes 1 argument, expected 2")
+        expect { xs.inject(0, Z3.Lambda(Z3.Int("x"), 1)) }
+          .to raise_error(Z3::Exception, "Wanted a SeqFunction over (Int, Int), got Array(Int, Int)")
+        expect { xs.inject(0, SeqFunction.from_block(BoolSort.new, IntSort.new) { |a, x| a }) }
+          .to raise_error(Z3::Exception, "Wanted a SeqFunction over (Int, Int), got Z3::SeqFunction<(Bool, Int) -> Bool>")
+      end
+    end
+
+    describe "#inject_with_index" do
+      it "gives the block the index, the accumulator and the element" do
+        expect(value_of(xs.inject_with_index(0) { |i, a, x| a + x * i }, xs == sort.from_const([5, 5, 5])))
+          .to eq(15)
+      end
+
+      it "starts the index at `from:`" do
+        expect(value_of(xs.inject_with_index(0, from: 1) { |i, a, x| a + i }, xs == sort.from_const([5, 5, 5])))
+          .to eq(6)
+      end
+
+      it "is aliased as Z3's #fold_lefti" do
+        expect(SeqExpr.instance_method(:fold_lefti)).to eq(SeqExpr.instance_method(:inject_with_index))
+      end
+    end
+
+    # The whole point of having these in a solver rather than in Ruby
+    describe "map and fold solve backwards" do
+      it "finds a sequence from a fold of it" do
+        solver = Solver.new
+        solver.assert xs.length == 3
+        solver.assert(xs.inject(0) { |a, x| a + x } == 10)
+        solver.assert(xs.inject(Z3.Const(true)) { |a, x| a & (x > 0) })
+        expect(solver).to be_satisfiable
+        elements = solver.model[xs].value
+        expect(elements.size).to eq(3)
+        expect(elements.sum).to eq(10)
+        expect(elements).to all(be > 0)
+      end
+
+      it "recovers a sequence from its image" do
+        solver = Solver.new
+        solver.assert xs.length == 3
+        solver.assert(xs.map { |x| x * 2 } == sort.from_const([2, 4, 6]))
+        expect(solver).to be_satisfiable
+        expect(solver.model[xs].value).to eq([1, 2, 3])
+      end
+
+      it "proves a fold can't have the wrong answer" do
+        solver = Solver.new
+        solver.assert xs == sort.from_const([1, 2, 3])
+        solver.assert(xs.inject(0) { |a, x| a + x } == 7)
+        expect(solver).to_not be_satisfiable
+      end
+
+      it "nests" do
+        outer = SeqSort.new(sort)
+        qs = outer.var("qs")
+        solver = Solver.new
+        solver.assert qs == outer.from_const([[1, 2], [3]])
+        total = qs.map { |q| q.length }.inject(0) { |a, x| a + x }
+        expect(solver).to be_satisfiable
+        expect(solver.model[total].value).to eq(3)
       end
     end
 

@@ -68,6 +68,21 @@ solver.assert x != :red
 solver.model[x].value   # => :green
 ```
 
+A `Seq` maps and folds, with a block, the way a Ruby Array does. The block gets Z3 expressions and returns one, and the result is a term rather than an answer - so the interesting direction is backwards, asking the solver for a sequence with the property you want:
+
+```ruby
+xs.map { |x| x * 2 }                              # Seq(Int) -> Seq(Int)
+xs.map { |x| x > 1 }                              # ...and to Seq(Bool)
+xs.inject(0) { |acc, x| acc + x }                 # Int
+xs.map_with_index { |i, x| x * 10 + i }           # index first, Z3's order
+xs.inject_with_index(0) { |i, acc, x| acc + x * i }
+
+solver.assert xs.length == 3                      # solve for the sequence itself
+solver.assert(xs.inject(0) { |acc, x| acc + x } == 10)
+```
+
+`#reduce` is `#inject`, as in Ruby, and `#mapi` / `#fold_left` / `#fold_lefti` are aliases under Z3's own names. `map_with_index` and `inject_with_index` take `from:` to start the index somewhere other than 0, which Ruby has no spelling for. Instead of a block you can pass a function: `#map` takes a `Z3.Lambda`, and the other three take a `Z3::SeqFunction`, which is what a lambda of two or three arguments has to be until multi-dimensional array sorts exist. A String is a `Seq(Char)` so it maps and folds too, but Z3 will not evaluate the result - see `StringExpr` for what that costs.
+
 Enums don't share a namespace, so `Color` and `Squirrel` can both have a `:red` and the two are different values of different sorts, which Z3 won't compare. Unlike every other sort an enumeration can only be declared once - Z3 rejects a second declaration of the same name - so asking for the same one again gives back the sort you already have, and asking for the same name with different values raises.
 
 A model reports an uninterpreted function as a Hash from argument lists to values, with Ruby's Hash default holding Z3's `else` branch - the answer for every argument the solver never had to pin down. Z3 picks one of the values as that fallback, so the entries are only the exceptions to it:

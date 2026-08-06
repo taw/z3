@@ -476,6 +476,54 @@ module Z3
       end
     end
 
+    # A String is a Seq(Char) to Z3, so it gets the same map and fold operations,
+    # with the block taking a Char
+    describe "#map and #inject" do
+      it "map to Char gives a String back, and to anything else a Seq" do
+        expect(s.map { |c| c }.sort).to eq(StringSort.new)
+        expect(s.map { |c| c.to_i }.sort).to eq(SeqSort.new(IntSort.new))
+        expect(s.inject(0) { |a, _c| a + 1 }.sort).to eq(IntSort.new)
+      end
+
+      it "prints as Ruby, the same as a Seq does" do
+        expect(s.map(Z3.Lambda(CharSort.new.var("c"), CharSort.new.var("c"))))
+          .to stringify("s.map((lambda ((c Unicode)) c))")
+      end
+
+      it "constrains correctly" do
+        solver = Solver.new
+        solver.assert s == "abc"
+        solver.assert(s.map { |c| c } == sort.from_const("abc"))
+        expect(solver).to be_satisfiable
+
+        solver = Solver.new
+        solver.assert s == "abc"
+        solver.assert(s.map { |c| c } == sort.from_const("xyz"))
+        expect(solver).to_not be_satisfiable
+      end
+
+      # The catch worth pinning down, because it's the whole difference from Seq:
+      # Z3 gets the constraint semantics right but never reduces the term, so there
+      # is nothing to read back. Not through the model, not through #simplify, and
+      # not by equating it to a free variable either.
+      it "is never evaluated, unlike the same map over a Seq" do
+        solver = Solver.new
+        solver.assert s == "abc"
+        counted = s.inject(0) { |a, _c| a + 1 }
+        expect(solver).to be_satisfiable
+        expect { solver.model[counted].value }.to raise_error(Z3::Exception)
+        expect { counted.simplify.value }.to raise_error(Z3::Exception)
+
+        # ...where a Seq(Int) folds down to a number
+        seq = SeqSort.new(IntSort.new)
+        xs = seq.var("xs")
+        solver = Solver.new
+        solver.assert xs == seq.from_const([1, 2, 3])
+        expect(solver).to be_satisfiable
+        expect(solver.model[xs.inject(0) { |a, _x| a + 1 }].value).to eq(3)
+      end
+    end
+
     describe ".Concat" do
       it "concatenates any number of strings" do
         expect(StringExpr.Concat(s, "a", "b").sexpr).to eq(%q{(str.++ s "a" "b")})

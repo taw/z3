@@ -12,6 +12,19 @@ module Z3
   # String, and no String is `nil`. Those just return whatever Z3 returns, and the
   # method comments say what that is.
   class StringExpr < Expr
+    # A String is a Seq(Char) to Z3, so #map, #inject and the rest are the very same
+    # operations, and the block gets a Char. A Char to Char map gives a String back;
+    # anything else gives a Seq of whatever the block returns.
+    #
+    # One caveat, and it's a big one: **Z3 will not evaluate a map or fold over a
+    # String**. The constraint semantics are right - asserting the identity map over
+    # `"abc"` equals `"abc"` is sat and `"xyz"` is unsat - but nothing reduces the
+    # term. `model[term]` hands back the unevaluated `"abc".map(...)`, `#simplify`
+    # leaves it alone, and equating it to a free Int gives that Int the term as its
+    # value rather than a number. The same map over a Seq(Int) evaluates cleanly.
+    # So these are for constraining with, not for reading back.
+    include SeqMapFold
+
     public_class_method :new
 
     # `str.len` and `seq.len` are one Z3 operation, so SeqExpr#length is the same
