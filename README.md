@@ -90,7 +90,9 @@ Z3::StringSort.new.from_const("hi").value   # "hi"
 Z3.Int("a").value                           # raises - "a" is not a literal
 ```
 
-A `Bitvec` carries no sign of its own, so it has `#signed_value` and `#unsigned_value` instead - the same eight bits are `200` read one way and `-56` the other. `Real` and `Float` have no `#value`, as their literals don't always have an exact Ruby equivalent.
+A `Bitvec` carries no sign of its own, so it has `#signed_value` and `#unsigned_value` instead - the same eight bits are `200` read one way and `-56` the other. `Real` has no `#value`, as Z3's Reals include the algebraic numbers and √2 has no exact Ruby equivalent at all - `#to_r` is exact and refuses when it can't be, `#to_f` approximates and says so by being a Float.
+
+A Ruby Float *is* an IEEE double, so `Float`'s `#value` converts every `Float(11, 53)` or narrower literal exactly, NaN, the infinities and the two zeroes included. A wider sort raises whatever it holds - a quadruple's `1.5` would convert exactly, but a sort a Float can't round-trip doesn't get a `#value` which works only for the values which happen to be small enough.
 
 The container sorts hand back the matching Ruby container, calling `#value` on what's inside, so a `Seq(Seq(Int))` gives nested Arrays:
 

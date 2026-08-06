@@ -159,6 +159,33 @@ module Z3
       BitvecSort.new(sort.sbits - 1).new(LowLevel.fpa_get_numeral_significand_bv(self))
     end
 
+    # Leaves Z3 for a Ruby Float, where #to_real and #to_ieee_bv build expressions.
+    # A Ruby Float is an IEEE double, so every Float(11, 53) or narrower value
+    # converts exactly, NaN, the infinities and the two zeroes included.
+    #
+    # A wider sort raises whatever it holds, even when that value happens to fit -
+    # Float(15, 113)'s 1.5 is a double's 1.5, but a sort which can't round-trip
+    # through a Float doesn't get a #value which works only sometimes.
+    def value
+      unless sort.ebits <= 11 and sort.sbits <= 53
+        raise Z3::Exception, "#{sort} values don't fit in a Ruby Float, which is an IEEE double - only Float(11, 53) and narrower have a #value, use #to_real or #significand_string / #exponent_string"
+      end
+
+      obj = as_literal
+      # Deliberately not #nan? / #infinite? / #zero?, which build symbolic BoolExprs -
+      # these ask about the literal in Ruby, and #value is the only thing that needs it
+      return Float::NAN if LowLevel.fpa_is_numeral_nan(obj)
+      sign = LowLevel.fpa_is_numeral_negative(obj) ? -1 : 1
+      return sign * Float::INFINITY if LowLevel.fpa_is_numeral_inf(obj)
+      return sign * 0.0 if LowLevel.fpa_is_numeral_zero(obj)
+
+      # Z3's significand is in [0, 2) and its unbiased exponent stays at the sort's
+      # minimum for subnormals, so one expression covers normal and subnormal alike.
+      # Both strings are exact, and the sort check above means the double is too.
+      exact = sign * Rational(obj.significand_string) * 2 ** obj.exponent_string(false).to_i
+      exact.to_f
+    end
+
     public_class_method :new
 
     class << self
@@ -258,6 +285,19 @@ module Z3
         m = coerce_to_mode_sort(m)
         a.sort.new(LowLevel.mk_fpa_fma(m, a, b, c))
       end
+    end
+
+    private
+
+    # Every float literal is an `:app`, NaN and the infinities included, so #ast_kind
+    # is no help here the way it is on Int and Bitvec - Z3 has a separate question
+    def as_literal
+      return self if LowLevel.fpa_is_numeral(self)
+      simplified = simplify
+      unless LowLevel.fpa_is_numeral(simplified)
+        raise Z3::Exception, "Can't convert expression #{self} into a Float"
+      end
+      simplified
     end
   end
 end

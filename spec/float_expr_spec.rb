@@ -167,6 +167,65 @@ module Z3
       expect(float_single.from_const(-1.0).sign_bv.unsigned_value).to eq(1)
     end
 
+    # A Ruby Float is an IEEE double, so a double or narrower always converts
+    it "value" do
+      expect(float_double.from_const(1.5).value).to eq(1.5)
+      expect(float_double.from_const(-7.25).value).to eq(-7.25)
+      expect(float_double.from_const(0.1).value).to eq(0.1)
+      expect(float_double.from_const(Float::MAX).value).to eq(Float::MAX)
+      expect(float_single.from_const(0.1).value).to eq(0.10000000149011612)
+      expect(FloatSort.new(:half).from_const(1.5).value).to eq(1.5)
+      expect(float_double.from_const(1.5).value).to be_a(Float)
+    end
+
+    # Subnormals go through the same code, with the significand below 1 and the
+    # exponent stuck at the sort's minimum
+    it "value of subnormals" do
+      expect(float_double.from_const(1234 * 0.5**1040).value).to eq(1234 * 0.5**1040)
+      expect(float_single.from_const(1234 * 0.5**137).value).to eq(1234 * 0.5**137)
+      expect(FloatSort.new(:half).from_const(2.0**-24).value).to eq(2.0**-24)
+    end
+
+    # Ruby has all of these too, and the two zeroes are different Floats
+    it "value of zeroes, infinities and NaN" do
+      expect(positive_zero.value).to eq(0.0)
+      expect(negative_zero.value).to eq(-0.0)
+      expect(1 / positive_zero.value).to eq(Float::INFINITY)
+      expect(1 / negative_zero.value).to eq(-Float::INFINITY)
+      expect(positive_infinity.value).to eq(Float::INFINITY)
+      expect(negative_infinity.value).to eq(-Float::INFINITY)
+      expect(nan.value).to be_nan
+    end
+
+    # It's the sort which has to fit, not the value - a quadruple's 1.5 would convert
+    # exactly, but a sort a Float can't round-trip doesn't get a #value which works
+    # only for the values which happen to be small enough
+    it "value of sorts wider than a double" do
+      quad = FloatSort.new(:quadruple)
+      expect{ quad.from_const(1.5).value }.to raise_error(Z3::Exception, /Float\(15, 113\) values don't fit in a Ruby Float/)
+      expect{ quad.nan.value }.to raise_error(Z3::Exception, /don't fit in a Ruby Float/)
+      expect{ quad.var("q").value }.to raise_error(Z3::Exception, /don't fit in a Ruby Float/)
+      # Only one of the two has to be too wide
+      expect{ FloatSort.new(12, 53).from_const(1.5).value }.to raise_error(Z3::Exception, /don't fit/)
+      expect{ FloatSort.new(11, 54).from_const(1.5).value }.to raise_error(Z3::Exception, /don't fit/)
+      expect(FloatSort.new(11, 53).from_const(1.5).value).to eq(1.5)
+      expect(FloatSort.new(8, 24).from_const(1.5).value).to eq(1.5)
+    end
+
+    # Every float literal is an `:app`, so this can't lean on #ast_kind
+    it "value of expressions" do
+      expect(float_double.from_const(2.0).add(float_double.from_const(0.5), ties_even).value).to eq(2.5)
+      expect{ a.value }.to raise_error(Z3::Exception, "Can't convert expression a into a Float")
+      expect{ a.add(b, ties_even).value }.to raise_error(Z3::Exception, /Can't convert expression/)
+    end
+
+    it "value out of a model" do
+      solver = Solver.new
+      solver.assert a == 1.25
+      solver.check
+      expect(solver.model[a].value).to eq(1.25)
+    end
+
     it "comparisons" do
       expect([a == 3.0, b == 3.0, x == (a >= b)]).to have_solution(x => true)
       expect([a == 3.0, b == 3.0, x == (a >  b)]).to have_solution(x => false)
