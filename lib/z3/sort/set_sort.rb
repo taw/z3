@@ -10,6 +10,23 @@ module Z3
       SetExpr
     end
 
+    # A Set is an `Array(X, Bool)`, and `ArraySort.new(X, BoolSort.new)` hands you one
+    # of these instead of an ArraySort - so it has to answer to the Array vocabulary
+    # too, or the redirect would quietly take methods away. Same reason StringSort has
+    # `#element_sort`: the specialised sort still answers the general one's questions.
+    def key_sort
+      element_sort
+    end
+
+    def value_sort
+      BoolSort.new
+    end
+
+    # `#Empty` and `#Full` are this with `false` and `true`
+    def Const(value)
+      new(LowLevel.mk_const_array(element_sort, BoolSort.new.cast(value)))
+    end
+
     def to_s
       "Set(#{element_sort})"
     end

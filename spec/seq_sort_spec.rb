@@ -62,5 +62,17 @@ module Z3
       expect(SeqSort.new(CharSort.new).class).to eq(StringSort)
       expect(SeqSort.new(CharSort.new).from_const("hi").inspect).to eq(%q{String<"hi">})
     end
+
+    # ...by every route that builds one, not just the constructor
+    it "gives a String however the Seq(Char) got built" do
+      expect(SeqSort.new(CharSort.new).var("s")).to be_a(StringExpr)
+      expect(SeqExpr.Unit(CharSort.new.from_const("a"))).to be_a(StringExpr)
+      expect(Expr.new_from_pointer(LowLevel.mk_string("hi"))).to be_a(StringExpr)
+      # Nested, where only the inner sort is the Seq(Char)
+      expect(SeqSort.new(SeqSort.new(CharSort.new)).to_s).to eq("Seq(String)")
+      expect(ReSort.new(SeqSort.new(CharSort.new)).to_s).to eq("Re(String)")
+      # A Set of Char is an Array(Char, Bool), not a Seq, so it stays a Set
+      expect(SetSort.new(CharSort.new).to_s).to eq("Set(Char)")
+    end
   end
 end

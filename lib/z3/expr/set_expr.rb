@@ -7,6 +7,36 @@ module Z3
       sort.element_sort
     end
 
+    # The Array vocabulary, because a Set *is* an `Array(X, Bool)` and asking for one
+    # gives you a Set - see ArraySort.new. `#add` and `#delete` are `#store` with a
+    # literal `true` and `false`; `#store` is the only way to say it with a symbolic
+    # Bool, so it can't just be dropped. `#include?` is `#select` under a Ruby name.
+    def key_sort
+      sort.key_sort
+    end
+
+    def value_sort
+      sort.value_sort
+    end
+
+    def store(key, value)
+      sort.new LowLevel.mk_store(self, element_sort.cast(key), BoolSort.new.cast(value))
+    end
+
+    def select(key)
+      include?(key)
+    end
+
+    def [](key)
+      include?(key)
+    end
+
+    # What the set answers for elements nothing has stored to - `true` for a co-finite
+    # set, which is the case #value refuses to convert. See ArrayExpr#default.
+    def default
+      BoolSort.new.new(LowLevel.mk_array_default(self))
+    end
+
     def is_superset_of(other)
       SetExpr.Subset(other, self)
     end
