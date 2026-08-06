@@ -1,13 +1,24 @@
 #!/usr/bin/env ruby
 
-# NOTE: This is not part of integration test suite as it's very slow
+# NOTE: This is not part of integration test suite as it's very slow (~20-30s)
+#
+# The default solver used to handle this in ~15s on Z3 4.9, but somewhere between
+# 4.14 and 4.15 its tactic selection for this goal regressed badly - 4.14 still
+# solved it in about a minute, 4.15 and later run for over 10 minutes without
+# finishing. Bit-blasting to SAT explicitly is what the default used to amount to
+# here, and it's back to the original speed. `Tactic.named("smt")` also works, but
+# takes several times longer.
 
 require_relative "../lib/z3"
 
 class CLogicPuzzleSolver
   attr_reader :solver, :wv
   def initialize
-    @solver = Z3::Solver.new
+    @solver = Z3::Solver.from_tactic(
+      Z3::Tactic.named("simplify")
+        .and_then(Z3::Tactic.named("bit-blast"))
+        .and_then(Z3::Tactic.named("sat"))
+    )
     @digits = ["b", "c", "d", "f", "g", "h", "i", "j", "l", "n", "o", "q", "s", "t", "u", "v", "w", "x", "y", "z"]
     @digit_vars = Hash[@digits.map{|v| [v, digit_var(v)]}]
     @words = [
