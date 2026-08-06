@@ -292,6 +292,15 @@ module Z3
       expect{ a.bit(1.5) }.to raise_error(Z3::Exception, "Trying to take a bit out of range")
     end
 
+    # Both are decl parameters, like extract's and zero_extend's, so they have to be
+    # printed explicitly or `a.bit(0)` and `a.bit(7)` are the same string
+    it "bit and repeat print their parameter" do
+      expect(Z3.Bitvec("a", 8).bit(0).to_s).to eq("bit2bool(a, 0)")
+      expect(Z3.Bitvec("a", 8).bit(7).to_s).to eq("bit2bool(a, 7)")
+      expect(Z3.Bitvec("a", 8).repeat(2).to_s).to eq("repeat(a, 2)")
+      expect(Z3.Bitvec("a", 8).repeat(3).to_s).to eq("repeat(a, 3)")
+    end
+
     it "repeat" do
       expect([e == 0b1101, a == e.repeat(2)]).to have_solution(a => 0b1101_1101)
       expect([e == 0b0011, d == e.repeat(3)]).to have_solution(d => 0b0011_0011_0011)

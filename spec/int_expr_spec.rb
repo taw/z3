@@ -121,6 +121,14 @@ module Z3
     end
 
     # Z3 spells it the other way round, as "3 divides 12"
+    # The divisor is a decl parameter, so it has to be printed explicitly or every
+    # `divisible_by?` looks the same
+    it "divisible_by? and to_bv print their parameter" do
+      expect(Z3.Int("a").divisible_by?(3).to_s).to eq("divisible(a, 3)")
+      expect(Z3.Int("a").divisible_by?(5).to_s).to eq("divisible(a, 5)")
+      expect(Z3.Int("a").to_bv(8).to_s).to eq("int_to_bv(a, 8)")
+    end
+
     it "divisible_by?" do
       expect([a == 12, x == a.divisible_by?(3)]).to have_solution(x => true)
       expect([a == 12, x == a.divisible_by?(5)]).to have_solution(x => false)

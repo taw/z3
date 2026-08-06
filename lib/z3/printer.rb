@@ -275,6 +275,35 @@ module Z3
       a.arguments.flat_map { |x| flatten_re(x, name) }
     end
 
+    # Cardinality constraints are indexed decls: the bound, and for the weighted forms
+    # one weight per argument, are decl parameters rather than arguments. Printing the
+    # arguments alone made `AtMost([a, b], 1)` and `AtMost([a, b], 2)` the same string,
+    # so these print back as the Ruby that builds them. Unit-weight `pble`/`pbge` never
+    # reach here - Z3 normalises those into `at-most`/`at-least` - but a unit-weight
+    # `pbeq` does, because Z3 has no unweighted spelling of it.
+    PSEUDO_BOOLEAN_NAMES = {
+      "at-most"  => "AtMost",
+      "at-least" => "AtLeast",
+      "pble"     => "AtMost",
+      "pbge"     => "AtLeast",
+      "pbeq"     => "Exactly",
+    }
+
+    def format_pseudo_boolean(a, name, args)
+      method = PSEUDO_BOOLEAN_NAMES[name]
+      decl = a.func_decl
+      return nil unless method and decl.num_parameters >= 1 and decl.parameter_kind(0) == :int
+      bound = decl.parameter(0)
+      weights = (1...decl.num_parameters).map { |i| decl.parameter(i) }
+      if weights.all?{|w| w == 1} and weights.size == args.size
+        return PrintedExpr.new("#{method}([#{args.join(", ")}], #{bound})")
+      end
+      return PrintedExpr.new("#{method}([#{args.join(", ")}], #{bound})") if weights.empty?
+      return nil unless weights.size == args.size
+      pairs = args.zip(weights).map{|arg, weight| "#{arg} => #{weight}"}
+      PrintedExpr.new("#{method}({#{pairs.join(", ")}}, #{bound})")
+    end
+
     def format_app(a)
       if LowLevel::is_algebraic_number(a)
         str = LowLevel::get_numeral_decimal_string(a, 10)
@@ -329,6 +358,9 @@ module Z3
           return PrintedExpr.new("map(#{decl.func_decl_parameter(0).name}, #{args.join(", ")})")
         end
 
+        pseudo_boolean = format_pseudo_boolean(a, name, args)
+        return pseudo_boolean if pseudo_boolean
+
         # Before the zero-argument case below, since `re.none` / `re.all` /
         # `re.allchar` are three of these
         re = format_re(a, name, args)
@@ -353,10 +385,24 @@ module Z3
 
         # Special case common Bitvec operators
         case name
-        when "rotate_left", "rotate_right", "zero_extend", "sign_extend"
+        # All one-argument decls carrying a single int parameter. `repeat`, `int_to_bv`,
+        # `bit2bool` and `divisible` were printing without theirs, which made
+        # `u.bit(0)` and `u.bit(7)`, or `x.divisible_by?(3)` and `x.divisible_by?(5)`,
+        # the same string.
+        when "rotate_left", "rotate_right", "zero_extend", "sign_extend",
+             "repeat", "int_to_bv", "bit2bool", "divisible"
           if args.size == 1
             n = Z3::LowLevel.get_decl_int_parameter(a.func_decl, 0)
             return PrintedExpr.new("#{name}(#{args[0]}, #{n})", true)
+          end
+        # Same again, except these take a rounding mode first, so the size is the
+        # decl parameter of a two-argument application. The float *sources* -
+        # `to_fp` and friends - deliberately aren't here: their parameters are the
+        # result sort, which `#sort` answers, the way `NaN` prints without its.
+        when "fp.to_sbv", "fp.to_ubv"
+          if args.size == 2
+            n = Z3::LowLevel.get_decl_int_parameter(a.func_decl, 0)
+            return PrintedExpr.new("#{name}(#{args[0]}, #{args[1]}, #{n})", true)
           end
         when "bvxor", "bvand", "bvor", "bvadd", "bvsub"
           if args.size == 2

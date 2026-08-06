@@ -126,6 +126,19 @@ module Z3
       expect(Z3.Exactly({a => 1, b => 1, c => 1}, 2)).to eql(Z3.Exactly([a, b, c], 2))
     end
 
+    # The bound and the weights are decl parameters, not arguments, so a printer which
+    # only walks the arguments prints `AtMost([a, b], 1)` and `AtMost([a, b], 2)` the same
+    it "cardinality constraints print their bound and weights" do
+      expect(Z3.AtMost([a, b, c], 2).to_s).to eq("AtMost([a, b, c], 2)")
+      expect(Z3.AtLeast([a, b, c], 2).to_s).to eq("AtLeast([a, b, c], 2)")
+      expect(Z3.Exactly([a, b, c], 2).to_s).to eq("Exactly([a, b, c], 2)")
+      expect(Z3.AtMost({a => 3, b => 2, c => 5}, 7).to_s).to eq("AtMost({a => 3, b => 2, c => 5}, 7)")
+      expect(Z3.AtLeast({a => 3, b => 2, c => 5}, 8).to_s).to eq("AtLeast({a => 3, b => 2, c => 5}, 8)")
+      expect(Z3.Exactly({a => 3, b => 2, c => 5}, 7).to_s).to eq("Exactly({a => 3, b => 2, c => 5}, 7)")
+      expect(Z3.AtMost({a => -3, b => 2}, -1).to_s).to eq("AtMost({a => -3, b => 2}, -1)")
+      expect(Z3.AtMost([a, b], 1).to_s).to_not eq(Z3.AtMost([a, b], 2).to_s)
+    end
+
     it "weighted constraints reject bad weights" do
       expect{ Z3.AtMost({a => 1.5, b => 2}, 3) }.to raise_error(Z3::Exception, /weights must be Integers/)
       expect{ Z3.AtMost({a => "3", b => 2}, 3) }.to raise_error(Z3::Exception, /weights must be Integers/)

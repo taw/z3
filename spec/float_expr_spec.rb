@@ -144,6 +144,16 @@ module Z3
       expect{ a.to_signed_bv(8, :towards_zero) }.to raise_error(Z3::Exception, "Mode expected")
     end
 
+    # The width is a decl parameter, not an argument, so without spelling it out
+    # `a.to_signed_bv(8, m)` and `a.to_signed_bv(16, m)` were the same string. The
+    # `to_fp` direction deliberately stays bare - its parameters are the result sort,
+    # which `#sort` answers, the same call `NaN` makes.
+    it "to_signed_bv / to_unsigned_bv print their width" do
+      expect(a.to_signed_bv(32, ties_even).to_s).to eq("fp.to_sbv(roundNearestTiesToEven, a, 32)")
+      expect(a.to_unsigned_bv(16, ties_even).to_s).to eq("fp.to_ubv(roundNearestTiesToEven, a, 16)")
+      expect(a.to_signed_bv(16, ties_even).to_s).to_not eq(a.to_signed_bv(32, ties_even).to_s)
+    end
+
     # The pieces #exponent_string and #significand_string give as Strings, as Bitvecs.
     # The significand is one narrower than sbits - IEEE doesn't store the leading bit.
     it "sign_bv / exponent_bv / significand_bv" do
