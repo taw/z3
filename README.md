@@ -85,6 +85,20 @@ solver.assert(xs.inject(0) { |acc, x| acc + x } == 10)
 
 Enums don't share a namespace, so `Color` and `Squirrel` can both have a `:red` and the two are different values of different sorts, which Z3 won't compare. Unlike every other sort an enumeration can only be declared once - Z3 rejects a second declaration of the same name - so asking for the same one again gives back the sort you already have, and asking for the same name with different values raises.
 
+`Z3::TupleSort` declares a tuple - a record of named fields, each with a sort of its own. Fields read as methods, and a value converts to a Hash:
+
+```ruby
+point = Z3::TupleSort.new("Point", x: Z3::IntSort.new, y: Z3::IntSort.new)
+p = point.var("p")
+solver.assert p.x > 0
+solver.assert p == point.mk(3, 4)   # or p == [3, 4], or p == {x: 3, y: 4}
+solver.model[p].value               # => {x: 3, y: 4}
+```
+
+A tuple is a sort like any other, so tuples nest, key an `Array`, and are the way to have an uninterpreted function take or return more than one value. `p[:x]` reads a field as well, which is how to read one named after something an expression already answers to, like `sort` or `value` - those don't get a method of their own.
+
+Tuples are declared once, like enums, and share the datatype namespace with them, so neither can take a name the other has. The reason is worse than the enum's: where Z3 rejects a second enum of the same name outright, it accepts a second *tuple* and quietly rebuilds the sort's fields from it, abandoning every term built against the first declaration. Asking for the same tuple twice gives back the sort you already have; the same name with different fields raises.
+
 A model reports an uninterpreted function as a Hash from argument lists to values, with Ruby's Hash default holding Z3's `else` branch - the answer for every argument the solver never had to pin down. Z3 picks one of the values as that fallback, so the entries are only the exceptions to it:
 
 ```ruby

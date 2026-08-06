@@ -124,18 +124,18 @@ module Z3
         expect(suit[:diamonds].inspect).to eq("Suit<diamonds>")
       end
 
-      # A constructor which takes arguments is a record or a tree, and there's
-      # nothing here to represent it
-      it "raises for a datatype sort which isn't an enumeration" do
+      # One constructor taking arguments is a tuple, and Sort.from_pointer sends it
+      # to TupleSort - anything past that is a datatype this gem has no class for
+      it "raises for a datatype sort which is neither an enumeration nor a tuple" do
         solver = Solver.new
         solver.from_string <<~SMT2
-          (declare-datatypes ((Pair 0)) (((pair (fst Int) (snd Int)))))
-          (declare-const p Pair)
-          (assert (= (fst p) 1))
+          (declare-datatypes ((Maybe 0)) (((nothing) (just (val Int)))))
+          (declare-const m Maybe)
+          (assert (= m (just 1)))
         SMT2
         solver.check
         expect{ solver.model.to_s }
-          .to raise_error(Z3::Exception, "Datatype sort Pair is not an enumeration, its constructor pair takes arguments")
+          .to raise_error(Z3::Exception, "Datatype sort Maybe is not an enumeration, its constructor just takes arguments")
       end
     end
 

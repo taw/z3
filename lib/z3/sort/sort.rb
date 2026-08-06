@@ -140,8 +140,7 @@ module Z3
           ArraySort.new(domain, range)
         end
       when 6
-        # Rebuilt rather than redeclared - see EnumSort.from_pointer
-        EnumSort.from_pointer(_sort)
+        datatype_from_pointer(_sort)
       when 8
         FiniteDomainSort.new(
           name_from_pointer(_sort),
@@ -168,8 +167,24 @@ module Z3
       end
     end
 
-    # Sorts with a name (uninterpreted, finite domain, enum, type variable) need it to
-    # be rebuilt. Takes a raw pointer, as from_pointer needs it before there's a Sort.
+    # Z3 has one sort kind for every datatype, and this gem has two of them: an
+    # enumeration, whose constructors all take no arguments, and a tuple, which has
+    # exactly one constructor and it takes the fields. Nothing else - a datatype with
+    # several argument-taking constructors, or a recursive one - has a class here yet,
+    # and EnumSort is the one that raises about it, by name.
+    #
+    # Both are rebuilt rather than redeclared - see EnumSort.from_pointer.
+    def self.datatype_from_pointer(_sort)
+      num_constructors = VeryLowLevel.Z3_get_datatype_sort_num_constructors(LowLevel._ctx_pointer, _sort)
+      if num_constructors == 1
+        constructor = FuncDecl.new(VeryLowLevel.Z3_get_datatype_sort_constructor(LowLevel._ctx_pointer, _sort, 0))
+        return TupleSort.from_pointer(_sort) if constructor.arity > 0
+      end
+      EnumSort.from_pointer(_sort)
+    end
+
+    # Sorts with a name (uninterpreted, finite domain, enum, tuple, type variable) need
+    # it to be rebuilt. Takes a raw pointer, as from_pointer needs it before there's a Sort.
     def self.name_from_pointer(_sort)
       LowLevel.symbol_value(VeryLowLevel.Z3_get_sort_name(LowLevel._ctx_pointer, _sort))
     end

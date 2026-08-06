@@ -205,6 +205,22 @@ module Z3
         Z3::VeryLowLevel.Z3_mk_enumeration_sort(_ctx_pointer, symbol, n, _names, _consts, _testers)
       end
 
+      # The tuple's own out params are worth keeping, unlike the enumeration's: the
+      # constructor and the accessors are how a tuple value is built and read, and
+      # they're returned rather than looked up again so the sort has them from the
+      # start. All three come back as raw pointers, as TupleSort wraps them itself.
+      def mk_tuple_sort(symbol, field_symbols, field_sorts)
+        n = field_symbols.size
+        _names = FFI::MemoryPointer.new(:pointer, n)
+        _names.write_array_of_pointer(field_symbols)
+        _sorts = FFI::MemoryPointer.new(:pointer, n)
+        _sorts.write_array_of_pointer(field_sorts.map(&:_ast))
+        _constructor = FFI::MemoryPointer.new(:pointer)
+        _accessors = FFI::MemoryPointer.new(:pointer, n)
+        _sort = Z3::VeryLowLevel.Z3_mk_tuple_sort(_ctx_pointer, symbol, n, _names, _sorts, _constructor, _accessors)
+        [_sort, _constructor.read_pointer, _accessors.read_array_of_pointer(n)]
+      end
+
       # Weight is a hint to the instantiation engine rather than part of what the
       # formula means, but a bad one turns a decidable problem into `:unknown` - the
       # same unsat query answers at weight 20 and gives up at weight 50 - so it's

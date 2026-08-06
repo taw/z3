@@ -330,6 +330,24 @@ module Z3
       PrintedExpr.new("#{method}({#{pairs.join(", ")}}, #{bound})")
     end
 
+    # `Point.mk(3, 4)` and `p.x`, rather than the raw `Point(3, 4)` and `x(p)`. A
+    # tuple's constructor is named after the sort and its accessors after the fields,
+    # so it's the decls that get matched and not the names - the same reason
+    # EnumExpr#value matches decls, since nothing stops a variable being called `x`.
+    def format_tuple(a, args)
+      decl = a.func_decl
+      if a.sort.is_a?(TupleSort) and decl == a.sort.constructor
+        return PrintedExpr.new("#{a.sort}.mk(#{args.join(", ")})")
+      end
+      return nil unless args.size == 1
+      receiver_sort = a.arguments[0].sort
+      return nil unless receiver_sort.is_a?(TupleSort)
+      field = receiver_sort.accessors.key(decl)
+      # A method call binds tighter than any operator, so only the receiver can need
+      # parentheses and the result is atomic
+      field && PrintedExpr.new("#{args[0].enforce_parentheses}.#{field}")
+    end
+
     def format_app(a)
       if LowLevel::is_algebraic_number(a)
         str = LowLevel::get_numeral_decimal_string(a, 10)
@@ -383,6 +401,9 @@ module Z3
         if name == "map" and decl.num_parameters == 1 and decl.parameter_kind(0) == :func_decl
           return PrintedExpr.new("map(#{decl.func_decl_parameter(0).name}, #{args.join(", ")})")
         end
+
+        tuple = format_tuple(a, args)
+        return tuple if tuple
 
         pseudo_boolean = format_pseudo_boolean(a, name, args)
         return pseudo_boolean if pseudo_boolean

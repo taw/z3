@@ -54,6 +54,13 @@ module Z3
           end
           return already_declared
         end
+        # Enums and tuples share the datatype namespace, so the name has to be free of
+        # both. Z3 refuses this one itself, with "enumeration sort name is already
+        # declared" and no mention of what took it - see TupleSort.new for the other
+        # direction, which Z3 doesn't refuse at all.
+        if TupleSort.declared?(name)
+          raise Z3::Exception, "Enum sort #{name} can't be declared, #{name} is already a tuple sort"
+        end
         _sort = LowLevel.mk_enumeration_sort(
           LowLevel.mk_symbol(name),
           values.map { |value| LowLevel.mk_symbol(value) },
@@ -68,6 +75,12 @@ module Z3
       def from_pointer(_sort)
         name = Sort.name_from_pointer(_sort)
         registry[name] ||= build(_sort, name, values_from_pointer(_sort, name))
+      end
+
+      # Whether this process declared an enum of that name - TupleSort asks, so that
+      # the two of them don't take each other's names
+      def declared?(name)
+        registry.key?(normalize_name(name))
       end
 
       private

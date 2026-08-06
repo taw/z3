@@ -306,6 +306,40 @@ module Z3
       end
     end
 
+    # A tuple's constructor is named after the sort and its accessors after the
+    # fields, so `Point(3, 4)` and `x(p)` are what Z3 has - the Ruby that builds
+    # them is `Point.mk(3, 4)` and `p.x`
+    describe "tuples" do
+      let(:int) { IntSort.new }
+      let(:sort) { TupleSort.new("PrintedPoint", x: int, y: int) }
+      let(:p) { sort.var("p") }
+
+      it "constructors" do
+        expect(sort.mk(3, 4)).to stringify("PrintedPoint.mk(3, 4)")
+        expect(sort.mk(Z3.Int("a") + 1, 4)).to stringify("PrintedPoint.mk(a + 1, 4)")
+      end
+
+      it "accessors" do
+        expect(p.x).to stringify("p.x")
+        expect(sort.mk(3, 4).y).to stringify("PrintedPoint.mk(3, 4).y")
+        nested = TupleSort.new("PrintedSegment", from: sort, to: sort)
+        expect(nested.var("s").from.x).to stringify("s.from.x")
+      end
+
+      it "accessors are atomic, and parenthesize their receiver" do
+        expect(p.x + p.y).to stringify("p.x + p.y")
+        expect(-p.x).to stringify("-p.x")
+        expect(Z3.IfThenElse(Z3.Bool("b"), p, p).x).to stringify("if(b, p, p).x")
+      end
+
+      # A variable is an app too, and nothing stops one being named `x` - so it's the
+      # decls that get matched, not the names
+      it "is not fooled by a variable named after an accessor" do
+        expect(Z3.Int("x")).to stringify("x")
+        expect(Z3.Function("y", int, int)[1]).to stringify("y(1)")
+      end
+    end
+
     describe "expressions" do
       let(:a) { Z3.Int("a") }
       let(:b) { Z3.Int("b") }

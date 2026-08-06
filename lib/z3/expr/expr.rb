@@ -71,6 +71,10 @@ module Z3
           # through would say "No Z3 sort for :red", which is true but unhelpful.
           raise Z3::Exception, "Can't tell which enum #{a.inspect} belongs to, ask the sort for it instead - `enum_sort[#{a.inspect}]`" unless toward
         end
+        # An Array or a Hash is a tuple's fields, and like a Symbol it has no sort of
+        # its own - `[3, 4]` is a Point only because that's what it's being compared
+        # to. Anywhere else they're still not values, and fall through to the error.
+        return toward if (a.is_a?(Array) or a.is_a?(Hash)) and toward.is_a?(TupleSort)
         case a
         when TrueClass, FalseClass
           BoolSort.new
