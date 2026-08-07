@@ -60,6 +60,9 @@ module Z3
     attach_function :Z3_optimize_check, [:ctx_pointer, :optimize_pointer, :int, :pointer], :int
     attach_function :Z3_solver_check_assumptions, [:ctx_pointer, :solver_pointer, :int, :pointer], :int
     attach_function :Z3_substitute, [:ctx_pointer, :ast_pointer, :int, :pointer, :pointer], :ast_pointer
+    # Same shape, except the `from` array is func decls and the `to` array is bodies
+    # over de Bruijn variables rather than ordinary terms
+    attach_function :Z3_substitute_funs, [:ctx_pointer, :ast_pointer, :int, :pointer, :pointer], :ast_pointer
     attach_function :Z3_mk_func_decl, [:ctx_pointer, :symbol_pointer, :int, :pointer, :sort_pointer], :func_decl_pointer
     attach_function :Z3_mk_app, [:ctx_pointer, :func_decl_pointer, :int, :pointer], :ast_pointer
     attach_function :Z3_mk_fresh_func_decl, [:ctx_pointer, :string, :int, :pointer, :sort_pointer], :func_decl_pointer

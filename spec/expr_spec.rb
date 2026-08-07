@@ -368,6 +368,147 @@ module Z3
       end
     end
 
+    describe "#substitute_functions" do
+      let(:int) { IntSort.new }
+      # `c` and `d` are the Bools of the outer scope, and three Ints are needed here
+      let(:g) { Z3.Int("g") }
+      let(:fn) { Z3.Function("fn", int, int) }
+      let(:gn) { Z3.Function("gn", int, int) }
+      let(:fn2) { Z3.Function("fn2", int, int, int) }
+      let(:fn3) { Z3.Function("fn3", int, int, int, int) }
+      let(:pn) { Z3.Function("pn", int, BoolSort.new) }
+
+      it "replaces an application by the body, arguments substituted in" do
+        expect(fn[a].substitute_functions(fn => ->(x) { x * 2 })).to be_equivalent_to(a * 2)
+      end
+
+      it "replaces every application, whatever the arguments" do
+        expect((fn[a] + fn[b + 1]).substitute_functions(fn => ->(x) { x * 2 }))
+          .to be_equivalent_to(a * 2 + (b + 1) * 2)
+      end
+
+      it "replaces applications nested inside each other" do
+        expect(fn[fn[a]].substitute_functions(fn => ->(x) { x * 2 })).to be_equivalent_to(a * 4)
+      end
+
+      it "gives the block the arguments in the order they're declared" do
+        expect(fn3[a, b, g].substitute_functions(fn3 => ->(x, y, z) { x * 100 + y * 10 + z }))
+          .to be_equivalent_to(a * 100 + b * 10 + g)
+      end
+
+      it "replaces more than one function at a time" do
+        expect((fn[a] + gn[b]).substitute_functions(fn => ->(x) { x + 1 }, gn => ->(x) { x - 1 }))
+          .to be_equivalent_to((a + 1) + (b - 1))
+      end
+
+      # Same promise #substitute makes, and the reason self-reference terminates
+      it "doesn't apply the replacements to each other" do
+        expect(fn[a].substitute_functions(fn => ->(x) { gn[x] }, gn => ->(x) { x * 7 }))
+          .to be_equivalent_to(gn[a])
+      end
+
+      it "leaves a replacement mentioning its own function alone" do
+        expect(fn[a].substitute_functions(fn => ->(x) { fn[x] + 1 })).to be_equivalent_to(fn[a] + 1)
+      end
+
+      it "takes a FuncDecl as a rename" do
+        expect(fn[a].substitute_functions(fn => gn)).to be_equivalent_to(gn[a])
+      end
+
+      it "takes any other value as a constant function" do
+        expect((fn[a] + fn[b]).substitute_functions(fn => 42)).to be_equivalent_to(int.from_const(84))
+        expect((fn[a] + fn[b]).substitute_functions(fn => g * 2)).to be_equivalent_to(g * 2 + g * 2)
+      end
+
+      it "casts a Ruby literal the block returns" do
+        expect(fn[a].substitute_functions(fn => ->(_x) { 7 })).to be_equivalent_to(IntSort.new.from_const(7))
+      end
+
+      it "works on any sort" do
+        expect((pn[a] & pn[b]).substitute_functions(pn => ->(x) { x > 5 }))
+          .to be_equivalent_to((a > 5) & (b > 5))
+      end
+
+      it "keeps the sort of the expression it rewrote" do
+        expect(fn[a].substitute_functions(fn => ->(x) { x * 2 }).sort).to eq(IntSort.new)
+        expect(pn[a].substitute_functions(pn => ->(x) { x > 5 }).sort).to eq(BoolSort.new)
+        expect(Z3.Lambda(a, fn[a]).substitute_functions(fn => ->(x) { x * 2 }).sort)
+          .to eq(ArraySort.new(IntSort.new, IntSort.new))
+      end
+
+      it "reaches applications under a quantifier" do
+        expect(Z3.ForAll(a, fn[a] > 0).substitute_functions(fn => ->(x) { x * 3 }))
+          .to be_equivalent_to(Z3.ForAll(a, a * 3 > 0))
+      end
+
+      # The replacement's free variables are the outer ones, even where a quantifier
+      # binds something of the same name - the sexpr prints both as `a` and doesn't
+      # show the difference, but the solver has it right
+      it "doesn't capture a variable a quantifier binds" do
+        substituted = Z3.ForAll(a, fn[b] > 0).substitute_functions(fn => ->(x) { x + a })
+        expect([substituted, a < -1000, b == 1002]).to have_solution(a => -1001)
+      end
+
+      it "does nothing when nothing matches" do
+        expect((a + b).substitute_functions(fn => ->(x) { x })).to be_equivalent_to(a + b)
+      end
+
+      it "returns the expression itself when there's nothing to replace" do
+        expr = fn[a]
+        expect(expr.substitute_functions({})).to equal(expr)
+      end
+
+      it "returns something the solver can use" do
+        expect([(fn2[a, b] == 100).substitute_functions(fn2 => ->(x, y) { x * 10 + y }), a == 1])
+          .to have_solution(b => 90)
+      end
+
+      # Not only the functions you declared - `+` is a decl like any other
+      it "replaces an interpreted function too" do
+        expect((a + b).substitute_functions((a + b).func_decl => ->(x, y) { x * y }))
+          .to be_equivalent_to(a * b)
+      end
+
+      it "raises unless every key is a func decl" do
+        expect{ fn[a].substitute_functions(a => b) }
+          .to raise_error(Z3::Exception, "Can't substitute for Int, only for functions - use #substitute to replace an expression")
+        expect{ fn[a].substitute_functions(1 => 2) }
+          .to raise_error(Z3::Exception, "Can't substitute for Integer, only for functions")
+      end
+
+      it "raises on a nullary decl, which is #substitute's job" do
+        expect{ fn[a].substitute_functions(a.func_decl => 5) }
+          .to raise_error(Z3::Exception, "a is a constant, use #substitute for it")
+      end
+
+      # Z3 would take either silently and get it wrong
+      it "raises when the block's arity isn't the function's" do
+        expect{ fn2[a, b].substitute_functions(fn2 => ->(x) { x }) }
+          .to raise_error(Z3::Exception, "Replacement for fn2 takes 1 argument, expected 2")
+        expect{ fn[a].substitute_functions(fn => ->(x, y) { x + y }) }
+          .to raise_error(Z3::Exception, "Replacement for fn takes 2 arguments, expected 1")
+      end
+
+      it "lets a splat block take whatever arity the function has" do
+        expect(fn2[a, b].substitute_functions(fn2 => ->(*xs) { xs.inject(:+) }))
+          .to be_equivalent_to(a + b)
+      end
+
+      it "raises when the replacement doesn't fit what the function returns" do
+        expect{ fn[a].substitute_functions(fn => ->(x) { x > 0 }) }
+          .to raise_error(Z3::Exception, "Can't convert Bool into Int")
+        expect{ fn[a].substitute_functions(fn => :abc) }
+          .to raise_error(Z3::Exception, "Can't convert :abc into Int")
+        expect{ fn2[a, b].substitute_functions(fn2 => gn) }
+          .to raise_error(Z3::Exception, "gn takes 1 argument, got 2")
+      end
+
+      it "raises unless given a Hash" do
+        expect{ fn[a].substitute_functions([[fn, ->(x) { x }]]) }
+          .to raise_error(Z3::Exception, "Hash of replacements required")
+      end
+    end
+
     describe ".sort_for_const" do
       it "knows the sorts Ruby values map to" do
         expect(Expr.sort_for_const(true)).to eq(BoolSort.new)

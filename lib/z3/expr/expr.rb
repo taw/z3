@@ -53,6 +53,78 @@ module Z3
       sort.new(LowLevel.substitute(self, replacements.keys, to))
     end
 
+    # Inlines a function. Every application of a key is replaced by that key's value
+    # with the arguments substituted in, so the function symbol disappears from the
+    # term entirely - which is what turns a declared function plus a quantified axiom
+    # into an ordinary quantifier-free expression.
+    #
+    #   f = Z3.Function("f", Int, Int)
+    #   (f[a] + f[b]).substitute_functions(f => ->(x) { x * 2 })  # => (a * 2) + (b * 2)
+    #
+    # Where #substitute matches whole subterms, this matches on the *function symbol*,
+    # so it reaches every application whatever the arguments - including applications
+    # nested inside each other and ones under a quantifier.
+    #
+    # A value is normally a proc taking one argument per parameter of the function, in
+    # the order they're declared. A `FuncDecl` of the same signature renames the
+    # function, and any other value is what the function is replaced by everywhere,
+    # arguments ignored.
+    #
+    # It's a separate method rather than a mode of #substitute because the two are
+    # different Z3 calls and can't be made simultaneous with each other. Doing them in
+    # sequence would make the result depend on which ran first, and #substitute
+    # promises it doesn't.
+    #
+    # Replacements happen at once and are not applied to each other, exactly as in
+    # #substitute. With `f => ->(x) { g[x] }, g => ->(x) { x * 7 }` an `f(a)` becomes
+    # `g(a)` and stops there. A replacement which mentions its own function stops for
+    # the same reason, so `f => ->(x) { f[x] + 1 }` terminates rather than unfolding
+    # forever.
+    def substitute_functions(replacements)
+      raise Z3::Exception, "Hash of replacements required" unless replacements.is_a?(Hash)
+      return self if replacements.empty?
+      bodies = replacements.map do |decl, replacement|
+        unless decl.is_a?(FuncDecl)
+          # An Expr key is the easiest mistake to make here and has an exact answer
+          extra = decl.is_a?(Expr) ? " - use #substitute to replace an expression" : ""
+          raise Z3::Exception, "Can't substitute for #{AST.describe(decl)}, only for functions#{extra}"
+        end
+        # Z3 answers a nullary decl with a bare "invalid usage", and it's precisely the
+        # case #substitute already covers
+        raise Z3::Exception, "#{decl.name} is a constant, use #substitute for it" if decl.arity.zero?
+        LowLevel.bound_body(*function_body(decl, replacement))
+      end
+      sort.new(LowLevel.substitute_funs(self, replacements.keys, bodies))
+    end
+
+    private
+
+    # The variables the replacement is written in terms of, and the body it makes of
+    # them. Fresh, so a proc which closes over a variable of the same name can't
+    # capture the bound one by accident - the same reason SeqFunction uses them.
+    #
+    # Exactly one variable per parameter, always, which is what makes the arity
+    # mistakes unreachable. Z3 takes a body over the wrong number of variables without
+    # complaint and gets it wrong quietly in both directions: too few and the extra
+    # arguments are dropped from the term, too many and a stray de Bruijn variable is
+    # left in the result, to be met later as "Values must have AST kind numeral, app,
+    # or quantifier" somewhere unrelated to the call that caused it.
+    def function_body(decl, replacement)
+      vars = decl.arity.times.map { |i| decl.domain(i).fresh_var("arg#{i}") }
+      body = case replacement
+      when Proc
+        unless replacement.arity < 0 or replacement.arity == decl.arity
+          raise Z3::Exception, "Replacement for #{decl.name} takes #{replacement.arity} argument#{"s" unless replacement.arity == 1}, expected #{decl.arity}"
+        end
+        replacement.call(*vars)
+      when FuncDecl
+        replacement[*vars]
+      else
+        replacement
+      end
+      [vars, decl.range.cast(body)]
+    end
+
     class << self
       def coerce_to_same_sort(*args)
         # When coercion fails Ruby names the receiver's class - `1 + Object.new` says

@@ -179,6 +179,32 @@ module Z3
         Z3::VeryLowLevel.Z3_substitute(_ctx_pointer, ast._ast, from_asts.size, asts_vector(from_asts), asts_vector(to_asts))
       end
 
+      # `from_decls` are func decls and `to_bodies` are their replacements, parallel and
+      # the same length. A replacement isn't an ordinary term but a body over de Bruijn
+      # variables, so they come in as raw pointers - #bound_body is what makes one.
+      def substitute_funs(ast, from_decls, to_bodies)
+        _from = FFI::MemoryPointer.new(:pointer, from_decls.size)
+        _from.write_array_of_pointer from_decls.map(&:_ast)
+        _to = FFI::MemoryPointer.new(:pointer, to_bodies.size)
+        _to.write_array_of_pointer to_bodies
+        Z3::VeryLowLevel.Z3_substitute_funs(_ctx_pointer, ast._ast, from_decls.size, _from, _to)
+      end
+
+      # `body` with de Bruijn variables where `vars` were. Nothing in the gem can hold
+      # one of those - `Expr` refuses AST kind `:var`, and a bare `#0` would mean
+      # nothing outside the term that binds it - so this returns a raw pointer for
+      # #substitute_funs to consume immediately.
+      #
+      # Building a lambda and taking its body straight back out is the whole trick, and
+      # needs no binding the gem doesn't already have. The reverse is not a typo: a
+      # lambda numbers its bound variables from the right, so `lambda (x y)` has `y` as
+      # `#0`, while substitute_funs numbers a function's arguments from the left. The
+      # list has to go in backwards to come out forwards.
+      def bound_body(vars, body)
+        _lambda = mk_lambda_const(vars.reverse, body)
+        Z3::VeryLowLevel.Z3_get_quantifier_body(_ctx_pointer, _lambda)
+      end
+
       def mk_func_decl(symbol, domain_sorts, range_sort)
         Z3::VeryLowLevel.Z3_mk_func_decl(_ctx_pointer, symbol, domain_sorts.size, asts_vector(domain_sorts), range_sort._ast)
       end
