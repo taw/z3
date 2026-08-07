@@ -206,6 +206,44 @@ module Z3
     LowLevel.simplify_get_help
   end
 
+  # Z3's own estimate of what it has allocated, in bytes. Process wide rather than
+  # per context - it's the one Z3 function that takes no context at all, and there's
+  # only ever one context here anyway.
+  #
+  # What it's good for is watching the leak the README warns about. The context is
+  # built with `Z3_mk_context` rather than `Z3_mk_context_rc`, which means ASTs live
+  # as long as the context does and nothing Z3 hash-conses is ever released, so this
+  # number goes up and effectively never comes down. Dropping every reference to
+  # every Expr and running Ruby's GC doesn't move it. Only the refcounted objects -
+  # `Solver`, `Model`, `Tactic` and the rest - are released, and they're the smaller
+  # half.
+  def estimated_alloc_size
+    LowLevel.get_estimated_alloc_size
+  end
+
+  # Makes Z3's reference count decrements thread safe. They are not by default, which
+  # Z3's own header states plainly.
+  #
+  # It matters here because every refcounted object is released from an ObjectSpace
+  # finalizer, and a finalizer runs on whichever thread happened to trigger the
+  # collection - not necessarily the one that built the object. A single threaded
+  # program has nothing to fix, since there's only one thread for either to run on.
+  # A threaded one does, and the failure would be a corrupted refcount rather than
+  # anything that announces itself.
+  #
+  # One way, as Z3 offers no way back off, and harmless to call more than once.
+  # It cost nothing measurable over 30k create-and-collect cycles, so a program with
+  # threads in it should just call this before starting them.
+  #
+  # This is not the same subject as the note above: that's about memory never being
+  # freed, this is about freeing it safely from more than one thread. Neither makes
+  # a `Context` safe to *use* from several threads, which Z3 doesn't support at all
+  # without a context per thread - and this gem has exactly one.
+  def enable_concurrent_dec_ref
+    LowLevel.enable_concurrent_dec_ref
+    nil
+  end
+
   private
 
   # Whether Z3 could have this parameter. Only the unqualified names can be told -

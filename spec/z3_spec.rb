@@ -124,4 +124,42 @@ describe Z3 do
       expect(descrs).to_not include("pp.decimal")
     end
   end
+
+  describe "memory" do
+    it "#estimated_alloc_size reports bytes" do
+      expect(Z3.estimated_alloc_size).to be_a(Integer)
+      expect(Z3.estimated_alloc_size).to be > 0
+    end
+
+    # The leak the README warns about: the context isn't the refcounting kind, so an
+    # AST lives as long as the context does no matter what Ruby does with its wrapper
+    it "#estimated_alloc_size goes up with ASTs and not back down" do
+      before = Z3.estimated_alloc_size
+      exprs = (0...20_000).map { |i| Z3.Int("alloc_size_spec_#{i}") > i }
+      grown = Z3.estimated_alloc_size
+      expect(grown).to be > before
+      exprs = nil
+      GC.start
+      expect(Z3.estimated_alloc_size).to be >= grown
+    end
+
+    # One way and process wide, so it's exercised somewhere it can't reach the rest of
+    # the suite. The thread is the whole point - it collects solvers it didn't build,
+    # which is the dec_ref this makes safe.
+    it "#enable_concurrent_dec_ref survives an off-thread dec_ref" do
+      script = <<~RUBY
+        require #{File.expand_path("../lib/z3", __dir__).inspect}
+        raise "expected nil" unless Z3.enable_concurrent_dec_ref.nil?
+        Z3.enable_concurrent_dec_ref  # one way, but saying it twice is not an error
+        Thread.new { 500.times { Z3::Solver.new }; GC.start }.join
+        GC.start
+        solver = Z3::Solver.new
+        x = Z3.Int("x")
+        solver.assert x > 3
+        solver.assert x < 5
+        print solver.model[x] if solver.satisfiable?
+      RUBY
+      expect(IO.popen(["ruby", "-e", script], err: [:child, :out], &:read)).to eq("4")
+    end
+  end
 end
