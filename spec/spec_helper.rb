@@ -67,6 +67,25 @@ RSpec::Matchers.define :be_same_as do |expected|
   end
 end
 
+# `1 < int_var` and `int_var > 1` are the same claim written from opposite sides, and
+# so are `1 == int_var` and `int_var == 1` - but they're not the same term, because the
+# operands stay where the caller put them. Comparing printed forms would be asking the
+# printer a question about meaning, so this asks the solver instead: two Bools say the
+# same thing exactly when nothing can satisfy one without the other.
+#
+# Distinct rather than `!=` because `!=` is usually the thing under test.
+RSpec::Matchers.define :be_equivalent_to do |expected|
+  match do |actual|
+    solver = Z3::Solver.new
+    solver.assert Z3::Expr.Distinct(actual, expected)
+    !solver.satisfiable?
+  end
+
+  failure_message do |actual|
+    "expected `#{actual}' to say the same thing as `#{expected}', but a model tells them apart"
+  end
+end
+
 RSpec::Matchers.define :be_all_same do
   match do |array|
     array.uniq.size == 1

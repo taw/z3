@@ -20,6 +20,21 @@ module Z3
       Expr.Distinct(self, other)
     end
 
+    # Ruby's coercion protocol, which is how `1 + int_var` and `1 < int_var` reach Z3
+    # at all - Integer#+ and CompareHacks both hand the pair to the right-hand side to
+    # convert. Both come back in the wider of the two sorts, so `1 + real_var` is
+    # `(+ 1.0 r)` and not `(+ (to_real 1) r)`, and the Ruby value stays on the left
+    # where it was written.
+    #
+    # Every Expr has it, not only the arithmetic ones. A sort which can't hold the
+    # value raises here exactly what it raises with the operands the other way round,
+    # which is the point of it being here - `1 == bool_var` and `bool_var == 1` are the
+    # same question and shouldn't fail differently.
+    def coerce(other)
+      mine, theirs = Expr.coerce_to_same_sort(self, other)
+      [theirs, mine]
+    end
+
     # Rewrites the expression, replacing each key with its value. Keys are matched as
     # whole subterms, not just as variables, so `(a + b)` is as substitutable as `a`.
     #

@@ -60,15 +60,6 @@ module Z3
       sort.new(LowLevel.mk_abs(self))
     end
 
-    # Recast so 1 + x:Float
-    # is:  (+ 1.0 x)
-    # not: (+ (to_real 1) x)
-    def coerce(other)
-      other_sort = Expr.sort_for_const(other, toward: sort)
-      max_sort = [sort, other_sort].max
-      [max_sort.from_const(other), max_sort.from_value(self)]
-    end
-
     class << self
       def coerce_to_same_arith_sort(*args)
         args = coerce_to_same_sort(*args)

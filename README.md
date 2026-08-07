@@ -143,6 +143,66 @@ The interface is potentially unstable, and can change in the future.
 
 A utility at `api/gen_api` will loop through a .h file and generate Ruby definitions. This will update the API when upstream changes `z3_api.h`
 
+## Limitations
+
+`==` on an expression builds a `Z3::BoolExpr` rather than answering `true` or `false`, and every `BoolExpr` is truthy:
+
+```ruby
+a = Z3.Int("a")
+b = Z3.Int("b")
+a == b     # => Bool<a = b>, not false
+```
+
+That's the whole point of the gem, and Ruby's core classes are patched so the expression can be on either side - `1 == a` builds the same equation `a == 1` does, and so do `true`, `"a"`, `:red`, `[1, 2]` and `{x: 1, y: 2}` against the sorts which can hold them. The cost is that anything asking `==` a question and expecting a Ruby answer gets an expression instead, which reads as "yes".
+
+### Containers which work
+
+Hash and Set look their keys up with `#hash` and `#eql?`, not with `==`, and expressions answer those properly. Z3 interns its ASTs, so two expressions are `eql?` exactly when they're the same term - and being built separately doesn't make them different:
+
+```ruby
+{a => 1, b => 2}[b]      # => 2
+Set[a, b].include?(c)    # => false
+[a, b].uniq              # => [a, b]
+[a, a].uniq              # => [a]
+(a + 1).eql?(a + 1)      # => true
+(a + 1).eql?(1 + a)      # => false - a different term, not a different value
+```
+
+So Hash reading and writing, `#key?`, Set membership, and the Array operations built on hashing - `#uniq`, `#-`, `#&`, `#|`, `#tally`, `#group_by` - all behave as you'd expect. `#eql?` is also how you ask whether two expressions are the same term, which is the question `==` would have answered in a library that wasn't this one.
+
+This is where the Ruby gem differs from [crystal-z3](https://github.com/taw/crystal-z3), where Hash and Set have the problem too - Crystal has no `eql?`, so `==` has to do both jobs at once.
+
+### Containers which don't
+
+Anything which searches with `==` stops at the first thing it looks at, and anything which counts or deletes by `==` matches everything:
+
+```ruby
+[a] == [b]           # => true
+[a].include?(b)      # => true, for any b
+[a, b].index(b)      # => 0
+[a, b].count(b)      # => 2
+[a, b].delete(b)     # removes both
+{x: a} == {x: b}     # => true - Hash#== compares its values with ==
+{1 => a}.value?(b)   # => true
+```
+
+`case`/`when` goes the same way, because `Object#===` is `==` unless a class says otherwise, so the first branch mentioning an expression always wins. So does ordering: `Object#<=>` answers `0` whenever `==` is truthy, which makes every expression compare equal to every other, and `#sort`, `#min` and `#max` quietly hand back the order they were given.
+
+Building these collections is fine. It's only reading from them which lies, and `#eql?` reads correctly - `[a, b].index{|x| x.eql?(b)}` is `1`.
+
+The same applies with the Ruby value on the left, since that's the half the patched core classes make work: `[1].include?(a)` is `true`. Hashing is unaffected there too, so `Set[1].include?(a)` is `false` and `{1 => :x}[a]` is `nil`.
+
+### nil
+
+`nil` isn't a Z3 value, and it's the one case left where the two sides disagree:
+
+```ruby
+a == nil    # raises Z3::Exception
+nil == a    # => false
+```
+
+`NilClass` is deliberately not patched. Making it match would mean raising, and Ruby asks `nil == x` on its own, in places where an exception would stop the whole call rather than the element - `[nil, 1].include?(a)` asks it of the first element before going on to the second. Plain `Object`s are left alone for the same reason.
+
 ## Building
 
 ```

@@ -356,12 +356,6 @@ module Z3
       self.negative?.ite(-self, self)
     end
 
-    def coerce(other)
-      other_sort = Expr.sort_for_const(other, toward: sort)
-      max_sort = [sort, other_sort].max
-      [max_sort.from_const(other), max_sort.from_value(self)]
-    end
-
     public_class_method :new
 
     class << self
