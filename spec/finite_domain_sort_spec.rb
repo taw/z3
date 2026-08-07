@@ -56,13 +56,52 @@ module Z3
         expect(sort.cast(sort.from_const(2))).to be_same_as(sort.from_const(2))
       end
 
-      # A Ruby Integer means an Int everywhere else, so unlike a Bitvec it isn't
-      # coerced into this sort - values have to be asked for by name
-      it "is how a value gets into an expression, a bare Integer being a sort mismatch" do
+      it "is how a value gets into an expression" do
         x = sort.var("x")
         expect([x == sort.from_const(1)]).to have_solution(x => sort.from_const(1))
         expect([Z3.Distinct(x, sort.from_const(1))]).to have_solution(x => sort.from_const(0))
-        expect { x == 1 }.to raise_error(ArgumentError, "Can't convert Int into FD")
+      end
+    end
+
+    # `FiniteDomainSort#>` claiming Int is what routes the literal here, the same way
+    # BitvecSort does it
+    describe "Ruby Integers in expressions" do
+      let(:x) { sort.var("x") }
+
+      it "coerces a bare Integer on either side" do
+        expect([x == 1]).to have_solution(x => sort.from_const(1))
+        expect([1 == x]).to have_solution(x => sort.from_const(1))
+        expect([x != 1, x != 2]).to have_solution(x => sort.from_const(0))
+        expect([Z3.Distinct(x, 1, 2)]).to have_solution(x => sort.from_const(0))
+      end
+
+      it "builds the same term as spelling the value out" do
+        expect(x == 1).to be_same_as(x == sort.from_const(1))
+      end
+
+      # from_const's range check, which a Bitvec can't have - `bv == -1` and
+      # `bv == 255` both have to work at width 8, so there's no range to enforce
+      it "raises out of range rather than wrapping" do
+        expect { x == 3 }.to raise_error(Z3::Exception, "FD value must be between 0 and 2")
+        expect { x == -1 }.to raise_error(Z3::Exception, "FD value must be between 0 and 2")
+      end
+
+      # The claim only reaches Ruby values - from_value isn't overridden, so an Expr
+      # of another sort is refused as it always was
+      it "still refuses exprs of other sorts" do
+        expect { x == Z3.Int("i") }.to raise_error(Z3::Exception, "Can't convert Int into FD")
+        expect { Z3.Int("i") == x }.to raise_error(Z3::Exception, "Can't convert Int into FD")
+        expect { Z3.Int("i") + x }.to raise_error(Z3::Exception, "Can't convert Int into FD")
+        expect { x == Z3.Real("r") }.to raise_error(ArgumentError, "Can't convert Real into FD")
+        expect { x == Z3.Bool("b") }.to raise_error(ArgumentError, "Can't convert Bool into FD")
+        expect { x == 1.5 }.to raise_error(ArgumentError, "Can't convert Real into FD")
+      end
+
+      it "orders the sorts to match" do
+        expect(sort > IntSort.new).to eq(true)
+        expect(IntSort.new < sort).to eq(true)
+        expect(sort <=> RealSort.new).to eq(nil)
+        expect(sort <=> FiniteDomainSort.new("Other", 3)).to eq(nil)
       end
     end
 
