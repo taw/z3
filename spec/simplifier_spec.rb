@@ -48,12 +48,20 @@ module Z3
       end
     end
 
-    # Z3 4.16 gets `elim-unconstrained` wrong badly enough to be worth refusing outright -
-    # see spec/upstream_bugs_spec.rb, which reaches past this class to reproduce it
+    # Z3 below 5.0 gets `elim-unconstrained` wrong badly enough to be worth refusing
+    # outright - see spec/upstream_bugs_spec.rb, which reaches past this class to
+    # reproduce it. 5.0 fixed it, and there the refusal has to get out of the way.
     describe "unsound simplifiers" do
-      it "refuses to build one" do
-        expect{Simplifier.named("elim-unconstrained")}
-          .to raise_error(Z3::Exception, /\Aelim-unconstrained is unsound in Z3 .* which doesn't satisfy the assertions\z/)
+      if Z3.version_at_least?(5, 0)
+        it "refuses nothing, because this Z3 has no known unsound simplifier" do
+          expect(Simplifier.unsound).to eq({})
+          expect(Simplifier.named("elim-unconstrained")).to be_a Simplifier
+        end
+      else
+        it "refuses to build one" do
+          expect{Simplifier.named("elim-unconstrained")}
+            .to raise_error(Z3::Exception, /\Aelim-unconstrained is unsound in Z3 .* which doesn't satisfy the assertions\z/)
+        end
       end
 
       # Z3 has it, so the list says so - #named is where it gets turned down
@@ -114,9 +122,9 @@ module Z3
     end
 
     # Guards against a different one going wrong the way elim-unconstrained did, and
-    # against UNSOUND naming something which was only ever fine
+    # against .unsound naming something which was only ever fine
     it "every simplifier it will build returns models which satisfy the assertions" do
-      refused, buildable = Simplifier.names.partition { |name| Simplifier::UNSOUND.key?(name) }
+      refused, buildable = Simplifier.names.partition { |name| Simplifier.unsound.key?(name) }
       x, y = Z3.Int("x"), Z3.Int("y")
 
       unsound = buildable.reject do |name|
@@ -129,8 +137,14 @@ module Z3
       end
 
       expect(unsound).to eq([])
-      expect(refused).to eq(Simplifier::UNSOUND.keys)
-      expect(buildable.size).to eq(25)
+      expect(refused).to eq(Simplifier.unsound.keys)
+      # Hardcoded so that Z3 adding or dropping a simplifier is something we get told
+      # about. 5.0 added 11 and fixed the one entry .unsound had, so it refuses none.
+      if Z3.version_at_least?(5, 0)
+        expect(buildable.size).to eq(37)
+      else
+        expect(buildable.size).to eq(25)
+      end
     end
   end
 end

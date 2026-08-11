@@ -7,8 +7,11 @@ require "rbconfig"
 # stands for can go. Each one says what correct behaviour would look like, so a
 # failing example is also most of a bug report.
 #
-# Last verified against Z3 4.16.0. Z3 5.0 exists upstream but isn't packaged yet; when
-# it lands, run this file before anything else.
+# The gem supports Z3 versions on both sides of a fix, so an example for something 5.0
+# fixed asserts the bug below 5.0 and the correct answer at or above it, rather than
+# being deleted. Deleting it is for when the oldest Z3 we support has the fix.
+#
+# Verified against Z3 4.16.0 and 5.0.0.
 module Z3
   describe "Z3 upstream bugs" do
     # Two of these take the whole process down, so they have to run somewhere else.
@@ -32,9 +35,10 @@ module Z3
     # `r = 2`, and that same model then evaluates the constraint it supposedly
     # satisfies to false. `spec/float_expr_spec.rb` works around this by simplifying
     # `#to_real` instead of solving with it - the term the gem builds is correct, it's
-    # only the solver that goes wrong once a Real constraint is involved.
+    # only the solver that goes wrong once a Real constraint is involved. That
+    # workaround is version-independent, so it stays until 4.16 support goes.
     #
-    # Correct: a model in which `r` is 1/2.
+    # Correct, and what 5.0 does: a model in which `r` is 1/2.
     it "fp.to_real gives a model which contradicts its own constraint" do
       a = FloatSort.new(11, 53).var("a")
       r = Z3.Real("r")
@@ -44,24 +48,29 @@ module Z3
       solver.assert a == 0.5
       solver.assert constraint
       expect(solver.check).to eq(:sat)
-
-      # Not asserting which wrong value it picks, only that it is wrong - a different
-      # wrong answer is the same bug, and shouldn't read as a fix
       expect(solver.model.model_eval(a == 0.5, true).to_b).to be true
-      expect(solver.model.model_eval(constraint, true).to_b).to be false
+
+      if Z3.version_at_least?(5, 0)
+        expect(solver.model.model_eval(constraint, true).to_b).to be true
+        expect(solver.model[r].to_r).to eq(Rational(1, 2))
+      else
+        # Not asserting which wrong value it picks, only that it is wrong - a different
+        # wrong answer is the same bug, and shouldn't read as a fix
+        expect(solver.model.model_eval(constraint, true).to_b).to be false
+      end
     end
 
     # The `elim-unconstrained` simplifier drops a variable it considers unconstrained
     # and never reconstructs it, so the model it returns doesn't satisfy the
-    # assertions. Of the 26 simplifiers this is the only unsound one - the other 25
-    # all round-trip this problem correctly. The `z3` binary on the same problem
-    # answers x=4.
+    # assertions. Of the 26 simplifiers 4.16 has this is the only unsound one - the
+    # other 25 all round-trip this problem correctly. The `z3` binary on the same
+    # problem answers x=4.
     #
-    # `Simplifier::UNSOUND` refuses to build this one because of it, so the
-    # reproduction has to go through LowLevel to get past that guard. When this example
-    # fails, drop the entry there too.
+    # `Simplifier.unsound` refuses to build this one below 5.0, so the reproduction has
+    # to go through LowLevel to get past that guard - which it keeps doing on 5.0 too,
+    # so that both branches exercise the same solver.
     #
-    # Correct: a model in which `x` is `y + 3`.
+    # Correct, and what 5.0 does: a model in which `x` is `y + 3`.
     it "the elim-unconstrained simplifier returns a model which fails its assertions" do
       # Z3 collects a simplifier which nothing holds a reference to, and then dies
       # inside the solver, so this has to claim it the way ReferenceCounted would
@@ -80,7 +89,7 @@ module Z3
 
       expect(solver.check).to eq(:sat)
       expect(solver.model.model_eval(y > 0, true).to_b).to be true
-      expect(solver.model.model_eval(definition, true).to_b).to be false
+      expect(solver.model.model_eval(definition, true).to_b).to be Z3.version_at_least?(5, 0)
     end
 
     # `Z3_mk_enumeration_sort`'s last two arguments are out arrays, and passing NULL

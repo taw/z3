@@ -7,13 +7,20 @@ module Z3
   class Simplifier
     include ReferenceCounted
 
-    # Simplifiers we refuse to build, because Z3 gets them wrong. Pinned down in
-    # `spec/upstream_bugs_spec.rb`, which reaches past this class to reproduce the bug -
-    # when that spec starts failing, Z3 has fixed it and the entry here can go.
+    # Simplifiers Z3 gets wrong, each with the first version which fixed it. Pinned down
+    # in `spec/upstream_bugs_spec.rb`, which reaches past this class to reproduce the
+    # bug on the versions that still have it.
+    #
+    # Entries stay here after they're fixed rather than being deleted, because the gem
+    # supports Z3 versions on both sides of the fix - `.unsound` is what the running Z3
+    # still gets wrong, and that's what `#named` refuses.
     UNSOUND = {
-      "elim-unconstrained" =>
-        "it drops variables it decides are unconstrained without ever rebuilding them, " \
-        "so the solver answers :sat with a model which doesn't satisfy the assertions",
+      "elim-unconstrained" => {
+        fixed_in: [5, 0],
+        reason: "it drops variables it decides are unconstrained without ever rebuilding " \
+                "them, so the solver answers :sat with a model which doesn't satisfy the " \
+                "assertions",
+      },
     }
 
     attr_reader :_simplifier
@@ -23,8 +30,8 @@ module Z3
       when String
         names = Simplifier.names
         raise Z3::Exception, "#{_simplifier} not on list of known simplifiers, available: #{names.join(" ")}" unless names.include?(_simplifier)
-        if (reason = UNSOUND[_simplifier])
-          raise Z3::Exception, "#{_simplifier} is unsound in Z3 #{Z3.version} - #{reason}"
+        if (bug = Simplifier.unsound[_simplifier])
+          raise Z3::Exception, "#{_simplifier} is unsound in Z3 #{Z3.version} - #{bug[:reason]}"
         end
         _simplifier = LowLevel.mk_simplifier(_simplifier)
       when FFI::Pointer
@@ -61,10 +68,16 @@ module Z3
     end
 
     class << self
-      # Z3's whole list, including anything in UNSOUND - #named is where those get
+      # Z3's whole list, including anything .unsound names - #named is where those get
       # turned down, so this stays a faithful report of what Z3 has
       def names
         (0...LowLevel.get_num_simplifiers).map{|i| LowLevel.get_simplifier_name(i) }
+      end
+
+      # The UNSOUND entries the Z3 we're actually running still gets wrong. #named
+      # refuses exactly these, so on a new enough Z3 nothing is refused at all.
+      def unsound
+        UNSOUND.reject{|_, bug| Z3.version_at_least?(*bug[:fixed_in]) }
       end
 
       def description(name)
