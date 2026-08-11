@@ -505,23 +505,12 @@ module Z3
       end
     end
 
-    # This is a very simple example of unknown satisfiablity
-    # so we might need more complex one in the future
-    # This is now satisfiable in 4.6.0
-    if Z3.version_at_least?(4, 6)
-      it "unknown satisfiability (until 4.6 fix)" do
-        solver.assert a**3 == a
-        expect(solver.check).to eq(:sat)
-        expect(solver).to be_satisfiable
-        expect(solver).to_not be_unsatisfiable
-      end
-    else
-      it "unknown satisfiability (until 4.6 fix)" do
-        solver.assert a**3 == a
-        expect(solver.check).to eq(:unknown)
-        expect{solver.satisfiable?}.to raise_error("Satisfiability unknown")
-        expect{solver.unsatisfiable?}.to raise_error("Satisfiability unknown")
-      end
+    # Z3 used to answer :unknown here, which is what the example below still covers
+    it "nonlinear satisfiability" do
+      solver.assert a**3 == a
+      expect(solver.check).to eq(:sat)
+      expect(solver).to be_satisfiable
+      expect(solver).to_not be_unsatisfiable
     end
 
     it "unknown satisfiability" do

@@ -116,56 +116,53 @@ module Z3
       )
     end
 
-    if Z3.version_at_least?(4, 5)
-      # Only works in z3 4.5, 4.4 (like on Ubuntu) returns bad stuff
-      it "union" do
-        expect([
-          a.include?(1),
-          a.include?(2),
-          !a.include?(3),
-          !b.include?(1),
-          b.include?(2),
-          b.include?(3),
-          c == a.union(b),
-        ]).to have_solution(
-          a => sort.Full.delete(3),
-          b => sort.Full.delete(1),
-          c => sort.Full,
-        )
-      end
+    it "union" do
+      expect([
+        a.include?(1),
+        a.include?(2),
+        !a.include?(3),
+        !b.include?(1),
+        b.include?(2),
+        b.include?(3),
+        c == a.union(b),
+      ]).to have_solution(
+        a => sort.Full.delete(3),
+        b => sort.Full.delete(1),
+        c => sort.Full,
+      )
+    end
 
-      it "difference" do
-        expect([
-          a.include?(1),
-          a.include?(2),
-          !a.include?(3),
-          !b.include?(1),
-          b.include?(2),
-          b.include?(3),
-          c == a.difference(b),
-        ]).to have_solution(
-          a => sort.Full.delete(3),
-          b => sort.Full.delete(1),
-          # a & !b
-          c => sort.Empty.add(1),
-        )
-      end
+    it "difference" do
+      expect([
+        a.include?(1),
+        a.include?(2),
+        !a.include?(3),
+        !b.include?(1),
+        b.include?(2),
+        b.include?(3),
+        c == a.difference(b),
+      ]).to have_solution(
+        a => sort.Full.delete(3),
+        b => sort.Full.delete(1),
+        # a & !b
+        c => sort.Empty.add(1),
+      )
+    end
 
-      it "intersection" do
-        expect([
-          a.include?(1),
-          a.include?(2),
-          !a.include?(3),
-          !b.include?(1),
-          b.include?(2),
-          b.include?(3),
-          c == a.intersection(b),
-        ]).to have_solution(
-          a => sort.Full.delete(3),
-          b => sort.Full.delete(1),
-          c => sort.Full.delete(1).delete(3),
-        )
-      end
+    it "intersection" do
+      expect([
+        a.include?(1),
+        a.include?(2),
+        !a.include?(3),
+        !b.include?(1),
+        b.include?(2),
+        b.include?(3),
+        c == a.intersection(b),
+      ]).to have_solution(
+        a => sort.Full.delete(3),
+        b => sort.Full.delete(1),
+        c => sort.Full.delete(1).delete(3),
+      )
     end
   end
 end
