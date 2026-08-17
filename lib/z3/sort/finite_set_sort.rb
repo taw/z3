@@ -32,6 +32,14 @@ module Z3
     attr_reader :element_sort
 
     def initialize(element_sort)
+      # Z3 4.x has none of the `Z3_mk_finite_set_*` entry points, and calling one there
+      # raises "Could not find Z3_mk_finite_set_sort in the Z3 library", which says what
+      # happened but not what to do about it. This is the only door into the sort, so
+      # it's the one place that has to check - everything else needs a FiniteSetSort
+      # in hand before it can be reached.
+      unless Sort.finite_sets?
+        raise Z3::Exception, "Finite sets need Z3 5.0 or newer, this is Z3 #{Z3.version}"
+      end
       raise Z3::Exception, "Sort expected, got #{AST.describe(element_sort)}" unless element_sort.is_a?(Sort)
       @element_sort = element_sort
       super LowLevel.mk_finite_set_sort(element_sort)

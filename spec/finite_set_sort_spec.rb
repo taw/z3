@@ -1,5 +1,7 @@
 module Z3
   describe FiniteSetSort do
+    before { skip "Finite sets were added in Z3 5.0" unless Z3.version_at_least?(5, 0) }
+
     let(:sort)        { FiniteSetSort.new(IntSort.new) }
     let(:bool_set)    { FiniteSetSort.new(BoolSort.new) }
     let(:string_set)  { FiniteSetSort.new(StringSort.new) }

@@ -1,5 +1,7 @@
 module Z3
   describe FiniteSetExpr do
+    before { skip "Finite sets were added in Z3 5.0" unless Z3.version_at_least?(5, 0) }
+
     let(:sort)   { FiniteSetSort.new(IntSort.new) }
     let(:nested) { FiniteSetSort.new(FiniteSetSort.new(IntSort.new)) }
     let(:a) { sort.var("a") }

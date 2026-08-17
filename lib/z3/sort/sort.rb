@@ -117,13 +117,17 @@ module Z3
       Z3::Exception.new("Can't convert #{AST.describe(value)} into #{self}")
     end
 
+    # FiniteSetSort added in 5.0
+    def self.finite_sets?
+      return @finite_sets unless @finite_sets.nil?
+      @finite_sets = Z3.version_at_least?(5, 0)
+    end
+
     def self.from_pointer(_sort)
-      # Before the kind, because a finite set hasn't got one: Z3 5.0 added the sort
-      # without adding a `Z3_FINITE_SET_SORT` to `Z3_sort_kind`, so `Z3_get_sort_kind`
-      # answers `Z3_UNKNOWN_SORT` and this predicate is the only way to tell. Z3's own
-      # Python bindings do exactly this, for exactly this reason. Pinned, along with
-      # the fact that it fires on nothing else, in `spec/upstream_bugs_spec.rb`.
-      if VeryLowLevel.Z3_is_finite_set_sort(LowLevel._ctx_pointer, _sort)
+      # FiniteSetSort didn't get its dedicated Z3_sort_kind value
+      # so we need to call a special function to check for it.
+      # But that function was only added in 5.0. Pre-5.0 we can't have finite sets anyway.
+      if finite_sets? and VeryLowLevel.Z3_is_finite_set_sort(LowLevel._ctx_pointer, _sort)
         return FiniteSetSort.new(
           from_pointer(VeryLowLevel.Z3_get_finite_set_sort_basis(LowLevel._ctx_pointer, _sort))
         )

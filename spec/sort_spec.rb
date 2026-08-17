@@ -172,5 +172,29 @@ module Z3
         expect(counts).to eq({IntSort.new => 3, BitvecSort.new(8) => 1})
       end
     end
+
+    # Every sort but one is recognised by its `Z3_sort_kind`, which every Z3 has - so a
+    # sort from a newer Z3 falls through to "Unknown sort kind" and bothers nobody else.
+    # A finite set has no kind of its own, so it has to be recognised by asking
+    # `Z3_is_finite_set_sort`, a function Z3 4.x hasn't got - and #from_pointer runs on
+    # the path of every model read, so calling it there unconditionally took the whole
+    # gem down on 4.x rather than just finite sets.
+    describe "on a Z3 without finite sets" do
+      before do
+        allow(Sort).to receive(:finite_sets?).and_return(false)
+      end
+
+      it "doesn't ask a question that Z3 has no function to answer" do
+        expect(VeryLowLevel).to_not receive(:Z3_is_finite_set_sort)
+        all_sorts.each do |sort|
+          expect(Sort.from_pointer(sort._ast)).to eq(sort)
+        end
+      end
+
+      it "says what's wrong when someone actually asks for one" do
+        expect { FiniteSetSort.new(IntSort.new) }
+          .to raise_error(Z3::Exception, /Finite sets need Z3 5\.0 or newer/)
+      end
+    end
   end
 end
