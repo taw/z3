@@ -15,12 +15,10 @@ module Z3
       sort.new LowLevel.mk_store(self, key_sort.cast(key), value_sort.cast(value))
     end
 
-    def select(key)
-      sort.value_sort.new LowLevel.mk_select(self, key_sort.cast(key))
-    end
-
+    # Z3 calls this `select`, and that name is deliberately not exposed - Ruby's
+    # `select` filters a collection, which is the one thing this doesn't do
     def [](key)
-      select(key)
+      sort.value_sort.new LowLevel.mk_select(self, key_sort.cast(key))
     end
 
     # The array's fallback - what it answers for keys nothing has stored to. It's the

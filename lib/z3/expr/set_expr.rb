@@ -10,7 +10,8 @@ module Z3
     # The Array vocabulary, because a Set *is* an `Array(X, Bool)` and asking for one
     # gives you a Set - see ArraySort.new. `#add` and `#delete` are `#store` with a
     # literal `true` and `false`; `#store` is the only way to say it with a symbolic
-    # Bool, so it can't just be dropped. `#include?` is `#select` under a Ruby name.
+    # Bool, so it can't just be dropped. Z3's `select` is `#include?` here, and is not
+    # exposed under its own name - Ruby's `select` filters, which this doesn't.
     def key_sort
       sort.key_sort
     end
@@ -21,10 +22,6 @@ module Z3
 
     def store(key, value)
       sort.new LowLevel.mk_store(self, element_sort.cast(key), BoolSort.new.cast(value))
-    end
-
-    def select(key)
-      include?(key)
     end
 
     def [](key)

@@ -394,6 +394,32 @@ module Z3
       PrintedExpr.new("#{method}({#{pairs.join(", ")}}, #{bound})")
     end
 
+    # Array and Set reads and writes. Z3 has one `select` and one `store` for both,
+    # because a Set is an `Array(X, Bool)` - so which Ruby spelling they get is decided
+    # by the receiver's sort. `select` has no Ruby name of its own on either: indexing
+    # is `[]` and membership is `#include?`, and `select` means something else entirely
+    # in Ruby.
+    #
+    # The sort check is also what keeps a user function called `store` or `select` out
+    # of here.
+    def format_array(a, name, args)
+      return nil unless args.size >= 1
+      receiver_sort = a.arguments[0].sort
+      return nil unless receiver_sort.is_a?(ArraySort) or receiver_sort.is_a?(SetSort)
+      case name
+      when "select"
+        return nil unless args.size == 2
+        if receiver_sort.is_a?(SetSort)
+          PrintedExpr.new("#{args[0].enforce_parentheses}.include?(#{args[1]})")
+        else
+          PrintedExpr.new("#{args[0].enforce_parentheses}[#{args[1]}]")
+        end
+      when "store"
+        return nil unless args.size == 3
+        PrintedExpr.new("#{args[0].enforce_parentheses}.store(#{args[1]}, #{args[2]})")
+      end
+    end
+
     # `Point.mk(3, 4)` and `p.x`, rather than the raw `Point(3, 4)` and `x(p)`. A
     # tuple's constructor is named after the sort and its accessors after the fields,
     # so it's the decls that get matched and not the names - the same reason
@@ -469,6 +495,9 @@ module Z3
         if name == "map" and decl.num_parameters == 1 and decl.parameter_kind(0) == :func_decl
           return PrintedExpr.new("map(#{decl.func_decl_parameter(0).name}, #{args.join(", ")})")
         end
+
+        array = format_array(a, name, args)
+        return array if array
 
         tuple = format_tuple(a, args)
         return tuple if tuple

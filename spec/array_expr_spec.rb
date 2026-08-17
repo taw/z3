@@ -96,10 +96,7 @@ module Z3
       )
     end
 
-    it "select" do
-      expect([a.select(10) == 20]).to have_solution(
-        a => sort.Const(20),
-      )
+    it "reading with []" do
       expect([a[10] == 20]).to have_solution(
         a => sort.Const(20),
       )
@@ -113,9 +110,6 @@ module Z3
     end
 
     it "store" do
-      expect([a == b.store(10, 20), x == a.select(10)]).to have_solution(
-        x => 20,
-      )
       expect([a == b.store(10, 20), x == a[10]]).to have_solution(
         x => 20,
       )

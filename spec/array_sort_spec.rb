@@ -85,7 +85,6 @@ module Z3
         expect(v.value_sort).to eq(BoolSort.new)
         expect(v.default.sort).to eq(BoolSort.new)
         expect(v[3]).to eql(v.include?(3))
-        expect(v.select(3)).to eql(v.include?(3))
         expect(v.store(3, true)).to eql(v.add(3))
         expect(v.store(3, false)).to eql(v.delete(3))
         # #store is the only one of these that takes a symbolic Bool
