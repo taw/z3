@@ -144,6 +144,7 @@ module Z3
     attach_function :Z3_get_error_code, [:ctx_pointer], :uint
     attach_function :Z3_get_error_msg, [:ctx_pointer, :int], :string
     attach_function :Z3_get_estimated_alloc_size, [], :uint64
+    attach_function :Z3_get_finite_set_sort_basis, [:ctx_pointer, :sort_pointer], :sort_pointer
     attach_function :Z3_get_full_version, [], :string
     attach_function :Z3_get_func_decl_id, [:ctx_pointer, :func_decl_pointer], :uint
     attach_function :Z3_get_global_param_descrs, [:ctx_pointer], :param_descrs_pointer
@@ -214,6 +215,7 @@ module Z3
     attach_function :Z3_is_eq_ast, [:ctx_pointer, :ast_pointer, :ast_pointer], :bool
     attach_function :Z3_is_eq_func_decl, [:ctx_pointer, :func_decl_pointer, :func_decl_pointer], :bool
     attach_function :Z3_is_eq_sort, [:ctx_pointer, :sort_pointer, :sort_pointer], :bool
+    attach_function :Z3_is_finite_set_sort, [:ctx_pointer, :sort_pointer], :bool
     attach_function :Z3_is_ground, [:ctx_pointer, :ast_pointer], :bool
     attach_function :Z3_is_lambda, [:ctx_pointer, :ast_pointer], :bool
     attach_function :Z3_is_numeral_ast, [:ctx_pointer, :ast_pointer], :bool
@@ -290,6 +292,18 @@ module Z3
     attach_function :Z3_mk_extract, [:ctx_pointer, :uint, :uint, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_false, [:ctx_pointer], :ast_pointer
     attach_function :Z3_mk_finite_domain_sort, [:ctx_pointer, :symbol_pointer, :uint64], :sort_pointer
+    attach_function :Z3_mk_finite_set_difference, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_finite_set_empty, [:ctx_pointer, :sort_pointer], :ast_pointer
+    attach_function :Z3_mk_finite_set_filter, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_finite_set_intersect, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_finite_set_map, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_finite_set_member, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_finite_set_range, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_finite_set_singleton, [:ctx_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_finite_set_size, [:ctx_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_finite_set_sort, [:ctx_pointer, :sort_pointer], :sort_pointer
+    attach_function :Z3_mk_finite_set_subset, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_finite_set_union, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_fixedpoint, [:ctx_pointer], :fixedpoint_pointer
     attach_function :Z3_mk_fpa_abs, [:ctx_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_fpa_add, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_pointer

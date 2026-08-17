@@ -577,6 +577,10 @@ module Z3
         VeryLowLevel.Z3_get_estimated_alloc_size()
       end
 
+      def get_finite_set_sort_basis(sort) #=> :sort_pointer
+        VeryLowLevel.Z3_get_finite_set_sort_basis(_ctx_pointer, sort._ast)
+      end
+
       def get_full_version #=> :string
         VeryLowLevel.Z3_get_full_version()
       end
@@ -855,6 +859,10 @@ module Z3
 
       def is_eq_sort(sort1, sort2) #=> :bool
         VeryLowLevel.Z3_is_eq_sort(_ctx_pointer, sort1._ast, sort2._ast)
+      end
+
+      def is_finite_set_sort(sort) #=> :bool
+        VeryLowLevel.Z3_is_finite_set_sort(_ctx_pointer, sort._ast)
       end
 
       def is_ground(ast) #=> :bool
@@ -1159,6 +1167,54 @@ module Z3
 
       def mk_finite_domain_sort(sym, num) #=> :sort_pointer
         VeryLowLevel.Z3_mk_finite_domain_sort(_ctx_pointer, sym, num)
+      end
+
+      def mk_finite_set_difference(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_finite_set_difference(_ctx_pointer, ast1._ast, ast2._ast)
+      end
+
+      def mk_finite_set_empty(sort) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_finite_set_empty(_ctx_pointer, sort._ast)
+      end
+
+      def mk_finite_set_filter(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_finite_set_filter(_ctx_pointer, ast1._ast, ast2._ast)
+      end
+
+      def mk_finite_set_intersect(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_finite_set_intersect(_ctx_pointer, ast1._ast, ast2._ast)
+      end
+
+      def mk_finite_set_map(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_finite_set_map(_ctx_pointer, ast1._ast, ast2._ast)
+      end
+
+      def mk_finite_set_member(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_finite_set_member(_ctx_pointer, ast1._ast, ast2._ast)
+      end
+
+      def mk_finite_set_range(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_finite_set_range(_ctx_pointer, ast1._ast, ast2._ast)
+      end
+
+      def mk_finite_set_singleton(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_finite_set_singleton(_ctx_pointer, ast._ast)
+      end
+
+      def mk_finite_set_size(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_finite_set_size(_ctx_pointer, ast._ast)
+      end
+
+      def mk_finite_set_sort(sort) #=> :sort_pointer
+        VeryLowLevel.Z3_mk_finite_set_sort(_ctx_pointer, sort._ast)
+      end
+
+      def mk_finite_set_subset(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_finite_set_subset(_ctx_pointer, ast1._ast, ast2._ast)
+      end
+
+      def mk_finite_set_union(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_finite_set_union(_ctx_pointer, ast1._ast, ast2._ast)
       end
 
       def mk_fixedpoint #=> :fixedpoint_pointer
