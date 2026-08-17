@@ -118,6 +118,17 @@ module Z3
     end
 
     def self.from_pointer(_sort)
+      # Before the kind, because a finite set hasn't got one: Z3 5.0 added the sort
+      # without adding a `Z3_FINITE_SET_SORT` to `Z3_sort_kind`, so `Z3_get_sort_kind`
+      # answers `Z3_UNKNOWN_SORT` and this predicate is the only way to tell. Z3's own
+      # Python bindings do exactly this, for exactly this reason. Pinned, along with
+      # the fact that it fires on nothing else, in `spec/upstream_bugs_spec.rb`.
+      if VeryLowLevel.Z3_is_finite_set_sort(LowLevel._ctx_pointer, _sort)
+        return FiniteSetSort.new(
+          from_pointer(VeryLowLevel.Z3_get_finite_set_sort_basis(LowLevel._ctx_pointer, _sort))
+        )
+      end
+
       kind = VeryLowLevel.Z3_get_sort_kind(LowLevel._ctx_pointer, _sort)
       case kind
       when 0

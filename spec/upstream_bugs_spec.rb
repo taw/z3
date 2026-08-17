@@ -31,6 +31,33 @@ module Z3
       expect(dies_on_a_signal?("raise Z3::Exception, 'nope'")).to be false
     end
 
+    # One of these doesn't come back at all, so it has to run somewhere else too - and
+    # somewhere else that can be killed, since the whole point is that nothing inside
+    # Z3 will stop it. `timeout` and `rlimit` are no help: Z3 never looks at either
+    # from inside the loop, which is why this is a hang rather than an `:unknown`.
+    #
+    # `seconds` is generous because a slow machine finishing in 4s and a hang look the
+    # same from out here, and a false "still broken" is the worse of the two mistakes.
+    def hangs?(ruby_code, seconds: 10)
+      pid = spawn(
+        RbConfig.ruby, "-I#{__dir__}/../lib", "-rz3", "-e", ruby_code,
+        out: File::NULL, err: File::NULL,
+      )
+      finished = nil
+      waiter = Thread.new { finished = Process.wait2(pid)&.last }
+      hung = waiter.join(seconds).nil?
+      if hung
+        Process.kill(:KILL, pid)
+        waiter.join
+      end
+      hung
+    end
+
+    it "the hang helper can tell a hang from an ordinary answer" do
+      expect(hangs?("sleep 60", seconds: 2)).to be true
+      expect(hangs?("Z3::Solver.new.check", seconds: 30)).to be false
+    end
+
     # Asserting `r == a.to_real` alongside `a == 0.5` returns :sat with a model saying
     # `r = 2`, and that same model then evaluates the constraint it supposedly
     # satisfies to false. `spec/float_expr_spec.rb` works around this by simplifying
@@ -187,8 +214,11 @@ module Z3
 
       # 1000 is Z3_UNKNOWN_SORT, the fallback for a sort the API can't classify
       expect(VeryLowLevel.Z3_get_sort_kind(LowLevel._ctx_pointer, _finite_set)).to eq(1000)
-      expect { Sort.from_pointer(_finite_set) }
-        .to raise_error(Z3::Exception, "Unknown sort kind 1000")
+
+      # `Sort.from_pointer` gets there anyway, by asking the predicate first. Without
+      # that it would fall through its kind dispatch to "Unknown sort kind 1000", and
+      # take every model holding a finite set with it.
+      expect(Sort.from_pointer(_finite_set)).to eq(FiniteSetSort.new(IntSort.new))
     end
 
     # The workaround for the above, which is what `Sort.from_pointer` will have to do
@@ -310,6 +340,137 @@ module Z3
       )
       _size = VeryLowLevel.Z3_mk_finite_set_size(_ctx, _union)
       expect(Expr.new_from_pointer(VeryLowLevel.Z3_simplify(_ctx, _size)).ast_kind).to eq(:app)
+    end
+
+    # `set.size` is unsound. Z3 never connects element distinctness to cardinality, so
+    # it will agree that a set it can see has two elements has one - and hand back a
+    # model saying so, which is the shape of this that matters, because the model
+    # contradicts the very constraint it claims to satisfy.
+    #
+    # Membership, equality and subset are all sound - `Set[1] == Set[2]` is unsat and
+    # `1 in Set[2]` is unsat - so Z3 knows perfectly well that 1 and 2 are different.
+    # It just doesn't tell the cardinality solver.
+    #
+    # What it does know is the bounds: a union of n singletons has a size between 1
+    # and n. So `size == 0` and `size == 3` are both correctly refused for a two
+    # element set, and only the middle is wrong.
+    #
+    # `FiniteSetSort`'s documentation warns about this, since there's no working around
+    # it - refusing `#size` would leave the sort with no point to it.
+    #
+    # Correct: unsat, on every one of the three below.
+    it "set.size is unsound - a two element set is allowed to have one element" do
+      skip "Finite sets were added in Z3 5.0" unless Z3.version_at_least?(5, 0)
+      sort = FiniteSetSort.new(IntSort.new)
+      set = sort.var("unsound_size_set")
+
+      # The whole set is spelled out, so there is nothing left to decide
+      solver = Solver.new
+      solver.assert set == Set[1, 2]
+      solver.assert set.size == 1
+      expect(solver.check).to eq(:sat)
+      # ...and the model it offers says the set is `Set[1, 2]`, whose size is 2
+      expect(solver.model[set].value).to eq(Set[1, 2])
+
+      # Same thing reached through membership rather than equality
+      solver = Solver.new
+      solver.assert set.include?(7)
+      solver.assert set.include?(9)
+      solver.assert set.size == 1
+      expect(solver.check).to eq(:sat)
+
+      # Ground, with no variable in it at all
+      solver = Solver.new
+      solver.assert sort.from_const(Set[1, 2, 3]).size == 2
+      expect(solver.check).to eq(:sat)
+
+      # The bounds it does get right, so this is a gap and not a total absence
+      [0, 4].each do |wrong_size|
+        solver = Solver.new
+        solver.assert sort.from_const(Set[1, 2, 3]).size == wrong_size
+        expect(solver.check).to eq(:unsat)
+      end
+    end
+
+    # Equality is unsound once a `set.range` has a symbolic end. Z3 will agree that
+    # `(1..n)` is `Set[1, 2, 3]` while refusing to let `n` be 3, and offer an `n` for
+    # which the two sets plainly differ.
+    #
+    # It's specifically equality: membership stays sound with a symbolic end, and
+    # equality stays sound with literal ones, so the ordinary uses of `#Range` are
+    # fine. `FiniteSetSort#Range`'s spec asks about membership for this reason.
+    #
+    # Correct: unsat, since `(1..n) == Set[1, 2, 3]` forces `n` to be 3.
+    it "set.range equality is unsound when an end is symbolic" do
+      skip "Finite sets were added in Z3 5.0" unless Z3.version_at_least?(5, 0)
+      sort = FiniteSetSort.new(IntSort.new)
+      n = Z3.Int("unsound_range_n")
+
+      solver = Solver.new
+      solver.assert sort.Range(1, n) == Set[1, 2, 3]
+      solver.assert n != 3
+      expect(solver.check).to eq(:sat)
+      # ...and the `n` it picks makes a range which is not that set at all
+      expect(solver.model[n].value).to_not eq(3)
+
+      # With both ends literal it decides correctly, in both directions
+      solver = Solver.new
+      solver.assert sort.Range(1, 2) == Set[1, 2, 3]
+      expect(solver.check).to eq(:unsat)
+
+      solver = Solver.new
+      solver.assert sort.Range(1, 3) == Set[1, 2, 3]
+      expect(solver.check).to eq(:sat)
+
+      # ...and membership is sound even with a symbolic end
+      solver = Solver.new
+      solver.assert sort.Range(1, n).include?(3)
+      solver.assert n == 2
+      expect(solver.check).to eq(:unsat)
+    end
+
+    # `set.map` doesn't answer. Not slowly, not `:unknown` - `#check` never returns,
+    # and `timeout` and `rlimit` both go unread, so nothing short of killing the
+    # process gets control back. It happens on questions with nothing to them: whether
+    # 10 is in `Set[1, 2].map { |x| x * 10 }`, or whether two identical map terms are
+    # equal.
+    #
+    # `FiniteSetExpr#map` refuses to build one for exactly this reason - a term that
+    # stops the next `#check` is worse than no term - so this reproduces it through
+    # LowLevel to get past that guard. `FiniteSetExpr::MAP_HANGS` is what to change
+    # when this example starts failing.
+    #
+    # `set.filter` is fine, in the sense that matters here: it answers `:unknown` a
+    # lot, but it answers.
+    #
+    # Correct: any answer at all, including `:unknown`.
+    it "set.map hangs the solver, ignoring timeout and rlimit" do
+      skip "Finite sets were added in Z3 5.0" unless Z3.version_at_least?(5, 0)
+      expect(hangs?(<<~RUBY)).to be true
+        sort = Z3::FiniteSetSort.new(Z3::IntSort.new)
+        set = sort.from_const([1, 2])
+        x = Z3::IntSort.new.fresh_var("x")
+        # #map refuses to build this, so it's built the way #map would have
+        mapped = sort.new(Z3::LowLevel.mk_finite_set_map(Z3.Lambda(x, x * 10), set))
+        solver = Z3::Solver.new(timeout: 1000, rlimit: 10000)
+        solver.assert mapped.include?(10)
+        solver.check
+      RUBY
+    end
+
+    it "set.filter answers, which is what makes #select usable and #map not" do
+      skip "Finite sets were added in Z3 5.0" unless Z3.version_at_least?(5, 0)
+      sort = FiniteSetSort.new(IntSort.new)
+      filtered = sort.from_const([1, 2, 3]).select { |x| x > 1 }
+
+      solver = Solver.new
+      solver.assert filtered.include?(1)
+      expect(solver.check).to eq(:unsat)
+
+      # Incomplete rather than wrong - it can't confirm the ones it can't refute
+      solver = Solver.new
+      solver.assert filtered.include?(2)
+      expect(solver.check).to eq(:unknown)
     end
   end
 end

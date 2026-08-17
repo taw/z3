@@ -128,6 +128,20 @@ class Hash
   prepend EqualityHacks
 end
 
+# A Set is a finite set's elements, so it needs the flipped form too. Array already has
+# it just above, for tuples, and means a finite set as well when that's the sort it's
+# meeting. Range deliberately doesn't: it isn't a set value here, because it isn't one
+# in Ruby either.
+#
+# Not CompareHacks: Ruby's Set#<= is the subset question, and routing that through
+# `coerce` would ask it of two Z3 expressions rather than answering it, which is a
+# different thing from what the arithmetic operators do.
+require "set"
+
+class Set
+  prepend EqualityHacks
+end
+
 # NilClass and the rest of Object deliberately don't get this. They're not Z3 values,
 # so `nil == int_var` would have to raise to match `int_var == nil`, and Ruby calls
 # `==` on nil all over the place - `[nil, x].include?(y)` asks `nil == y` - where an

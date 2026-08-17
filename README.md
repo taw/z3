@@ -2,7 +2,7 @@
 
 This is a Ruby interface for [Z3](https://github.com/Z3Prover/z3).
 
-Recommended [Z3](https://github.com/Z3Prover/z3) version is 4.16 or newer. Make sure you have it first (e.g. `brew install z3` on MacOS).
+Recommended [Z3](https://github.com/Z3Prover/z3) version is 5.0 or newer. All basic functionality works on Z3 4.x just fine, so you only miss more exotic features. Make sure you have it first (e.g. `brew install z3` on OSX).
 
 ```sh
 gem install z3
@@ -99,6 +99,25 @@ A tuple is a sort like any other, so tuples nest, key an `Array`, and are the wa
 
 Tuples are declared once, like enums, and share the datatype namespace with them, so neither can take a name the other has. The reason is worse than the enum's: where Z3 rejects a second enum of the same name outright, it accepts a second *tuple* and quietly rebuilds the sort's fields from it, abandoning every term built against the first declaration. Asking for the same tuple twice gives back the sort you already have; the same name with different fields raises.
 
+`Z3::FiniteSetSort` is a set in the sense Ruby's `Set` is one, and a Ruby `Set` is a value of it - as is an `Array`, which is the other way of writing the same thing:
+
+```ruby
+sort = Z3::FiniteSetSort.new(Z3::IntSort.new)
+s = sort.var("s")
+solver.assert s.include?(3)
+solver.assert s.subset?(Set[1, 2, 3])
+solver.assert s != Set[3]
+solver.model[s].value               # => #<Set: {1, 3}>
+
+s == Set[1, 2, 3]                   # and Set[1, 2, 3] == s, and [1, 2, 3]
+```
+
+It reads like Ruby's Set throughout - `#include?`, `#size`, `#empty?`, `#add`, `#delete`, `#subset?`, `#disjoint?`, `|`, `&`, `-`, `^` - except that nothing mutates, so `#add` gives back a new set the way `#union` does.
+
+This is a different sort from `Z3::SetSort`, which is Z3's older `Array(X, Bool)` and is described further down: that one is a characteristic function, so it has no cardinality and can hold everything-except-5, while this one has `#size` and holds finitely many elements. When you want a set, this is usually the one you want.
+
+It's new in Z3 5.0 and Z3's side of it is unfinished.
+
 A model reports an uninterpreted function as a Hash from argument lists to values, with Ruby's Hash default holding Z3's `else` branch - the answer for every argument the solver never had to pin down. Z3 picks one of the values as that fallback, so the entries are only the exceptions to it:
 
 ```ruby
@@ -126,12 +145,13 @@ A Ruby Float *is* an IEEE double, so `Float`'s `#value` converts every `Float(11
 The container sorts hand back the matching Ruby container, calling `#value` on what's inside, so a `Seq(Seq(Int))` gives nested Arrays:
 
 ```ruby
-seq_expr.value     # => [1, 2, 3]
-set_expr.value     # => #<Set: {3, 5}>
-array_expr.value   # => {2 => 7}, with 0 as the Hash default
+seq_expr.value        # => [1, 2, 3]
+set_expr.value        # => #<Set: {3, 5}>
+finite_set_expr.value # => #<Set: {3, 5}>
+array_expr.value      # => {2 => 7}, with 0 as the Hash default
 ```
 
-An `Array` is a total map, so its entries alone can't say what it is - Ruby's Hash default holds `#default`, the answer for every key not listed, the same shape a function interpretation uses. A `Set` is an `Array` to Bool, which means Z3 is just as happy answering "everything except 5" as it is "3 and 5". Ruby has no co-finite set, so that case raises rather than lying about it, and `#complement` is how you ask which elements it leaves out.
+An `Array` is a total map, so its entries alone can't say what it is - Ruby's Hash default holds `#default`, the answer for every key not listed, the same shape a function interpretation uses. A `Set` is an `Array` to Bool, which means Z3 is just as happy answering "everything except 5" as it is "3 and 5". Ruby has no co-finite set, so that case raises rather than lying about it, and `#complement` is how you ask which elements it leaves out. A `FiniteSet` has no such case - it's finite by construction - but it has one of its own: asked only how big a set is, Z3 answers with a set of that size whose elements it never chose, and `#value` refuses that too.
 
 Note that `#value` is not the same as `#to_i` and friends. `#value` leaves Z3 and hands you a Ruby object, while `#to_i`, `#to_bv` and so on build a *new Z3 expression* of another sort - `string_expr.to_i` is the symbolic `str.to_int`, not a Ruby Integer. On `Int` the two are the same method, since converting an Int to an Int can't mean anything else.
 

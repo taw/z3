@@ -162,6 +162,15 @@ module Z3
         # its own - `[3, 4]` is a Point only because that's what it's being compared
         # to. Anywhere else they're still not values, and fall through to the error.
         return toward if (a.is_a?(Array) or a.is_a?(Hash)) and toward.is_a?(TupleSort)
+        # A Set or an Array is a finite set's elements, for the same reason - `Set[1, 2]`
+        # and `[1, 2]` are only a FiniteSet(Int) because that's what's on the other side.
+        # An Array means a tuple's fields or a set's elements depending on which sort
+        # it's meeting, and never both at once.
+        #
+        # A Range deliberately isn't one of these. `Set[1, 2, 3] != (1..3)` in Ruby, and
+        # there's no reason for them to be the same value in Z3 when they aren't in
+        # Ruby - `[*1..3]` says it as a set, `FiniteSetSort#Range` says it as a range.
+        return toward if (a.is_a?(::Set) or a.is_a?(Array)) and toward.is_a?(FiniteSetSort)
         case a
         when TrueClass, FalseClass
           BoolSort.new

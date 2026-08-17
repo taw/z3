@@ -77,6 +77,8 @@ module Z3
       "str.replace_re_all" => "gsub",
       "str.in_re" => "matches?",
       "seq.in.re" => "matches?",
+      "set.size" => "size",
+      "set.subset" => "subset?",
     }
 
     # Same idea, but Z3 takes the prefix/suffix first and the string second, where
@@ -87,6 +89,9 @@ module Z3
       "str.prefixof" => "start_with?",
       "seq.suffixof" => "end_with?",
       "str.suffixof" => "end_with?",
+      # `set.in` takes the element first and the set second, Ruby's Set#include? the
+      # other way round
+      "set.in" => "include?",
     }
 
     # Lexicographic string comparison. These are operators in Ruby, but their Z3 names
@@ -154,6 +159,65 @@ module Z3
     def flatten_seq_concat(a)
       return [a] unless a.ast_kind == :app and SEQ_CONCAT_NAMES.include?(a.func_decl.name)
       a.arguments.flat_map{|x| flatten_seq_concat(x)}
+    end
+
+    # Finite set operations that print as Ruby operators. `set.union` is not in here
+    # because it also has to merge singletons into a Set literal - see below.
+    FINITE_SET_OPERATOR_NAMES = {
+      "set.intersect" => "&",
+      "set.difference" => "-",
+    }
+
+    def finite_set_singleton?(a)
+      a.ast_kind == :app and a.func_decl.name == "set.singleton"
+    end
+
+    # Set values as Ruby Set literals, and the rest of the finite set vocabulary as
+    # the methods and operators it's written with. `set.size`, `set.subset` and
+    # `set.in` aren't here - they're ordinary method calls, and the tables above have
+    # them.
+    def format_finite_set(a, name, args)
+      case name
+      when "set.empty"
+        # No element sort in it, the same way an empty sequence prints as `[]`
+        return PrintedExpr.new("Set[]")
+      when "set.singleton"
+        return PrintedExpr.new("Set[#{args[0]}]") if args.size == 1
+      when "set.range"
+        # A Range is what builds one of these, and unlike `Set[1, 2, 3]` it stays
+        # right when an end is symbolic
+        return PrintedExpr.new("(#{args[0]}..#{args[1]})") if args.size == 2
+      when "set.union"
+        return format_finite_set_union(a) if args.size >= 2
+      when "set.map"
+        return PrintedExpr.new("#{args[1].enforce_parentheses}.map(#{args[0]})") if args.size == 2
+      when "set.filter"
+        return PrintedExpr.new("#{args[1].enforce_parentheses}.select(#{args[0]})") if args.size == 2
+      end
+      operator = FINITE_SET_OPERATOR_NAMES[name]
+      return nil unless operator and args.size == 2
+      PrintedExpr.new("#{args[0].enforce_parentheses} #{operator} #{args[1].enforce_parentheses}", true)
+    end
+
+    # Union is associative, and models return it nested any which way and at any
+    # arity, so flattening it and merging every run of singletons into one Set literal
+    # turns `(set.union (set.singleton 1) (set.union (set.singleton 2) xs))` into
+    # `Set[1, 2] | xs`. Exactly what format_seq_concat does for sequences.
+    def format_finite_set_union(a)
+      parts = flatten_finite_set_union(a).chunk{|x| finite_set_singleton?(x)}.flat_map do |singleton, exprs|
+        if singleton
+          "Set[#{exprs.map{|x| format_ast(x.arguments[0])}.join(", ")}]"
+        else
+          exprs.map{|x| format_ast(x).enforce_parentheses}
+        end
+      end
+      return PrintedExpr.new(parts[0]) if parts.size == 1
+      PrintedExpr.new(parts.join(" | "), true)
+    end
+
+    def flatten_finite_set_union(a)
+      return [a] unless a.ast_kind == :app and a.func_decl.name == "set.union"
+      a.arguments.flat_map{|x| flatten_finite_set_union(x)}
     end
 
     # A method call binds tighter than any operator, so the result is atomic - only
@@ -395,6 +459,10 @@ module Z3
         if SEQ_CONCAT_NAMES.include?(name) and args.size >= 2
           return format_seq_concat(a)
         end
+
+        # Before the zero-argument case below, since `set.empty` is one of these
+        finite_set = format_finite_set(a, name, args)
+        return finite_set if finite_set
 
         # Set operations come back from models as `(_ map and)`, `(_ map or)` etc.
         # `decl.name` is just "map" for all of them, the mapped function is a decl parameter.
