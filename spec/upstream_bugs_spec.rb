@@ -162,5 +162,154 @@ module Z3
       solver.assert x != y
       expect(solver.check).to eq(:unsat)
     end
+
+    # Z3 5.0 added finite sets without adding a `Z3_FINITE_SET_SORT` to `Z3_sort_kind`,
+    # so `Z3_get_sort_kind` answers `Z3_UNKNOWN_SORT` for one. It's the only sort family
+    # in Z3 with no kind of its own, and `Z3_is_finite_set_sort` is the only way to
+    # recognise one. Appending to the enum would break nothing: slot 15 is unused, and
+    # `Z3_UNKNOWN_SORT` is pinned at 1000 for exactly that reason.
+    #
+    # Upstream knows. Z3's own Python bindings work around it identically, testing
+    # `Z3_is_finite_set_sort` ahead of the kind dispatch in both `_to_sort_ref` and
+    # `_to_expr_ref`, the second carrying the comment "Check for finite set sort before
+    # checking sort kind". The C++ API has all 14 finite set constructors and no
+    # `sort::is_finite_set()` at all.
+    #
+    # This is not the `Z3_is_string_sort` / `Z3_is_seq_sort` situation, where the
+    # predicate narrows within a kind that does exist - a String really is a
+    # `Z3_SEQ_SORT`.
+    #
+    # Correct: `Z3_FINITE_SET_SORT`, and `Sort.from_pointer` dispatching on it like
+    # every other sort.
+    it "Z3_get_sort_kind has no kind for a finite set sort" do
+      skip "Finite sets were added in Z3 5.0" unless Z3.version_at_least?(5, 0)
+      _finite_set = LowLevel.mk_finite_set_sort(IntSort.new)
+
+      # 1000 is Z3_UNKNOWN_SORT, the fallback for a sort the API can't classify
+      expect(VeryLowLevel.Z3_get_sort_kind(LowLevel._ctx_pointer, _finite_set)).to eq(1000)
+      expect { Sort.from_pointer(_finite_set) }
+        .to raise_error(Z3::Exception, "Unknown sort kind 1000")
+    end
+
+    # The workaround for the above, which is what `Sort.from_pointer` will have to do
+    # once there's a FiniteSetSort to dispatch to. Testing a predicate before the kind
+    # dispatch is only safe if it never fires on a sort the dispatch already handles,
+    # so that's what this pins: every sort the gem has, answering false, and the finite
+    # set answering true.
+    #
+    # If Z3 ever does add the kind, this example goes on passing - it's the one above
+    # that fails, which is the right way round.
+    it "Z3_is_finite_set_sort works as a substitute for the missing sort kind" do
+      skip "Finite sets were added in Z3 5.0" unless Z3.version_at_least?(5, 0)
+      _finite_set = LowLevel.mk_finite_set_sort(IntSort.new)
+      expect(VeryLowLevel.Z3_is_finite_set_sort(LowLevel._ctx_pointer, _finite_set)).to be true
+
+      # Every sort `Sort.from_pointer` knows how to build, including both datatype
+      # shapes - names are unique to this example, as enums and tuples can only be
+      # declared once per context
+      every_other_sort = [
+        BoolSort.new,
+        IntSort.new,
+        RealSort.new,
+        BitvecSort.new(8),
+        FloatSort.new(11, 53),
+        RoundingModeSort.new,
+        CharSort.new,
+        StringSort.new,
+        SeqSort.new(IntSort.new),
+        ReSort.new(SeqSort.new(IntSort.new)),
+        ArraySort.new(IntSort.new, IntSort.new),
+        SetSort.new(IntSort.new),
+        UninterpretedSort.new("FiniteSetProbeUninterpreted"),
+        FiniteDomainSort.new("FiniteSetProbeFiniteDomain", 5),
+        EnumSort.new("FiniteSetProbeEnum", %i[a b]),
+        TupleSort.new("FiniteSetProbeTuple", x: IntSort.new),
+        TypeVariableSort.new("FiniteSetProbeTypeVar"),
+      ]
+      expect(every_other_sort.map { |sort| LowLevel.is_finite_set_sort(sort) }).to all(be false)
+
+      # And the elements of a finite set are readable, so a FiniteSetSort can be
+      # rebuilt from a bare pointer the way every other named sort is
+      _basis = VeryLowLevel.Z3_get_finite_set_sort_basis(LowLevel._ctx_pointer, _finite_set)
+      expect(Sort.from_pointer(_basis)).to eq(IntSort.new)
+    end
+
+    # Z3 5.0's model evaluator has no rules for finite sets at all. Asked what
+    # `set.size s` or `set.in 7 s` comes to in a model which says `s` is the entirely
+    # concrete `(set.singleton 7)`, it hands the term straight back unreduced - with
+    # model completion on, which is meant to guarantee a literal.
+    #
+    # This is not the `set.unique` abstraction Z3 uses for sets it never had to pin
+    # down. There is nothing left to decide in `(set.size (set.singleton 7))`, and the
+    # simplifier decides it - see the next example.
+    #
+    # It matters beyond `#value`, because `Model#model_eval` is how `Model#[]`, the
+    # `have_solution` matcher and `Solver#prove!` all ask a model what it says. Any
+    # finite set reader will have to go through the simplifier instead.
+    #
+    # Correct: `1` and `true`, the way every other sort's operations evaluate.
+    it "Z3_model_eval can't evaluate finite set operations, even on a concrete set" do
+      skip "Finite sets were added in Z3 5.0" unless Z3.version_at_least?(5, 0)
+      _ctx = LowLevel._ctx_pointer
+      _int = IntSort.new._ast
+      _seven = VeryLowLevel.Z3_mk_numeral(_ctx, "7", _int)
+      _set = VeryLowLevel.Z3_mk_const(
+        _ctx, LowLevel.mk_string_symbol("model_eval_probe_set"),
+        LowLevel.mk_finite_set_sort(IntSort.new),
+      )
+
+      solver = Solver.new
+      VeryLowLevel.Z3_solver_assert(_ctx, solver._solver, VeryLowLevel.Z3_mk_finite_set_member(_ctx, _seven, _set))
+      expect(solver.check).to eq(:sat)
+      model = solver.model
+
+      # The model pins `s` down completely - no `set.unique` anywhere in it
+      _value = LowLevel.model_get_const_interp(model, model.consts[0])
+      expect(LowLevel.ast_to_string(Struct.new(:_ast).new(_value))).to eq("(set.singleton 7)")
+
+      # ...and the evaluator still won't reduce either question about it. A literal
+      # would be `:numeral` - `:app` means the term came back as it went in.
+      [
+        VeryLowLevel.Z3_mk_finite_set_member(_ctx, _seven, _set),
+        VeryLowLevel.Z3_mk_finite_set_size(_ctx, _set),
+      ].each do |_query|
+        answer = Expr.new_from_pointer(LowLevel.model_eval(model, Expr.new_from_pointer(_query), true))
+        expect(answer.ast_kind).to eq(:app)
+      end
+    end
+
+    # The workaround for the above, and the reason a finite set `#value` is possible at
+    # all: the simplifier does know these rules, even though the evaluator doesn't.
+    #
+    # It costs nothing to reach, because every `#value` in the gem already falls back to
+    # `#simplify` when the term isn't already a literal - so the answers `model_eval`
+    # refused above come out right anyway, by a route that was there for other reasons.
+    #
+    # It's a partial workaround though: the simplifier gives up on `set.size` of a
+    # union of two concrete singletons, which is 2 and not hard. Pinned here rather
+    # than assumed, because a reader built on this has to be ready to raise.
+    it "Z3_simplify evaluates the finite set operations Z3_model_eval won't" do
+      skip "Finite sets were added in Z3 5.0" unless Z3.version_at_least?(5, 0)
+      _ctx = LowLevel._ctx_pointer
+      _int = IntSort.new._ast
+      _seven = VeryLowLevel.Z3_mk_numeral(_ctx, "7", _int)
+      _eight = VeryLowLevel.Z3_mk_numeral(_ctx, "8", _int)
+      _singleton = VeryLowLevel.Z3_mk_finite_set_singleton(_ctx, _seven)
+
+      # #value simplifies on its own, so these are the unreduced terms model_eval hands
+      # back, answered the way any other expression would be
+      expect(Expr.new_from_pointer(VeryLowLevel.Z3_mk_finite_set_size(_ctx, _singleton)).value).to eq(1)
+      expect(Expr.new_from_pointer(VeryLowLevel.Z3_mk_finite_set_member(_ctx, _seven, _singleton)).value).to be true
+      expect(Expr.new_from_pointer(VeryLowLevel.Z3_mk_finite_set_member(_ctx, _eight, _singleton)).value).to be false
+
+      # Where it gives up. Asserting the term is still `:app` rather than that #value
+      # raises, because building that error message would print the term, and printing
+      # walks into the missing sort kind two examples up.
+      _union = VeryLowLevel.Z3_mk_finite_set_union(
+        _ctx, _singleton, VeryLowLevel.Z3_mk_finite_set_singleton(_ctx, _eight),
+      )
+      _size = VeryLowLevel.Z3_mk_finite_set_size(_ctx, _union)
+      expect(Expr.new_from_pointer(VeryLowLevel.Z3_simplify(_ctx, _size)).ast_kind).to eq(:app)
+    end
   end
 end
