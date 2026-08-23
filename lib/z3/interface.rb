@@ -45,6 +45,19 @@ module Z3
     FuncDecl.declare(name, *sorts)
   end
 
+  # A function which *is* its body, rather than one the solver gets to interpret -
+  # SMT-LIB's `define-fun-rec`. Signature order is the same as Z3.Function's.
+  #
+  #   fact = Z3.RecFunction("fact", Int, Int) { |fact, n| Z3.IfThenElse(n <= 0, 1, n * fact[n - 1]) }
+  #   solver.assert fact[5] == x   # x is 120
+  #
+  # The block gets the function itself as its first argument, then one variable per
+  # domain sort. Without a block the declaration comes back undefined and `#define`
+  # supplies the body later, which is how mutually recursive functions are written.
+  def RecFunction(name, *sorts, &block)
+    FuncDecl.declare_rec(name, *sorts, &block)
+  end
+
   # Same, but Z3 picks a name nothing has used yet by appending a number to `prefix` -
   # for helper functions which shouldn't collide with whatever the caller has named.
   # The number comes from a counter shared by the whole context, so don't count on

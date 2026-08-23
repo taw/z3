@@ -39,13 +39,19 @@ module Z3
     end
 
     def num_funcs
-      LowLevel.model_get_num_funcs(self)
+      funcs.size
     end
 
+    # Recursive definitions are left out. Z3 puts every one made in the context into
+    # every model, of every solver, whether or not the query so much as mentioned it -
+    # `define-fun-rec` is context-global the way it is in an SMT-LIB script. It isn't
+    # something this model decided, it's the definition handed straight back, and its
+    # `else` branch is a body over de Bruijn variables which no Expr can hold, so
+    # #func_interp on one raises rather than returning anything usable.
     def funcs
-      (0...num_funcs).map do |i|
+      (0...LowLevel.model_get_num_funcs(self)).map { |i|
         FuncDecl.new(LowLevel.model_get_func_decl(self, i))
-      end
+      }.reject(&:recursive?)
     end
 
     # What the model decided a function does, as a Hash from argument lists to values

@@ -58,6 +58,21 @@ solver.assert f[f[x]] == x
 solver.assert f[x] != x
 ```
 
+`Z3.RecFunction` declares a function which *is* its body, SMT-LIB's `define-fun-rec`, which is what you want when a quantified axiom over `Z3.Function` would only say "f is characterised by this". Declaring and defining are two steps so that the body can mention the function it defines - the block form does both, and gets the function as its first argument:
+
+```ruby
+fact = Z3.RecFunction("fact", Int, Int) { |fact, n| Z3.IfThenElse(n <= 0, 1, n * fact[n - 1]) }
+solver.assert fact[5] == x
+solver.model[x].to_i   # => 120
+
+even = Z3.RecFunction("even", Int, Bool)      # two mutually recursive functions
+odd  = Z3.RecFunction("odd", Int, Bool)       # need the declarations first
+even.define { |n| Z3.IfThenElse(n == 0, true, odd[n - 1]) }
+odd.define { |n| Z3.IfThenElse(n == 0, false, even[n - 1]) }
+```
+
+Two things to know. Z3 doesn't check that the recursion terminates, and one it can't finish unfolding comes back as `:unknown` rather than an error. And a definition belongs to the context rather than to any solver, exactly as it would in an SMT-LIB script - so it is permanent, and every solver created afterwards carries it, which can change the model an unrelated query gets back.
+
 `Z3::EnumSort` declares an enumeration - a sort whose values are a fixed list of names, and nothing else. The values are Symbols, and they work anywhere that sort is expected:
 
 ```ruby

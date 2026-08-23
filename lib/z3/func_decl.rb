@@ -97,6 +97,30 @@ module Z3
       self[*args]
     end
 
+    # Whether this is a declaration made by .declare_rec, which is worth asking
+    # because Z3 hands them back in places nothing else does - see Model#funcs.
+    def recursive?
+      LowLevel.get_decl_kind(self) == FuncDecl.recursive_decl_kind
+    end
+
+    # Gives a recursive declaration its body - the `define-fun-rec` half of
+    # FuncDecl.declare_rec. The block is called with one fresh variable per domain
+    # sort and returns the body, which may call this very function:
+    #
+    #   fact.define { |n| Z3.IfThenElse(n <= 0, 1, n * fact[n - 1]) }
+    #
+    # Z3 renames the variables when it prints the definition, so what the block
+    # calls them is between the block and whoever reads it.
+    #
+    # Only a declaration made by .declare_rec can be defined; Z3 says so itself
+    # ("needs to be declared using rec_func_decl") for any other, which is a better
+    # error than anything we could check for here.
+    def define
+      args = (0...arity).map { |i| domain(i).fresh_var(name) }
+      LowLevel.add_rec_def(self, args, range.cast(yield(*args)))
+      self
+    end
+
     # Z3 hash-conses declarations, so two decls of the same name and signature are
     # one and the same. AST already gives us #eql? and #hash on the pointer; without
     # this they'd disagree with ==, which would be an odd thing for a Hash key to do.
@@ -118,6 +142,43 @@ module Z3
       def declare(name, *sorts)
         domain, range = split_signature(sorts)
         new(LowLevel.mk_func_decl(LowLevel.mk_symbol(name), domain, range))
+      end
+
+      # A function which is defined by its own body - SMT-LIB's `define-fun-rec`,
+      # and the thing to reach for when a plain Z3.Function plus a quantified axiom
+      # would say "f is characterised by this" rather than "f is this".
+      #
+      # Declaring and defining are two steps, because the body has to be able to
+      # mention the function being defined - and, for mutually recursive functions,
+      # the other one too:
+      #
+      #   even = Z3.RecFunction("even", Int, Bool)
+      #   odd  = Z3.RecFunction("odd", Int, Bool)
+      #   even.define { |n| Z3.IfThenElse(n == 0, true, odd[n - 1]) }
+      #   odd.define  { |n| Z3.IfThenElse(n == 0, false, even[n - 1]) }
+      #
+      # The block is the one-step spelling for the single function case, and it gets
+      # the declaration as its first argument - at the point it runs there's no local
+      # variable holding it yet, so there'd be no other way to recurse.
+      #
+      # Z3 doesn't check that the recursion terminates, and an unfolding it can't
+      # finish comes back as `:unknown` rather than an error.
+      def declare_rec(name, *sorts)
+        domain, range = split_signature(sorts)
+        decl = new(LowLevel.mk_rec_func_decl(LowLevel.mk_symbol(name), domain, range))
+        decl.define { |*args| yield(decl, *args) } if block_given?
+        decl
+      end
+
+      # Z3's answer for #recursive? is the decl kind `Z3_OP_RECURSIVE`, and its
+      # numeric value sits at the far end of an enum which grows between releases -
+      # so rather than writing the number down, we make one recursive declaration
+      # and ask Z3 what kind it came out as. Leaving it undefined is safe: nothing
+      # applies it, so no solver ever has to unfold it and no model mentions it.
+      def recursive_decl_kind
+        @recursive_decl_kind ||= LowLevel.get_decl_kind(
+          new(LowLevel.mk_rec_func_decl(LowLevel.mk_symbol("z3.rb.recursive?"), [BoolSort.new], BoolSort.new))
+        )
       end
 
       # Z3 appends a number to `prefix`, picking one no declaration is using yet.

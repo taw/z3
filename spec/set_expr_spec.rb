@@ -108,12 +108,17 @@ module Z3
       end
     end
 
+    # The one example here whose constraints didn't pin a model down: `b != c` says
+    # only that c differs somewhere, so which set the solver lands on is its own
+    # business - and it changes when anything else at all is in the context. What the
+    # example is actually about is that `==` and `!=` compare sets by value, so `a` is
+    # given a value to be equal to and transitivity is asserted separately.
     it "== and !=" do
-      expect([a == b, b != c]).to have_solution(
+      expect([a == sort.Empty.add(0), a == b, b != c]).to have_solution(
         a => sort.Empty.add(0),
         b => sort.Empty.add(0),
-        c => sort.Empty,
       )
+      expect([a == b, b == c, a != c]).to have_no_solution
     end
 
     it "union" do

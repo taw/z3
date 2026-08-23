@@ -66,6 +66,10 @@ module Z3
     attach_function :Z3_mk_func_decl, [:ctx_pointer, :symbol_pointer, :int, :pointer, :sort_pointer], :func_decl_pointer
     attach_function :Z3_mk_app, [:ctx_pointer, :func_decl_pointer, :int, :pointer], :ast_pointer
     attach_function :Z3_mk_fresh_func_decl, [:ctx_pointer, :string, :int, :pointer, :sort_pointer], :func_decl_pointer
+    # A recursive function is declared and defined in two calls, so that the body
+    # passed to the second one can mention the declaration made by the first
+    attach_function :Z3_mk_rec_func_decl, [:ctx_pointer, :symbol_pointer, :int, :pointer, :sort_pointer], :func_decl_pointer
+    attach_function :Z3_add_rec_def, [:ctx_pointer, :func_decl_pointer, :int, :pointer, :ast_pointer], :void
     # The last two are out params - Z3 segfaults rather than skipping them if either is NULL
     attach_function :Z3_mk_enumeration_sort, [:ctx_pointer, :symbol_pointer, :int, :pointer, :pointer, :pointer], :sort_pointer
     # Same story: the constructor and the one-accessor-per-field array come back in

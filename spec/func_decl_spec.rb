@@ -112,6 +112,94 @@ module Z3
       end
     end
 
+    # A recursive function *is* its body, where an uninterpreted function is only
+    # constrained by whatever was asserted about it. Every example declares its own
+    # name, because Z3 hash-conses declarations - two "fact"s of the same signature
+    # are one declaration, and it would be defined twice.
+    describe "Z3.RecFunction" do
+      it "defines a function by its own body" do
+        fact = Z3.RecFunction("fact", int, int) { |fact, n| Z3.IfThenElse(n <= 0, 1, n * fact[n - 1]) }
+        expect(fact).to be_a(FuncDecl)
+        expect(fact.name).to eq("fact")
+        expect(fact.arity).to eq(1)
+        expect([fact[5] == x]).to have_solution(x => 120)
+      end
+
+      it "knows what the function isn't" do
+        fact = Z3.RecFunction("fact_unsat", int, int) { |fact, n| Z3.IfThenElse(n <= 0, 1, n * fact[n - 1]) }
+        expect([fact[5] == 100]).to have_no_solution
+      end
+
+      it "takes several arguments" do
+        add = Z3.RecFunction("slow_add", int, int, int) { |add, a, b| Z3.IfThenElse(b <= 0, a, add[a + 1, b - 1]) }
+        expect([add[3, 4] == x]).to have_solution(x => 7)
+      end
+
+      it "can have a Bool range" do
+        pos = Z3.RecFunction("all_pos_down_to_zero", int, bool) { |pos, n| Z3.IfThenElse(n <= 0, true, pos[n - 1]) }
+        expect([pos[3]]).to have_solution({})
+      end
+
+      # Without a block the declaration comes back undefined, which is what mutually
+      # recursive functions need - each body mentions a function declared separately
+      it "defines mutually recursive functions in two steps" do
+        even = Z3.RecFunction("even", int, bool)
+        odd = Z3.RecFunction("odd", int, bool)
+        expect(even.define { |n| Z3.IfThenElse(n == 0, true, odd[n - 1]) }).to eq(even)
+        odd.define { |n| Z3.IfThenElse(n == 0, false, even[n - 1]) }
+
+        expect([even[10], odd[7]]).to have_solution({})
+        expect([even[7]]).to have_no_solution
+        expect([odd[10]]).to have_no_solution
+      end
+
+      it "evaluates in a model" do
+        fib = Z3.RecFunction("fib", int, int) { |fib, n| Z3.IfThenElse(n <= 1, n, fib[n - 1] + fib[n - 2]) }
+        solver = Solver.new
+        solver.assert x == 10
+        expect(solver.check).to eq(:sat)
+        expect(solver.model.model_eval(fib[x], true).to_i).to eq(55)
+      end
+
+      it "is an ordinary declaration otherwise" do
+        double = Z3.RecFunction("double", int, int) { |_, n| n * 2 }
+        expect(double.domain(0)).to eq(int)
+        expect(double.range).to eq(int)
+        expect(double[x]).to be_a(IntExpr)
+        expect(double.to_s).to eq("double")
+      end
+
+      it "knows itself apart from an ordinary declaration" do
+        rec = Z3.RecFunction("recursive_p", int, int) { |_, n| n }
+        expect(rec).to be_recursive
+        expect(Z3.Function("recursive_p_not", int, int)).to_not be_recursive
+        # An undefined one is recursive too - it's the declaration that decides
+        expect(Z3.RecFunction("recursive_p_undefined", int, int)).to be_recursive
+      end
+
+      # A definition belongs to the context, not to the solver that first saw it -
+      # the same as `define-fun-rec` in an SMT-LIB script. Z3 then hands it back in
+      # every model it builds afterwards, of every solver, whether or not the query
+      # mentioned it, and its `else` branch is a body over de Bruijn variables which
+      # no Expr can hold - so Model#funcs leaves recursive definitions out.
+      it "is context-global, and left out of models" do
+        f = Z3.Function("uninterpreted_beside_rec", int, int)
+        Z3.RecFunction("in_every_model", int, int) { |_, n| n * 2 }
+        solver = Solver.new
+        solver.assert f[1] == 10
+        expect(solver.check).to eq(:sat)
+        expect(solver.model.funcs.map(&:name)).to eq(["uninterpreted_beside_rec"])
+        expect(solver.model.num_funcs).to eq(1)
+        expect { solver.model.to_s }.to_not raise_error
+      end
+
+      it "refuses to define a function which wasn't declared recursive" do
+        expect {
+          Z3.Function("not_rec", int, int).define { |n| n + 1 }
+        }.to raise_error(Z3::Exception, /needs to be declared using rec_func_decl/)
+      end
+    end
+
     describe "Z3.FreshFunction" do
       # The number Z3 appends comes from a counter shared by the whole context -
       # shared across prefixes, and with mk_fresh_const too - so which one this gets

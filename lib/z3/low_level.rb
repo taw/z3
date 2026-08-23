@@ -214,6 +214,19 @@ module Z3
         Z3::VeryLowLevel.Z3_mk_fresh_func_decl(_ctx_pointer, prefix, domain_sorts.size, asts_vector(domain_sorts), range_sort._ast)
       end
 
+      # A recursive function's declaration is made on its own, and the body arrives
+      # afterwards through #add_rec_def - which is the only way a body can call the
+      # function it's defining.
+      def mk_rec_func_decl(symbol, domain_sorts, range_sort)
+        Z3::VeryLowLevel.Z3_mk_rec_func_decl(_ctx_pointer, symbol, domain_sorts.size, asts_vector(domain_sorts), range_sort._ast)
+      end
+
+      # `args` are the constants `body` is written in terms of, one per domain sort
+      # and in order; Z3 rebinds them the way a quantifier rebinds its bound variables.
+      def add_rec_def(func_decl, args, body)
+        Z3::VeryLowLevel.Z3_add_rec_def(_ctx_pointer, func_decl._ast, args.size, asts_vector(args), body._ast)
+      end
+
       def mk_app(func_decl, args)
         Z3::VeryLowLevel.Z3_mk_app(_ctx_pointer, func_decl._ast, args.size, asts_vector(args))
       end
