@@ -139,10 +139,14 @@ module Z3
         expect(optimize.check).to eq(:unknown)
       end
 
-      # Optimize takes far fewer parameters than Solver, and this is one Solver has
+      # Optimize takes far fewer parameters than Solver - 89 fewer on 5.1 - and this
+      # is one Solver has. Which ones differ moves between versions: `arith.nl` used
+      # to be an example and stopped being one in 5.1, when Optimize gained the whole
+      # `arith.*` group. `unsat_core` is picked because Optimize has no unsat cores
+      # to configure at all.
       it "#set_params rejects parameters Optimize does not take" do
-        expect{ optimize.set_params("arith.nl" => true) }
-          .to raise_error(Z3::Exception, "Unknown parameter `arith.nl'")
+        expect{ optimize.set_params(unsat_core: true) }
+          .to raise_error(Z3::Exception, "Unknown parameter `unsat_core'")
       end
     end
   end

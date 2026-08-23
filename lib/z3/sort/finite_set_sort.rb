@@ -15,7 +15,8 @@ module Z3
   #   so it answers `:sat` to `set == Set[1, 2] and set.size == 1`, and hands back
   #   `Set[1, 2]` as the model - a model which contradicts the constraint it was asked
   #   to satisfy. Membership, subset and equality between spelled-out sets are all
-  #   sound; it's `set.size` that isn't.
+  #   sound; it's `set.size` that isn't. On Z3 5.1 it's worse than unsound: the same
+  #   question about a set whose elements Z3 can see takes the whole process down.
   # * **`#Range` is unsound under `==` once an end is symbolic.** Z3 will agree that
   #   `(1..n)` is `Set[1, 2, 3]` while refusing to let `n` be 3. Asking about
   #   membership instead is sound, and so is `==` with both ends literal.

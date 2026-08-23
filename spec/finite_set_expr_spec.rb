@@ -88,7 +88,12 @@ module Z3
     end
 
     describe "#size" do
+      # Z3 5.1 takes the whole process down on any size query about a set whose
+      # elements it can see - an assertion violation in ast.cpp, or a segfault when
+      # the set is ground - so this can't even be asked there. 5.0 answered it. The
+      # crash itself is pinned in spec/upstream_bugs_spec.rb.
       it "is the cardinality" do
+        skip "Z3 5.1 crashes on a size query about a set with known elements" unless Z3.version_at_least?(5, 2)
         expect([sort.Empty.size == 0]).to have_solution({})
         expect([set(1, 2, 3).size == 3]).to have_solution({})
       end

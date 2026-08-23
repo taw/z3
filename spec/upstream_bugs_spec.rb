@@ -11,7 +11,7 @@ require "rbconfig"
 # fixed asserts the bug below 5.0 and the correct answer at or above it, rather than
 # being deleted. Deleting it is for when the oldest Z3 we support has the fix.
 #
-# Verified against Z3 4.16.0 and 5.0.0.
+# Verified against Z3 4.16.0, 5.0.0 and 5.1.0.
 module Z3
   describe "Z3 upstream bugs" do
     # Two of these take the whole process down, so they have to run somewhere else.
@@ -358,9 +358,13 @@ module Z3
     # `FiniteSetSort`'s documentation warns about this, since there's no working around
     # it - refusing `#size` would leave the sort with no point to it.
     #
+    # Only 5.0 gets as far as being unsound about it: 5.1 dies on these queries
+    # instead of answering them, which is the example below this one.
+    #
     # Correct: unsat, on every one of the three below.
     it "set.size is unsound - a two element set is allowed to have one element" do
       skip "Finite sets were added in Z3 5.0" unless Z3.version_at_least?(5, 0)
+      skip "Z3 5.1 crashes on these queries rather than answering them" unless Z3.version_at_least?(5, 2)
       sort = FiniteSetSort.new(IntSort.new)
       set = sort.var("unsound_size_set")
 
@@ -390,6 +394,27 @@ module Z3
         solver.assert sort.from_const(Set[1, 2, 3]).size == wrong_size
         expect(solver.check).to eq(:unsat)
       end
+    end
+
+    # 5.1 doesn't answer a `set.size` question about a set whose elements it can see -
+    # it dies. A ground set segfaults; one reached through a variable trips an
+    # assertion violation in ast.cpp and exits 114. Either way the process is gone, so
+    # this has to run somewhere else, and every other example asking `#size` about a
+    # concrete set skips below 5.2.
+    #
+    # It's specifically a set Z3 can see the elements of. `set.unique` sets - the ones
+    # it only had to decide a size for - still answer, which is why `#empty?` and the
+    # rest of the sort are usable on 5.1 at all.
+    #
+    # Correct: an answer, even the unsound one 5.0 gives, rather than a dead process.
+    it "set.size crashes the process for a set with known elements" do
+      skip "Finite sets were added in Z3 5.0" unless Z3.version_at_least?(5, 0)
+      expect(dies_on_a_signal?(<<~RUBY)).to be true
+        sort = Z3::FiniteSetSort.new(Z3::IntSort.new)
+        solver = Z3::Solver.new
+        solver.assert sort.from_const(Set[1, 2, 3]).size == 2
+        solver.check
+      RUBY
     end
 
     # Equality is unsound once a `set.range` has a symbolic end. Z3 will agree that

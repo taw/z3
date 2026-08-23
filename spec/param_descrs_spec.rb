@@ -55,10 +55,13 @@ module Z3
       expect(descrs.inspect).to eq("Z3::ParamDescrs<#{descrs.size} parameters>")
     end
 
+    # Which parameters are on which side changes between versions - Optimize gained
+    # the whole `arith.*` group in 5.1 - so this asks about `unsat_core`, which
+    # Optimize has no use for, rather than anything that might migrate
     it "Optimize accepts a much smaller set of parameters than Solver" do
       optimize_descrs = Optimize.new.param_descrs
       expect(optimize_descrs).to include("timeout", "rlimit")
-      expect(optimize_descrs).to_not include("arith.nl")
+      expect(optimize_descrs).to_not include("unsat_core")
       expect(optimize_descrs.size).to be < descrs.size
     end
   end
