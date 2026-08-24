@@ -209,8 +209,8 @@ module Z3
         expect { int == nil }.to raise_error(Z3::Exception, "nil can't be coerced into Int")
       end
 
-      # The rest of this block is what the README's Limitations section claims, so that
-      # the claims are checked rather than just written down.
+      # The rest of this block is what API.md's "Ruby integration and its limits"
+      # section claims, so that the claims are checked rather than just written down.
       #
       # Ruby's own `==` on containers is C code which wants a `true` or a `false`, and
       # an Expr is neither - it's an object, so it's truthy, so any two Exprs look
