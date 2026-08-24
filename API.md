@@ -104,7 +104,7 @@ Substitution replaces subterms, all at once, so a swap is a swap:
 function everywhere it's applied, including under quantifiers:
 
 ```ruby
-f = Z3.Function("f", Int, Int)
+f = Z3.Function("f", Z3::IntSort.new, Z3::IntSort.new)
 (f[x] + f[y]).substitute_functions(f => ->(v) { v * 2 })   # (x * 2) + (y * 2)
 ```
 
@@ -532,18 +532,26 @@ mention the function it defines - the block form does both, and gets the functio
 its first argument:
 
 ```ruby
-fact = Z3.RecFunction("fact", Int, Int) { |fact, n| Z3.IfThenElse(n <= 0, 1, n * fact[n - 1]) }
+int, bool = Z3::IntSort.new, Z3::BoolSort.new
+
+fact = Z3.RecFunction("fact", int, int) { |fact, n| Z3.IfThenElse(n <= 0, 1, n * fact[n - 1]) }
 solver.assert fact[5] == x
 solver.model[x].to_i   # => 120
 
-even = Z3.RecFunction("even", Int, Bool)      # two mutually recursive functions
-odd  = Z3.RecFunction("odd", Int, Bool)       # need the declarations first
+even = Z3.RecFunction("even", int, bool)      # two mutually recursive functions
+odd  = Z3.RecFunction("odd", int, bool)       # need the declarations first
 even.define { |n| Z3.IfThenElse(n == 0, true, odd[n - 1]) }
 odd.define { |n| Z3.IfThenElse(n == 0, false, even[n - 1]) }
+
+solver.assert even[10]                        # sat, and even[7] is unsat
 ```
 
-Two things to know. Z3 doesn't check that the recursion terminates, and one it can't
-finish unfolding comes back as `:unknown` rather than an error. And a definition
+A declaration you never `#define` is not an error and doesn't announce itself - it
+just behaves as an uninterpreted function, so `even[7]` would come back `:sat` on the
+strength of the solver being free to decide what `even` means.
+
+Two things more to know. Z3 doesn't check that the recursion terminates, and one it
+can't finish unfolding comes back as `:unknown` rather than an error. And a definition
 belongs to the context rather than to any solver, exactly as it would in an SMT-LIB
 script - so it is permanent, and every solver created afterwards carries it, which can
 change the model an unrelated query gets back.
