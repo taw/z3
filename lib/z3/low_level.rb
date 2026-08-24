@@ -20,15 +20,37 @@ module Z3
         value_ptr.get_pointer(0).read_string
       end
 
+      # Only remembers the handler - installing it needs a context, and creating the
+      # context here would be creating it at require time, which is exactly what
+      # Z3.configure needs not to happen. Context#initialize installs it instead.
+      #
+      # Z3 keeps the native trampoline FFI builds for this block, and that trampoline
+      # dies with the Proc - so we must hold onto it forever.
       def set_error_handler(&block)
-        # Z3 keeps the native trampoline FFI builds for this block, and that
-        # trampoline dies with the Proc - so we must hold onto it forever
         @error_handler = block
-        Z3::VeryLowLevel.Z3_set_error_handler(_ctx_pointer, block)
+        nil
       end
 
-      def mk_context
-        Z3::VeryLowLevel.Z3_mk_context(Z3::VeryLowLevel.Z3_mk_config)
+      def install_error_handler(_ctx)
+        Z3::VeryLowLevel.Z3_set_error_handler(_ctx, @error_handler) if @error_handler
+      end
+
+      # `config` is the context creation time parameters, which Z3 takes through a
+      # config object rather than as arguments - so it's built, used and thrown away
+      # here, and never seen anywhere else. Values reach Z3 as Strings whatever they
+      # look like on the way in.
+      #
+      # The `mk_config` / `del_config` / `set_param_value` in low_level_auto.rb are
+      # the same three calls wrapped for a Config class this gem doesn't have, and
+      # they're loaded after this file, so this deliberately isn't spelled with them.
+      def mk_context(config = {})
+        _config = Z3::VeryLowLevel.Z3_mk_config
+        config.each do |name, value|
+          Z3::VeryLowLevel.Z3_set_param_value(_config, name.to_s, value.to_s)
+        end
+        context = Z3::VeryLowLevel.Z3_mk_context(_config)
+        Z3::VeryLowLevel.Z3_del_config(_config)
+        context
       end
 
       def model_eval(model, ast, model_completion)

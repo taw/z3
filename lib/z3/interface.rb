@@ -168,6 +168,59 @@ module Z3
     (LowLevel.get_version <=> [a, b, c, d]) >= 0
   end
 
+  # The context creation time parameters, the ones which can't be set any other way.
+  # Z3 reads these while building the context, so this only works before the context
+  # exists - which means before the first call that touches Z3 at all - and raises
+  # rather than doing nothing once it's up.
+  #
+  #   Z3.configure(proof: true, timeout: 5000)
+  #
+  # A Hash rather than a block, because there are eleven parameters in total and most
+  # programs set none. Calling it more than once merges, so a later call can override
+  # an earlier one, and the merged Hash is what #configuration reads back.
+  #
+  # Values go to Z3 as Strings whatever they are here, so `true`, `"true"` and `1` all
+  # arrive as something Z3 parses itself. Names are checked against the list Z3
+  # documents, because `Z3_set_param_value` ignores one it doesn't know without a word.
+  def configure(config)
+    raise Z3::Exception, "Hash of context parameters required" unless config.is_a?(Hash)
+    config = config.to_h { |name, value| [name.to_s, value] }
+    config.each_key do |name|
+      unless CONTEXT_PARAMS.include?(name)
+        raise Z3::Exception, "Unknown context parameter `#{name}', try one of: #{CONTEXT_PARAMS.join(", ")}"
+      end
+    end
+    if Context.created?
+      raise Z3::Exception,
+        "Z3 context already exists, and its parameters are read when it's created - " \
+        "Z3.configure has to come before anything else that touches Z3"
+    end
+    @configuration = configuration.merge(config)
+  end
+
+  # What #configure has been told so far, as a Hash. Empty, and the default context,
+  # if nothing ever called it.
+  def configuration
+    @configuration ||= {}
+  end
+
+  # Every parameter #configure takes, in the order Z3's own documentation lists them.
+  # There is no Z3 call which enumerates these - unlike the global parameters, which
+  # describe themselves through Z3.param_descrs - so the list is written down.
+  CONTEXT_PARAMS = %w[
+    proof
+    debug_ref_count
+    trace
+    trace_file_name
+    timeout
+    well_sorted_check
+    auto_config
+    model
+    model_validate
+    unsat_core
+    encoding
+  ].freeze
+
   # Z3's global parameters, the ones the `z3` binary takes on its command line. Names
   # are case insensitive, and the ones belonging to a module are qualified with it -
   # `smt.qi.cost`, `pp.decimal`. Everything is a String in both directions, which is
@@ -272,14 +325,14 @@ module Z3
 
   # `proof` is the one global parameter Z3 reads only while creating the context -
   # its own description says "it must be enabled when the Z3 context is created" -
-  # and the context is created while `z3` is being required, so by the time anyone
-  # can call #set_param it's far too late. Setting it is harmless, and #get_param
-  # will report it as set, which is exactly the problem worth warning about: Z3
-  # goes on refusing to produce proofs. Every other global parameter, `timeout` and
+  # so setting it here is harmless and does nothing, and #get_param will report it as
+  # set, which is exactly the problem worth warning about: Z3 goes on refusing to
+  # produce proofs. Z3.configure is the way in, and it raises rather than doing
+  # nothing if it's called too late. Every other global parameter, `timeout` and
   # `encoding` included, takes effect whenever it's set.
   def warn_about_proof_param
-    warn "Z3.set_param(\"proof\", ...) has no effect - proofs must be enabled before " \
-         "the context is created, which happens while `z3` is being required. " \
+    warn "Z3.set_param(\"proof\", ...) has no effect - proofs have to be enabled while " \
+         "the context is being created, which is what Z3.configure(proof: true) does. " \
          "Z3_solver_get_proof will keep saying there is no current proof."
   end
 

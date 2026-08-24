@@ -807,8 +807,39 @@ Z3.simplify_param_descrs   # what AST#simplify takes
 Z3.simplify_help
 ```
 
-`proof` is the one that can't work: Z3 reads it while creating the context, which
-happens while `z3` is being required, so setting it warns and does nothing.
+`proof` is the one global parameter that can't work this way: Z3 reads it while
+creating the context, so `set_param` warns and does nothing. `Z3.configure` below is
+where it belongs.
+
+### Context parameters
+
+A handful of parameters are read while Z3 builds the context, and can't be set any
+other way. `Z3.configure` takes them as a Hash, and has to run before anything else
+touches Z3 - the context is created lazily, on the first call that needs it, and
+configuring after that raises rather than quietly doing nothing:
+
+```ruby
+require "z3"
+Z3.configure(proof: true, timeout: 5000)   # before any other Z3 call
+
+Z3.configuration      # {"proof" => true, "timeout" => 5000}
+```
+
+Calling it more than once merges, so a later call overrides an earlier one, and names
+arrive as Strings either way - `proof:` and `"proof" =>` are the same parameter.
+Values reach Z3 as Strings too, so `true`, `"true"` and `1` all end up as something
+Z3 parses itself.
+
+The eleven parameters, which is all of them, are `proof`, `debug_ref_count`, `trace`,
+`trace_file_name`, `timeout`, `well_sorted_check`, `auto_config`, `model`,
+`model_validate`, `unsat_core` and `encoding`. `Z3::CONTEXT_PARAMS` is that list;
+anything else raises, because `Z3_set_param_value` ignores a name it doesn't know
+without saying a word.
+
+`proof: true` is the reason this exists. Z3 keeps no proof at all unless the context
+was built for it - `Z3_solver_get_proof` answers "there is no current proof" - and
+there's no `Solver#proof` yet, so reaching the proof term itself still means going
+through `LowLevel`.
 
 ## Ruby integration and its limits
 
@@ -907,10 +938,12 @@ Z3.version                        # "5.1.0.0"
 Z3.version_at_least?(5, 0)
 Z3.estimated_alloc_size           # Z3's own estimate, process wide
 Z3.enable_concurrent_dec_ref      # makes refcount decrements thread safe
+Z3::Context.created?              # whether anything has needed the context yet
 ```
 
-There is exactly one `Z3::Context`, created while the gem is being required, and no
-public method takes one. That's a deliberate limitation: supporting several would mean
+There is exactly one `Z3::Context`, created on the first call that needs one, and no
+public method takes one. Requiring the gem doesn't create it - that's what leaves room
+for [`Z3.configure`](#context-parameters). That's a deliberate limitation: supporting several would mean
 a context parameter on every sort, expr, solver and model, and a context isn't safe to
 use from more than one thread anyway.
 
