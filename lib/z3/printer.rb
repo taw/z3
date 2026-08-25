@@ -438,6 +438,25 @@ module Z3
       field && PrintedExpr.new("#{args[0].enforce_parentheses}.#{field}")
     end
 
+    # `l.head` and `l.is_nil`, rather than the raw `head(l)` and `is(l)`. Recognizers
+    # especially need this: Z3 names every recognizer of every datatype `is`, so the
+    # name says nothing and only the sort can tell them apart.
+    #
+    # Constructors are left alone - `cons(10, nil)` is what Z3 prints and reads better
+    # than spelling out the DatatypeSort#mk call that built it.
+    def format_datatype(a, args)
+      return nil unless args.size == 1
+      receiver_sort = a.arguments[0].sort
+      return nil unless receiver_sort.is_a?(DatatypeSort)
+      decl = a.func_decl
+      constructor_name = receiver_sort.constructor_names.find { |name| receiver_sort.recognizer(name) == decl }
+      # A method call binds tighter than any operator, so only the receiver can need
+      # parentheses and the result is atomic
+      return PrintedExpr.new("#{args[0].enforce_parentheses}.is_#{constructor_name}") if constructor_name
+      field = receiver_sort.field_names.find { |name| receiver_sort.accessor(name) == decl }
+      field && PrintedExpr.new("#{args[0].enforce_parentheses}.#{field}")
+    end
+
     def format_app(a)
       if LowLevel::is_algebraic_number(a)
         str = LowLevel::get_numeral_decimal_string(a, 10)
@@ -501,6 +520,9 @@ module Z3
 
         tuple = format_tuple(a, args)
         return tuple if tuple
+
+        datatype = format_datatype(a, args)
+        return datatype if datatype
 
         pseudo_boolean = format_pseudo_boolean(a, name, args)
         return pseudo_boolean if pseudo_boolean

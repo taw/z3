@@ -132,7 +132,7 @@ Everything below is covered in [**API.md**](API.md):
   [Strings and Chars](API.md#strings-and-chars), [Sequences](API.md#sequences),
   [regular expressions](API.md#regular-expressions), [Arrays and Sets](API.md#arrays-and-sets),
   [finite sets](API.md#finite-sets), [enums and tuples](API.md#enums-and-tuples),
-  [uninterpreted sorts](API.md#uninterpreted-sorts-finite-domains-type-variables)
+  [datatypes](API.md#datatypes), [uninterpreted sorts](API.md#uninterpreted-sorts-finite-domains-type-variables)
 * [Functions](API.md#functions), including recursive definitions, and
   [quantifiers and lambdas](API.md#quantifiers-and-lambdas)
 * The rest of [Solver](API.md#solver) - unsat cores, assumptions, consequences,

@@ -1,0 +1,151 @@
+#!/usr/bin/env ruby
+
+# Insertion sort, proved correct.
+#
+# Z3 won't prove a theorem about a recursive function on its own - ask it whether
+# `sorted(isort(l))` holds for every list and it answers `:unknown`, every time. What
+# it will do is discharge one case of an induction in milliseconds, so the induction
+# is written out here and Z3 does the work inside each case.
+#
+# Each case reduces by a single unfolding into its hypotheses, which is why it
+# terminates. Where it doesn't - the lemmas below - the missing fact has to be handed
+# over as an assumption, and it's proved by the same pattern one step earlier.
+
+require_relative "../lib/z3"
+
+class InsertionSortProof
+  Int = Z3::IntSort.new
+  List = Z3::DatatypeSort.new("List", nil: [], cons: {head: Int, tail: :self})
+
+  def initialize
+    @solver = Z3::Solver.new
+    @failures = 0
+  end
+
+  # Insert into a sorted list, keeping it sorted
+  def ins
+    @ins ||= Z3.RecFunction("ins", Int, List, List) do |ins, x, l|
+      Z3.IfThenElse(
+        l.is_nil,
+        List.mk(:cons, x, List[:nil]),
+        Z3.IfThenElse(x <= l.head, List.mk(:cons, x, l), List.mk(:cons, l.head, ins[x, l.tail])),
+      )
+    end
+  end
+
+  def isort
+    @isort ||= Z3.RecFunction("isort", List, List) do |isort, l|
+      Z3.IfThenElse(l.is_nil, List[:nil], ins[l.head, isort[l.tail]])
+    end
+  end
+
+  def sorted
+    @sorted ||= Z3.RecFunction("sorted", List, Z3::BoolSort.new) do |sorted, l|
+      Z3.IfThenElse(
+        l.is_nil,
+        Z3.True,
+        Z3.IfThenElse(l.tail.is_nil, Z3.True, (l.head <= l.tail.head) & sorted[l.tail]),
+      )
+    end
+  end
+
+  # How many times x occurs. Two lists are permutations of each other exactly when
+  # every value occurs the same number of times in both, which is the shape of
+  # "is a permutation" that induction can actually get at.
+  def count
+    @count ||= Z3.RecFunction("count", Int, List, Int) do |count, x, l|
+      Z3.IfThenElse(l.is_nil, 0, Z3.IfThenElse(x == l.head, 1, 0) + count[x, l.tail])
+    end
+  end
+
+  # A case is proved when its negation is unsatisfiable, under whatever hypotheses the
+  # induction gives us. push/pop so the hypotheses don't leak into the next case.
+  def prove(label, hypotheses, goal)
+    @solver.push
+    hypotheses.each { |hypothesis| @solver.assert hypothesis }
+    @solver.assert ~goal
+    proved = @solver.check == :unsat
+    @solver.pop
+    @failures += 1 unless proved
+    puts "  #{proved ? "proved" : "FAILED"}: #{label}"
+  end
+
+  def x = Z3.Int("x")
+  def y = Z3.Int("y")
+  def l = List.var("l")
+
+  # sorted(l) => sorted(ins(x, l)), which is what makes isort's step case go through
+  def prove_ins_keeps_sorted
+    puts "lemma: inserting into a sorted list leaves it sorted"
+    prove "nil", [], Z3.Implies(sorted[List[:nil]], sorted[ins[x, List[:nil]]])
+    prove "cons", [ins_keeps_sorted],
+      Z3.Implies(sorted[List.mk(:cons, y, l)], sorted[ins[x, List.mk(:cons, y, l)]])
+  end
+
+  # The induction hypothesis, quantified so Z3 can use it at whatever list the step
+  # case actually needs it at
+  def ins_keeps_sorted
+    Z3.ForAll([x, l], Z3.Implies(sorted[l], sorted[ins[x, l]]))
+  end
+
+  def prove_isort_sorts
+    puts "theorem: isort returns a sorted list"
+    prove "nil", [], sorted[isort[List[:nil]]]
+    prove "cons", [ins_keeps_sorted, sorted[isort[l]]], sorted[isort[List.mk(:cons, x, l)]]
+  end
+
+  # count(x, ins(y, l)) is count(x, l), plus one if x is the value being inserted
+  def count_of_ins
+    Z3.ForAll([x, y, l], count[x, ins[y, l]] == count[x, l] + Z3.IfThenElse(x == y, 1, 0))
+  end
+
+  def prove_count_of_ins
+    puts "lemma: inserting a value adds one to its count and changes no other"
+    prove "nil", [], count[x, ins[y, List[:nil]]] == count[x, List[:nil]] + Z3.IfThenElse(x == y, 1, 0)
+    prove "cons", [count_of_ins],
+      count[x, ins[y, List.mk(:cons, Z3.Int("h"), l)]] ==
+        count[x, List.mk(:cons, Z3.Int("h"), l)] + Z3.IfThenElse(x == y, 1, 0)
+  end
+
+  def prove_isort_permutes
+    puts "theorem: isort is a permutation - every value occurs as often as before"
+    prove "nil", [], count[x, isort[List[:nil]]] == count[x, List[:nil]]
+    prove "cons", [count_of_ins, Z3.ForAll([x], count[x, isort[l]] == count[x, l])],
+      count[x, isort[List.mk(:cons, y, l)]] == count[x, List.mk(:cons, y, l)]
+  end
+
+  # The other direction, and what a model is for: a proof says nothing about any
+  # particular list, so here's one being sorted
+  def sort_a_list
+    input = [3, 1, 4, 1, 5]
+    @solver.push
+    result = List.var("result")
+    @solver.assert result == isort[from_a(input)]
+    @solver.check
+    puts "and running it: #{input.inspect} -> #{to_a(@solver.model[result]).inspect}"
+    @solver.pop
+  end
+
+  def from_a(array)
+    array.reverse.inject(List[:nil]) { |list, value| List.mk(:cons, value, list) }
+  end
+
+  # `{cons: {head: 1, tail: {cons: ...}}}` says everything, and reads like nothing.
+  # A list is the one datatype where the Ruby value wants flattening.
+  def to_a(list)
+    value = list.value
+    return [] if value == :nil
+    [value[:cons][:head]] + to_a(List[value[:cons][:tail]])
+  end
+
+  def call
+    prove_ins_keeps_sorted
+    prove_isort_sorts
+    prove_count_of_ins
+    prove_isort_permutes
+    sort_a_list
+    exit 1 if @failures > 0
+  end
+end
+
+InsertionSortProof.new.call

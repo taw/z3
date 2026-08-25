@@ -20,6 +20,7 @@ code using most of this.
 * [Arrays and Sets](#arrays-and-sets)
 * [Finite sets](#finite-sets)
 * [Enums and Tuples](#enums-and-tuples)
+* [Datatypes](#datatypes)
 * [Uninterpreted sorts, finite domains, type variables](#uninterpreted-sorts-finite-domains-type-variables)
 * [Functions](#functions)
 * [Quantifiers and lambdas](#quantifiers-and-lambdas)
@@ -551,6 +552,102 @@ has. Asking for the same one again gives back the sort you already have; asking 
 the same name with different values or fields raises. The reason is Z3's: it rejects a
 second enum of the same name outright, and accepts a second *tuple* while quietly
 rebuilding the sort's fields from it, abandoning every term built against the first.
+
+## Datatypes
+
+Several named constructors, each taking any number of named fields, and any of those
+fields may be the sort being declared:
+
+```ruby
+int    = Z3::IntSort.new
+Option = Z3::DatatypeSort.new("Option", none: [], some: {value: int})
+List   = Z3::DatatypeSort.new("List", nil: [], cons: {head: int, tail: :self})
+Tree   = Z3::DatatypeSort.new("Tree", leaf: [], node: {left: :self, val: int, right: :self})
+```
+
+`:self` is the one field sort which can't be a Sort object, because the sort doesn't
+exist yet while it's being declared. A field of some *other* datatype is an ordinary
+Sort. Mutually recursive datatypes - a group declared at once, each mentioning the
+others - aren't supported.
+
+Constructors, recognizers and field readers are all methods:
+
+```ruby
+l = List.var("l")
+l.is_cons             # or l.cons?, or l.is?(:cons)
+l.head   l.tail       # Int and List, and total - nil.head is some Int Z3 won't name
+List[:nil]                             # a constructor with no fields
+List[cons: {head: 10, tail: :nil}]     # or List[cons: [10, :nil]]
+List.mk(:cons, 10, List[:nil])         # the same value from expressions
+```
+
+Both `is_cons` and `cons?` exist for every constructor. `cons?` is skipped where Ruby
+already answers to the name - `nil?` most importantly, since taking that over would
+make every value of the sort look like Ruby's nil. `l[:head]` reads a field too, which
+is how to read one named after something an expression already answers to.
+
+A value is a Symbol for a constructor with no fields, the way an enum value is one,
+and otherwise the constructor pointing at its fields:
+
+```ruby
+solver.model[l].value   # => {cons: {head: 10, tail: {cons: {head: 20, tail: :nil}}}}
+List[solver.model[l].value]            # and straight back in
+```
+
+Two shapes of datatype are other classes' sorts, and asking for them here gives back
+that class - every constructor nullary is an `EnumSort`, and a single constructor with
+fields is a `TupleSort`. Z3 makes the same sort either way, so a datatype coming back
+out of a model couldn't be told apart from one of those, and declaring it has to land
+on the same class. The tuple's constructor is named after the sort, so
+`DatatypeSort.new("Box", wrap: {v: int})` comes back with its constructor called `Box`.
+
+Enums, tuples and datatypes share one namespace, and the same rule applies to all
+three: asking for the same one again gives back the sort you already have, asking for
+the same name with different constructors raises. It matters most here. Z3 accepts a
+second datatype of a name it already has, hands back the sort it already had, and
+attaches the new constructors to it - leaving one sort with two incompatible sets of
+declarations, both of which still typecheck, and a model that can give a String-sorted
+term an Int value. Z3's own SMT-LIB parser rejects the redeclaration; the C API
+doesn't, so the gem does.
+
+### Proving things about them
+
+Datatypes are how a recursive function gets something to recurse over, and
+`Z3.RecFunction` is the other half:
+
+```ruby
+len = Z3.RecFunction("len", List, int) { |len, l| Z3.IfThenElse(l.is_nil, 0, 1 + len[l.tail]) }
+```
+
+What Z3 will *not* do is prove a theorem about one. `Z3.ForAll([l], len[l] >= 0)`
+doesn't come back at all - `:unknown` is what a `timeout` on the solver turns it into,
+and that's the best answer available for any statement about every list. Setting
+`smt.induction` doesn't rescue it, and neither does bounding the list's length: the
+unfolding diverges as soon as the shape is symbolic.
+
+What Z3 will do is discharge one case of an induction, in milliseconds. So write the
+induction out and let it do the work inside each case, where a single unfolding
+reduces the goal into the hypotheses:
+
+```ruby
+solver.push                                    # base case
+solver.assert ~(len[List[:nil]] >= 0)
+solver.check                                   # => :unsat
+solver.pop
+
+solver.push                                    # step case
+solver.assert len[l] >= 0                      # the induction hypothesis
+solver.assert ~(len[List.mk(:cons, x, l)] >= 0)
+solver.check                                   # => :unsat
+solver.pop
+```
+
+Lemmas have to be supplied by hand, as quantified assumptions, and each is proved by
+the same pattern one step earlier. That's a sharp line rather than a soft one: the
+step case of a theorem that needs a lemma answers `:unknown` without it and `:unsat`
+with it. [`examples/insertion_sort_proof`](https://github.com/taw/z3/blob/master/examples/insertion_sort_proof)
+is the whole thing end to end - insertion sort proved to return a sorted list and to
+be a permutation of its input, in four inductions and two lemmas.
 
 ## Uninterpreted sorts, finite domains, type variables
 

@@ -182,20 +182,22 @@ module Z3
       end
     end
 
-    # Z3 has one sort kind for every datatype, and this gem has two of them: an
-    # enumeration, whose constructors all take no arguments, and a tuple, which has
-    # exactly one constructor and it takes the fields. Nothing else - a datatype with
-    # several argument-taking constructors, or a recursive one - has a class here yet,
-    # and EnumSort is the one that raises about it, by name.
+    # Z3 has one sort kind for every datatype, and this gem has three classes over it,
+    # told apart by shape: an enumeration, whose constructors all take no arguments; a
+    # tuple, which has exactly one constructor and it takes the fields; and a general
+    # datatype for everything else. The shapes are what `DatatypeSort.new` checks
+    # before declaring anything, so that declaring a sort and getting it back out of a
+    # model always land on the same class.
     #
-    # Both are rebuilt rather than redeclared - see EnumSort.from_pointer.
+    # All three are rebuilt rather than redeclared - see EnumSort.from_pointer.
     def self.datatype_from_pointer(_sort)
       num_constructors = VeryLowLevel.Z3_get_datatype_sort_num_constructors(LowLevel._ctx_pointer, _sort)
-      if num_constructors == 1
-        constructor = FuncDecl.new(VeryLowLevel.Z3_get_datatype_sort_constructor(LowLevel._ctx_pointer, _sort, 0))
-        return TupleSort.from_pointer(_sort) if constructor.arity > 0
+      arities = num_constructors.times.map do |i|
+        FuncDecl.new(VeryLowLevel.Z3_get_datatype_sort_constructor(LowLevel._ctx_pointer, _sort, i)).arity
       end
-      EnumSort.from_pointer(_sort)
+      return EnumSort.from_pointer(_sort) if arities.all?(&:zero?)
+      return TupleSort.from_pointer(_sort) if num_constructors == 1
+      DatatypeSort.from_pointer(_sort)
     end
 
     # Sorts with a name (uninterpreted, finite domain, enum, tuple, type variable) need

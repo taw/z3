@@ -126,9 +126,9 @@ module Z3
         expect(suit[:diamonds].inspect).to eq("Suit<diamonds>")
       end
 
-      # One constructor taking arguments is a tuple, and Sort.from_pointer sends it
-      # to TupleSort - anything past that is a datatype this gem has no class for
-      it "raises for a datatype sort which is neither an enumeration nor a tuple" do
+      # One constructor taking arguments is a tuple, and anything past that is a
+      # general datatype - Sort.from_pointer sends each of the three to its own class
+      it "leaves a datatype which is neither an enumeration nor a tuple to DatatypeSort" do
         solver = Solver.new
         solver.from_string <<~SMT2
           (declare-datatypes ((Maybe 0)) (((nothing) (just (val Int)))))
@@ -136,8 +136,16 @@ module Z3
           (assert (= m (just 1)))
         SMT2
         solver.check
-        expect{ solver.model.to_s }
-          .to raise_error(Z3::Exception, "Datatype sort Maybe is not an enumeration, its constructor just takes arguments")
+        expect(solver.model.each_const.first[0].sort).to be_a(Z3::DatatypeSort)
+      end
+
+      # Only reachable by calling it directly, since Sort.from_pointer stopped
+      # sending anything but enumerations here
+      it "raises when handed a datatype which isn't an enumeration" do
+        int = IntSort.new
+        sort = DatatypeSort.new("NotAnEnum", nothing: [], just: {just_val: int})
+        expect{ EnumSort.send(:values_from_pointer, sort._ast, "NotAnEnum") }
+          .to raise_error(Z3::Exception, "Datatype sort NotAnEnum is not an enumeration, its constructor just takes arguments")
       end
     end
 

@@ -282,6 +282,40 @@ module Z3
         [_sort, _constructor.read_pointer, _accessors.read_array_of_pointer(n)]
       end
 
+      # One constructor of a datatype, made on its own so that mk_datatype can take
+      # several. `field_sorts` takes nil for a field of the sort being declared: that
+      # sort doesn't exist yet, so Z3 wants NULL and an index into the group of sorts
+      # being declared instead, which is always 0 here since the gem declares one at a
+      # time. The result is a heap object, and del_constructor frees it.
+      #
+      # Zero fields still allocates, for the same reason mk_enumeration_sort's unused
+      # out params do - Z3 reads the pointers whatever the count says.
+      def mk_constructor(symbol, recognizer_symbol, field_symbols, field_sorts)
+        n = field_symbols.size
+        _names = FFI::MemoryPointer.new(:pointer, [n, 1].max)
+        _names.write_array_of_pointer(field_symbols)
+        _sorts = FFI::MemoryPointer.new(:pointer, [n, 1].max)
+        _sorts.write_array_of_pointer(field_sorts.map { |sort| sort ? sort._ast : FFI::Pointer::NULL })
+        _refs = FFI::MemoryPointer.new(:uint, [n, 1].max)
+        _refs.write_array_of_uint([0] * n)
+        Z3::VeryLowLevel.Z3_mk_constructor(_ctx_pointer, symbol, recognizer_symbol, n, _names, _sorts, _refs)
+      end
+
+      # Takes the constructors mk_constructor made, and gives back the sort. Every
+      # declaration is recoverable from that sort afterwards, so the array Z3 rewrites
+      # in place is thrown away - which is also what lets DatatypeSort.from_pointer
+      # rebuild a sort it never declared.
+      def mk_datatype(symbol, constructors)
+        n = constructors.size
+        _constructors = FFI::MemoryPointer.new(:pointer, n)
+        _constructors.write_array_of_pointer(constructors)
+        Z3::VeryLowLevel.Z3_mk_datatype(_ctx_pointer, symbol, n, _constructors)
+      end
+
+      def del_constructor(constructor)
+        Z3::VeryLowLevel.Z3_del_constructor(_ctx_pointer, constructor)
+      end
+
       # Weight is a hint to the instantiation engine rather than part of what the
       # formula means, but a bad one turns a decidable problem into `:unknown` - the
       # same unsat query answers at weight 20 and gives up at weight 50 - so it's

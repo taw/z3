@@ -46,7 +46,6 @@ module Z3
     attach_function :Z3_datatype_update_field, [:ctx_pointer, :func_decl_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_dec_ref, [:ctx_pointer, :ast_pointer], :void
     attach_function :Z3_del_config, [:config_pointer], :void
-    attach_function :Z3_del_constructor, [:ctx_pointer, :constructor_pointer], :void
     attach_function :Z3_del_constructor_list, [:ctx_pointer, :constructor_list_pointer], :void
     attach_function :Z3_del_context, [:ctx_pointer], :void
     attach_function :Z3_disable_trace, [:string], :void

@@ -61,6 +61,9 @@ module Z3
         if TupleSort.declared?(name)
           raise Z3::Exception, "Enum sort #{name} can't be declared, #{name} is already a tuple sort"
         end
+        if DatatypeSort.declared?(name)
+          raise Z3::Exception, "Enum sort #{name} can't be declared, #{name} is already a datatype sort"
+        end
         _sort = LowLevel.mk_enumeration_sort(
           LowLevel.mk_symbol(name),
           values.map { |value| LowLevel.mk_symbol(value) },

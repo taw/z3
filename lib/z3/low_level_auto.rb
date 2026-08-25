@@ -185,10 +185,6 @@ module Z3
         VeryLowLevel.Z3_del_config(config._config)
       end
 
-      def del_constructor(constructor) #=> :void
-        VeryLowLevel.Z3_del_constructor(_ctx_pointer, constructor._constructor)
-      end
-
       def del_constructor_list(constructor_list) #=> :void
         VeryLowLevel.Z3_del_constructor_list(_ctx_pointer, constructor_list._constructor_list)
       end

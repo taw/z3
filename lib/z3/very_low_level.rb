@@ -75,6 +75,20 @@ module Z3
     # Same story: the constructor and the one-accessor-per-field array come back in
     # the last two params, and they're not optional either
     attach_function :Z3_mk_tuple_sort, [:ctx_pointer, :symbol_pointer, :int, :pointer, :pointer, :pointer, :pointer], :sort_pointer
+    # A datatype is assembled out of Z3_constructor objects, which are heap objects with
+    # a lifecycle of their own - made here, handed to Z3_mk_datatype, then freed with
+    # Z3_del_constructor. Nothing else the gem wraps works that way.
+    #
+    # The field sorts array takes NULL for a field of the sort being declared, since
+    # that sort doesn't exist yet, and sort_refs says which datatype was meant instead.
+    attach_function :Z3_mk_constructor, [:ctx_pointer, :symbol_pointer, :symbol_pointer, :uint, :pointer, :pointer, :pointer], :constructor_pointer
+    # The constructor array is inout - Z3 rewrites each constructor in place with its
+    # declarations filled in. The sort answers for all of them afterwards, so what comes
+    # back in the array is dropped and read off the sort instead.
+    attach_function :Z3_mk_datatype, [:ctx_pointer, :symbol_pointer, :uint, :pointer], :sort_pointer
+    # Hand-written because the constructors it frees are raw pointers rather than
+    # objects, which is what the generated binding would have expected
+    attach_function :Z3_del_constructor, [:ctx_pointer, :constructor_pointer], :void
     attach_function :Z3_tactic_par_or, [:ctx_pointer, :int, :pointer], :tactic_pointer
     attach_function :Z3_mk_forall_const, [:ctx_pointer, :uint, :uint, :pointer, :uint, :pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_exists_const, [:ctx_pointer, :uint, :uint, :pointer, :uint, :pointer, :ast_pointer], :ast_pointer
