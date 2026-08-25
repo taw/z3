@@ -7,6 +7,7 @@ The generated method-by-method documentation is at <https://taw.github.io/z3/>, 
 the [`examples/`](https://github.com/taw/z3/blob/master/examples) directory is real
 code using most of this.
 
+* [Names](#names)
 * [Sorts and variables](#sorts-and-variables)
 * [Expressions](#expressions)
 * [Booleans](#booleans)
@@ -29,6 +30,75 @@ code using most of this.
 * [Parameters and statistics](#parameters-and-statistics)
 * [Ruby integration and its limits](#ruby-integration-and-its-limits)
 * [Global settings and internals](#global-settings-and-internals)
+
+## Names
+
+Z3's vocabulary comes from mathematical logic, and some of it means something else in
+Ruby. Methods mostly follow Ruby - `include?`, `start_with?`, `sub`, `inject` - so
+this is mostly about the nouns.
+
+**sort** is a type. `Z3::IntSort` is the type Int; nothing here sorts anything.
+
+**assert** adds a constraint to the solver, and has nothing to do with tests.
+
+**model** is one solution: an assignment of values which satisfies the constraints.
+
+**distinct** is pairwise `!=`, across any number of arguments at once.
+
+**const** is a variable. Logic calls a name whose value gets picked a constant, which
+is what a programmer calls a variable, so the gem says `var` for that and keeps
+`const` for the other meaning:
+
+```ruby
+sort.var("x")            # a variable
+sort.from_const(3)       # a literal
+```
+
+Int, Bool, String and Float mean what you'd expect, and `#value` hands back the Ruby
+object. Real and Bitvec don't quite: Z3's reals are exact and include the algebraic
+numbers, so `√2` is an ordinary Real with no Ruby equivalent, and a Bitvec is fixed
+width and carries no sign of its own, which is why `b < c` raises rather than guess and
+makes you pick `signed_lt` or `unsigned_lt`.
+
+### Array, Set, FiniteSet
+
+The three most likely to mislead.
+
+An **Array** is a total function from one sort to another - no length, no bounds, no
+order, and defined at every index there is. Ruby's nearest thing is a Hash with a
+default.
+
+A **Set** is a mathematical set, and may be infinite. It's a membership test rather
+than a collection, so it has no `#size`, and "all the even numbers" is an ordinary
+value of one:
+
+```ruby
+x = Z3.Int("x")
+evens = Z3.Lambda([x], (x % 2) == 0)   # a lambda from Int to Bool is a Set(Int)
+solver.assert evens.include?(k)
+```
+
+A **FiniteSet** is a set in the sense Ruby's `Set` is one - finitely many elements, and
+`#size` works. It's usually the one you want.
+
+[Arrays and Sets](#arrays-and-sets), [Finite sets](#finite-sets).
+
+### Capitalised methods
+
+Where Ruby's syntax can't carry an operation, it goes on the class as a capitalised
+method, the way Ruby spells its own `Integer()` and `Array()`:
+
+```ruby
+Z3::Expr.Eq(a, b)                 # `==` builds an equation rather than answering one
+Z3.Distinct(a, b, c)              # no Ruby operator is n-ary
+Z3.IfThenElse(c, a, b)
+Z3.And(*xs)   Z3.Or(*xs)          # `and` and `or` are keywords, `&` and `|` are binary
+Z3.AtMost(xs, 1)                  # no operator at all
+Z3::BitvecExpr.UnsignedLt(a, b)   # Ruby has one `<`, and a bitvector needs two
+```
+
+Every operator has one of these, so `Z3::ArithExpr.Div(a, b)` is `a / b`, for when the
+operator spelling isn't available or isn't clear.
 
 ## Sorts and variables
 
