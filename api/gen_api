@@ -40,8 +40,16 @@ class GenerateAPI
         # of scope. `translate` and friends move an object between two of them,
         # `import_model_converter` is how a translated solver carries its model
         # conversion across, and `mk_context_rc` builds the other kind of context.
+        # `inc_ref` / `dec_ref` are the AST reference counters that only kind of context
+        # has - the header says they're a NOOP under `mk_context_rc`'s absence - and
+        # `del_context` deletes a context this gem never lets go of. (The per-object
+        # `*_inc_ref` / `*_dec_ref` are a different thing entirely and all needed:
+        # `LowLevel#inc_ref_pointer` reaches every one of them by name.)
         "ast_vector_translate",
+        "dec_ref",
+        "del_context",
         "goal_translate",
+        "inc_ref",
         "mk_context_rc",
         "model_translate",
         "optimize_translate",
@@ -49,7 +57,10 @@ class GenerateAPI
         "solver_translate",
         "translate",
 
-        # Sort predicates - `Sort.from_pointer` dispatches on the sort kind instead
+        # Sort predicates - `Sort.from_pointer` dispatches on the sort kind instead.
+        # `is_finite_set_sort` is the exception and stays: a finite set has no kind of
+        # its own, so the predicate is the only way to recognise one.
+        "is_char_sort",
         "is_string_sort",
         "is_string",
         "is_re_sort",
@@ -66,8 +77,11 @@ class GenerateAPI
         # Aliases, so we keep whichever spelling the object layer already uses.
         # Pattern, Sort and FuncDecl are all ASTs to the C API, so the three
         # `*_to_string` are `ast_to_string` with a differently typed pointer; the header
-        # says outright that `get_arity` is an alias for `get_domain_size`; and the
-        # `mk_fpa_r*` five are the short spellings of `mk_fpa_round_*`.
+        # says outright that `get_arity` is an alias for `get_domain_size`; the
+        # `mk_fpa_r*` five are the short spellings of `mk_fpa_round_*`; and
+        # `mk_fpa_sort_half` / `_single` / `_double` / `_quadruple` are the named
+        # spellings of `mk_fpa_sort_16` / `_32` / `_64` / `_128`, which is what
+        # `FloatSort` calls for both `16` and `:half`.
         "func_decl_to_string",
         "get_domain_size",
         "mk_fpa_rna",
@@ -75,6 +89,10 @@ class GenerateAPI
         "mk_fpa_rtn",
         "mk_fpa_rtp",
         "mk_fpa_rtz",
+        "mk_fpa_sort_double",
+        "mk_fpa_sort_half",
+        "mk_fpa_sort_quadruple",
+        "mk_fpa_sort_single",
         "pattern_to_string",
         "sort_to_string",
 
@@ -95,8 +113,57 @@ class GenerateAPI
         "stats_inc_ref",
         "stats_to_string",
 
-        # Extra constructors we'll never need
+        # Identity, which the object layer answers by pointer. Z3 hash-conses within a
+        # context, so two structurally equal ASTs are one pointer - which is what
+        # `AST#eql?` compares and `AST#hash` returns - and the `is_eq_*` trio and the
+        # `*_id` / `ast_hash` accessors are longer ways to the same answer.
+        "get_ast_hash",
+        "get_ast_id",
+        "get_func_decl_id",
+        "get_sort_id",
+        "is_eq_ast",
+        "is_eq_func_decl",
+        "is_eq_sort",
+
+        # Float literal predicates. The symbolic `mk_fpa_is_*` spellings own the Ruby
+        # names - `FloatExpr#normal?` and friends build a BoolExpr - and `BoolExpr#to_b`
+        # gets the Ruby answer out of one for a literal, which is all these do.
+        "fpa_is_numeral_normal",
+        "fpa_is_numeral_positive",
+        "fpa_is_numeral_subnormal",
+
+        # Extra constructors we'll never need: every one of these builds a value out of
+        # C integers or bits that `mk_numeral` builds out of a String, and a String is
+        # what Ruby has - no width to overflow, no pair of ints to assemble.
+        "mk_bv_numeral",
         "mk_fpa_numeral_float",
+        "mk_fpa_numeral_int",
+        "mk_fpa_numeral_int64_uint64",
+        "mk_fpa_numeral_int_uint",
+        "mk_int",
+        "mk_int64",
+        "mk_real",
+        "mk_real_int64",
+        "mk_unsigned_int",
+        "mk_unsigned_int64",
+
+        # And the readers to match. `get_numeral_string` answers for every width with no
+        # overflow flag to check, and Ruby Integers are arbitrary precision. (These have
+        # out parameters, so `Definition` can't express them either - they're here so the
+        # decision reads as a decision rather than as a limitation.)
+        "get_numeral_int",
+        "get_numeral_int64",
+        "get_numeral_rational_int64",
+        "get_numeral_small",
+        "get_numeral_uint",
+        "get_numeral_uint64",
+
+        # Alternative spellings of the string round trip `LowLevel#get_string` and
+        # `#mk_string` already do, escaping and all, on top of `get_lstring` / `mk_string`.
+        "get_string_contents",
+        "get_string_length",
+        "mk_lstring",
+        "mk_u32string",
 
         # Hand-coded
         "mk_add",

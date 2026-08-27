@@ -2,23 +2,18 @@ module Z3
   class FloatSort < Sort
     def initialize(e, s=nil)
       if s.nil?
+        # `mk_fpa_sort_half` and friends are the same four calls under their IEEE names -
+        # the header says so and Z3 hands back the same sort - so only one spelling of
+        # each is bound
         case e
-        when 16
+        when 16, :half
           super LowLevel.mk_fpa_sort_16
-        when 32
+        when 32, :single
           super LowLevel.mk_fpa_sort_32
-        when 64
+        when 64, :double
           super LowLevel.mk_fpa_sort_64
-        when 128
+        when 128, :quadruple
           super LowLevel.mk_fpa_sort_128
-        when :half
-          super LowLevel.mk_fpa_sort_half
-        when :single
-          super LowLevel.mk_fpa_sort_single
-        when :double
-          super LowLevel.mk_fpa_sort_double
-        when :quadruple
-          super LowLevel.mk_fpa_sort_quadruple
         else
           raise Z3::Exception, "Unknown float type #{e}, use FloatSort.new(exponent_bits, significant_bits)"
         end
