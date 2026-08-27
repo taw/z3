@@ -890,6 +890,21 @@ opt.model.to_s       # Z3::Model<x=10, y=0>
 Z3's objective value readers aren't bound, so read the maximised term out of the model
 rather than from the return value of `#maximize`.
 
+SMT-LIB2 goes in the same way it does for a solver, except that this parser knows the
+optimization commands too:
+
+```ruby
+opt.from_string("(declare-const a Int)(assert (> a 10))(assert-soft (= a 20))(minimize a)")
+opt.from_file("problem.smt2")
+```
+
+`opt.set_initial_value(b, true)` is the same warm start hint `Solver.simple` takes,
+but Bool and Bitvec only. Z3's optimizer drops an Int hint in preprocessing, and hands
+a Real one back scaled - with any objective in play that means a model which fails its
+own assertions - so those two raise here instead of being passed through.
+`Solver.simple` takes arithmetic warm starts correctly, and
+`spec/upstream_bugs_spec.rb` reproduces both bugs.
+
 ## Tactics, probes, goals, simplifiers
 
 A goal is a set of formulas to work on, a tactic turns one goal into the subgoals which

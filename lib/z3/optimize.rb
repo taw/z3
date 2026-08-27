@@ -151,6 +151,54 @@ module Z3
       LowLevel.optimize_minimize(self, ast)
     end
 
+    # A hint at which value to try for a variable first - a warm start, for feeding a
+    # known-good solution back in. It stays a hint: an impossible one is overridden
+    # rather than believed, and it can't make an unsat problem sat.
+    #
+    # Bool and Bitvec only, unlike Solver#set_initial_value, because Z3's optimizer gets
+    # arithmetic ones wrong in both directions: an Int hint is dropped by its `elim_01`
+    # preprocessing before the search ever sees it, and a Real hint which does arrive
+    # comes back out of that preprocessing scaled, so an Optimize with an objective can
+    # answer with a model that fails its own assertions. `spec/upstream_bugs_spec.rb`
+    # reproduces both, through LowLevel to get past this guard. Solver.simple honours Int
+    # and Real warm starts correctly, and is where an arithmetic one belongs until Z3 is
+    # fixed.
+    #
+    # Z3 acts on the hint for Bool (the initial phase) and Bitvec (a phase per bit).
+    # Other sorts - String, Seq and Float among them - it accepts and ignores, and
+    # there's no way to be told which is which.
+    def set_initial_value(var, value)
+      unless var.is_a?(Expr) and var.ast_kind == :app and var.func_decl.arity == 0
+        raise Z3::Exception, "Initial values are for variables, and #{var.inspect} is not one"
+      end
+      if var.sort.is_a?(IntSort) or var.sort.is_a?(RealSort)
+        raise Z3::Exception,
+          "Optimize drops Int initial values and answers unsoundly for Real ones, " \
+          "use Solver.simple for an arithmetic warm start"
+      end
+      LowLevel.optimize_set_initial_value(self, var, var.sort.cast(value))
+      self
+    end
+
+    # Parses SMT-LIB2 and adds its assertions on top of whatever's already asserted.
+    # Anything it declares goes into the shared context, so `(declare-const a Int)`
+    # here is the same variable as `Z3.Int("a")` in Ruby - but the parser starts with
+    # an empty symbol table every time, so each string has to declare what it uses.
+    #
+    # `(maximize ...)`, `(minimize ...)` and `(assert-soft ...)` are understood too,
+    # so a string can bring objectives along with its assertions.
+    def from_string(str)
+      reset_model!
+      LowLevel.optimize_from_string(self, str)
+      self
+    end
+
+    def from_file(path)
+      reset_model!
+      LowLevel.optimize_from_file(self, path)
+      self
+    end
+
     private
 
     def reset_model!

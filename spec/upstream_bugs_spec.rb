@@ -1,4 +1,5 @@
 require "rbconfig"
+require "open3"
 
 # Bugs in Z3 itself, not in this gem.
 #
@@ -56,6 +57,19 @@ module Z3
     it "the hang helper can tell a hang from an ordinary answer" do
       expect(hangs?("sleep 60", seconds: 2)).to be true
       expect(hangs?("Z3::Solver.new.check", seconds: 30)).to be false
+    end
+
+    # And one of these depends on what's in the context, which every example that ran
+    # before this file has been adding to, so it needs a context nobody else touched.
+    def output_of(ruby_code)
+      out, _status = Open3.capture2e(
+        RbConfig.ruby, "-I#{__dir__}/../lib", "-rz3", "-e", ruby_code,
+      )
+      out
+    end
+
+    it "the output helper runs its code in a context of its own" do
+      expect(output_of("puts Z3::Solver.new.assertions.size")).to eq("0\n")
     end
 
     # Asserting `r == a.to_real` alongside `a == 0.5` returns :sat with a model saying
@@ -157,6 +171,74 @@ module Z3
         optimize.pop
         Z3::LowLevel.optimize_get_upper(optimize, i)
       RUBY
+    end
+
+    # `Optimize` preprocesses with `elim_01`, which rewrites bounded integers, and the
+    # hint doesn't survive that rewrite - `opt::context::optimize` does hand the hints
+    # to the model converter first, and `x` still comes out of it meaning nothing to
+    # the solver which then runs. Turning that one preprocessing step off is enough to
+    # make the same hint land, which is what pins this on the rewrite rather than on
+    # the search. So is defining any recursive function, anywhere in the context, which
+    # turns the preprocessing off wholesale - that's why this runs in a fresh process
+    # rather than in the context the rest of the suite has been building up.
+    #
+    # `Optimize#set_initial_value` refuses Int for this reason, so the reproduction
+    # goes through LowLevel to get past that guard.
+    #
+    # Correct: the warm start Solver.simple gives on the same problem, which is 77.
+    it "Z3_optimize_set_initial_value loses an Int hint in elim_01 preprocessing" do
+      # `false` is the bug - the hint didn't land. Not asserting which value it picked
+      # instead, as any value but the hint is the same bug and shouldn't read as a fix
+      expect(output_of(<<~RUBY)).to eq("false\n77\n")
+        def hinted(params)
+          optimize = Z3::Optimize.new(params)
+          x = Z3.Int("x")
+          optimize.assert x >= 40
+          optimize.assert x <= 100
+          Z3::LowLevel.optimize_set_initial_value(optimize, x, Z3::IntSort.new.cast(77))
+          optimize.check
+          optimize.model[x].value
+        end
+        puts hinted({}) == 77
+        puts hinted(elim_01: false)
+      RUBY
+
+      x = Z3.Int("elim01_x")
+      solver = Solver.simple
+      solver.assert x >= 40
+      solver.assert x <= 100
+      solver.set_initial_value(x, 77)
+      expect(solver.check).to eq(:sat)
+      expect(solver.model[x].value).to eq(77)
+    end
+
+    # The same preprocessing, one sort over, is unsound rather than forgetful. A Real
+    # hint does reach the search, and the value comes back out of the rewrite scaled -
+    # hint 7 answers 13 or 14 - so an `Optimize` with any objective at all can return a
+    # model which fails an assertion it was given. It needs the objective: the same
+    # hint on the same assertions with nothing to optimize answers 7 and is fine.
+    #
+    # This is the worst kind of bug the gem can pass through, so `Optimize#set_initial_value`
+    # refuses Real too, and this goes through LowLevel to get past that guard.
+    #
+    # Correct: any model at all satisfying `0 <= r <= 10`, hint or no hint.
+    it "Z3_optimize_set_initial_value makes an objective answer with a model which fails its assertions" do
+      r = Z3.Real("unsound_r")
+      bounds = [r >= 0, r <= 10]
+
+      optimize = Optimize.new
+      bounds.each { |bound| optimize.assert bound }
+      optimize.maximize(r)
+      LowLevel.optimize_set_initial_value(optimize, r, RealSort.new.cast(7))
+      expect(optimize.check).to eq(:sat)
+      expect(optimize.model.model_eval(bounds[1], true).to_b).to be false
+
+      # Without an objective the same hint is honoured, and honestly
+      solver_like = Optimize.new
+      bounds.each { |bound| solver_like.assert bound }
+      LowLevel.optimize_set_initial_value(solver_like, r, RealSort.new.cast(7))
+      expect(solver_like.check).to eq(:sat)
+      expect(solver_like.model[r].to_r).to eq(7)
     end
 
     # Two enum values with the same name are accepted, and Z3 then hash-conses them
