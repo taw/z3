@@ -827,6 +827,7 @@ model.each_const   model.each_func
 model.consts   model.num_consts
 model.funcs    model.num_funcs
 model.func_interp(f)
+model.has_interp?(x)      # whether the model says anything about x at all
 model.sorts   model.sort_universe(sort)
 !model                    # the negation - assert it to ask for a different model
 ```
@@ -856,6 +857,24 @@ while solver.satisfiable?
   solver.assert !solver.model
 end
 ```
+
+Models don't have to come from a solver. `Model.new` takes the same shape `#each`
+yields - variables and FuncDecls to values, a function's entries keyed by argument
+list with `default:` for the `else` branch:
+
+```ruby
+model = Z3::Model.new(x => 3, y => 4, f => {[1] => 10, default: 0})
+model.model_eval(x*x + y*y == 25, true)   # true - no solver involved anywhere
+Z3::Model.new(solver.model.to_h)          # a model read out goes back in
+```
+
+That makes `Model` an evaluator for any expression under any assignment, which is how
+to check a candidate answer without asking Z3 to search for one, and it's what feeds
+`Goal#convert_model` a model of a subgoal you solved some other way. A model built
+here is only what it was told - nothing checks it against any assertions, and it can
+say something false. Two things it can't be told: what elements an uninterpreted sort
+has (Z3 has no writer for those, so `#sorts` stays empty), and what a recursive
+definition does (that belongs to the context, and `Model.new` refuses it).
 
 ## Optimize
 

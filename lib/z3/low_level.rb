@@ -400,6 +400,24 @@ module Z3
         interp
       end
 
+      # The other direction, for a model built rather than read - same Hash, same
+      # `else`-branch-as-Hash-default convention. Z3 makes the FuncInterp and hands it
+      # back with a reference count of 0, so it has to be claimed before anything
+      # touches it and released after; the model it was added to keeps it alive.
+      def pack_func_interp(model, func_decl, interp)
+        _func_interp = add_func_interp(model, func_decl, interp.default)
+        func_interp_inc_ref(_func_interp)
+        begin
+          interp.each do |args, value|
+            with_ast_vectors(args) do |_args|
+              func_interp_add_entry(_func_interp, _args, value)
+            end
+          end
+        ensure
+          func_interp_dec_ref(_func_interp)
+        end
+      end
+
       def unpack_statistics(_stats)
         stats = {}
         stats_size(_stats).times.map do |i|

@@ -60,6 +60,16 @@ module Z3
         expect(model[x].value).to eq(model[y].value + 3)
       end
 
+      # Which makes the whole round trip available without solving the subgoal at all -
+      # a model built by hand goes in, and comes back in terms of the original goal
+      it "takes a model built by hand" do
+        subgoal = Tactic.named("solve-eqs").apply(goal).first
+        model = subgoal.convert_model(Model.new(x => 7))
+        expect(model[x].value).to eq(7)
+        expect(model[y].value).to eq(4)
+        expect(model.model_eval(x == y + 3, true).to_b).to eq(true)
+      end
+
       it "requires a model" do
         expect{goal.convert_model(42)}.to raise_error(Z3::Exception, "Model required")
       end

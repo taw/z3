@@ -83,7 +83,10 @@ class GenerateAPI
         # keys are argument lists - so nothing here ever holds one of these objects,
         # prints it, or writes back into it.
         # (`func_interp_add_entry` and `func_interp_set_else` are deliberately absent:
-        # those build a model rather than read one, which is a feature we don't have yet.)
+        # those write a model rather than read one, and `Model.new(Hash)` does that -
+        # through `LowLevel.pack_func_interp`, which uses the first of the two.
+        # `func_interp_set_else` stays bound and unused, as `add_func_interp` takes the
+        # else value up front and a model built here is built once.)
         "ast_vector_resize",
         "ast_vector_set",
         "ast_vector_to_string",

@@ -109,6 +109,152 @@ module Z3
       end
     end
 
+    describe "built by hand" do
+      let(:f) { Z3.Function("f", IntSort.new, IntSort.new) }
+      let(:g) { Z3.Function("g", IntSort.new, IntSort.new, IntSort.new) }
+
+      it "says what it was told to say" do
+        model = Model.new(a => 2, b => 4)
+        expect(model.to_s).to eq("Z3::Model<a=2, b=4>")
+        expect(model.num_consts).to eq(2)
+        expect(model[a]).to be_same_as(Z3.Const(2))
+      end
+
+      # Which is the whole point - no solver anywhere, just a term and an assignment
+      it "evaluates any expression against it" do
+        model = Model.new(a => 3, b => 4)
+        expect(model.model_eval(a*a + b*b == 25, true).to_b).to eq(true)
+        expect(model.model_eval(a > b, true).to_b).to eq(false)
+      end
+
+      it "casts values into the variable's sort" do
+        model = Model.new(Z3.Bool("p") => true, Z3.String("s") => "hi", Z3.Bitvec("v", 8) => 200)
+        expect(model.to_s).to eq(%(Z3::Model<p=true, s="hi", v=200>))
+        expect{ Model.new(a => "nope") }.to raise_error(Z3::Exception, "Can't convert String into Int")
+      end
+
+      it "takes a FuncDecl for a variable as well as an Expr" do
+        expect(Model.new(FuncDecl.declare("k", IntSort.new) => 5).to_s).to eq("Z3::Model<k=5>")
+      end
+
+      it "takes functions, keyed by argument list" do
+        model = Model.new(f => {[1] => 10, [2] => 20, default: 0}, g => {[1, 2] => 12, default: -1})
+        expect(model.to_s).to eq("Z3::Model<f={(1) => 10, (2) => 20, else => 0}, g={(1, 2) => 12, else => -1}>")
+        expect(model.model_eval(f[1] + f[99] + g[1, 2] + g[5, 5], true)).to be_same_as(Z3.Const(21))
+      end
+
+      # #func_interp puts the else branch there, so a model read out goes straight back in
+      it "takes the else branch as the Hash's own default too" do
+        interp = {[1] => 10}
+        interp.default = 0
+        expect(Model.new(f => interp).to_s).to eq("Z3::Model<f={(1) => 10, else => 0}>")
+      end
+
+      it "round trips a model a solver produced" do
+        solver.assert f[3] == 7
+        solver.assert a == 5
+        expect(solver).to be_satisfiable
+        expect(Model.new(solver.model.to_h).to_s).to eq(solver.model.to_s)
+      end
+
+      it "is empty when it's told nothing" do
+        expect(Model.new.to_s).to eq("Z3::Model<>")
+        expect(!Model.new).to be_same_as(Z3.False)
+      end
+
+      it "is only what it was told - nothing checks it against anything" do
+        model = Model.new(a => 2)
+        expect(model.model_eval(a == 3, true).to_b).to eq(false)
+      end
+
+      # There's no writer for these in the C API, so the elements Z3 invents for an
+      # uninterpreted sort are the one thing a model can't be told
+      it "can't be told a sort universe" do
+        person = UninterpretedSort.new("Person")
+        model = Model.new(person.var("alice") => person.var("Person!val!0"))
+        expect(model.to_s).to eq("Z3::Model<alice=Person!val!0>")
+        expect(model.sorts).to eq([])
+      end
+
+      it "raises unless the key is a variable or a function" do
+        expect{ Model.new("a" => 2) }
+          .to raise_error(Z3::Exception, "A model says what variables and functions are, and String is neither")
+        expect{ Model.new((a + 1) => 2) }
+          .to raise_error(Z3::Exception, "A model says what variables and functions are, and Int<a + 1> is neither")
+      end
+
+      # Z3 takes the interpretation and answers from the definition anyway, the same
+      # reason #funcs leaves recursive definitions out of a model it read
+      it "raises on a recursive definition, which belongs to the context" do
+        rec = Z3.RecFunction("model_spec_rec", IntSort.new, IntSort.new) { |_, n| n * 2 }
+        expect{ Model.new(rec => {[1] => 99, default: 0}) }
+          .to raise_error(Z3::Exception, "model_spec_rec is defined in the context, so a model can't say what it is")
+      end
+
+      it "raises on an interpretation which isn't a function's" do
+        expect{ Model.new(f => 3) }.to raise_error(
+          Z3::Exception, "f is a function, so it needs a Hash of argument lists to values, got Integer"
+        )
+      end
+
+      it "raises unless every entry is an argument list of the right size" do
+        expect{ Model.new(f => {[1, 2] => 3, default: 0}) }.to raise_error(
+          Z3::Exception, "f takes 1 argument, so [1, 2] is not an argument list for it"
+        )
+        expect{ Model.new(g => {1 => 3, default: 0}) }.to raise_error(
+          Z3::Exception, "g takes 2 arguments, so 1 is not an argument list for it"
+        )
+      end
+
+      it "raises when a function has no else branch, which Z3 requires" do
+        expect{ Model.new(f => {[1] => 10}) }.to raise_error(
+          Z3::Exception, "f needs a `default:` - Z3 wants an answer for the argument lists with no entry"
+        )
+      end
+
+      it "raises unless given a Hash" do
+        # FFI would take a number here as an address and segfault on it
+        expect{ Model.new(42) }
+          .to raise_error(Z3::Exception, "A model is built from a Hash of interpretations, got Integer")
+      end
+
+      # Z3 hands back the FuncInterp it just made with a reference count of 0, so
+      # without claiming it this is a segfault rather than a failure
+      it "survives garbage collection, functions and all" do
+        kept = Model.new(a => 1, f => {[1] => 10, [2] => 20, default: 0})
+        100.times { |i| Model.new(Z3.Int("gc_#{i}") => i, f => {[i] => i, default: 0}) }
+        GC.start
+        expect(kept.to_s).to eq("Z3::Model<a=1, f={(1) => 10, (2) => 20, else => 0}>")
+        expect(kept.model_eval(f[2], true)).to be_same_as(Z3.Const(20))
+      end
+
+      describe "#has_interp?" do
+        it "is the question model_eval can't answer" do
+          model = Model.new(a => 2, f => {[1] => 10, default: 0})
+          expect(model.has_interp?(a)).to eq(true)
+          expect(model.has_interp?(f)).to eq(true)
+          expect(model.has_interp?(b)).to eq(false)
+          expect(model.has_interp?(g)).to eq(false)
+          # b evaluates to itself, or to whatever completion invents - neither says
+          # the model was silent about it
+          expect(model.model_eval(b)).to be_same_as(b)
+          expect(model.model_eval(b, true)).to be_same_as(Z3.Const(0))
+        end
+
+        it "works on a model a solver produced" do
+          solver.assert a == 2
+          expect(solver).to be_satisfiable
+          expect(model.has_interp?(a)).to eq(true)
+          expect(model.has_interp?(b)).to eq(false)
+        end
+
+        it "raises unless asked about a variable or a function" do
+          expect{ Model.new.has_interp?(42) }
+            .to raise_error(Z3::Exception, "A model says what variables and functions are, and Integer is neither")
+        end
+      end
+    end
+
     describe "uninterpreted sorts in the model" do
       let(:person) { UninterpretedSort.new("Person") }
       let(:alice) { person.var("alice") }

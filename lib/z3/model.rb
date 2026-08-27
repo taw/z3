@@ -4,10 +4,44 @@ module Z3
     include ReferenceCounted
 
     attr_reader :_model
-    def initialize(_model)
-      @_model = _model
+
+    # Either a model Z3 produced - `Solver#model` and `Optimize#model` pass their
+    # pointer in here - or one built from what it should say, which is the same shape
+    # #each yields back:
+    #
+    #   Model.new(x => 3, y => 4)
+    #   Model.new(f => {[1] => 10, [2] => 20, default: 0})
+    #
+    # Keys are variables or FuncDecls, values are anything their sort can cast, and a
+    # function's entries are keyed by argument list - `[1]` even for a unary function.
+    # `default:` is the `else` branch, the answer for every argument list without an
+    # entry, and Z3 insists a function have one. Ruby's own Hash default says the same
+    # thing, which is where #func_interp puts it, so a model read out goes back in:
+    # `Model.new(model.to_h)` round trips.
+    #
+    # A model built here is a model like any other - #model_eval evaluates any
+    # expression against it, without a solver anywhere in sight, and Goal#convert_model
+    # takes one - but it is only what it was told: nothing checks it against any
+    # assertions, and it can perfectly well say something false.
+    #
+    # Two things it can't be told. The elements Z3 invents for an uninterpreted sort
+    # have no writer in the C API at all, so #sorts on a model built here is empty
+    # however many of them its values mention. And a recursive definition belongs to
+    # the context rather than to any model, so one is refused - see #funcs.
+    def initialize(interps = {})
+      @_model =
+        case interps
+        when Hash
+          LowLevel.mk_model
+        when FFI::Pointer
+          interps
+        else
+          # FFI would take anything numeric here as an address and segfault on it
+          raise Z3::Exception, "A model is built from a Hash of interpretations, got #{AST.describe(interps)}"
+        end
       # Without this the solver reclaims the model as soon as it produces another one
-      inc_ref! :model, _model
+      inc_ref! :model, @_model
+      add_interps(interps) if interps.is_a?(Hash)
     end
 
     def num_consts
@@ -64,6 +98,14 @@ module Z3
       LowLevel.unpack_func_interp(_func_interp)
     end
 
+    # Whether the model says anything at all about this variable or function. It's the
+    # question #model_eval can't answer: without `model_completion` an unassigned
+    # variable evaluates to itself, and with it Z3 invents a value rather than telling
+    # you it had to.
+    def has_interp?(key)
+      LowLevel.model_has_interp(self, interp_decl(key))
+    end
+
     def model_eval(ast, model_completion=false)
       Expr.new_from_pointer(LowLevel.model_eval(self, ast, model_completion))
     end
@@ -113,6 +155,63 @@ module Z3
       # A model with no consts constrains nothing, so there is nothing to differ in
       return Z3.False if differences.empty?
       Z3.Or(*differences)
+    end
+
+    private
+
+    def add_interps(interps)
+      interps.each do |key, value|
+        decl = interp_decl(key)
+        if decl.arity == 0
+          LowLevel.add_const_interp(self, decl, decl.range.cast(value))
+        else
+          LowLevel.pack_func_interp(self, decl, func_interp_for(decl, value))
+        end
+      end
+    end
+
+    # A variable is an Expr - that's how #each_const yields one - and a function is a
+    # FuncDecl, which is how #each_func does. Either way what Z3 wants is the decl.
+    def interp_decl(key)
+      decl =
+        case key
+        when FuncDecl
+          key
+        when Expr
+          unless key.ast_kind == :app and key.func_decl.arity == 0
+            raise Z3::Exception, "A model says what variables and functions are, and #{key.inspect} is neither"
+          end
+          key.func_decl
+        else
+          raise Z3::Exception, "A model says what variables and functions are, and #{AST.describe(key)} is neither"
+        end
+      # Z3 takes an interpretation for one of these and then answers from the definition
+      # anyway, the same way #funcs leaves them out of a model it read - see #funcs
+      if decl.recursive?
+        raise Z3::Exception, "#{decl.name} is defined in the context, so a model can't say what it is"
+      end
+      decl
+    end
+
+    # Same Hash #func_interp gives back, with everything cast into the declared sorts
+    def func_interp_for(decl, interp)
+      unless interp.is_a?(Hash)
+        raise Z3::Exception, "#{decl.name} is a function, so it needs a Hash of argument lists to values, got #{AST.describe(interp)}"
+      end
+      entries = interp.reject { |args, _| args == :default }
+      else_value = interp.key?(:default) ? interp[:default] : interp.default
+      if else_value.nil?
+        raise Z3::Exception, "#{decl.name} needs a `default:` - Z3 wants an answer for the argument lists with no entry"
+      end
+      result = {}
+      entries.each do |args, value|
+        unless args.is_a?(Array) and args.size == decl.arity
+          raise Z3::Exception, "#{decl.name} takes #{decl.arity} argument#{"s" unless decl.arity == 1}, so #{args.inspect} is not an argument list for it"
+        end
+        result[args.each_with_index.map { |arg, i| decl.domain(i).cast(arg) }] = decl.range.cast(value)
+      end
+      result.default = decl.range.cast(else_value)
+      result
     end
   end
 end
