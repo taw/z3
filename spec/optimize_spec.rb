@@ -96,6 +96,88 @@ module Z3
       expect(optimize.model[a].to_i).to eq 1
     end
 
+    describe "Optimize::Objective" do
+      it "#upper and #lower once the search has converged" do
+        optimize.assert a > 0
+        optimize.assert a < 10
+        obj = optimize.maximize(a)
+        expect(optimize).to be_satisfiable
+        expect(obj.upper.to_i).to eq(9)
+        expect(obj.lower.to_i).to eq(9)
+      end
+
+      it "#value reads the model's answer for the objective's own term" do
+        optimize.assert a > 0
+        optimize.assert a < 10
+        obj = optimize.maximize(a * 2)
+        expect(optimize).to be_satisfiable
+        expect(obj.value.to_i).to eq(18)
+      end
+
+      # `a > 0` alone has no finite maximum, and Z3 reports both directions as
+      # unbounded here - there's no witness value below the (nonexistent) maximum
+      # worth calling a tight lower bound once the search has proven that
+      it "#upper is Float::INFINITY when nothing bounds the objective above" do
+        optimize.assert a > 0
+        obj = optimize.maximize(a)
+        expect(optimize).to be_satisfiable
+        expect(obj.upper).to eq(Float::INFINITY)
+        expect(obj.lower).to eq(Float::INFINITY)
+      end
+
+      it "#lower is -Float::INFINITY when nothing bounds the objective below" do
+        obj = optimize.minimize(a)
+        expect(optimize).to be_satisfiable
+        expect(obj.lower).to eq(-Float::INFINITY)
+      end
+
+      # The infimum of `r > 5` is 5, but 5 itself is never a legal value of `r` - so
+      # Z3 reports it as the symbolic `5 + epsilon` rather than rounding down to an
+      # attained-looking 5. Real, not Int, because on an Int this bound is attained
+      # outright at 6 and no epsilon is needed at all
+      it "#lower is a `+ epsilon` Expr when the bound is only reachable in the limit" do
+        r = Z3.Real("r")
+        optimize.assert r > 5
+        optimize.assert r < 100
+        obj = optimize.minimize(r)
+        expect(optimize).to be_satisfiable
+        expect(obj.lower.to_s).to eq("5 + epsilon")
+      end
+
+      it "#upper_as_vector and #lower_as_vector give the raw [infinity, value, epsilon] coefficients" do
+        r = Z3.Real("r")
+        optimize.assert r > 5
+        optimize.assert r < 100
+        obj = optimize.minimize(r)
+        expect(optimize).to be_satisfiable
+        expect(obj.lower_as_vector.map(&:to_s)).to eq(["0", "5", "1"])
+      end
+
+      it "#to_s and #inspect" do
+        optimize.assert a > 0
+        optimize.assert a < 10
+        obj = optimize.maximize(a)
+        expect(optimize).to be_satisfiable
+        expect(obj.to_s).to eq("a in [9, 9]")
+        expect(obj.inspect).to eq("Z3::Optimize::Objective<a in [9, 9]>")
+      end
+    end
+
+    describe "#objectives" do
+      it "lists every objective, minimize ones as given and maximize ones negated" do
+        optimize.assert a > 0
+        optimize.assert b > 0
+        optimize.maximize(a)
+        optimize.minimize(b)
+        expect(optimize.objectives.map(&:to_s)).to eq(["-a", "b"])
+      end
+
+      it "picks up objectives #from_string added, which never went through #maximize" do
+        optimize.from_string("(declare-const c Int)(assert (> c 0))(minimize c)")
+        expect(optimize.objectives.map(&:to_s)).to eq(["c"])
+      end
+    end
+
     it "#assert_and_track and #unsat_core" do
       optimize.assert_and_track a > 5, Z3.Bool("p1")
       optimize.assert_and_track a < 2, Z3.Bool("p2")

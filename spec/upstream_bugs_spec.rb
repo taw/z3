@@ -166,7 +166,7 @@ module Z3
         optimize.assert a > 0
         optimize.assert a < 9
         optimize.push
-        i = optimize.maximize a
+        i = optimize.maximize(a).index
         optimize.check
         optimize.pop
         Z3::LowLevel.optimize_get_upper(optimize, i)

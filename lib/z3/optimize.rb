@@ -2,6 +2,75 @@ module Z3
   class Optimize
     include ReferenceCounted
 
+    # What #maximize and #minimize hand back instead of the raw index the C API
+    # uses to tell objectives apart. The index is still what every call needs, so
+    # it's kept, but everything above LowLevel reaches it through here.
+    class Objective
+      attr_reader :optimize, :index, :ast
+
+      def initialize(optimize, index, ast)
+        @optimize = optimize
+        @index = index
+        @ast = ast
+      end
+
+      # The best value the search has proven so far - tight once #check has
+      # returned :sat and this objective converged, a real bound but not
+      # necessarily the final answer if it returned :unknown instead.
+      #
+      # Ordinarily an Expr in the same sort as the term being optimized. An
+      # objective the search can push without limit reads as Float::INFINITY or
+      # -Float::INFINITY instead - a * infinity + b + c * epsilon with the
+      # infinity coefficient nonzero, in the vocabulary #upper_as_vector and
+      # #lower_as_vector use - since Ruby has no term for that to be an Expr of.
+      # One only reachable in the limit (b + epsilon, the coefficient on epsilon
+      # nonzero rather than on infinity) stays an Expr - `(+ 5 epsilon)` - rather
+      # than being rounded to the unattained 5, which is the honest answer and
+      # the one #upper_as_vector would otherwise be needed to notice.
+      def upper
+        bound(:upper)
+      end
+
+      def lower
+        bound(:lower)
+      end
+
+      # The [infinity, value, epsilon] coefficients #upper encodes into a Float or
+      # an Expr - see its comment. `infinity` and `epsilon` are always Int, being
+      # coefficients rather than values of that sort themselves; `value` is usually
+      # an Int too, whatever the objective's own sort, and only widens to it when
+      # the value itself isn't a whole number.
+      def upper_as_vector
+        LowLevel.unpack_ast_vector(LowLevel.optimize_get_upper_as_vector(optimize, index))
+      end
+
+      def lower_as_vector
+        LowLevel.unpack_ast_vector(LowLevel.optimize_get_lower_as_vector(optimize, index))
+      end
+
+      # What the model says this objective's own term evaluates to - meaningful
+      # once #check has returned :sat, unbounded like #upper/#lower otherwise
+      def value
+        optimize.model[ast]
+      end
+
+      def to_s
+        "#{ast} in [#{lower}, #{upper}]"
+      end
+
+      def inspect
+        "Z3::Optimize::Objective<#{self}>"
+      end
+
+      private
+
+      def bound(which)
+        infinity, _value, _epsilon = send(:"#{which}_as_vector")
+        return infinity.to_i * Float::INFINITY unless infinity.to_i.zero?
+        Expr.new_from_pointer(LowLevel.send(:"optimize_get_#{which}", optimize, index))
+      end
+    end
+
     attr_reader :_optimize
 
     def initialize(params = {})
@@ -143,12 +212,24 @@ module Z3
 
     def maximize(ast)
       reset_model!
-      LowLevel.optimize_maximize(self, ast)
+      Objective.new(self, LowLevel.optimize_maximize(self, ast), ast)
     end
 
     def minimize(ast)
       reset_model!
-      LowLevel.optimize_minimize(self, ast)
+      Objective.new(self, LowLevel.optimize_minimize(self, ast), ast)
+    end
+
+    # Every objective currently registered, in the order they were added - which
+    # includes ones `#from_string`/`#from_file` parsed out of a `(maximize ...)` or
+    # `(minimize ...)` command and never went through #maximize/#minimize at all.
+    # Z3 normalises a maximize into the equivalent minimize internally, so an
+    # objective added through #maximize shows up here negated - `opt.maximize(x)`
+    # puts `-x` in this list, not `x`. #maximize's own return value doesn't have
+    # that problem, so prefer it when the objective was added from Ruby.
+    def objectives
+      _ast_vector = LowLevel.optimize_get_objectives(self)
+      LowLevel.unpack_ast_vector(_ast_vector)
     end
 
     # A hint at which value to try for a variable first - a warm start, for feeding a

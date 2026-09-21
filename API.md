@@ -901,13 +901,25 @@ opt = Z3::Optimize.new
 opt.assert x >= 0
 opt.assert y >= 0
 opt.assert x + y <= 10
-opt.maximize(x * 2 + y)
+obj = opt.maximize(x * 2 + y)
 opt.satisfiable?     # true
 opt.model.to_s       # Z3::Model<x=10, y=0>
+obj.value             # 20, read from the model - same as opt.model[x * 2 + y]
+obj.upper   obj.lower  # the search's proven bounds - Expr, or +/-Float::INFINITY
 ```
 
-Z3's objective value readers aren't bound, so read the maximised term out of the model
-rather than from the return value of `#maximize`.
+`#maximize` and `#minimize` return a `Z3::Optimize::Objective` rather than the raw
+index the C API tells objectives apart by. `#upper`/`#lower` are that objective's
+proven bounds and stay meaningful even after `:unknown` - `check` can give up with
+an objective merely bracketed, which is the situation `#value` alone can't describe.
+An unbounded direction reads as `Float::INFINITY`/`-Float::INFINITY`; a bound only
+reachable in the limit (a strict inequality with no attainable optimum) stays a
+symbolic Expr - `5 + epsilon` - rather than being rounded to the unattained 5.
+`#upper_as_vector`/`#lower_as_vector` give the raw `[infinity, value, epsilon]`
+coefficients `#upper`/`#lower` are built from. `Optimize#objectives` lists every
+objective currently registered, including ones a `(maximize ...)`/`(minimize ...)`
+in `#from_string`/`#from_file` added directly - though Z3 normalises a maximize into
+the equivalent minimize internally, so it shows up there negated.
 
 SMT-LIB2 goes in the same way it does for a solver, except that this parser knows the
 optimization commands too:
