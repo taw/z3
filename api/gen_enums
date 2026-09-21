@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+require_relative "enum"
+
+if ARGV.empty?
+  STDERR.puts "Usage: #{$0} file1.h file2.h ..."
+  exit 1
+end
+
+class GenerateEnums
+  def initialize(*paths)
+    @enums = []
+    paths.each { |path| add_file! Pathname(path) }
+  end
+
+  def run!
+    (Pathname(__dir__) + "../lib/z3/enums_auto.rb").open("w") do |fh|
+      fh.puts "module Z3"
+      fh.puts "  module Enums"
+      fh.puts enums.map(&:ruby).join
+      fh.puts "  end"
+      fh.puts "end"
+    end
+  end
+
+  def enums
+    @enums.uniq(&:name).sort
+  end
+
+  private
+
+  def add_file!(path)
+    path.read.scan(/typedef\s+enum\s*\{.*?\}\s*Z3_\w+\s*;/m).each do |block|
+      @enums << Enum.new(block)
+    end
+  end
+end
+
+GenerateEnums.new(*ARGV).run!

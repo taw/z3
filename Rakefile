@@ -18,6 +18,12 @@ task "api" do
   sh "./api/gen_api api/definitions.h"
 end
 
+desc "Regenerate lib/z3/enums_auto.rb"
+task "enums" do
+  headers = `brew list -v z3`.split("\n").grep(/\.h\z/)
+  sh "./api/gen_enums", *headers
+end
+
 desc "Clean up"
 task "clean" do
   sh "trash z3-*.gem coverage"
@@ -71,4 +77,5 @@ RDoc::Task.new do |rdoc|
   rdoc.rdoc_files.exclude("lib/z3/low_level.rb")
   rdoc.rdoc_files.exclude("lib/z3/very_low_level.rb")
   rdoc.rdoc_files.exclude("lib/z3/very_low_level_auto.rb")
+  rdoc.rdoc_files.exclude("lib/z3/enums_auto.rb")
 end
