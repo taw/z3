@@ -168,16 +168,18 @@ module Z3
       let(:z) { Z3.Int("z") }
 
       # Z3 solves for whichever requested variable comes first and expresses it in
-      # terms of the rest, so this is pinned to the order Z3 currently picks - not a
-      # documented guarantee, just what makes the test readable. If a Z3 upgrade
-      # flips it, fix the expectation then.
+      # terms of the rest - not a documented guarantee, just what makes the test
+      # readable. The order of `guard`'s own conjuncts isn't guaranteed either (it's
+      # Z3's internal AST ordering, which has flipped between Z3 versions), so that
+      # part is checked as a set rather than pinned to one string.
       it "gives a variable's solution in terms of another, once checked" do
         simple.assert(x + y == 10)
         expect(simple.check).to eq(:sat)
         solved_var, term, guard = simple.solve_for([x, y]).first
         expect(solved_var).to be_same_as(x)
         expect(term.to_s).to eq("10 + ((-1) * y)")
-        expect(guard.to_s).to eq("and((x + y) <= 10, (x + y) >= 10)")
+        expect(guard.func_decl.name).to eq("and")
+        expect(guard.arguments.map(&:to_s)).to contain_exactly("(x + y) <= 10", "(x + y) >= 10")
       end
 
       # x's solution mentions y, so y has to come first - "triangular form"
