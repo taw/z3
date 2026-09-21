@@ -6,21 +6,12 @@ task "test" => "spec"
 task "test:integration" => "spec:integration"
 task "test:unit" => "spec:unit"
 
-desc "Regenerate api/definitions.h"
-task "definitions" do
-  headers = `brew list -v z3`.split("\n").grep(/\.h\z/)
-  # Need to bump it to latest version
-  sh "./api/gen_definitions", *headers
-end
-
-desc "Regenerate API"
+# Bump the installed z3 formula first to pick up a new version
+desc "Regenerate api/definitions.h, low_level*_auto.rb and enums_auto.rb"
 task "api" do
-  sh "./api/gen_api api/definitions.h"
-end
-
-desc "Regenerate lib/z3/enums_auto.rb"
-task "enums" do
   headers = `brew list -v z3`.split("\n").grep(/\.h\z/)
+  sh "./api/gen_definitions", *headers
+  sh "./api/gen_api", "api/definitions.h"
   sh "./api/gen_enums", *headers
 end
 
