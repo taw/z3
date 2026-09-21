@@ -9,7 +9,6 @@ require_relative "z3/very_low_level"
 require_relative "z3/very_low_level_auto"
 require_relative "z3/low_level"
 require_relative "z3/low_level_auto"
-require_relative "z3/enums_auto"
 
 # Classes
 require_relative "z3/reference_counted"

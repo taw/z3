@@ -97,20 +97,10 @@ module Z3
       self[*args]
     end
 
-    # What kind of decl this is - `:add`, `:select`, `:recursive`, `:uninterpreted`
-    # and so on, one Symbol per `Z3_decl_kind` entry Z3 has a name for. Built from
-    # `Z3::Enums::DECL_KIND`, so it stays in step with whatever Z3 is installed
-    # rather than a number written down by hand.
-    KIND = Enums::DECL_KIND.transform_values { |name| name.sub(/\AZ3_OP_/, "").downcase.to_sym }.freeze
-
-    def kind
-      KIND.fetch(LowLevel.get_decl_kind(self))
-    end
-
     # Whether this is a declaration made by .declare_rec, which is worth asking
     # because Z3 hands them back in places nothing else does - see Model#funcs.
     def recursive?
-      kind == :recursive
+      LowLevel.get_decl_kind(self) == FuncDecl.recursive_decl_kind
     end
 
     # Gives a recursive declaration its body - the `define-fun-rec` half of
@@ -178,6 +168,17 @@ module Z3
         decl = new(LowLevel.mk_rec_func_decl(LowLevel.mk_symbol(name), domain, range))
         decl.define { |*args| yield(decl, *args) } if block_given?
         decl
+      end
+
+      # Z3's answer for #recursive? is the decl kind `Z3_OP_RECURSIVE`, and its
+      # numeric value sits at the far end of an enum which grows between releases -
+      # so rather than writing the number down, we make one recursive declaration
+      # and ask Z3 what kind it came out as. Leaving it undefined is safe: nothing
+      # applies it, so no solver ever has to unfold it and no model mentions it.
+      def recursive_decl_kind
+        @recursive_decl_kind ||= LowLevel.get_decl_kind(
+          new(LowLevel.mk_rec_func_decl(LowLevel.mk_symbol("z3.rb.recursive?"), [BoolSort.new], BoolSort.new))
+        )
       end
 
       # Z3 appends a number to `prefix`, picking one no declaration is using yet.
