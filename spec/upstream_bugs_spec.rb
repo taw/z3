@@ -133,6 +133,48 @@ module Z3
       expect(solver.model.model_eval(definition, true).to_b).to be Z3.version_at_least?(5, 0)
     end
 
+    # `Z3_solver_solve_for` fills three out-vectors - `variables`, `terms`, `guards` -
+    # and every other function in the API that works this way (`#consequences`,
+    # `#cube`, `#assertions`...) hands back ASTs that stay good after the vector
+    # holding them is freed, because ASTs in this gem's non-`_rc` context live as
+    # long as the context does regardless of what vector once carried them.
+    # `terms` breaks that: its ASTs go bad the moment `Z3_ast_vector_dec_ref` runs
+    # on the vector they came back in - `variables` and `guards`, filled by the very
+    # same call, don't. `Solver#solve_for` works around it by running each term
+    # through `Z3_simplify` before its vector is freed, which allocates a fresh,
+    # ordinarily-owned AST - `spec/solver_spec.rb` covers the working method;
+    # this reproduces the bug the workaround is for, bypassing it by going through
+    # LowLevel directly.
+    #
+    # Correct: `terms`' ASTs behave like every other output vector's and outlive it.
+    it "Z3_solver_solve_for's terms vector doesn't outlive itself" do
+      solver = Solver.simple
+      x, y = Z3.Int("x"), Z3.Int("y")
+      solver.assert(x + y == 10)
+      expect(solver.check).to eq(:sat)
+
+      _variables = LowLevel.mk_ast_vector
+      LowLevel.ast_vector_inc_ref(_variables)
+      LowLevel.ast_vector_push(_variables, x)
+      _terms = LowLevel.mk_ast_vector
+      LowLevel.ast_vector_inc_ref(_terms)
+      _guards = LowLevel.mk_ast_vector
+      LowLevel.ast_vector_inc_ref(_guards)
+
+      LowLevel.solver_solve_for(solver, _variables, _terms, _guards)
+      term = LowLevel.unpack_ast_vector(_terms).first
+      guard = LowLevel.unpack_ast_vector(_guards).first
+      expect(term.to_s).to eq("((-1) * y) + 10")
+
+      LowLevel.ast_vector_dec_ref(_terms)
+      expect { term.to_s }.to raise_error(Z3::Exception, /not a valid ast/)
+      # The bug is specific to `terms` - `guards`, filled by the same call, is fine
+      expect { guard.to_s }.to_not raise_error
+
+      LowLevel.ast_vector_dec_ref(_variables)
+      LowLevel.ast_vector_dec_ref(_guards)
+    end
+
     # `Z3_mk_enumeration_sort`'s last two arguments are out arrays, and passing NULL
     # for either segfaults instead of skipping that output. Everything they contain is
     # recoverable from the sort afterwards, so a caller who doesn't want them has no

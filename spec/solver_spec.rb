@@ -161,6 +161,88 @@ module Z3
       end
     end
 
+    describe "#solve_for" do
+      let(:simple) { Solver.simple }
+      let(:x) { Z3.Int("x") }
+      let(:y) { Z3.Int("y") }
+      let(:z) { Z3.Int("z") }
+
+      # Z3 solves for whichever requested variable comes first and expresses it in
+      # terms of the rest, so this is pinned to the order Z3 currently picks - not a
+      # documented guarantee, just what makes the test readable. If a Z3 upgrade
+      # flips it, fix the expectation then.
+      it "gives a variable's solution in terms of another, once checked" do
+        simple.assert(x + y == 10)
+        expect(simple.check).to eq(:sat)
+        solved_var, term, guard = simple.solve_for([x, y]).first
+        expect(solved_var).to be_same_as(x)
+        expect(term.to_s).to eq("10 + ((-1) * y)")
+        expect(guard.to_s).to eq("and((x + y) <= 10, (x + y) >= 10)")
+      end
+
+      # x's solution mentions y, so y has to come first - "triangular form"
+      it "orders dependent solutions before the ones which use them" do
+        simple.assert(x + y == 10)
+        simple.assert(y == 2 * z)
+        expect(simple.check).to eq(:sat)
+        result = simple.solve_for([x, y])
+        expect(result.map { |v, _, _| v.to_s }).to eq(["y", "x"])
+        expect(result[1][1].to_s).to include("y")
+      end
+
+      # Every requested variable, in one triple each, when the system fully pins them
+      it "solves a genuine linear system for every variable involved" do
+        simple.assert(x + y == 10)
+        simple.assert(x - y == 2)
+        expect(simple.check).to eq(:sat)
+        result = simple.solve_for([x, y])
+        solutions = result.each_with_object({}) { |(v, t, _), h| h[v.to_s] = t }
+        expect(solutions["x"].to_i).to eq(6)
+        expect(solutions["y"].to_i).to eq(4)
+      end
+
+      # A term survives past the call it came back in - see
+      # spec/upstream_bugs_spec.rb for the Z3 bug this works around
+      it "returns terms usable after the call, not just inside it" do
+        simple.assert(x + y == 10)
+        expect(simple.check).to eq(:sat)
+        term = simple.solve_for([x, y]).first[1]
+        GC.start
+        expect { term + 1 }.to_not raise_error
+      end
+
+      it "leaves out a free variable nothing ties down" do
+        simple.assert(x + y == 10)
+        expect(simple.check).to eq(:sat)
+        result = simple.solve_for([x, y, z])
+        expect(result.map { |v, _, _| v.to_s }).to_not include("z")
+      end
+
+      it "is empty for a variable Z3's own preprocessing already resolved" do
+        simple.assert(x == 5)
+        expect(simple.check).to eq(:sat)
+        expect(simple.solve_for([x])).to eq([])
+      end
+
+      it "is empty before #check has run" do
+        simple.assert(x + y == 10)
+        expect(simple.solve_for([x, y])).to eq([])
+      end
+
+      it "is empty for no requested variables" do
+        simple.assert(x + y == 10)
+        expect(simple.check).to eq(:sat)
+        expect(simple.solve_for([])).to eq([])
+      end
+
+      it "only Solver.simple implements it" do
+        solver.assert(x + y == 10)
+        expect(solver.check).to eq(:sat)
+        expect { solver.solve_for([x]) }
+          .to raise_error(Z3::Exception, "Only Solver.simple solves for variables, every other solver reports nothing")
+      end
+    end
+
     describe "#cube" do
       let(:p) { Z3.Bool("p") }
       let(:q) { Z3.Bool("q") }

@@ -180,6 +180,43 @@ module Z3
       end
     end
 
+    # Solves the current assertions for `variables`, as far as the linear equalities
+    # among them go - `x + y == 10` solved for `[x, y]` gives back `y` expressed as
+    # a pivot and `x` in terms of it, "triangular form": earlier entries in the
+    # result never depend on later ones, only the other way round.
+    #
+    # Each entry is `[variable, term, guard]` - `variable == term` whenever `guard`
+    # holds, which is Z3's own justification for the substitution rather than a
+    # precondition to check separately, since it already follows from what's
+    # asserted. Not every requested variable gets an entry: a free variable nothing
+    # ties down is left out, and so is one the pivot itself became (there's nothing
+    # left to express it in terms of but itself).
+    #
+    # Only Solver.simple implements it, and only once #check has run - Z3 reads
+    # this off whatever its last search left behind rather than solving fresh, so
+    # a solver that hasn't checked yet, or a single `x == 5` preprocessing already
+    # resolved on its own, both report nothing here (#model already has that
+    # answer). And only linear arithmetic - Z3's own restriction, not this gem's.
+    #
+    # `#simplify` on the way out is a workaround, not cosmetic: `Z3_solver_solve_for`
+    # doesn't hand `term` the same lifetime as everything else in the context - its
+    # AST goes bad the moment the `Z3_ast_vector` it came back in is freed, which is
+    # otherwise harmless for any other vector this gem unpacks. `guard` doesn't have
+    # the bug, `#simplify` is cheap insurance on it anyway rather than a second thing
+    # to track. `spec/upstream_bugs_spec.rb` pins the bug so this can go if Z3 fixes it.
+    def solve_for(variables)
+      unless simple?
+        raise Z3::Exception, "Only Solver.simple solves for variables, every other solver reports nothing"
+      end
+      LowLevel.with_ast_vectors(variables, [], []) do |_variables, _terms, _guards|
+        LowLevel.solver_solve_for(self, _variables, _terms, _guards)
+        LowLevel.unpack_ast_vector(_variables).zip(
+          LowLevel.unpack_ast_vector(_terms).map(&:simplify),
+          LowLevel.unpack_ast_vector(_guards).map(&:simplify),
+        )
+      end
+    end
+
     # One case split, for divide-and-conquer solving - each call returns the next
     # cube, and `[false]` once they're exhausted (after which it starts over).
     # `variables` is which literals to split on, or [] to let Z3 choose.
