@@ -724,7 +724,12 @@ script - so it is permanent, and every solver created afterwards carries it, whi
 change the model an unrelated query gets back.
 
 A declaration itself answers `#name`, `#arity`, `#domain(i)`, `#range`, `#recursive?`,
-`#[]` / `#call`, and `#define`.
+`#kind`, `#[]` / `#call`, and `#define`.
+
+`#kind` is a Symbol - `:add`, `:select`, `:recursive`, `:uninterpreted` and so on, one
+per `Z3_decl_kind` entry Z3 names - built from `Z3::Enums::DECL_KIND`, a table
+generated from the installed Z3's own headers rather than written down by hand.
+`#recursive?` is just `kind == :recursive`.
 
 ## Quantifiers and lambdas
 

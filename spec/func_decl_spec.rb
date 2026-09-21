@@ -73,6 +73,31 @@ module Z3
       end
     end
 
+    describe "#kind" do
+      it "names a built-in decl after the Z3_OP_ it came from" do
+        expect((x + y).func_decl.kind).to eq(:add)
+        expect((x < y).func_decl.kind).to eq(:lt)
+        expect(Z3.IfThenElse(true, x, y).func_decl.kind).to eq(:ite)
+      end
+
+      it "is :uninterpreted for a plain declared function" do
+        expect(f.kind).to eq(:uninterpreted)
+      end
+
+      it "is :recursive for one declared with Z3.RecFunction, defined or not" do
+        rec = Z3.RecFunction("kind_demo_rec", int, int) { |_, n| n }
+        expect(rec.kind).to eq(:recursive)
+        expect(Z3.RecFunction("kind_demo_rec_undefined", int, int).kind).to eq(:recursive)
+      end
+
+      # One Symbol per Z3_decl_kind entry that has a Z3_OP_ name - which is all of
+      # them - built from Z3::Enums::DECL_KIND rather than written down by hand
+      it "covers every entry in Z3::Enums::DECL_KIND, with no two collapsing together" do
+        expect(FuncDecl::KIND.size).to eq(Z3::Enums::DECL_KIND.size)
+        expect(FuncDecl::KIND.values.uniq.size).to eq(FuncDecl::KIND.size)
+      end
+    end
+
     describe "Z3.Function" do
       # Z3 hash-conses them, so redeclaring is the same function, not a second one
       it "is a value object" do
