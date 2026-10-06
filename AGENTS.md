@@ -24,10 +24,10 @@ Supported Z3: 4.16 and 5.x (CI runs 4.16, local dev is usually latest Homebrew 5
 ```sh
 bundle exec rspec                   # everything; slow (integration), allow ~10 min
 bundle exec rspec spec/foo_spec.rb  # one file
-rake spec:unit / rake spec:integration
-rake api                            # regen definitions.h + *_auto.rb from installed brew z3
-rake rdoc                           # regen docs/
-rake coverage:missing               # list bound but unused C APIs
+bundle exec rake spec:unit / bundle exec rake spec:integration
+bundle exec rake api                            # regen definitions.h + *_auto.rb from installed brew z3
+bundle exec rake rdoc                           # regen docs/
+bundle exec rake coverage:missing               # list bound but unused C APIs
 ```
 
 ## Conventions
