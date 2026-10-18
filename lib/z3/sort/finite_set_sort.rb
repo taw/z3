@@ -24,8 +24,9 @@ module Z3
   #   finite set operations, even on fully concrete sets, so `Model#[]` can't reduce
   #   one. `FiniteSetExpr#value` works the term out in Ruby instead, which is why it
   #   exists in the shape it does.
-  # * **`set.map` hangs Z3**, uninterruptibly, so `FiniteSetExpr#map` refuses to build
-  #   one. See there. `#select` works.
+  # * **Before Z3 5.3, `set.map` hangs Z3** uninterruptibly, so
+  #   `FiniteSetExpr#map` refuses to build one. See there. `#select` works on every
+  #   version, though it is incomplete before 5.3.
   #
   # None of that touches the parts most programs want: membership, subset, union,
   # intersection, difference and equality against a Ruby Set are all sound and fast.

@@ -8,13 +8,13 @@ module Z3
   # and one that quietly didn't mutate would be worse than not having it.
   class FiniteSetExpr < Expr
     # Z3 versions which hang on `set.map`, each with the first version that doesn't.
-    # `nil` means no version is known to work yet, so #map refuses on all of them -
-    # see there for what "hang" means here and why refusing is the only option.
+    # Before 5.3 `set.map` hangs the solver; see #map for why it has to be refused
+    # there.
     #
     # Same shape as `Simplifier::UNSOUND`, and for the same reason: the gem supports
     # Z3 versions on both sides of a fix, so the entry stays after the fix lands and
     # the predicate decides. `spec/upstream_bugs_spec.rb` is what will notice.
-    MAP_HANGS = {fixed_in: nil}
+    MAP_HANGS = {fixed_in: [5, 3]}
 
     public_class_method :new
 
@@ -128,21 +128,20 @@ module Z3
     #
     # Instead of a block you can pass a `Z3.Lambda`, which is what the block builds.
     #
-    # Refused on every Z3 that has finite sets, because asking one anything hangs.
+    # Before Z3 5.3 this is refused, because asking one anything hangs.
     # `Set[1, 2].map { |x| x * 10 }.include?(10)` does not return, and neither
-    # `timeout` nor `rlimit` cuts it short - Z3 never looks at either from inside that
-    # loop - so there's no way to recover and nothing to hand back. Even `map == map`
-    # on two identical terms hangs. Building the term and refusing to say so would
-    # only move the hang to whichever #check came next.
+    # `timeout` nor `rlimit` cuts it short. Building the term and refusing to say so
+    # would only move the hang to whichever #check came next.
     #
-    # #select is the one that works: it's incomplete, answering `:unknown` more often
-    # than not, but it always answers.
+    # #select works on every version with finite sets, although before 5.3 it is
+    # incomplete and answers `:unknown` more often than not.
     def map(function = nil, &block)
       unless MAP_HANGS[:fixed_in] and Z3.version_at_least?(*MAP_HANGS[:fixed_in])
         raise Z3::Exception, "Z3 #{Z3.version} hangs on any query about set.map rather " \
                              "than answering or giving up, so #map is refused - it would " \
                              "build a term that stops the first #check which reaches it. " \
-                             "#select works, if a subset is what you needed."
+                             "#map needs Z3 5.3 or newer; #select works, if a subset is " \
+                             "what you needed."
       end
       function = unary_function("#map", function, &block)
       range = function.is_a?(SetExpr) ? BoolSort.new : function.sort.value_sort

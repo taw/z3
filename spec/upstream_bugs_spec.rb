@@ -578,24 +578,24 @@ module Z3
       expect(solver.check).to eq(:unsat)
     end
 
-    # `set.map` doesn't answer. Not slowly, not `:unknown` - `#check` never returns,
+    # Before 5.3, `set.map` doesn't answer. Not slowly, not `:unknown` - `#check` never returns,
     # and `timeout` and `rlimit` both go unread, so nothing short of killing the
     # process gets control back. It happens on questions with nothing to them: whether
     # 10 is in `Set[1, 2].map { |x| x * 10 }`, or whether two identical map terms are
     # equal.
     #
-    # `FiniteSetExpr#map` refuses to build one for exactly this reason - a term that
+    # Before 5.3, `FiniteSetExpr#map` refuses to build one for exactly this reason - a term that
     # stops the next `#check` is worse than no term - so this reproduces it through
     # LowLevel to get past that guard. `FiniteSetExpr::MAP_HANGS` is what to change
     # when this example starts failing.
     #
-    # `set.filter` is fine, in the sense that matters here: it answers `:unknown` a
-    # lot, but it answers.
+    # `set.filter` answers `:unknown` before 5.3, and decides this ground membership
+    # question in 5.3.
     #
     # Correct: any answer at all, including `:unknown`.
-    it "set.map hangs the solver, ignoring timeout and rlimit" do
+    it "set.map hangs the solver before 5.3, ignoring timeout and rlimit" do
       skip "Finite sets were added in Z3 5.0" unless Z3.version_at_least?(5, 0)
-      expect(hangs?(<<~RUBY)).to be true
+      expect(hangs?(<<~RUBY)).to eq(!Z3.version_at_least?(5, 3))
         sort = Z3::FiniteSetSort.new(Z3::IntSort.new)
         set = sort.from_const([1, 2])
         x = Z3::IntSort.new.fresh_var("x")
@@ -607,7 +607,7 @@ module Z3
       RUBY
     end
 
-    it "set.filter answers, which is what makes #select usable and #map not" do
+    it "set.filter decides ground membership in 5.3" do
       skip "Finite sets were added in Z3 5.0" unless Z3.version_at_least?(5, 0)
       sort = FiniteSetSort.new(IntSort.new)
       filtered = sort.from_const([1, 2, 3]).select { |x| x > 1 }
@@ -616,10 +616,10 @@ module Z3
       solver.assert filtered.include?(1)
       expect(solver.check).to eq(:unsat)
 
-      # Incomplete rather than wrong - it can't confirm the ones it can't refute
+      # Before 5.3 this is incomplete rather than wrong.
       solver = Solver.new
       solver.assert filtered.include?(2)
-      expect(solver.check).to eq(:unknown)
+      expect(solver.check).to eq(Z3.version_at_least?(5, 3) ? :sat : :unknown)
     end
   end
 end

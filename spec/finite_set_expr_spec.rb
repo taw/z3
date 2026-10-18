@@ -222,30 +222,38 @@ module Z3
       end
     end
 
-    # Refused outright while Z3 hangs on it - see FiniteSetExpr::MAP_HANGS and the
-    # example in spec/upstream_bugs_spec.rb which pins the hang itself. When Z3 stops
-    # hanging, `MAP_HANGS[:fixed_in]` gets a version and the rest of this comes back.
     describe "#map" do
       def map_refused(&block)
         expect(&block).to raise_error(Z3::Exception, /hangs on any query about set\.map/)
       end
 
-      it "is refused, because Z3 hangs on it" do
-        map_refused { a.map { |x| x * 10 } }
-        map_refused { a.collect { |x| x * 10 } }
-        map_refused { a.map(Z3.Lambda(Z3.Int("map_x"), Z3.Int("map_x") * 10)) }
-      end
+      if Z3.version_at_least?(5, 3)
+        it "maps every element" do
+          expect(set(1, 2).map { |x| x * 10 }.value).to eq(Set[10, 20])
+          expect(set(1, 2).collect { |x| x * 10 }.value).to eq(Set[10, 20])
+        end
 
-      it "is refused before the block is looked at, so a bad one raises this too" do
-        map_refused { a.map }
-        map_refused { a.map(3) }
+        it "takes a lambda instead of a block" do
+          x = Z3.Int("map_x")
+          expect(set(1, 2).map(Z3.Lambda(x, x * 10)).value).to eq(Set[10, 20])
+        end
+      else
+        it "is refused, because Z3 hangs on it" do
+          map_refused { a.map { |x| x * 10 } }
+          map_refused { a.collect { |x| x * 10 } }
+          map_refused { a.map(Z3.Lambda(Z3.Int("map_x"), Z3.Int("map_x") * 10)) }
+        end
+
+        it "is refused before the block is looked at, so a bad one raises this too" do
+          map_refused { a.map }
+          map_refused { a.map(3) }
+        end
       end
     end
 
     describe "#select" do
-      # Z3 answers `:unknown` to most questions about `set.filter`, so these check the
-      # term rather than the solving. It does always answer, which is what separates it
-      # from #map.
+      # Before Z3 5.3 this answers `:unknown` to most questions about `set.filter`,
+      # so these check the term rather than the solving.
       it "builds a filter over the same sort" do
         expect(set(1, 2, 3).select { |x| x > 1 }.sort).to eq(sort)
         expect(set(1, 2, 3).select { |x| x > 1 }).to be_a FiniteSetExpr

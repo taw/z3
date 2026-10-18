@@ -505,8 +505,9 @@ Z3's own side of this is unfinished, and the gem works around it where it can:
 
 * `#size` is unsound - Z3 never connects element distinctness to cardinality - and on
   Z3 5.1 a size query about a set whose elements Z3 can see aborts the process.
-* `#map` refuses to build a term, because `set.map` hangs Z3 uninterruptibly.
-  `#select` is fine.
+* Before Z3 5.3, `#map` refuses to build a term because `set.map` hangs Z3
+  uninterruptibly. `#select` is available on every supported version, although it is
+  incomplete before 5.3.
 * Nothing evaluates finite set operations, so `#value` walks the term in Ruby.
 * On Z3 5.1 a model can contradict its own constraints - asserting `s.include?(3)`,
   `s.subset?(Set[1, 2, 3])` and `s != Set[3]` comes back `:sat` with `Set[1, 2, 3, 4]`,

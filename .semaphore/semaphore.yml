@@ -9,7 +9,7 @@ blocks:
     task:
       env_vars:
         - name: Z3_VERSION
-          value: "4.16.0"
+          value: "5.3.1"
         - name: Z3_DIST
           value: x64-glibc-2.39
       jobs:
