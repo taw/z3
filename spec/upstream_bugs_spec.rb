@@ -488,7 +488,7 @@ module Z3
     # Correct: unsat, on every one of the three below.
     it "set.size is unsound - a two element set is allowed to have one element" do
       skip "Finite sets were added in Z3 5.0" unless Z3.version_at_least?(5, 0)
-      skip "Z3 5.1 crashes on these queries rather than answering them" unless Z3.version_at_least?(5, 2)
+      skip "Z3 5.1 crashes on these queries rather than answering them" unless Z3.version_at_least?(5, 4)
       sort = FiniteSetSort.new(IntSort.new)
       set = sort.var("unsound_size_set")
 
