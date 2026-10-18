@@ -55,7 +55,10 @@ module Z3
       acc, elem = Z3.Int("acc"), Z3.Int("elem")
       raw = Expr.new_from_pointer(LowLevel.mk_lambda_const([acc, elem], acc + elem))
       expect(raw.sort).to eq(ArraySort.new(int, int))
-      expect { raw[3] }.to raise_error(Z3::Exception, /select requires 3 arguments/)
+      expect { raw[3] }.to raise_error(
+        Z3::Exception,
+        /select requires 3 arguments|select expects the first argument to be an array taking 2/,
+      )
     end
   end
 end
