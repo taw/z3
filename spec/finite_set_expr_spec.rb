@@ -320,8 +320,13 @@ module Z3
           .to raise_error(Z3::Exception, "Can't convert expression a into Set")
         expect { (a | set(1)).value }
           .to raise_error(Z3::Exception, /Can't convert expression .* into Set/)
-        expect { set(1, 2).select { |x| x > 1 }.value }
-          .to raise_error(Z3::Exception, /Can't convert expression .* into Set/)
+
+        if Z3.version_at_least?(5, 3)
+          expect(set(1, 2).select { |x| x > 1 }.value).to eq(set(2))
+        else
+          expect { set(1, 2).select { |x| x > 1 }.value }
+            .to raise_error(Z3::Exception, /Can't convert expression .* into Set/)
+        end
       end
 
       # Z3 writes a set it only had to decide the size of as `set.unique`, which is
