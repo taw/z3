@@ -545,6 +545,10 @@ module Z3
         VeryLowLevel.Z3_get_estimated_alloc_size()
       end
 
+      def get_finite_field_sort_size(sort) #=> :string
+        VeryLowLevel.Z3_get_finite_field_sort_size(_ctx_pointer, sort._ast)
+      end
+
       def get_finite_set_sort_basis(sort) #=> :sort_pointer
         VeryLowLevel.Z3_get_finite_set_sort_basis(_ctx_pointer, sort._ast)
       end
@@ -1101,8 +1105,16 @@ module Z3
         VeryLowLevel.Z3_mk_false(_ctx_pointer)
       end
 
+      def mk_ff_neg(ast) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_ff_neg(_ctx_pointer, ast._ast)
+      end
+
       def mk_finite_domain_sort(sym, num) #=> :sort_pointer
         VeryLowLevel.Z3_mk_finite_domain_sort(_ctx_pointer, sym, num)
+      end
+
+      def mk_finite_field_sort(str) #=> :sort_pointer
+        VeryLowLevel.Z3_mk_finite_field_sort(_ctx_pointer, str)
       end
 
       def mk_finite_set_difference(ast1, ast2) #=> :ast_pointer
@@ -1599,6 +1611,10 @@ module Z3
 
       def mk_seq_nth(ast1, ast2) #=> :ast_pointer
         VeryLowLevel.Z3_mk_seq_nth(_ctx_pointer, ast1._ast, ast2._ast)
+      end
+
+      def mk_seq_power(ast1, ast2) #=> :ast_pointer
+        VeryLowLevel.Z3_mk_seq_power(_ctx_pointer, ast1._ast, ast2._ast)
       end
 
       def mk_seq_prefix(ast1, ast2) #=> :ast_pointer

@@ -136,6 +136,7 @@ module Z3
     attach_function :Z3_get_error_code, [:ctx_pointer], :uint
     attach_function :Z3_get_error_msg, [:ctx_pointer, :int], :string
     attach_function :Z3_get_estimated_alloc_size, [], :uint64
+    attach_function :Z3_get_finite_field_sort_size, [:ctx_pointer, :sort_pointer], :string
     attach_function :Z3_get_finite_set_sort_basis, [:ctx_pointer, :sort_pointer], :sort_pointer
     attach_function :Z3_get_full_version, [], :string
     attach_function :Z3_get_global_param_descrs, [:ctx_pointer], :param_descrs_pointer
@@ -275,7 +276,9 @@ module Z3
     attach_function :Z3_mk_ext_rotate_right, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_extract, [:ctx_pointer, :uint, :uint, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_false, [:ctx_pointer], :ast_pointer
+    attach_function :Z3_mk_ff_neg, [:ctx_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_finite_domain_sort, [:ctx_pointer, :symbol_pointer, :uint64], :sort_pointer
+    attach_function :Z3_mk_finite_field_sort, [:ctx_pointer, :string], :sort_pointer
     attach_function :Z3_mk_finite_set_difference, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_finite_set_empty, [:ctx_pointer, :sort_pointer], :ast_pointer
     attach_function :Z3_mk_finite_set_filter, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
@@ -400,6 +403,7 @@ module Z3
     attach_function :Z3_mk_seq_map, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_mapi, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_nth, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
+    attach_function :Z3_mk_seq_power, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_prefix, [:ctx_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_replace, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_pointer
     attach_function :Z3_mk_seq_replace_all, [:ctx_pointer, :ast_pointer, :ast_pointer, :ast_pointer], :ast_pointer
